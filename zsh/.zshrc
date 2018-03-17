@@ -20,7 +20,7 @@ antigen bundle zpm-zsh/autoenv
 antigen bundle mafredri/zsh-async
 
 antigen bundle seletskiy/zsh-fuzzy-search-and-edit
-bindkey '^P' fuzzy-search-and-edit
+bindkey '^F' fuzzy-search-and-edit
 
 
 antigen bundle zlsun/solarized-man
