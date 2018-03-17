@@ -16,8 +16,20 @@ antigen bundle taskwarrior
 # Syntax highlighting bundle.
 antigen bundle zsh-users/zsh-syntax-highlighting
 
+# Misc plugins from awesome-zsh
+antigen bundle chrissicool/zsh-256color
+antigen bundle zpm-zsh/autoenv
+antigen bundle mafredri/zsh-async
+antigen bundle seletskiy/zsh-fuzzy-search-and-edit
+
+
+
+
 # Load the theme.
 antigen theme agnoster
+
+# Antigen plugin updater
+antigen bundle unixorn/autoupdate-antigen.zshplugin
 
 # Tell Antigen that you're done.
 antigen apply
