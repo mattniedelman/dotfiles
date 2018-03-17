@@ -9,6 +9,9 @@ antigen bundle pip
 antigen bundle wd
 antigen bundle docker
 antigen bundle git-flow
+antigen bundle httpie
+antigen bundle python
+antigen bundle taskwarrior
 
 # Syntax highlighting bundle.
 antigen bundle zsh-users/zsh-syntax-highlighting
