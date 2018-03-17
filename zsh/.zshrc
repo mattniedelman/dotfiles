@@ -7,6 +7,8 @@ antigen use oh-my-zsh
 antigen bundle git
 antigen bundle pip
 antigen bundle wd
+antigen bundle docker
+
 
 # Syntax highlighting bundle.
 antigen bundle zsh-users/zsh-syntax-highlighting
