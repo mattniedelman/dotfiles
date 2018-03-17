@@ -18,7 +18,11 @@ antigen bundle taskwarrior
 antigen bundle chrissicool/zsh-256color
 antigen bundle zpm-zsh/autoenv
 antigen bundle mafredri/zsh-async
+
 antigen bundle seletskiy/zsh-fuzzy-search-and-edit
+bindkey '^P' fuzzy-search-and-edit
+
+
 antigen bundle zlsun/solarized-man
 antigen bundle jreese/zsh-titles
 
