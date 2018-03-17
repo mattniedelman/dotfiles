@@ -8,7 +8,7 @@ antigen bundle git
 antigen bundle pip
 antigen bundle wd
 antigen bundle docker
-
+antigen bundle git-flow
 
 # Syntax highlighting bundle.
 antigen bundle zsh-users/zsh-syntax-highlighting
