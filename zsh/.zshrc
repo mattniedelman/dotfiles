@@ -13,8 +13,6 @@ antigen bundle httpie
 antigen bundle python
 antigen bundle taskwarrior
 
-# Syntax highlighting bundle.
-antigen bundle zsh-users/zsh-syntax-highlighting
 
 # Misc plugins from awesome-zsh
 antigen bundle chrissicool/zsh-256color
@@ -31,5 +29,10 @@ antigen theme agnoster
 # Antigen plugin updater
 antigen bundle unixorn/autoupdate-antigen.zshplugin
 
+# Syntax highlighting bundle.
+antigen bundle zsh-users/zsh-syntax-highlighting
+
 # Tell Antigen that you're done.
 antigen apply
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
