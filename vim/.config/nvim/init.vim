@@ -34,12 +34,13 @@ function! Layers()
   Layer '+lang/vim'
 
   " Additional plugins.
-  ExtraPlugin 'liuchengxu/space-vim-dark'
+  "ExtraPlugin 'liuchengxu/space-vim-dark'
   ExtraPlugin 'jeffkreeftmeijer/vim-numbertoggle'
   ExtraPlugin 'ntpeters/vim-better-whitespace'
-  ExtraPlugin 'rakr/vim-one'
+  "ExtraPlugin 'rakr/vim-one'
   ExtraPlugin 'vim-airline/vim-airline-themes'
   ExtraPlugin 'lifepillar/vim-solarized8'
+  "ExtraPlugin 'vimwiki/vimwiki'
 endfunction
 
 function! UserInit()
@@ -49,9 +50,11 @@ endfunction
 
 function! UserConfig()
 " This block is called after Spaceneovim layers are configured.
-  SetThemeWithBg 'dark', 'one', 'one'
+  SetThemeWithBg 'dark', 'solarized8_dark_flat', 'solarized'
   noremap Q <nop>
+  noremap q <nop>
   imap fd <ESC>l
+
   set invcursorline
   set wrap
   set textwidth=80
