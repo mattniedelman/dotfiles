@@ -12,7 +12,7 @@ antigen bundle git-flow
 antigen bundle httpie
 antigen bundle python
 antigen bundle taskwarrior
-
+antigen bundle kubectl
 
 # Misc plugins from awesome-zsh
 antigen bundle chrissicool/zsh-256color
@@ -36,7 +36,12 @@ antigen bundle unixorn/autoupdate-antigen.zshplugin
 # Syntax highlighting bundle.
 antigen bundle zsh-users/zsh-syntax-highlighting
 
+antigen bundle zsh-users/zsh-autosuggestions
+
 # Tell Antigen that you're done.
 antigen apply
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# Weird fix for antigen completions bug
+source $HOME/.antigen/bundles/robbyrussell/oh-my-zsh/plugins/kubectl/kubectl.plugin.zsh
