@@ -50,7 +50,6 @@ endfunction
 
 function! UserConfig()
 " This block is called after Spaceneovim layers are configured.
-  SetThemeWithBg 'dark', 'solarized8_dark_flat', 'solarized'
   noremap Q <nop>
   noremap q <nop>
   imap fd <ESC>l
@@ -79,6 +78,12 @@ function! UserConfig()
 
   let g:better_whitespace_enabled=1
   let g:strip_whitespace_on_save=1
+
+  SetThemeWithBg 'dark', 'solarized8_dark_flat', 'solarized'
+  let g:airline_powerline_fonts=1
+  if !exists('g:airline_symbols')
+    let g:airline_symbols={}
+  endif
 
 endfunction
 
