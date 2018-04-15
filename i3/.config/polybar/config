@@ -48,7 +48,7 @@ font-2 = siji:pixelsize=10;1
 
 modules-left = bspwm i3
 modules-center =
-modules-right = filesystem xbacklight xkeyboard memory cpu battery temperature date powermenu
+modules-right = filesystem memory cpu battery temperature date wlan volume powermenu
 
 tray-position = right
 tray-padding = 2
