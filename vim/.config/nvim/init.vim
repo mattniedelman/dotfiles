@@ -12,12 +12,14 @@ function! Layers()
   Layer '+completion/snippets'
   Layer '+checkers/ale' " Or '+checkers/neomake'
   Layer '+checkers/quickfix'
+  Layer '+gui/ide'
   Layer '+nav/buffers'
   Layer '+nav/comments'
   Layer '+nav/files'
   Layer '+nav/fzf'
   Layer '+nav/quit'
   Layer '+nav/start-screen'
+  Layer '+nav/jump'
   Layer '+nav/text'
   Layer '+nav/tmux'
   Layer '+nav/windows'
@@ -26,6 +28,7 @@ function! Layers()
   Layer '+tools/language-server'
   Layer '+tools/multicursor'
   Layer '+tools/terminal'
+  Layer '+tools/format'
   Layer '+ui/airline'
   Layer '+ui/toggles'
 
@@ -34,13 +37,11 @@ function! Layers()
   Layer '+lang/vim'
 
   " Additional plugins.
-  "ExtraPlugin 'liuchengxu/space-vim-dark'
   ExtraPlugin 'jeffkreeftmeijer/vim-numbertoggle'
   ExtraPlugin 'ntpeters/vim-better-whitespace'
-  "ExtraPlugin 'rakr/vim-one'
   ExtraPlugin 'vim-airline/vim-airline-themes'
   ExtraPlugin 'lifepillar/vim-solarized8'
-  "ExtraPlugin 'vimwiki/vimwiki'
+  ExtraPlugin 'tpope/vim-surround'
 endfunction
 
 function! UserInit()
@@ -52,7 +53,13 @@ function! UserConfig()
 " This block is called after Spaceneovim layers are configured.
   noremap Q <nop>
   noremap q <nop>
-  imap fd <ESC>l
+  imap fd <ESC>
+
+  map <C-a> <ESC>^
+  imap <C-a> <ESC>^i
+
+  map <C-e> <ESC>$
+  imap <C-e> <ESC>$a
 
   set invcursorline
   set wrap
@@ -78,6 +85,11 @@ function! UserConfig()
 
   let g:better_whitespace_enabled=1
   let g:strip_whitespace_on_save=1
+
+  let g:NERDSpaceDelims=1
+  let g:NERDCompactSexyComs=1
+  let g:NERDDefaultAlign='left'
+
 
   SetThemeWithBg 'dark', 'solarized8_dark_flat', 'solarized'
   let g:airline_powerline_fonts=1
