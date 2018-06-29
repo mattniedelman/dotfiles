@@ -34,13 +34,10 @@ function! Layers()
   Layer '+lang/vim'
 
   " Additional plugins.
-  "ExtraPlugin 'liuchengxu/space-vim-dark'
   ExtraPlugin 'jeffkreeftmeijer/vim-numbertoggle'
   ExtraPlugin 'ntpeters/vim-better-whitespace'
-  "ExtraPlugin 'rakr/vim-one'
   ExtraPlugin 'vim-airline/vim-airline-themes'
   ExtraPlugin 'lifepillar/vim-solarized8'
-  "ExtraPlugin 'vimwiki/vimwiki'
 endfunction
 
 function! UserInit()
@@ -52,7 +49,13 @@ function! UserConfig()
 " This block is called after Spaceneovim layers are configured.
   noremap Q <nop>
   noremap q <nop>
-  imap fd <ESC>l
+  imap fd <ESC>
+
+  map <C-a> <ESC>^
+  imap <C-a> <ESC>^i
+
+  map <C-e> <ESC>$
+  imap <C-e> <ESC>$a
 
   set invcursorline
   set wrap
