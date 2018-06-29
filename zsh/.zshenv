@@ -1,5 +1,12 @@
-PATH=/home/matt/miniconda3/bin:$PATH
-EDITOR=nvim
+#
+# Defines environment variables.
+#
+# Authors:
+#   Sorin Ionescu <sorin.ionescu@gmail.com>
+#
 
-# to make the agnoster prompt come up correctly
-DEFAULT_USER=matt
+# Ensure that a non-login, non-interactive shell has a defined environment.
+if [[ ( "$SHLVL" -eq 1 && ! -o LOGIN ) && -s "${ZDOTDIR:-$HOME}/.zprofile" ]]; then
+  source "${ZDOTDIR:-$HOME}/.zprofile"
+fi
+PATH="${HOME}"/miniconda3/bin:$PATH
