@@ -86,6 +86,11 @@ function! UserConfig()
   let g:better_whitespace_enabled=1
   let g:strip_whitespace_on_save=1
 
+  let g:NERDSpaceDelims=1
+  let g:NERDCompactSexyComs=1
+  let g:NERDDefaultAlign='left'
+
+
   SetThemeWithBg 'dark', 'solarized8_dark_flat', 'solarized'
   let g:airline_powerline_fonts=1
   if !exists('g:airline_symbols')
