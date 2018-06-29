@@ -1,0 +1,39 @@
+
+
+# Bundles from the default repo (robbyrussell's oh-my-zsh).
+robbyrussel/oh-my-zsh folder:plugins/git
+robbyrussel/oh-my-zsh folder:plugins/pip
+robbyrussel/oh-my-zsh folder:plugins/wd
+robbyrussel/oh-my-zsh folder:plugins/docker
+robbyrussel/oh-my-zsh folder:plugins/git-flow
+robbyrussel/oh-my-zsh folder:plugins/httpie
+robbyrussel/oh-my-zsh folder:plugins/python
+robbyrussel/oh-my-zsh folder:plugins/taskwarrior
+robbyrussel/oh-my-zsh folder:plugins/kubectl
+
+# Misc plugins from awesome-zsh
+chrissicool/zsh-256color
+zpm-zsh/autoenv
+mafredri/zsh-async
+
+seletskiy/zsh-fuzzy-search-and-edit
+
+zlsun/solarized-man
+jreese/zsh-titles
+
+# Load the theme.
+antigen theme agnoster
+
+# Antigen plugin updater
+unixorn/autoupdate-antigen.zshplugin
+
+# Syntax highlighting bundle.
+zsh-users/zsh-syntax-highlighting
+
+zsh-users/zsh-autosuggestions
+
+# Tell Antigen that you're done.
+antigen apply
+
+
+# Weird fix for antigen completions bug
