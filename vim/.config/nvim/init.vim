@@ -41,6 +41,7 @@ function! Layers()
   ExtraPlugin 'ntpeters/vim-better-whitespace'
   ExtraPlugin 'vim-airline/vim-airline-themes'
   ExtraPlugin 'lifepillar/vim-solarized8'
+  ExtraPlugin 'tpope/vim-surround'
 endfunction
 
 function! UserInit()
