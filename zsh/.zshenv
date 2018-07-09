@@ -9,4 +9,4 @@
 if [[ ( "$SHLVL" -eq 1 && ! -o LOGIN ) && -s "${ZDOTDIR:-$HOME}/.zprofile" ]]; then
   source "${ZDOTDIR:-$HOME}/.zprofile"
 fi
-PATH="${HOME}"/miniconda3/bin:$PATH
+PATH="${HOME}/bin":/usr/local/anaconda3/bin:$PATH
