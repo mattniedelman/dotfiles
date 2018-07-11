@@ -9,4 +9,8 @@
 if [[ ( "$SHLVL" -eq 1 && ! -o LOGIN ) && -s "${ZDOTDIR:-$HOME}/.zprofile" ]]; then
   source "${ZDOTDIR:-$HOME}/.zprofile"
 fi
-PATH="${HOME}/bin":/usr/local/anaconda3/bin:$PATH
+
+if [[ "$OSTYPE" == darwin* ]]; then
+    PATH="${HOME}/bin":/usr/local/anaconda3/bin:$PATH
+    PATH="/usr/local/opt/grep/libexec/gnubin:$PATH"
+fi
