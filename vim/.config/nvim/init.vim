@@ -42,6 +42,7 @@ function! Layers()
   ExtraPlugin 'vim-airline/vim-airline-themes'
   ExtraPlugin 'lifepillar/vim-solarized8'
   ExtraPlugin 'tpope/vim-surround'
+  ExtraPlugin 'docker/docker'
 endfunction
 
 function! UserInit()
@@ -54,6 +55,7 @@ function! UserConfig()
   noremap Q <nop>
   noremap q <nop>
   imap fd <ESC>
+  vmap fd <ESC>
 
   map <C-a> <ESC>^
   imap <C-a> <ESC>^i
@@ -96,6 +98,8 @@ function! UserConfig()
   if !exists('g:airline_symbols')
     let g:airline_symbols={}
   endif
+
+  let g:neoformat_enabled_python = ['black']
 
 endfunction
 
