@@ -42,6 +42,7 @@ function! Layers()
   ExtraPlugin 'vim-airline/vim-airline-themes'
   ExtraPlugin 'lifepillar/vim-solarized8'
   ExtraPlugin 'tpope/vim-surround'
+  ExtraPlugin 'fatih/vim-go'
 endfunction
 
 function! UserInit()
