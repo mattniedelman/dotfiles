@@ -12,3 +12,9 @@ fi
 
 # Customize to your needs...
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+wd() {
+  . /Users/mattniedelman/bin/wd/wd.sh
+}
+source <(kubectl completion zsh)
+unsetopt correct
+unsetopt correct_all
