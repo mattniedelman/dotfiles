@@ -10,12 +10,9 @@ if [[ ( "$SHLVL" -eq 1 && ! -o LOGIN ) && -s "${ZDOTDIR:-$HOME}/.zprofile" ]]; t
   source "${ZDOTDIR:-$HOME}/.zprofile"
 fi
 
-if [[ "$OSTYPE" == darwin* ]]; then
-    PATH="${HOME}/bin":/usr/local/anaconda3/bin:$PATH
-    PATH="/usr/local/opt/grep/libexec/gnubin:$PATH"
-fi
 
 
 DEFAULT_USER="mattniedelman"
 EDITOR=nvim
 DISABLE_CORRECTION="true"
+GOPATH="$HOME/go"
