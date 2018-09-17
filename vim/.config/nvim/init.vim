@@ -100,8 +100,13 @@ function! UserConfig()
     let g:airline_symbols={}
   endif
 
+  let g:neoformat_python_black = {
+    \ 'exe': 'black',
+    \ 'stdin': 1,
+    \ 'args': ['-l 80', '--quiet', '-' ]}
   let g:neoformat_enabled_python = ['black']
 
+  let g:neoformat_enabled_yaml = ['']
 endfunction
 
 " Do NOT remove these calls!
