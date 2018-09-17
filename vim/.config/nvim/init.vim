@@ -43,6 +43,7 @@ function! Layers()
   ExtraPlugin 'lifepillar/vim-solarized8'
   ExtraPlugin 'tpope/vim-surround'
   ExtraPlugin 'docker/docker'
+  ExtraPlugin 'fatih/vim-go'
 endfunction
 
 function! UserInit()
