@@ -33,6 +33,7 @@ zstyle ':prezto:load' zmodule \
 # Set the Prezto modules to load (browse modules).
 # The order matters.
 zstyle ':prezto:load' pmodule \
+  'completion' \
   'environment' \
   'terminal' \
   'editor' \
