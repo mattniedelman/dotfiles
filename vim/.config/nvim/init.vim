@@ -71,6 +71,10 @@ function! UserConfig()
   map <C-e> <ESC>$
   imap <C-e> <ESC>$a
 
+  nmap <S-Enter> O<ESC>
+  nmap <CR> o<ESC>
+
+
   set invcursorline
   set wrap
   set textwidth=80
@@ -126,6 +130,8 @@ function! UserConfig()
 
   " Enable trimmming of trailing whitespace
   let g:neoformat_basic_format_trim = 1
+
+  autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
 
 endfunction
 
