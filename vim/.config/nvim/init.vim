@@ -8,7 +8,7 @@ function! Layers()
 
   Layer '+core/behavior'
   Layer '+core/sensible'
-  Layer '+completion/nvim-completion-manager' " Or '+completion/deoplete'
+  Layer '+completion/deoplete' " Or '+completion/deoplete'
   Layer '+completion/snippets'
   Layer '+checkers/ale' " Or '+checkers/neomake'
   Layer '+checkers/quickfix'
