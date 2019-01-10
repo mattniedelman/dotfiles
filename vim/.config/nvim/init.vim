@@ -2,9 +2,9 @@
 "vim: ft=vim
 
 function! Layers()
-" Configuration Layers declaration.
-" Add layers with `Layer '+layername'` and add individual packages
-" with `ExtraPlugin 'githubUser/Repo'`.
+  " Configuration Layers declaration.
+  " Add layers with `Layer '+layername'` and add individual packages
+  " with `ExtraPlugin 'githubUser/Repo'`.
 
   Layer '+core/behavior'
   Layer '+core/sensible'
