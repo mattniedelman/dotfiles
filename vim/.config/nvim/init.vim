@@ -2,13 +2,13 @@
 "vim: ft=vim
 
 function! Layers()
-" Configuration Layers declaration.
-" Add layers with `Layer '+layername'` and add individual packages
-" with `ExtraPlugin 'githubUser/Repo'`.
+  " Configuration Layers declaration.
+  " Add layers with `Layer '+layername'` and add individual packages
+  " with `ExtraPlugin 'githubUser/Repo'`.
 
   Layer '+core/behavior'
   Layer '+core/sensible'
-  Layer '+completion/nvim-completion-manager' " Or '+completion/deoplete'
+  Layer '+completion/deoplete' " Or '+completion/deoplete'
   Layer '+completion/snippets'
   Layer '+checkers/ale' " Or '+checkers/neomake'
   Layer '+checkers/quickfix'
@@ -42,19 +42,26 @@ function! Layers()
   ExtraPlugin 'vim-airline/vim-airline-themes'
   ExtraPlugin 'lifepillar/vim-solarized8'
   ExtraPlugin 'tpope/vim-surround'
-  ExtraPlugin 'docker/docker'
+  " ExtraPlugin 'docker/docker'
   ExtraPlugin 'fatih/vim-go'
+  ExtraPlugin 'pearofducks/ansible-vim'
+
 endfunction
 
 function! UserInit()
-" This block is called at the very startup of Spaceneovim initialization
-" before layers configuration.
+  " This block is called at the very startup of Spaceneovim initialization
+  " before layers configuration.
 endfunction
 
 function! UserConfig()
-" This block is called after Spaceneovim layers are configured.
+  SetThemeWithBg 'dark', 'solarized8_dark_flat', 'solarized'
+  colorscheme solarized8
+  " This block is called after Spaceneovim layers are configured.
+  " Q is super annoying to me
   noremap Q <nop>
   noremap q <nop>
+
+  " My preferred chord to get back to normal mode
   imap fd <ESC>
   vmap fd <ESC>
 
@@ -63,6 +70,10 @@ function! UserConfig()
 
   map <C-e> <ESC>$
   imap <C-e> <ESC>$a
+
+  nmap <S-Enter> O<ESC>
+  nmap <CR> o<ESC>
+
 
   set invcursorline
   set wrap
@@ -81,9 +92,9 @@ function! UserConfig()
   set number relativenumber
 
   if exists('+colorcolumn')
-      set colorcolumn=80
+    set colorcolumn=80
   else
-      au BufWinEnter * let w:m2=matchadd('ErrorMsg', '\%>80v.\+', -1)
+    au BufWinEnter * let w:m2=matchadd('ErrorMsg', '\%>80v.\+', -1)
   endif
 
   let g:better_whitespace_enabled=1
@@ -94,29 +105,33 @@ function! UserConfig()
   let g:NERDDefaultAlign='left'
 
 
-  SetThemeWithBg 'dark', 'solarized8_dark_flat', 'solarized'
   let g:airline_powerline_fonts=1
   if !exists('g:airline_symbols')
     let g:airline_symbols={}
   endif
 
   let g:neoformat_python_black = {
-    \ 'exe': 'black',
-    \ 'stdin': 1,
-    \ 'args': ['-l 80', '--quiet', '-' ]}
+        \ 'exe': 'black',
+        \ 'stdin': 1,
+        \ 'args': ['-l 80', '--quiet', '-' ]}
 
-  let g:neoformat_enabled_python = ['autopep8', 'yapf', 'black']
+  let g:neoformat_enabled_python = ['black']
+
+
+  let g:neoformat_enabled_dockerfile = ['']
 
   let g:neoformat_enabled_yaml = ['']
 
   " Enable alignment
-  let g:neoformat_basic_format_align = 1
+  " let g:neoformat_basic_format_align = 1
 
   " Enable tab to spaces conversion
   let g:neoformat_basic_format_retab = 1
 
   " Enable trimmming of trailing whitespace
   let g:neoformat_basic_format_trim = 1
+
+  autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
 
 endfunction
 
