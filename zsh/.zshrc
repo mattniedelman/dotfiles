@@ -31,3 +31,5 @@ source <(kubectl completion zsh)
 unsetopt correct
 unsetopt correct_all
 setopt CLOBBER
+
+export EDITOR=nvim
