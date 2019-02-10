@@ -15,6 +15,8 @@ if [[ "$OSTYPE" == darwin* ]]; then
     PATH="/usr/local/opt/grep/libexec/gnubin:$PATH"
 fi
 
+PATH="/usr/local/go/bin:$PATH"
+
 # Customize to your needs...
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 wd() {
