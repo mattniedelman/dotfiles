@@ -16,9 +16,11 @@ if [[ "$OSTYPE" == darwin* ]]; then
     PATH="/usr/local/Cellar/gnu-getopt/1.1.6/bin:$PATH"
 fi
 
-PATH="/usr/local/go/bin:$PATH"
-
-export EDITOR=nvim
+if [[ "$OSTYPE" == linux-gnu ]]; then
+    PATH="${HOME}/bin:$PATH"
+    PATH="${HOME}/miniconda3/bin:$PATH"
+    PATH="/usr/local/go/bin:$PATH"
+fi
 
 # Customize to your needs...
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
