@@ -17,7 +17,11 @@ if [[ "$OSTYPE" == darwin* ]]; then
     PATH="${HOME}/go/bin:$PATH"
 fi
 
-export EDITOR=nvim
+if [[ "$OSTYPE" == linux-gnu ]]; then
+    PATH="${HOME}/bin:$PATH"
+    PATH="${HOME}/miniconda3/bin:$PATH"
+    PATH="/usr/local/go/bin:$PATH"
+fi
 
 # Customize to your needs...
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
@@ -30,3 +34,4 @@ unsetopt correct_all
 setopt CLOBBER
 alias git=lab
 alias k=kubectl
+export EDITOR=nvim
