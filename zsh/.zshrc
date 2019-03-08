@@ -14,6 +14,7 @@ if [[ "$OSTYPE" == darwin* ]]; then
     PATH="${HOME}/bin:/usr/local/anaconda3/bin:$PATH"
     PATH="/usr/local/opt/grep/libexec/gnubin:$PATH"
     PATH="/usr/local/Cellar/gnu-getopt/1.1.6/bin:$PATH"
+    PATH="${HOME}/go/bin:$PATH"
 fi
 
 export EDITOR=nvim
@@ -27,3 +28,5 @@ source <(kubectl completion zsh)
 unsetopt correct
 unsetopt correct_all
 setopt CLOBBER
+alias git=lab
+alias k=kubectl
