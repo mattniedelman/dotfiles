@@ -113,7 +113,7 @@ function! UserConfig()
   let g:neoformat_python_black = {
         \ 'exe': 'black',
         \ 'stdin': 1,
-        \ 'args': ['-l 80', '--quiet', '-' ]}
+        \ 'args': ['-l 79', '--quiet', '-' ]}
 
   let g:neoformat_enabled_python = ['black']
 
@@ -126,13 +126,13 @@ function! UserConfig()
   " let g:neoformat_basic_format_align = 1
 
   " Enable tab to spaces conversion
-  let g:neoformat_basic_format_retab = 1
+  " let g:neoformat_basic_format_retab = 1
 
   " Enable trimmming of trailing whitespace
   let g:neoformat_basic_format_trim = 1
 
   autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
-
+  autocmd FileType make setlocal noexpandtab
 endfunction
 
 " Do NOT remove these calls!
