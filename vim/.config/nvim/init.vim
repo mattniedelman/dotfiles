@@ -8,8 +8,7 @@ function! Layers()
 
   Layer '+core/behavior'
   Layer '+core/sensible'
-  Layer '+completion/deoplete' " Or '+completion/deoplete'
-  Layer '+completion/snippets'
+  Layer '+completion/deoplete'
   Layer '+checkers/ale' " Or '+checkers/neomake'
   Layer '+checkers/quickfix'
   Layer '+gui/ide'
@@ -42,7 +41,6 @@ function! Layers()
   ExtraPlugin 'vim-airline/vim-airline-themes'
   ExtraPlugin 'lifepillar/vim-solarized8'
   ExtraPlugin 'tpope/vim-surround'
-  " ExtraPlugin 'docker/docker'
   ExtraPlugin 'fatih/vim-go'
   ExtraPlugin 'pearofducks/ansible-vim'
 
@@ -73,7 +71,6 @@ function! UserConfig()
 
   nmap <S-Enter> O<ESC>
   nmap <CR> o<ESC>
-
 
   set invcursorline
   set wrap
