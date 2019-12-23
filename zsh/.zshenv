@@ -12,7 +12,9 @@ fi
 
 
 
-DEFAULT_USER="mattniedelman"
+DEFAULT_USER="matt"
 EDITOR=nvim
 DISABLE_CORRECTION="true"
 GOPATH="$HOME/go"
+JIRA_DEFAULT_ACTION="dashboard"
+
