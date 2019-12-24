@@ -43,6 +43,7 @@ function! Layers()
   ExtraPlugin 'tpope/vim-surround'
   ExtraPlugin 'fatih/vim-go'
   ExtraPlugin 'pearofducks/ansible-vim'
+  ExtraPlugin 'majutsushi/tagbar'
 
 endfunction
 
@@ -72,6 +73,9 @@ function! UserConfig()
   nmap <S-Enter> O<ESC>
   nmap <CR> o<ESC>
 
+  nmap " ysiW"
+  nmap ' ysiW'
+
   set invcursorline
   set wrap
   set textwidth=80
@@ -85,6 +89,7 @@ function! UserConfig()
   set tabstop=4
   set shiftwidth=4
   set expandtab
+
 
   set number relativenumber
 
@@ -111,13 +116,21 @@ function! UserConfig()
         \ 'exe': 'black',
         \ 'stdin': 1,
         \ 'args': ['-l 79', '--quiet', '-' ]}
-
   let g:neoformat_enabled_python = ['black']
 
+  let g:neoformat_sh_shfmt = {
+        \ 'exe': 'shfmt',
+        \ 'stdin': 1,
+        \ 'args': ['-i', '2', '-ci']}
+  let g:neoformat_enabled_sh = ['shfmt']
+
+  let g:neoformat_yaml_prettier = {
+        \ 'exe': 'prettier',
+        \ 'stdin': 1,
+        \ 'args': ['--quote-props', 'preserve', '--parser', 'yaml']}
+  let g:neoformat_enabled_yaml = ['prettier']
 
   let g:neoformat_enabled_dockerfile = ['']
-
-  let g:neoformat_enabled_yaml = ['']
 
   " Enable alignment
   " let g:neoformat_basic_format_align = 1
@@ -130,6 +143,8 @@ function! UserConfig()
 
   autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
   autocmd FileType make setlocal noexpandtab
+  set clipboard+=unnamedplus
+  au BufReadPost Tiltfile set filetype=python
 endfunction
 
 " Do NOT remove these calls!
