@@ -1,6 +1,9 @@
 #
 # Executes commands at the start of an interactive session.
 #
+
+# zmodload zsh/zprof
+
 if [[ ! -d ~/.zplug ]]; then
   git clone https://github.com/zplug/zplug ~/.zplug
   source ~/.zplug/init.zsh && zplug update --self
@@ -26,6 +29,8 @@ if [[ "$OSTYPE" == linux-gnu ]]; then
     PATH="$PATH:/usr/local/kubebuilder/bin"
     GOPATH="${HOME}/go"
     PATH="${GOPATH}/bin:$PATH"
+    PATH="${PATH}:/home/matt/.linkerd2/bin"
+    PATH="${PATH}:${HOME}/.nvm/versions/node/v13.7.0/bin/"
 
     SKAFFOLD_DEFAULT_REPO="localhost:32000"
     SKAFFOLD_INSECURE_REGISTRY="localhost:32000"
@@ -34,6 +39,10 @@ fi
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 source <(kubectl completion zsh)
 source <(skaffold completion zsh)
+
+source ktx
+source ktx-completion.sh
+
 eval "$(direnv hook zsh)"
 unsetopt correct
 unsetopt correct_all
@@ -49,4 +58,20 @@ bindkey "^[[1;5C" forward-word
 bindkey "^[[1;5D" backward-word
 
 
-[ -s "/home/matt/.jabba/jabba.sh" ] && source "/home/matt/.jabba/jabba.sh"
+# [ -s "/home/matt/.jabba/jabba.sh" ] && source "/home/matt/.jabba/jabba.sh"
+wd() {
+  . /home/matt/bin/wd/wd.sh
+}
+# export NVM_DIR="$HOME/.nvm"
+# [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+# [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+
+#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
+export SDKMAN_DIR="/home/matt/.sdkman"
+[[ -s "/home/matt/.sdkman/bin/sdkman-init.sh" ]] && source "/home/matt/.sdkman/bin/sdkman-init.sh"
+
+# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
+export PATH="$PATH:$HOME/.rvm/bin"
+
+
+# zprof

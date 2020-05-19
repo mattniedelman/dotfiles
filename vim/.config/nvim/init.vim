@@ -10,7 +10,7 @@ function! Layers()
   Layer '+core/sensible'
   Layer '+completion/deoplete'
   Layer '+checkers/ale' " Or '+checkers/neomake'
-  Layer '+checkers/quickfix'
+  Layer '+checkers/syntastic'
   Layer '+gui/ide'
   Layer '+nav/buffers'
   Layer '+nav/comments'
@@ -44,7 +44,13 @@ function! Layers()
   ExtraPlugin 'fatih/vim-go'
   ExtraPlugin 'pearofducks/ansible-vim'
   ExtraPlugin 'majutsushi/tagbar'
-
+  ExtraPlugin 'wakatime/vim-wakatime'
+  ExtraPlugin 'google/vim-jsonnet'
+  ExtraPlugin 'jpalardy/vim-slime'
+  ExtraPlugin 'SirVer/ultisnips'
+  ExtraPlugin 'honza/vim-snippets'
+  ExtraPlugin 'Yggdroot/indentline'
+  ExtraPlugin 'raphamorim/lucario'
 endfunction
 
 function! UserInit()
@@ -75,6 +81,9 @@ function! UserConfig()
 
   nmap " ysiW"
   nmap ' ysiW'
+
+  nnoremap <A-a> <C-a>
+  nnoremap <A-x> <C-x>
 
   set invcursorline
   set wrap
@@ -112,11 +121,20 @@ function! UserConfig()
     let g:airline_symbols={}
   endif
 
+  let g:neoformat_run_all_formatters=1
   let g:neoformat_python_black = {
         \ 'exe': 'black',
         \ 'stdin': 1,
         \ 'args': ['-l 79', '--quiet', '-' ]}
-  let g:neoformat_enabled_python = ['black']
+  let g:neoformat_python_isort = {
+        \ 'exe': 'isort',
+        \ 'stdin': 1,
+        \ 'args': ['-', '-tc', '-up']}
+
+  let g:neoformat_enabled_python = ['black', 'isort']
+
+  let g:neoformat_starlark_black = g:neoformat_python_black
+  let g:neoformat_enabled_starlark = ['black']
 
   let g:neoformat_sh_shfmt = {
         \ 'exe': 'shfmt',
@@ -127,7 +145,7 @@ function! UserConfig()
   let g:neoformat_yaml_prettier = {
         \ 'exe': 'prettier',
         \ 'stdin': 1,
-        \ 'args': ['--quote-props', 'preserve', '--parser', 'yaml']}
+        \ 'args': ['--quote-props', 'preserve', '--parser', 'yaml', '--no-bracket-spacing']}
   let g:neoformat_enabled_yaml = ['prettier']
 
   let g:neoformat_enabled_dockerfile = ['']
@@ -141,10 +159,27 @@ function! UserConfig()
   " Enable trimmming of trailing whitespace
   let g:neoformat_basic_format_trim = 1
 
-  autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
+  set tabstop=4 softtabstop=0 expandtab shiftwidth=4 smarttab
+  au! BufNewFile,BufReadPost *.{yaml,yml} set filetype=yaml indentkeys-=0# indentkeys-=<:>
+  " autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
   autocmd FileType make setlocal noexpandtab
   set clipboard+=unnamedplus
-  au BufReadPost Tiltfile set filetype=python
+
+  au BufNewFile,BufReadPost Tiltfile set filetype=starlark
+  au  FileType starlark set syntax=python
+
+  let g:go_def_mode='gopls'
+  let g:go_info_mode='gopls'
+  " Launch gopls when Go files are in use
+  let g:LanguageClient_serverCommands.go = ['gopls']
+  " Run gofmt on save
+  autocmd BufWritePre *.go :call LanguageClient#textDocument_formatting_sync()
+
+  let g:slime_target="tmux"
+  let g:slime_python_ipython=1
+  let g:UltiSnipsExpandTrigger="<tab>"
+  let g:UltiSnipsJumpForwardTrigger="<c-b>"
+  let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 endfunction
 
 " Do NOT remove these calls!
