@@ -17,7 +17,7 @@ zplug "wfxr/forgit"
 zplug "zsh-users/zsh-completions"
 zplug "2m/zsh-jabba"
 zplug "nvm-sh/nvm"
-zplug "agnoster/agnoster-zsh-theme"
+zplug "agnoster/agnoster-zsh-theme", as:theme
 
 if ! zplug check --verbose; then
     printf "Install? [y/N]: "
