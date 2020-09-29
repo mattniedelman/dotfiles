@@ -26,3 +26,22 @@
 } >&2
 
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
+
+prompt_kubeconfig() {
+  if [[ -n $KUBECONFIG ]]; then
+    color=red
+    prompt_segment $color $PRIMARY_FG
+    print -Pn " $(basename $KUBECONFIG) "
+  fi
+}
+
+typeset -aHg AGNOSTER_PROMPT_SEGMENTS=(
+    prompt_status
+    prompt_context
+    prompt_virtualenv
+    prompt_dir
+    prompt_git
+    prompt_kubeconfig
+    prompt_end
+)
+

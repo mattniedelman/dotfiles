@@ -10,11 +10,19 @@ if [[ ( "$SHLVL" -eq 1 && ! -o LOGIN ) && -s "${ZDOTDIR:-$HOME}/.zprofile" ]]; t
   source "${ZDOTDIR:-$HOME}/.zprofile"
 fi
 
-
+export SDKMAN_DIR="/home/matt/.sdkman"
+[[ -s "/home/matt/.sdkman/bin/sdkman-init.sh" ]] && source "/home/matt/.sdkman/bin/sdkman-init.sh"
 
 DEFAULT_USER="matt"
 EDITOR=nvim
 DISABLE_CORRECTION="true"
-GOPATH="$HOME/go"
-JIRA_DEFAULT_ACTION="dashboard"
+GOPATH="${HOME}/go"
 
+PATH="${HOME}/bin:${PATH}"
+PATH="/usr/local/go/bin:${PATH}"
+PATH="${HOME}/go/bin:${PATH}"
+PATH="${HOME}/miniconda3/bin:${PATH}"
+PATH="/snap/bin:${PATH}"
+PATH="${HOME}/.krew/bin:${PATH}"
+alias k=kubectl
+alias cat=bat
