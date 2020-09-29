@@ -22,6 +22,7 @@ call plug#begin(stdpath('config') . '/plugged')
   Plug 'airblade/vim-gitgutter'
   Plug 'dense-analysis/ale'
   Plug 'sbdchd/neoformat'
+  Plug 'previm/previm'
 
 call plug#end()
 
@@ -38,10 +39,16 @@ autocmd! BufWritePost resolve(expand($MYVIMRC)) call ReloadVimrc()
 function FileConfigs()
   au FileType vim setlocal ts=2 sts=2 sw=2 expandtab
 
-  augroup fmt
-    autocmd!
-    autocmd BufWritePre * undojoin | Neoformat
-  augroup END
+  au BufNewFile,BufRead *.yml,*.yaml setlocal expandtab ts=2 sw=2
+
+  let g:better_whitespace_enabled=1
+  let g:strip_whitespace_on_save=1
+  let g:strip_whitespace_confirm=0
+
+"  augroup fmt
+"    autocmd!
+"    autocmd BufWritePre * undojoin | Neoformat
+"  augroup END
 
 endfunction
 
@@ -65,6 +72,10 @@ function Keymap()
 endfunction
 
 function UserConfig()
+  let g:previm_enable_realtime=1
+  let g:vim_markdown_conceal=0
+  let g:vim_markdown_conceal_code_blocks=0
+  let g:previm_open_cmd="google-chrome"
   let g:airline_theme="solarized"
   set background=dark
   set termguicolors
@@ -88,7 +99,6 @@ function UserConfig()
   set smartcase
 
   set wrap
-  set textwidth=80
   set mouse=a
 
 endfunction
