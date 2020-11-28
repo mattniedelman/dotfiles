@@ -8,10 +8,13 @@
     username = "mattniedelman";
     homeDirectory = "/home/mattniedelman";
     stateVersion = "21.03";
-    sessionVariables = {
-      LANG = "en_US.UTF-8";
-      LANGUAGE = "en_US.UTF-8";
+    language = {
+      base = "en_US.UTF-8";
+      ctype = "en_US.UTF-8";
     };
+    sessionVariables = {
+      LOCALE_ARCHIVE = "${pkgs.glibcLocales}/lib/locale/locale-archive";
+      };
     packages = with pkgs; [
       htop
       tree
@@ -21,6 +24,7 @@
       powerline-fonts
       glibcLocales
       zplug
+      zsh
     ];
   };
 
@@ -60,12 +64,12 @@
 
   programs.zsh = {
     enable = true;
-    zplug = {
-      enable = true;
+    sessionVariables = {
+      EDITOR = "nvim";
     };
     initExtraBeforeCompInit = ''
-      #!/bin/env zsh
       source ${pkgs.zplug}/init.zsh
+
       ${builtins.readFile ./.zplugrc}
   '';
   };
