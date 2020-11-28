@@ -70,7 +70,7 @@
     initExtraBeforeCompInit = ''
       source ${pkgs.zplug}/init.zsh
 
-      ${builtins.readFile ./.zplugrc}
+      ${builtins.readFile zsh/.zplugrc}
   '';
   };
 }
