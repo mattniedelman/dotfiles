@@ -5,8 +5,8 @@
   programs.home-manager.enable = true;
 
   home = {
-    username = "mattniedelman";
-    homeDirectory = "/home/mattniedelman";
+    username = "matt";
+    homeDirectory = "/home/matt";
     stateVersion = "21.03";
     language = {
       base = "en_US.UTF-8";
@@ -14,13 +14,14 @@
     };
     sessionVariables = {
       LOCALE_ARCHIVE = "${pkgs.glibcLocales}/lib/locale/locale-archive";
-      };
+    };
     packages = with pkgs; [
       htop
       tree
       wget
       unzip
       gnumake
+      powerline
       powerline-fonts
       glibcLocales
       zplug
