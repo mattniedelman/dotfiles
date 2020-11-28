@@ -18,6 +18,7 @@
     packages = with pkgs; [
       htop
       tree
+      gawk
       wget
       unzip
       gnumake
@@ -65,13 +66,46 @@
 
   programs.zsh = {
     enable = true;
+    defaultKeymap = "emacs";
     sessionVariables = {
       EDITOR = "nvim";
     };
-    initExtraBeforeCompInit = ''
-      source ${pkgs.zplug}/init.zsh
-
-      ${builtins.readFile zsh/.zplugrc}
-  '';
+    zplug = {
+      enable = true;
+      plugins = [
+        {
+	  name = "robbyrussell/oh-my-zsh";
+	  tags = ["use:lib/{clipboard,completion,directories,history,termsupport,key-bindings}.zsh"];
+	}
+        {
+	  name = "agnoster/agnoster-zsh-theme";
+	  tags = ["as:theme"];
+	}
+        {
+	  name = "plugins/docker";
+	  tags = ["from:oh-my-zsh"];
+	}
+        {
+	  name = "plugins/git";
+	  tags = ["from:oh-my-zsh"];
+	}
+        {
+	  name = "plugins/gradle";
+	  tags = ["from:oh-my-zsh"];
+	}
+        {
+	  name = "plugins/helm";
+	  tags = ["from:oh-my-zsh"];
+	}
+        {
+	  name = "plugins/kubectl";
+	  tags = ["from:oh-my-zsh"];
+	}
+        {
+	  name = "plugins/wd";
+	  tags = ["from:oh-my-zsh"];
+	}
+      ];
+    };
   };
 }
