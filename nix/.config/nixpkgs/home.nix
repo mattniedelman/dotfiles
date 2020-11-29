@@ -42,6 +42,7 @@
 
   programs.neovim = {
     enable = true;
+    withNodeJs = true;
     plugins = with pkgs.vimPlugins; [
 
       LanguageClient-neovim
@@ -102,6 +103,7 @@
         plugin = vim-colors-solarized;
         config = ''
           set background=dark
+          set termguicolors
           colorscheme solarized
           let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
           let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
@@ -151,13 +153,16 @@
 
       set nocompatible
       set clipboard+=unnamedplus
-
-
-
-
     '';
+    extraPackages = [
+      pkgs.bazel-buildtools
+      pkgs.clang-tools
+      pkgs.black
+      pkgs.shfmt
+      pkgs.nodePackages.prettier
+      pkgs.nodePackages.js-beautify
+    ];
   };
-
   programs.bat = {
     enable = true;
   };
@@ -181,44 +186,52 @@
   programs.zsh = {
     enable = true;
     defaultKeymap = "emacs";
+    enableAutosuggestions = true;
     sessionVariables = {
       EDITOR = "nvim";
     };
+    shellAliases = {
+      k = "kubectl";
+    };
+    initExtra = ''
+      bindkey "^[[1;5C" forward-word
+      bindkey "^[[1;5D" backward-word
+    '';
     zplug = {
       enable = true;
       plugins = [
         {
-	  name = "robbyrussell/oh-my-zsh";
-	  tags = ["use:lib/{clipboard,completion,directories,history,termsupport,key-bindings}.zsh"];
-	}
+          name = "robbyrussell/oh-my-zsh";
+          tags = ["use:lib/{clipboard,completion,directories,history,termsupport,key-bindings}.zsh"];
+        }
         {
-	  name = "agnoster/agnoster-zsh-theme";
-	  tags = ["as:theme"];
-	}
+          name = "agnoster/agnoster-zsh-theme";
+          tags = ["as:theme"];
+        }
         {
-	  name = "plugins/docker";
-	  tags = ["from:oh-my-zsh"];
-	}
+          name = "plugins/docker";
+          tags = ["from:oh-my-zsh"];
+        }
         {
-	  name = "plugins/git";
-	  tags = ["from:oh-my-zsh"];
-	}
+          name = "plugins/git";
+          tags = ["from:oh-my-zsh"];
+        }
         {
-	  name = "plugins/gradle";
-	  tags = ["from:oh-my-zsh"];
-	}
+          name = "plugins/gradle";
+          tags = ["from:oh-my-zsh"];
+        }
         {
-	  name = "plugins/helm";
-	  tags = ["from:oh-my-zsh"];
-	}
+          name = "plugins/helm";
+          tags = ["from:oh-my-zsh"];
+        }
         {
-	  name = "plugins/kubectl";
-	  tags = ["from:oh-my-zsh"];
-	}
+          name = "plugins/kubectl";
+          tags = ["from:oh-my-zsh"];
+        }
         {
-	  name = "plugins/wd";
-	  tags = ["from:oh-my-zsh"];
-	}
+          name = "plugins/wd";
+          tags = ["from:oh-my-zsh"];
+        }
       ];
     };
   };
