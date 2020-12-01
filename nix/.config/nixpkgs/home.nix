@@ -37,6 +37,7 @@
     userEmail = "mattniedelman@gmail.com";
     extraConfig = {
       core.editor = "nvim";
+      core.sshCommand = "/usr/bin/ssh";
     };
   };
 
@@ -189,13 +190,41 @@
     enableAutosuggestions = true;
     sessionVariables = {
       EDITOR = "nvim";
+      LOCALE_ARCHIVE = "${pkgs.glibcLocales}/lib/locale/locale-archive";
     };
     shellAliases = {
       k = "kubectl";
     };
+    envExtra = ''
+      PATH="$HOME/go/bin:$PATH"
+      if [ -e "$HOME/.nix-profile/etc/profile.d/nix.sh" ]; then . "$HOME/.nix-profile/etc/profile.d/nix.sh"; fi
+    '';
     initExtra = ''
       bindkey "^[[1;5C" forward-word
       bindkey "^[[1;5D" backward-word
+      bindkey "^[[3~" delete-char
+      bindkey "^[[A" history-beginning-search-backward
+      bindkey "^[[B" history-beginning-search-forward
+
+      source "$HOME/bin/.ktx"
+      source "$HOME/bin/.ktx-completion.sh"
+
+      prompt_kubeconfig() {
+      if [[ -n $KUBECONFIG ]]; then
+        color=red
+        prompt_segment $color $PRIMARY_FG
+        print -Pn " $(basename $KUBECONFIG) "
+      fi
+      }
+      typeset -aHg AGNOSTER_PROMPT_SEGMENTS=(
+          prompt_status
+          prompt_context
+          prompt_virtualenv
+          prompt_dir
+          prompt_git
+          prompt_kubeconfig
+          prompt_end
+      )
     '';
     zplug = {
       enable = true;
