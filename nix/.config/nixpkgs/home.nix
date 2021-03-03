@@ -16,20 +16,29 @@
       LOCALE_ARCHIVE = "${pkgs.glibcLocales}/lib/locale/locale-archive";
     };
     packages = with pkgs; [
-      htop
-      tree
+      bazel-buildtools
+      black
+      clang-tools
       gawk
-      wget
-      unzip
+      glibcLocales
       gnumake
+      haskellPackages.latex
+      htop
+      nodePackages.js-beautify
+      nodePackages.prettier
+      pandoc
       powerline
       powerline-fonts
-      glibcLocales
+      shfmt
+      texlive.combined.scheme-full
+      tree
+      unzip
+      wakatime
+      wget
       zplug
       zsh
     ];
   };
-
 
   programs.git = {
     enable = true;
@@ -52,9 +61,8 @@
       {
         plugin = goyo-vim;
         config = "let g:goyo_height='100%'";
-      }
+        }
       gv-vim
-      limelight-vim
       {
         plugin = limelight-vim;
         config = ''
@@ -66,9 +74,8 @@
       {
         plugin = rainbow;
         config = "let g:rainbow_active = 1";
-      }
+        }
       smartpairs-vim
-      syntastic
       {
         plugin = syntastic;
         config = ''
@@ -80,6 +87,7 @@
           let g:syntastic_auto_loc_list = 1
           let g:syntastic_check_on_open = 1
           let g:syntastic_check_on_wq = 0
+          let g:loaded_syntastic_java_javac_checker = 1
           '';
         }
       {
@@ -99,7 +107,6 @@
           let g:strip_whitespace_confirm = 0
           '';
         }
-      vim-codefmt
       {
         plugin = vim-colors-solarized;
         config = ''
@@ -153,16 +160,16 @@
       nmap <CR> o<ESC>
 
       set nocompatible
+
+      set nofoldenable
+
+      set smartcase
+      set ignorecase
+
       set clipboard+=unnamedplus
+
+
     '';
-    extraPackages = [
-      pkgs.bazel-buildtools
-      pkgs.clang-tools
-      pkgs.black
-      pkgs.shfmt
-      pkgs.nodePackages.prettier
-      pkgs.nodePackages.js-beautify
-    ];
   };
   programs.bat = {
     enable = true;
@@ -197,17 +204,31 @@
     };
     envExtra = ''
       PATH="$HOME/go/bin:$PATH"
+      PATH="$HOME/.local/bin:$PATH"
+
+      WORDCHARS=$WORDCHARS:s:/:
+
+      NVM_LAZY_LOAD=true
+
+      ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
+      ZSH_AUTOSUGGEST_USE_ASYNC=1
+
       if [ -e "$HOME/.nix-profile/etc/profile.d/nix.sh" ]; then . "$HOME/.nix-profile/etc/profile.d/nix.sh"; fi
     '';
     initExtra = ''
+      zstyle ':completion:*' menu select
       bindkey "^[[1;5C" forward-word
       bindkey "^[[1;5D" backward-word
       bindkey "^[[3~" delete-char
-      bindkey "^[[A" history-beginning-search-backward
-      bindkey "^[[B" history-beginning-search-forward
+      bindkey "^[[A" up-line-or-search
+      bindkey "^[[B" down-line-or-search
+      bindkey '^ ' autosuggest-accept
 
       source "$HOME/bin/.ktx"
       source "$HOME/bin/.ktx-completion.sh"
+      source <(kubectl completion zsh)
+      source <(skaffold completion zsh)
+      source "/home/matt/.sdkman/bin/sdkman-init.sh"
 
       prompt_kubeconfig() {
       if [[ -n $KUBECONFIG ]]; then
@@ -225,6 +246,8 @@
           prompt_kubeconfig
           prompt_end
       )
+
+      zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
     '';
     zplug = {
       enable = true;
@@ -260,6 +283,9 @@
         {
           name = "plugins/wd";
           tags = ["from:oh-my-zsh"];
+        }
+        {
+          name = "lukechilds/zsh-nvm";
         }
       ];
     };
