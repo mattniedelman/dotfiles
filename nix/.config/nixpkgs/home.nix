@@ -6,30 +6,31 @@
 
   home = {
     username = "matt";
-    homeDirectory = "/home/matt";
+    homeDirectory = "/Users/mattniedelman";
     stateVersion = "21.03";
     language = {
       base = "en_US.UTF-8";
       ctype = "en_US.UTF-8";
     };
-    sessionVariables = {
-      LOCALE_ARCHIVE = "${pkgs.glibcLocales}/lib/locale/locale-archive";
-    };
     packages = with pkgs; [
       bazel-buildtools
       black
       clang-tools
+      cmake
+      docker
       gawk
-      glibcLocales
       gnumake
       haskellPackages.latex
+      kubernetes-helm
       htop
+      kubectl
       nodePackages.js-beautify
       nodePackages.prettier
       pandoc
       powerline
       powerline-fonts
       shfmt
+      skaffold
       texlive.combined.scheme-full
       tree
       unzip
@@ -54,22 +55,8 @@
     enable = true;
     withNodeJs = true;
     plugins = with pkgs.vimPlugins; [
-
       LanguageClient-neovim
       fzf-vim
-      golden-ratio
-      {
-        plugin = goyo-vim;
-        config = "let g:goyo_height='100%'";
-        }
-      gv-vim
-      {
-        plugin = limelight-vim;
-        config = ''
-          nmap <Leader>l <Plug>(Limelight)
-          xmap <Leader>l <Plug>(Limelight)
-          '';
-        }
       neovim-sensible
       {
         plugin = rainbow;
@@ -82,7 +69,6 @@
           set statusline+=%#warningmsg#
           set statusline+=%{SyntasticStatuslineFlag()}
           set statusline+=%*
-
           let g:syntastic_always_populate_loc_list = 1
           let g:syntastic_auto_loc_list = 1
           let g:syntastic_check_on_open = 1
@@ -194,10 +180,9 @@
   programs.zsh = {
     enable = true;
     defaultKeymap = "emacs";
-    enableAutosuggestions = true;
+    enableAutosuggestions = false;
     sessionVariables = {
       EDITOR = "nvim";
-      LOCALE_ARCHIVE = "${pkgs.glibcLocales}/lib/locale/locale-archive";
     };
     shellAliases = {
       k = "kubectl";
@@ -228,7 +213,7 @@
       source "$HOME/bin/.ktx-completion.sh"
       source <(kubectl completion zsh)
       source <(skaffold completion zsh)
-      source "/home/matt/.sdkman/bin/sdkman-init.sh"
+      source "$HOME/.sdkman/bin/sdkman-init.sh"
 
       prompt_kubeconfig() {
       if [[ -n $KUBECONFIG ]]; then
