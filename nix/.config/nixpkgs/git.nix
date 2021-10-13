@@ -5,7 +5,7 @@
     ignores = [
       ".DS_Store"
     ];
-    userEmail = "matt@gradientts.com";
+    userEmail = "matt.niedelman@kaizenanalytix.com";
     userName = "Matt Niedelman";
   };
 }

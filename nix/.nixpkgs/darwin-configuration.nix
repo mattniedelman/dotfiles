@@ -72,19 +72,24 @@
   environment.systemPackages = [
     pkgs.xcode-install
     pkgs.skhd
+    pkgs.alacritty
   ];
 
   homebrew = {
     enable = true;
+    autoUpdate = true;
     brewPrefix = "/opt/homebrew/bin";
     extraConfig = ''
-      brew "xorpse/formulae/yabai", args: ["HEAD"]
-      brew "openconnect"
+      tap "yassinebridi/formulae", "https://github.com/yassinebridi/homebrew-formulae.git"
+      brew "yassinebridi/formulae/yabai", args: ["HEAD"]
+      brew "borgbackup"
+      cask "ubersicht"
+      cask "raycast"
+      cask "vorta"
+      cask "iterm2"
     '';
 
   };
-
-
 
   services.yabai = {
     enable = true;
@@ -175,10 +180,10 @@
         (yabai -m window --space prev || yabai -m window --space last) && \
         yabai -m window --focus $index
 
-
-
     '';
   };
+
+  security.accessibilityPrograms = [ "/opt/homebrew/bin/yabai" ];
 
 
 

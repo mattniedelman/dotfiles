@@ -40,10 +40,12 @@ in
         PATH="/usr/local/go/bin:$PATH"
         PATH="$HOME/bin:$PATH"
         PATH="$HOME/anaconda3/bin:$PATH"
+        PATH="$HOME/miniconda3/bin:$PATH"
 
         DEFAULT_USER=mattniedelman
 
         DOCKER_HOST=ssh://matt@100.106.87.24
+        RPS1=""
       '';
       initExtraFirst = ''
         skip_global_compinit=1
@@ -101,12 +103,6 @@ in
         source <(kubectl completion zsh)
         source <(skaffold completion zsh)
         source <(helm completion zsh)
-
-        export ATUIN_NOBIND="true"
-        source <(atuin init zsh)
-        bindkey "^R" _atuin_search_widget
-
-        source "$HOME/.sdkman/bin/sdkman-init.sh"
 
       '';
       plugins = [

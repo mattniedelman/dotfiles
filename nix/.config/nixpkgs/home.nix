@@ -24,5 +24,7 @@
     ./nvim.nix
     ./zsh.nix
     ./git.nix
+    ./alacritty.nix
+    ./tmux.nix
   ];
 }
