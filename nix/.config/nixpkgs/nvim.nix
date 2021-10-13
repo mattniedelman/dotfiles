@@ -47,6 +47,14 @@
 
     plugins = with pkgs.vimPlugins; [
       {
+        plugin = trouble-nvim;
+        config = ''
+          lua << EOF
+          require("trouble").setup {}
+          EOF
+        '';
+      }
+      {
         plugin = markdown-preview-nvim;
         config = ''
           let g:mkdp_auto_close = 0
@@ -61,6 +69,7 @@
       }
       neovim-sensible
       telescope-nvim
+      vim-wakatime
       fzf-vim
       vim-airline-themes
       vim-gitgutter
@@ -70,6 +79,13 @@
       popup-nvim
       plenary-nvim
       vim-cue
+      {
+        plugin = vim-slime;
+        config = ''
+          let g:slime_python_ipython = 1
+          let g:slime_target = "tmux"
+        '';
+      }
       {
         plugin = nvim-compe;
         config = ''
@@ -144,7 +160,17 @@
         plugin = nvim-lspconfig;
         config = ''
           lua << EOF
-            servers = {"bashls", "diagnosticls", "dockerls", "gopls", "jsonls", "rnix", "vimls", "yamlls"}
+            servers = {
+              "bashls",
+              "diagnosticls",
+              "dockerls",
+              "gopls",
+              "jsonls",
+              "rnix",
+              "pyright",
+              "vimls",
+              "yamlls"
+            }
             for _, lsp in ipairs(servers) do
               require'lspconfig'[lsp].setup{}
             end
