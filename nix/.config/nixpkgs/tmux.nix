@@ -9,11 +9,14 @@
       extrakto
     ];
     disableConfirmationPrompt = true;
-    historyLimit = 10000;
+    historyLimit = 1000000;
     newSession = true;
     sensibleOnTop = true;
     extraConfig = ''
       set -g mouse on;
+      bind c new-window -c "#{pane_current_path}"
+      bind '"' split-window -c "#{pane_current_path}"
+      bind % split-window -h -c "#{pane_current_path}"
     '';
   };
 }

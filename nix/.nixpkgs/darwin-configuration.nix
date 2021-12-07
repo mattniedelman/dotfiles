@@ -1,4 +1,7 @@
 { config, pkgs, ... }:
+let
+  home = builtins.getEnv "HOME";
+in
 {
   system.defaults = {
     loginwindow = {
@@ -82,11 +85,17 @@
     extraConfig = ''
       tap "yassinebridi/formulae", "https://github.com/yassinebridi/homebrew-formulae.git"
       brew "yassinebridi/formulae/yabai", args: ["HEAD"]
+      tap "dbt-labs/dbt"
+      brew "dbt"
       brew "borgbackup"
+      brew "neomutt"
+      brew "azure-cli"
       cask "ubersicht"
       cask "raycast"
       cask "vorta"
       cask "iterm2"
+      brew "koekeishiya/formulae/skhd"
+
     '';
 
   };
@@ -128,6 +137,7 @@
       window_shadow = "float";
       window_topmost = "on";
     };
+
 
     extraConfig = ''
         # rules
@@ -183,10 +193,26 @@
     '';
   };
 
-  security.accessibilityPrograms = [ "/opt/homebrew/bin/yabai" ];
+  security.accessibilityPrograms = [ "${config.services.yabai.package}/bin/yabai" ];
 
+  users = {
+    users.mattniedelman = {
+      name = "mattniedelman";
+      home = "/Users/mattniedelman";
+    };
+  };
 
+  nix.nixPath = {
+    hm-config = "${home}/.config/nixpkgs/home.nix";
+  };
 
-  imports = [ <home-manager/nix-darwin> ];
+  imports = [
+    <home-manager/nix-darwin>
+  ];
+
+  home-manager = {
+    useGlobalPkgs = true;
+    users.mattniedelman = import "/Users/mattniedelman/.config/nixpkgs/home.nix";
+  };
 
 }

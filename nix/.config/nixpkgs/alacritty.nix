@@ -6,7 +6,7 @@
       live_config_reload = true;
       font = {
         normal.family = "Source Code Pro for Powerline";
-        size = 14.0;
+        size = 16.0;
         use_this_strokes = true;
       };
       cursor = {
@@ -26,7 +26,7 @@
         {
           key = "Minus";
           mods = "Control";
-          chars = "\\x02\\x5c";
+          chars = "\\x02\\x22";
         }
         {
           key = "T";
@@ -56,7 +56,7 @@
         {
           key = "L";
           mods = "Command";
-          chars = "\\x02\\x6c";
+          chars = "\\x02\\x4e";
         }
         {
           key = "O";

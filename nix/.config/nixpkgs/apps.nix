@@ -14,6 +14,8 @@ in
       ag
       aws
       bazel-buildtools
+      buildpack
+      coreutils
       black
       cargo
       clang-tools
@@ -37,6 +39,7 @@ in
       kubectl
       kubernetes-helm
       nixpkgs-fmt
+      nodejs
       nodePackages.js-beautify
       nodePackages.prettier
       poetry
@@ -46,16 +49,15 @@ in
       rnix-lsp
       rustc
       shfmt
-      skaffold
       tanka
       tesseract
       texlive.combined.scheme-small
-      tree
+      # tree
+      openssh
       unzip
       terraform
       watch
       wget
-      zellij
       zplug
     ] ++ nodepkgs;
 

@@ -21,6 +21,7 @@ in
       shellAliases = {
         k = "kubectl";
         cdr = "cd $(git rev-parse --show-toplevel)";
+        tf = "terraform";
       };
       # completionInit = ''
       #   autoload -U +X compinit

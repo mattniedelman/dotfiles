@@ -43,6 +43,8 @@
       endif
 
       autocmd BufNewFile,BufRead *.cue setf cue
+      autocmd BufNewFile,BufRead *.md setlocal textwidth=80
+
     '';
 
     plugins = with pkgs.vimPlugins; [
@@ -64,9 +66,10 @@
       }
       nvim-treesitter-pyfold
       nvim-treesitter-refactor
-      {
-        plugin = nvim-treesitter.withPlugins (_: pkgs.tree-sitter.allGrammars);
-      }
+      nvim-treesitter
+      # {
+      #   plugin = nvim-treesitter.withPlugins (_: pkgs.tree-sitter.allGrammars);
+      # }
       neovim-sensible
       telescope-nvim
       vim-wakatime
@@ -79,6 +82,13 @@
       popup-nvim
       plenary-nvim
       vim-cue
+      {
+        plugin = vim-terraform;
+        config = ''
+          let g:terraform_align = 1
+          let g:terraform_fmt_on_save = 1
+        '';
+      }
       {
         plugin = vim-slime;
         config = ''
@@ -108,7 +118,7 @@
 
             source = {
               path = true;
-              nvim_lsp = true;
+             nvim_lsp = true;
             };
           }
 
@@ -225,6 +235,7 @@
           autocmd FileType nix AutoFormatBuffer nixpkgs-fmt
           augroup END
         '';
+
       }
     ];
   };
