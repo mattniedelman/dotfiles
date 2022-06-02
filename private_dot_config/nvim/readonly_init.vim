@@ -1,7 +1,7 @@
 call plug#begin()
   Plug 'kyazdani42/nvim-web-devicons'
   Plug 'folke/trouble.nvim'
-  Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
+  "Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
   Plug 'hashivim/vim-terraform'
   Plug 'jpalardy/vim-slime'
   Plug 'neovim/nvim-lspconfig'
