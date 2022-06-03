@@ -76,7 +76,6 @@ lua << EOF
   end
 
 EOF
-####
 
 " }}}
 " ale {{{
