@@ -5,6 +5,13 @@ call plug#begin()
   Plug 'hashivim/vim-terraform'
   Plug 'jpalardy/vim-slime'
   Plug 'neovim/nvim-lspconfig'
+  Plug 'dense-analysis/ale'
+  Plug 'sheerun/vim-polyglot'
+  Plug 'ntpeters/vim-better-whitespace'
+  Plug 'arcticeicestudio/nord-vim'
+  Plug 'google/vim-maktaba'
+  Plug 'google/vim-codefmt'
+  Plug 'google/vim-glaive'
 call plug#end()
 
 " trouble.nvim {{{
