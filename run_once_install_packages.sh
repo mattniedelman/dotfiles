@@ -6,7 +6,7 @@ npm install -g \
     bash-language-server \
     vscode-langservers-extracted \
     cssmodules-language-server \
-    dockerls \
+    dockerfile-language-server-nodejs \
     spectral \
     typescript-language-server \
     vim-language-server \
