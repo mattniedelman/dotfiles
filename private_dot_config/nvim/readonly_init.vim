@@ -96,7 +96,6 @@ let g:strip_whitespace_confirm = 0
 set background=dark
 set termguicolors
 colorscheme nord
-
 " }}}
 " vim-codefmt {{{
 augroup autoformat_settings
