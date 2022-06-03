@@ -8,7 +8,7 @@ call plug#begin()
   Plug 'dense-analysis/ale'
   Plug 'sheerun/vim-polyglot'
   Plug 'ntpeters/vim-better-whitespace'
-  Plug 'arcticeicestudio/nord-vim'
+  Plug 'arcticicestudio/nord-vim'
   Plug 'google/vim-maktaba'
   Plug 'google/vim-codefmt'
   Plug 'google/vim-glaive'
