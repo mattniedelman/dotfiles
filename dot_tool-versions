@@ -43,3 +43,4 @@ sqlite 3.38.5
 vault 1.10.3+ent
 yarn 1.22.19
 ag 2.2.0
+rust 1.61.0
