@@ -92,6 +92,7 @@ let g:ale_disable_lsp = 1
 
 " }}}
 " vim-polyglot {{{
+let g:polyglot_is_disabled = {}
 let g:polyglot_disabled = ['cue']
 
 " }}}
