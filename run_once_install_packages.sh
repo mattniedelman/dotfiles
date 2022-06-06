@@ -1,5 +1,7 @@
 #!/bin/bash
 
+
+# LSP
 npm install -g \
     @angular/language-server \
     @ansible/ansible-language-server \
@@ -14,10 +16,20 @@ npm install -g \
 
 yarn global add \
     diagnostic-languageserver \
-    yaml-language-server
+    yaml-language-server \
+    pyright
 
 dotnet tool install --global csharp-ls
 
-pip install 'python-lsp-server[all]'
+pip install \
+    'python-lsp-server[all]' \
 
 cargo install --locked taplo-cli
+
+# Code formatting
+pip install \
+    black \
+    isort
+
+go install mvdan.cc/sh/v3/cmd/shfmt@latest
+
