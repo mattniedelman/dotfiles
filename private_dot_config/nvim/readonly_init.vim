@@ -1,3 +1,6 @@
+
+set nocompatible
+
 call plug#begin()
   Plug 'kyazdani42/nvim-web-devicons'
   Plug 'folke/trouble.nvim'
@@ -135,7 +138,6 @@ map <C-e> <ESC>$
 imap <C-e> <ESC>$a
 nmap <S-Enter> O<ESC>
 nmap <CR> o<ESC>
-set nocompatible
 set nofoldenable
 set smartcase
 set ignorecase
