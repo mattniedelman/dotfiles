@@ -10,7 +10,7 @@ call plug#begin()
   Plug 'jpalardy/vim-slime'
   Plug 'neovim/nvim-lspconfig'
   Plug 'dense-analysis/ale'
-  Plug 'sheerun/vim-polyglot'
+  "Plug 'sheerun/vim-polyglot'
   Plug 'ntpeters/vim-better-whitespace'
   Plug 'arcticicestudio/nord-vim'
   Plug 'google/vim-maktaba'
