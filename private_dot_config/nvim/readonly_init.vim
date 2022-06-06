@@ -18,7 +18,7 @@ call plug#end()
 lua << EOF
 require("trouble").setup {
   position = "right",
-  auto_open = true,
+  auto_open = false,
   use_diagnostic_signs = true
   }
 EOF
