@@ -97,6 +97,7 @@ set background=dark
 set termguicolors
 colorscheme nord
 " }}}
+
 " vim-codefmt {{{
 augroup autoformat_settings
 autocmd FileType bzl AutoFormatBuffer buildifier
