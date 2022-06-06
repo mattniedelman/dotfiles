@@ -5,3 +5,7 @@ end
 
 set EDITOR nvim
 
+alias cdr='cd $(git rev-parse --show-toplevel)'
+alias k='kubectl'
+alias tf='terraform'
+
