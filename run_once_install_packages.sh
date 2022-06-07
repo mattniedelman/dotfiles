@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 # LSP
 npm install -g \
     @angular/language-server \

@@ -156,6 +156,7 @@ set shortmess+=c
 set smarttab
 set tabstop=4
 set shiftwidth=4
+set expandtab
 
 " Always show the signcolumn, otherwise it would shift the text each time
 " diagnostics appear/become resolved.
