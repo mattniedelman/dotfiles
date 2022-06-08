@@ -25,6 +25,8 @@ call plug#begin()
   Plug 'hrsh7th/nvim-cmp'
   Plug 'hrsh7th/cmp-vsnip'
   Plug 'hrsh7th/vim-vsnip'
+
+  Plug 'tpope/vim-fugitive'
 call plug#end()
 
 " trouble.nvim {{{
