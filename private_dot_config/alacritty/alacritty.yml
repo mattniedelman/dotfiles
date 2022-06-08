@@ -396,7 +396,7 @@ debug:
   #log_level: Warn
 
   # Print all received window events.
-  print_events: true
+  print_events: false
 
   # Highlight window damage information.
   highlight_damage: true
