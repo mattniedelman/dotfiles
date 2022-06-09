@@ -114,6 +114,10 @@ colorscheme nord
 " }}}
 
 " vim-codefmt {{{
+function! ApplyPythonFormatters() abort
+	execute 'FormatCode black'
+	execute 'FormatCode isort'
+endfunction
 augroup autoformat_settings
 autocmd FileType bzl AutoFormatBuffer buildifier
 autocmd FileType c,cpp,proto,javascript,arduino AutoFormatBuffer clang-format
@@ -122,9 +126,7 @@ autocmd FileType go AutoFormatBuffer gofmt
 autocmd FileType gn AutoFormatBuffer gn
 autocmd FileType html,css,sass,scss,less,json AutoFormatBuffer js-beautify
 autocmd FileType java AutoFormatBuffer google-java-format
-autocmd FileType python AutoFormatBuffer black
-autocmd FileType python AutoFormatBuffer isort
-" Alternative: autocmd FileType python AutoFormatBuffer autopep8
+autocmd FileType python AutoFormatBuffer ApplyPythonFormatters
 autocmd FileType rust AutoFormatBuffer rustfmt
 autocmd FileType vue AutoFormatBuffer prettier
 autocmd FileType nix AutoFormatBuffer nixpkgs-fmt
