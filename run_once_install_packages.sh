@@ -22,6 +22,7 @@ dotnet tool install --global csharp-ls
 
 pip install \
     'python-lsp-server[all]' \
+	semgrep
 
 cargo install --locked taplo-cli
 
