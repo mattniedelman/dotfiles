@@ -1,6 +1,8 @@
+function fish_right_prompt
+    string unescape \"\$$prompt_var[1][2]$color_normal\"
+end
 if status is-interactive
     source "$HOME/.asdf/asdf.fish"
-	source "$HOME/.config/fish/functions/tide.fish"
     # Commands to run in interactive sessions can go here
 
 end
