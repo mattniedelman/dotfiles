@@ -4,4 +4,5 @@ fisher install \
 	IlanCosman/tide@v5 \
 	PatrickF1/fzf.fish \
 	gazorby/fish-abbreviation-tips \
-	fischerling/plugin-wd
+	fischerling/plugin-wd \
+	acomagu/fish-async-prompt
