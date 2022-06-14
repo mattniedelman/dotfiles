@@ -1,6 +1,8 @@
 if status is-interactive
     source "$HOME/.asdf/asdf.fish"
+	source "$HOME/.config/fish/functions/tide.fish"
     # Commands to run in interactive sessions can go here
+
 end
 
 set EDITOR nvim
