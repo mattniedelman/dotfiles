@@ -1,6 +1,27 @@
 
-set nocompatible
+
+
+
+
 let g:polyglot_is_disabled = {}
+set autoindent
+set backspace=indent,eol,start
+set clipboard=unnamedplus
+set cmdheight=2
+set complete-=i
+set hidden
+set ignorecase
+set nobackup
+set nocompatible
+set nofoldenable
+set nowritebackup
+set number
+set shiftwidth=4
+set shortmess+=c
+set smartcase
+set smarttab
+set tabstop=4
+set updatetime=300
 
 call plug#begin()
   Plug 'kyazdani42/nvim-web-devicons'
@@ -27,6 +48,7 @@ call plug#begin()
   Plug 'hrsh7th/vim-vsnip'
 
   Plug 'tpope/vim-fugitive'
+  Plug 'tpope/vim-commentary'
 call plug#end()
 
 " trouble.nvim {{{
@@ -146,23 +168,6 @@ map <C-e> <ESC>$
 imap <C-e> <ESC>$a
 nmap <S-Enter> O<ESC>
 nmap <CR> o<ESC>
-set nofoldenable
-set smartcase
-set ignorecase
-set clipboard=unnamedplus
-
-
-set number
-set hidden
-set nobackup
-set nowritebackup
-set cmdheight=2
-set updatetime=300
-set shortmess+=c
-
-set smarttab
-set tabstop=4
-set shiftwidth=4
 
 " Always show the signcolumn, otherwise it would shift the text each time
 " diagnostics appear/become resolved.
