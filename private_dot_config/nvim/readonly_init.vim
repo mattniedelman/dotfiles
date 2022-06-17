@@ -49,6 +49,7 @@ call plug#begin()
 
   Plug 'tpope/vim-fugitive'
   Plug 'tpope/vim-commentary'
+  Plug 'tpope/vim-sleuth'
 call plug#end()
 
 " trouble.nvim {{{
