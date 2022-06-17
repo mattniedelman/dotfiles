@@ -1,28 +1,3 @@
-
-
-
-
-
-let g:polyglot_is_disabled = {}
-set autoindent
-set backspace=indent,eol,start
-set clipboard=unnamedplus
-set cmdheight=2
-set complete-=i
-set hidden
-set ignorecase
-set nobackup
-set nocompatible
-set nofoldenable
-set nowritebackup
-set number
-set shiftwidth=4
-set shortmess+=c
-set smartcase
-set smarttab
-set tabstop=4
-set updatetime=300
-
 call plug#begin()
   Plug 'kyazdani42/nvim-web-devicons'
   Plug 'folke/trouble.nvim'
@@ -51,6 +26,38 @@ call plug#begin()
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-sleuth'
 call plug#end()
+
+let g:polyglot_is_disabled = {}
+set autoindent
+set backspace=indent,eol,start
+set clipboard=unnamedplus
+set cmdheight=2
+set complete-=i
+set hidden
+set ignorecase
+set nobackup
+set nocompatible
+set nofoldenable
+set nowritebackup
+set number
+set shiftwidth=4
+set shortmess+=c
+set smartcase
+set smarttab
+set tabstop=4
+set updatetime=300
+
+
+noremap Q <nop>
+noremap q <nop>
+imap fd <ESC>
+vmap fd <ESC>
+map <C-a> <ESC>^
+imap <C-a> <ESC>^i
+map <C-e> <ESC>$
+imap <C-e> <ESC>$a
+nmap <S-Enter> O<ESC>
+nmap <CR> o<ESC>
 
 " trouble.nvim {{{
 lua << EOF
@@ -159,16 +166,6 @@ augroup autoformat
 	autocmd BufWritePre *.py call ApplyPythonFormatters() | noautocmd write
 augroup END
 " }}}
-noremap Q <nop>
-noremap q <nop>
-imap fd <ESC>
-vmap fd <ESC>
-map <C-a> <ESC>^
-imap <C-a> <ESC>^i
-map <C-e> <ESC>$
-imap <C-e> <ESC>$a
-nmap <S-Enter> O<ESC>
-nmap <CR> o<ESC>
 
 " Always show the signcolumn, otherwise it would shift the text each time
 " diagnostics appear/become resolved.
