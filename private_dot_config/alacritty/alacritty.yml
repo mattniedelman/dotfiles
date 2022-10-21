@@ -81,10 +81,9 @@
 # Font configuration
 font:
   normal:
-    family: "MesloL GS NF"
+    family: "MesloLGS Nerd Font"
     style: Regular
   size: 12.0
-  use_thin_strokes: true
 
 draw_bold_text_with_bright_colors: true
 
@@ -124,7 +123,7 @@ colors:
      foreground: '#EBCB8B'
      background: '#4C566A'
 
-    bar:
+    footer_bar:
      background: '#434C5E'
      foreground: '#88C0D0'
 

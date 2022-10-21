@@ -25,19 +25,45 @@ call plug#begin()
   Plug 'tpope/vim-fugitive'
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-sleuth'
+
+  Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install' }
+  Plug 'kyazdani42/nvim-web-devicons'
+  Plug 'mzlogin/vim-markdown-toc'
+  Plug 'nvim-lua/plenary.nvim'
+  Plug 'nvim-lua/popup.nvim'
+  Plug 'nvim-telescope/telescope-media-files.nvim'
+  Plug 'nvim-telescope/telescope-symbols.nvim'
+  Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.0' }
+  Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+
+  Plug 'goerz/jupytext.vim'
+
+  Plug 'renerocksai/calendar-vim'
+  Plug 'renerocksai/telekasten.nvim'
 call plug#end()
 
+let mapleader = "\<Space>"
+
+lua << EOF
+require('telescope').load_extension('media_files')
+EOF
+
 let g:polyglot_is_disabled = {}
+
 set autoindent
+set autoread
+set autowrite
 set backspace=indent,eol,start
 set clipboard=unnamedplus
 set cmdheight=2
 set complete-=i
 set hidden
 set ignorecase
+set mouse=a
 set nobackup
 set nocompatible
 set nofoldenable
+set noswapfile
 set nowritebackup
 set number
 set shiftwidth=4
@@ -46,6 +72,24 @@ set smartcase
 set smarttab
 set tabstop=4
 set updatetime=300
+set incsearch
+set hlsearch
+set ignorecase
+set smartcase
+set lazyredraw
+set nocursorcolumn
+set nocursorline
+set wrap
+set textwidth=80
+set formatoptions=qrn1
+
+set notimeout
+set ttimeout
+set ttimeoutlen=10
+set timeoutlen=500
+set signcolumn=yes
+command! -nargs=* -complete=help Help vertical belowright help <args>
+autocmd FileType help wincmd L
 
 
 noremap Q <nop>
@@ -59,6 +103,142 @@ imap <C-e> <ESC>$a
 nmap <S-Enter> O<ESC>
 nmap <CR> o<ESC>
 
+" jupytext.vim {{{
+let g:jupytext_fmt = "py"
+" }}}
+" telekasten.nim {{{
+nnoremap <leader>zf :lua require('telekasten').find_notes()<CR>
+nnoremap <leader>zd :lua require('telekasten').find_daily_notes()<CR>
+nnoremap <leader>zg :lua require('telekasten').search_notes()<CR>
+nnoremap <leader>zz :lua require('telekasten').follow_link()<CR>
+
+" on hesitation, bring up the panel
+nnoremap <leader>z :lua require('telekasten').panel()<CR>
+lua << EOF
+local home = vim.fn.expand("~/notes")
+require('telekasten').setup({
+    home         = home,
+    take_over_my_home = true,
+    auto_set_filetype = true,
+    dailies      = home .. '/' .. 'daily',
+    weeklies     = home .. '/' .. 'weekly',
+    templates    = home .. '/' .. 'templates',
+    image_subdir = "img",
+    extension    = ".md",
+    new_note_filename = "title",
+    -- file uuid type ("rand" or input for os.date()")
+    uuid_type = "%Y%m%d%H%M",
+    -- UUID separator
+    uuid_sep = "-",
+
+    -- following a link to a non-existing note will create it
+    follow_creates_nonexisting = true,
+    dailies_create_nonexisting = true,
+    weeklies_create_nonexisting = true,
+
+    -- skip telescope prompt for goto_today and goto_thisweek
+    journal_auto_open = false,
+
+    -- template for new notes (new_note, follow_link)
+    -- set to `nil` or do not specify if you do not want a template
+    template_new_note = home .. '/' .. 'templates/new_note.md',
+
+    -- template for newly created daily notes (goto_today)
+    -- set to `nil` or do not specify if you do not want a template
+    template_new_daily = home .. '/' .. 'templates/daily.md',
+
+    -- template for newly created weekly notes (goto_thisweek)
+    -- set to `nil` or do not specify if you do not want a template
+    template_new_weekly= home .. '/' .. 'templates/weekly.md',
+
+    -- image link style
+    -- wiki:     ![[image name]]
+    -- markdown: ![](image_subdir/xxxxx.png)
+    image_link_style = "markdown",
+
+    -- default sort option: 'filename', 'modified'
+    sort = "filename",
+
+    -- integrate with calendar-vim
+    plug_into_calendar = true,
+    calendar_opts = {
+        -- calendar week display mode: 1 .. 'WK01', 2 .. 'WK 1', 3 .. 'KW01', 4 .. 'KW 1', 5 .. '1'
+        weeknm = 4,
+        -- use monday as first day of week: 1 .. true, 0 .. false
+        calendar_monday = 1,
+        -- calendar mark: where to put mark for marked days: 'left', 'right', 'left-fit'
+        calendar_mark = 'left-fit',
+    },
+
+    -- telescope actions behavior
+    close_after_yanking = false,
+    insert_after_inserting = true,
+
+    -- tag notation: '#tag', ':tag:', 'yaml-bare'
+    tag_notation = "#tag",
+
+    -- command palette theme: dropdown (window) or ivy (bottom panel)
+    command_palette_theme = "ivy",
+
+    -- tag list theme:
+    -- get_cursor: small tag list at cursor; ivy and dropdown like above
+    show_tags_theme = "ivy",
+
+    -- when linking to a note in subdir/, create a [[subdir/title]] link
+    -- instead of a [[title only]] link
+    subdirs_in_links = true,
+
+    -- template_handling
+    -- What to do when creating a new note via `new_note()` or `follow_link()`
+    -- to a non-existing note
+    -- - prefer_new_note: use `new_note` template
+    -- - smart: if day or week is detected in title, use daily / weekly templates (default)
+    -- - always_ask: always ask before creating a note
+    template_handling = "smart",
+
+    -- path handling:
+    --   this applies to:
+    --     - new_note()
+    --     - new_templated_note()
+    --     - follow_link() to non-existing note
+    --
+    --   it does NOT apply to:
+    --     - goto_today()
+    --     - goto_thisweek()
+    --
+    --   Valid options:
+    --     - smart: put daily-looking notes in daily, weekly-looking ones in weekly,
+    --              all other ones in home, except for notes/with/subdirs/in/title.
+    --              (default)
+    --
+    --     - prefer_home: put all notes in home except for goto_today(), goto_thisweek()
+    --                    except for notes with subdirs/in/title.
+    --
+    --     - same_as_current: put all new notes in the dir of the current note if
+    --                        present or else in home
+    --                        except for notes/with/subdirs/in/title.
+    new_note_location = "smart",
+
+    -- should all links be updated when a file is renamed
+    rename_update_links = true,
+
+    vaults = {
+        vault2 = {
+            -- alternate configuration for vault2 here. Missing values are defaulted to
+            -- default values from telekasten.
+            -- e.g.
+            -- home = "/home/user/vaults/personal",
+        },
+    },
+
+    -- how to preview media files
+    -- "telescope-media-files" if you have telescope-media-files.nvim installed
+    -- "catimg-previewer" if you have catimg installed
+    media_previewer = "telescope-media-files",
+})
+EOF
+" }}}
+"
 " trouble.nvim {{{
 lua << EOF
 require("trouble").setup {
