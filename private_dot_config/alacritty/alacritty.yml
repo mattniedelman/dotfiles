@@ -398,5 +398,4 @@ debug:
   print_events: false
 
   # Highlight window damage information.
-  highlight_damage: true
-
+  highlight_damage: false
