@@ -1,17 +1,14 @@
 call plug#begin()
+  Plug 'sheerun/vim-polyglot'
+  Plug 'hrsh7th/vim-vsnip'
+  Plug 'nvim-tree/nvim-web-devicons'
+  Plug 'hrsh7th/nvim-compe'
+  Plug 'ray-x/lsp_signature.nvim'
 
-  " Plug 'google/vim-maktaba'
-  " Plug 'google/vim-codefmt'
-
-  " Plug 'google/vim-glaive'
-
-  """"
-
-  Plug 'kyazdani42/nvim-web-devicons'
+  Plug 'petobens/poet-v'
   Plug 'arcticicestudio/nord-vim'
 
   Plug 'fladson/vim-kitty'
-  Plug 'knubie/vim-kitty-navigator', {'do': 'cp ./*.py ~/.config/kitty/'}
 
   Plug 'jpalardy/vim-slime'
 
@@ -19,14 +16,6 @@ call plug#begin()
   Plug 'folke/trouble.nvim'
   Plug 'neovim/nvim-lspconfig'
   Plug 'ntpeters/vim-better-whitespace'
-
-  Plug 'hrsh7th/cmp-buffer'
-  Plug 'hrsh7th/cmp-cmdline'
-  Plug 'hrsh7th/cmp-nvim-lsp'
-  Plug 'hrsh7th/cmp-path'
-  Plug 'hrsh7th/cmp-vsnip'
-  Plug 'hrsh7th/nvim-cmp'
-  Plug 'hrsh7th/vim-vsnip'
 
   Plug 'tpope/vim-fugitive'
   Plug 'tpope/vim-commentary'
@@ -53,14 +42,13 @@ call plug#begin()
 call plug#end()
 
 let mapleader = "\<Space>"
-
+nnoremap <Leader>sv :source $MYVIMRC<CR>
 
 lua << EOF
 require('telescope').load_extension('media_files')
 require('telescope').load_extension('yaml_schema')
 EOF
 
-let g:polyglot_is_disabled = {}
 set autoindent
 set backspace=indent,eol,start
 set clipboard=unnamedplus
@@ -73,13 +61,17 @@ set nobackup
 set nofoldenable
 set nowritebackup
 set number
-set shiftwidth=4
 set shortmess+=c
 set smartcase
 set noswapfile
-set smarttab
-set tabstop=4
 set updatetime=300
+
+set tabstop=4
+set shiftwidth=4
+set softtabstop=4
+set expandtab
+set autoindent
+
 
 au FocusGained,BufEnter * :silent! !
 
@@ -94,78 +86,122 @@ imap <C-e> <ESC>$a
 nmap <S-Enter> O<ESC>
 nmap <CR> o<ESC>
 
+let g:python3_host_prog='/home/mattniedelman/.cache/pypoetry/virtualenvs/neovim-0WD0XgmR-py3.10/bin/python'
+" poet-v
+let g:poetv_executables = ['poetry']
+let g:poetv_auto_activate = 1
+"
 
 " mason.nvim {{{
 lua << EOF
 require("mason").setup()
 require("mason-lspconfig").setup({
-    ensure_installed = {
-        "awk_ls",
-        "dagger",
-        "diagnosticls",
-        "dockerls",
-        "eslint",
-        "gopls",
-        "graphql",
-        "html",
-        "jsonls",
-        "quick_lint_js",
-        "tsserver",
-        "texlab",
-        "marksman",
-        "prosemd_lsp",
-        "prismals",
-        "pylsp",
-        "ruby_ls",
-        "sqlls",
-        "sqls",
-        "stylelint_lsp",
-        "terraformls",
-        "tflint",
-        "tsserver",
-        "vimls",
-        "lemminx",
-        "yamlls"
-    }
+  ensure_installed = {
+    "awk_ls",
+    "dagger",
+    "dockerls",
+    "eslint",
+    "gopls",
+    "graphql",
+    "html",
+    "jsonls",
+    "quick_lint_js",
+    "tsserver",
+    "texlab",
+    "marksman",
+    "prismals",
+    "pylsp",
+    "ruby_ls",
+    "sqlls",
+    "sqls",
+    "terraformls",
+    "tflint",
+    "tsserver",
+    "vimls",
+    "lemminx",
+    "yamlls"
+  },
+  automatic_installation = true,
+  automatic_setup = true
 })
 
-local null_ls = require 'null-ls'
+local null_ls = require("null-ls")
+
+null_ls.setup({
+  sources = {
+   --null_ls.builtins.code_actions.gitsigns,
+   --null_ls.builtins.code_actions.refactoring,
+   --null_ls.builtins.code_actions.shellcheck,
+   --null_ls.builtins.diagnostics.actionlint,
+   --null_ls.builtins.diagnostics.checkmake,
+   --null_ls.builtins.diagnostics.fish,
+   --null_ls.builtins.diagnostics.mypy.with({ prefer_local = '.venv/bin' }),
+   --null_ls.builtins.diagnostics.flake8,
+   --null_ls.builtins.diagnostics.ruff,
+   --null_ls.builtins.diagnostics.pylama,
+   --null_ls.builtins.diagnostics.pylint,
+   null_ls.builtins.formatting.isort,
+   null_ls.builtins.formatting.black,
+   --null_ls.builtins.diagnostics.hadolint,
+    --null_ls.builtins.diagnostics,
+    --null_ls.builtins.formatting,
+    --null_ls.builtins.hover,
+    --null_ls.builtins.completion
+    }
+  }
+)
+
 require("mason-null-ls").setup({
-    ensure_installed = {
-        "hadolint",
-        "gofumpt",
-        "goimports",
-        "goimports_reviser",
-        "golangci_lint",
-        "golines",
-        "revive",
-        "staticcheck",
-        "fixjson",
-        "jq",
-        "black",
-        "flake8",
-        "isort",
-        "mypy",
-        "pylint",
-        "vulture",
-        "shellcheck",
-        "shellharden",
-        "shfmt",
-        "sqlfluff",
-        "sql_formatter",
-        "taplo",
-        "vint",
-        "yamlft",
-        "yamllint"
+  automatic_installation=true,
+  automatic_setup= {
+    exclude = {
+      "textlint",
+      "misspell",
+      "cspell"
+      }
+    },
+  ensure_installed = nil
+})
+
+--require('mason-null-ls').setup_handlers()
+
+require('lspconfig').pylsp.setup({
+--  settings = {
+    pylsp = {
+      plugins = {
+        flake8 = {
+          enabled = True,
+          maxLineLength = 88,
+        },
+        jedi_completion = {
+          include_class_objects = false,
+          include_function_objects = false,
+        }
+      }
     }
+--  }
+})
+require('lspconfig').pyright.setup({
+  settings = {
+    python = {
+      venvPath = ".venv"
+    }
+  }
 })
 
-require("mason-null-ls").setup_handlers({
-  jq = function()
-    null_ls.register(null_ls.builtins.formatting.jq)
-  end
-
+require("lsp_signature").setup({
+  wrap=false,
+  max_height = nil,
+  max_width = nil,
 })
+
+require("lsp_signature").status_line(200)
+
+require("lsp-format").setup()
+servers = require("mason-lspconfig").get_installed_servers()
+for _, lsp in ipairs(servers) do
+  require'lspconfig'[lsp].setup{on_attach=require("lsp-format").on_attach}
+end
 EOF
 
 " jupytext.vim {{{
@@ -202,42 +238,21 @@ let g:slime_python_ipython = 1
 "
 
 " }}}
-" nvim-lspconfig {{{
-lua << EOF
-  require("lsp-format").setup()
-  servers = require("mason-lspconfig").get_installed_servers()
-  local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
-  for _, lsp in ipairs(servers) do
-    require'lspconfig'[lsp].setup{capabilities = capabilities, on_attach=require("lsp-format").on_attach}
-  end
-
-EOF
-" }}}
 "
 " yaml-companion.nvim {{{
 lua << EOF
 local cfg = require("yaml-companion").setup({
-  -- Built in file matchers
   builtin_matchers = {
-    -- Detects Kubernetes files based on content
     kubernetes = { enabled = true },
   },
-
-  -- Additional schemas available in Telescope picker
   schemas = {
     result = {
       {
         name = "eksctl",
         uri = "https://raw.githubusercontent.com/weaveworks/eksctl/b440775877e40c73614a00c4dc1688351c15b3f9/pkg/apis/eksctl.io/v1alpha5/assets/schema.json"
       }
-      --{
-      --  name = "Kubernetes 1.22.4",
-      --  uri = "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.22.4-standalone-strict/all.json",
-      --},
     },
   },
-
-  -- Pass any additional options that will be merged in the final LSP config
   lspconfig = {
     flags = {
       debounce_text_changes = 150,
@@ -284,29 +299,84 @@ set termguicolors
 colorscheme nord
 " }}}
 
-" vim-codefmt {{{
-" function! ApplyPythonFormatters() abort
-" 	execute 'FormatCode black'
-" 	execute 'FormatCode isort'
-" endfunction
-" augroup autoformat_settings
-" autocmd FileType bzl AutoFormatBuffer buildifier
-" autocmd FileType c,cpp,proto,javascript,arduino AutoFormatBuffer clang-format
-" autocmd FileType dart AutoFormatBuffer dartfmt
-" autocmd FileType go AutoFormatBuffer gofmt
-" autocmd FileType gn AutoFormatBuffer gn
-" autocmd FileType html,css,sass,scss,less,json AutoFormatBuffer js-beautify
-" autocmd FileType java AutoFormatBuffer google-java-format
-" autocmd FileType rust AutoFormatBuffer rustfmt
-" autocmd FileType vue AutoFormatBuffer prettier
-" autocmd FileType nix AutoFormatBuffer nixpkgs-fmt
-" augroup END
+" nvim-compe {{{
+lua << EOF
+vim.o.completeopt = "menuone,noselect"
+require'compe'.setup {
+  enabled = true;
+  autocomplete = true;
+  debug = false;
+  min_length = 1;
+  preselect = 'enable';
+  throttle_time = 80;
+  source_timeout = 200;
+  resolve_timeout = 800;
+  incomplete_delay = 400;
+  max_abbr_width = 100;
+  max_kind_width = 100;
+  max_menu_width = 100;
+  documentation = {
+    border = { '', '' ,'', ' ', '', '', '', ' ' }, -- the border option is the same as `|help nvim_open_win|`
+    winhighlight = "NormalFloat:CompeDocumentation,FloatBorder:CompeDocumentationBorder",
+    max_width = 120,
+    min_width = 60,
+    max_height = math.floor(vim.o.lines * 0.3),
+    min_height = 1,
+  };
 
-" augroup autoformat
-" 	autocmd!
-" 	autocmd BufWritePre *.py call ApplyPythonFormatters() | noautocmd write
-" augroup END
-" }}}
+  source = {
+    path = true;
+    buffer = true;
+    nvim_lsp = true;
+    vsnip = true;
+  };
+}
+local t = function(str)
+  return vim.api.nvim_replace_termcodes(str, true, true, true)
+end
+
+local check_back_space = function()
+    local col = vim.fn.col('.') - 1
+    return col == 0 or vim.fn.getline('.'):sub(col, col):match('%s') ~= nil
+end
+
+-- Use (s-)tab to:
+--- move to prev/next item in completion menuone
+--- jump to prev/next snippet's placeholder
+_G.tab_complete = function()
+  if vim.fn.pumvisible() == 1 then
+    return t "<C-n>"
+  elseif vim.fn['vsnip#available'](1) == 1 then
+    return t "<Plug>(vsnip-expand-or-jump)"
+  elseif check_back_space() then
+    return t "<Tab>"
+  else
+    return vim.fn['compe#complete']()
+  end
+end
+_G.s_tab_complete = function()
+  if vim.fn.pumvisible() == 1 then
+    return t "<C-p>"
+  elseif vim.fn['vsnip#jumpable'](-1) == 1 then
+    return t "<Plug>(vsnip-jump-prev)"
+  else
+    -- If <S-Tab> is not working in your terminal, change it to <C-h>
+    return t "<S-Tab>"
+  end
+end
+
+vim.api.nvim_set_keymap("i", "<Tab>", "v:lua.tab_complete()", {expr = true})
+vim.api.nvim_set_keymap("s", "<Tab>", "v:lua.tab_complete()", {expr = true})
+vim.api.nvim_set_keymap("i", "<S-Tab>", "v:lua.s_tab_complete()", {expr = true})
+vim.api.nvim_set_keymap("s", "<S-Tab>", "v:lua.s_tab_complete()", {expr = true})
+EOF
+
+inoremap <silent><expr> <C-Space> compe#complete()
+inoremap <silent><expr> <CR>      compe#confirm('<CR>')
+inoremap <silent><expr> <C-e>     compe#close('<C-e>')
+inoremap <silent><expr> <C-f>     compe#scroll({ 'delta': +4 })
+inoremap <silent><expr> <C-d>     compe#scroll({ 'delta': -4 })
+
 
 " Always show the signcolumn, otherwise it would shift the text each time
 " diagnostics appear/become resolved.
@@ -319,69 +389,4 @@ endif
 
 autocmd BufNewFile,BufRead *.cue setf cue
 autocmd BufNewFile,BufRead *.md setlocal textwidth=80
-
-set completeopt=menu,menuone,noselect
-
-lua <<EOF
-  -- Setup nvim-cmp.
-  local cmp = require'cmp'
-
-  cmp.setup({
-    snippet = {
-      -- REQUIRED - you must specify a snippet engine
-      expand = function(args)
-        vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
-        -- require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
-        -- require('snippy').expand_snippet(args.body) -- For `snippy` users.
-        -- vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
-      end,
-    },
-    window = {
-      -- completion = cmp.config.window.bordered(),
-      -- documentation = cmp.config.window.bordered(),
-    },
-    mapping = cmp.mapping.preset.insert({
-      ['<C-b>'] = cmp.mapping.scroll_docs(-4),
-      ['<C-f>'] = cmp.mapping.scroll_docs(4),
-      ['<tab>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
-    }),
-    sources = cmp.config.sources({
-      { name = 'nvim_lsp' },
-      { name = 'vsnip' }, -- For vsnip users.
-      -- { name = 'luasnip' }, -- For luasnip users.
-      -- { name = 'ultisnips' }, -- For ultisnips users.
-      -- { name = 'snippy' }, -- For snippy users.
-    }, {
-      { name = 'buffer' },
-    })
-  })
-
-  -- Set configuration for specific filetype.
-  cmp.setup.filetype('gitcommit', {
-    sources = cmp.config.sources({
-      { name = 'cmp_git' }, -- You can specify the `cmp_git` source if you were installed it.
-    }, {
-      { name = 'buffer' },
-    })
-  })
-
-  -- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
-  cmp.setup.cmdline('/', {
-    mapping = cmp.mapping.preset.cmdline(),
-    sources = {
-      { name = 'buffer' }
-    }
-  })
-
-  -- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
-  cmp.setup.cmdline(':', {
-    mapping = cmp.mapping.preset.cmdline(),
-    sources = cmp.config.sources({
-      { name = 'path' }
-    }, {
-      { name = 'cmdline' }
-    })
-  })
-
-  -- Setup lspconfig.
-EOF
+autocmd! BufNewFile,BufRead Dvcfile,*.dvc,dvc.lock setfiletype yaml
