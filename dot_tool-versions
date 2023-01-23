@@ -10,11 +10,11 @@ helm 3.9.0
 jq 1.6
 k3d 5.4.1
 make 4.3
-neovim 0.7.0
-poetry 1.2.1
-python 3.9.14
+neovim 0.8.2
+poetry 1.3.2
+python 3.10.7
 shellcheck 0.8.0
-skaffold 2.0.0
+skaffold 2.0.3
 terraform 1.2.2
 tilt 0.30.1
 tmux 3.3a
@@ -36,6 +36,8 @@ eksctl 0.111.0
 kubectl 1.25.1
 java zulu-19.28.81
 ruby 3.1.2
-luaJIT 2.0.5--2.4.4
+luaJIT 2.1.0-beta3--3.4.0
 act 0.2.33
 action-validator 0.1.2
+semgrep 1.1.0
+lua 5.4.4
