@@ -35,8 +35,8 @@ require("packer").startup(function(use)
       })
     end,
   })
-  use("petobens/poet-v")
-  use("ntpeters/vim-better-whitespace")
+  use({ "petobens/poet-v" })
+  use({ "ntpeters/vim-better-whitespace" })
   use({ "tpope/vim-commentary" })
 
   use({
@@ -52,6 +52,7 @@ require("packer").startup(function(use)
   })
 
   use({ "arcticicestudio/nord-vim" })
+  use({ "jpalardy/vim-slime" })
   if packer_bootstrap then
     require("packer").sync()
   end
