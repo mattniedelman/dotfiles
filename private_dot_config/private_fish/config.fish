@@ -13,11 +13,17 @@ set -Ux AWS_DEFAULT_PROFILE 439323037767_AI-Developer
 set -Ux DIRENV_LOG_FORMAT ""
 set -Ux TERM xterm-color
 
+set --global tide_right_prompt_items status cmd_duration virtual_env kubectl time
 alias cdr='cd (git rev-parse --show-toplevel)'
 alias k='kubectl'
 alias tf='terraform'
 alias icat="kitty +kitten icat"
 alias nvim=nvimvenv
+alias gl='geek-life'
+
 
 fzf_configure_bindings --directory=\ct
 
+### MANAGED BY RANCHER DESKTOP START (DO NOT EDIT)
+set --export --prepend PATH "/home/mattniedelman/.rd/bin"
+### MANAGED BY RANCHER DESKTOP END (DO NOT EDIT)

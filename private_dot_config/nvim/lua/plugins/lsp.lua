@@ -15,6 +15,7 @@ return {
         html = {},
         jdtls = {},
         jedi_language_server = {},
+        marksman = {},
         pyright = {},
         ruff_lsp = {
           init_options = {
