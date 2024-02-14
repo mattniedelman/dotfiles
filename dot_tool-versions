@@ -23,7 +23,7 @@ fd 8.7.1
 age 1.1.1
 litestream 0.3.13
 mitmproxy 9.0.1
-nodejs 21.2.0
+nodejs 21.6.1
 ripgrep 14.0.3
 sentinel 0.23.1
 serf 0.8.2

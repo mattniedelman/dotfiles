@@ -4,6 +4,7 @@ if status is-interactive
     # Commands to run in interactive sessions can go here
     fish_add_path "$HOME/bin"
     fish_add_path "$GOPATH/bin"
+    fish_add_path "$HOME/.krew/bin"
 end
 
 set -Ux EDITOR nvim
