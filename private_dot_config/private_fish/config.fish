@@ -5,6 +5,9 @@ if status is-interactive
     fish_add_path "$HOME/bin"
     fish_add_path "$GOPATH/bin"
     fish_add_path "$HOME/.krew/bin"
+    fish_add_path "$HOME/.cargo/bin"
+    fish_add_path "$HOME/.local/bin"
+    source ~/.asdf/plugins/golang/set-env.fish
 end
 
 set -Ux EDITOR nvim
@@ -24,6 +27,7 @@ alias gl='geek-life'
 
 
 fzf_configure_bindings --directory=\ct
+set fzf_fd_opts --no-ignore
 
 ### MANAGED BY RANCHER DESKTOP START (DO NOT EDIT)
 set --export --prepend PATH "/home/mattniedelman/.rd/bin"
