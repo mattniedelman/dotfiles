@@ -7,6 +7,13 @@ return {
   "Saghen/blink.cmp",
   version = "1.*",
   opts = function(_, opts)
+    opts.sources.transform_items = function(_, items)
+      return vim.tbl_filter(
+        function(item) return item.kind ~= require("blink.cmp.types").CompletionItemKind.Snippet end,
+        items
+      )
+    end
+
     if not opts.keymap then opts.keymap = {} end
     opts.keymap["<Tab>"] = { "snippet_forward", "fallback" }
     opts.keymap["<C-F>"] = {
