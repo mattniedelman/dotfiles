@@ -17,7 +17,7 @@ return {
       lua = { "stylua" },
       fish = { "fish_indent" },
       sh = { "shfmt", "shellcheck" },
-      python = { "isort", "black", "auto-optional" },
+      python = { "ruff_format", "ruff_organize_imports", "ruff_fix", "auto-optional" },
       json = { "jq" },
       go = { "gofumpt", "goimports" },
       markdown = { "mdslw", "markdownlint" },
