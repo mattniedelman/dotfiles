@@ -11,6 +11,8 @@ if status is-interactive
     fish_add_path "$GOROOT/bin"
     fish_add_path "$GOPATH/bin"
     fish_add_path "$GOBIN"
+
+    set sponge_delay 10
 end
 
 set -Ux EDITOR nvim
