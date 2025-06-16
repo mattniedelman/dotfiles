@@ -18,7 +18,7 @@ return {
                 typeCheckingMode = "all",
                 diagnosticSeverityOverrides = {
                   reportMissingTypeStubs = false,
-                  reportUnknonwMemberType = "warning",
+                  reportUnknownMemberType = "warning",
                   reportUntypedBaseClass = "information",
                   reportUntypedClassDecorator = "none",
                 },
