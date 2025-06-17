@@ -1,0 +1,63 @@
+return {
+  -- "olimorris/codecompanion.nvim",
+  -- lazy = false,
+  -- keys = {
+  --   { "<leader>a", "<cmd>CodeCompanion<cr>", noremap = true, desc = "CodeCompanion", silent = true },
+  --   {
+  --     "<leader>ac",
+  --     function()
+  --       require("codecompanion").prompt("commit")
+  --     end,
+  --     desc = "Commit Message",
+  --     noremap = true,
+  --     silent = true,
+  --   },
+  -- },
+  -- opts = {
+  --   opts = {
+  --     log_level = "DEBUG",
+  --   },
+  --   prompt_library = {
+  --     ["Generate a Commit Message"] = {
+  --       strategy = "inline",
+  --       description = "Generate a commit message",
+  --       opts = {
+  --         adapter = {
+  --           name = "copilot",
+  --           model = "o4-mini",
+  --         },
+  --         index = 10,
+  --         is_default = true,
+  --         is_slash_cmd = false,
+  --         short_name = "commit",
+  --         user_prompt = false,
+  --         auto_submit = true,
+  --         placement = "add",
+  --       },
+  --       prompts = {
+  --         {
+  --           role = "user",
+  --           content = function()
+  --             return string.format(
+  --               [[You are an expert at following the Conventional Commit specification. Given the git diff listed below, please generate a commit message for me:
+  --
+  -- ```diff
+  -- %s
+  -- ```
+  -- ]],
+  --               vim.fn.system("git diff --no-ext-diff --staged")
+  --             )
+  --           end,
+  --           opts = {
+  --             contains_code = true,
+  --           },
+  --         },
+  --       },
+  --     },
+  --   },
+  -- },
+  -- dependencies = {
+  --   "nvim-lua/plenary.nvim",
+  --   "nvim-treesitter/nvim-treesitter",
+  -- },
+}
