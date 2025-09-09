@@ -42,4 +42,5 @@ set fzf_fd_opts --no-ignore --exclude __pycache__
 set --export --prepend PATH "/home/mattniedelman/.rd/bin"
 ### MANAGED BY RANCHER DESKTOP END (DO NOT EDIT)
 
+/home/mattniedelman/.local/bin/mise activate fish --shims | source
 /home/mattniedelman/.local/bin/mise activate fish | source

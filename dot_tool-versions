@@ -36,15 +36,12 @@ eksctl 0.175.0
 kubectl 1.28.4
 java adoptopenjdk-jre-22.0.2+9
 ruby 3.1.2
-luaJIT 2.0.5--2.4.4
 act 0.2.67
 action-validator 0.5.4
 semgrep 1.1.0
 lua 5.4.6
 postgres 16.1
 maven 3.9.5
-vela 1.8.2
-sonarscanner 5.0.1.3006
 snyk 1.1217.0
 buildpack 0.32.1
 azure-cli 2.54.0
