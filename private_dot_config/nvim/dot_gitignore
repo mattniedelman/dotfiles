@@ -6,3 +6,8 @@ debug
 foo.*
 *.log
 data
+
+# KICS temporary files
+kics-results.json
+kics-results/
+.kics/
