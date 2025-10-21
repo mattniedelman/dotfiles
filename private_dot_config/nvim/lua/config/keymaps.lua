@@ -3,3 +3,8 @@
 -- Add any additional keymaps here
 vim.keymap.set("", "q", "<nop>")
 vim.keymap.set("", "Q", "<nop>")
+
+vim.cmd([[
+  cabbrev <expr> w getcmdtype()==':' && getcmdline() == "'<,'>w" ? '<c-u>w' : 'w'
+]])
+vim.keymap.set("i", "<C-f>", "<cmd>call augment#Accept()<cr>", { noremap = true, silent = true })
