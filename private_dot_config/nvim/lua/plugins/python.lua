@@ -1,9 +1,40 @@
+-- Python Development
+-- All Python-related tooling: LSP, formatting, linting, virtual environments
+
 return {
+  -- Python LSP servers
+  {
+    "mason-org/mason-lspconfig.nvim",
+    opts = {
+      ensure_installed = {
+        "ruff", -- Python linter/formatter LSP
+        "zuban", -- Python LSP
+      },
+    },
+    dependencies = {
+      { "mason-org/mason.nvim", opts = {} },
+      "neovim/nvim-lspconfig",
+    },
+  },
+
+  -- Install Python formatters/linters
+  {
+    "mason-org/mason.nvim",
+    opts = {
+      ensure_installed = {
+        "ruff", -- Python linter and formatter (CLI tool)
+      },
+    },
+  },
+
+  -- Configure Python formatters
   {
     "stevearc/conform.nvim",
     opts = function(_, opts)
+      opts.formatters_by_ft = opts.formatters_by_ft or {}
       opts.formatters_by_ft.python = { "ruff_format", "ruff_organize_imports", "ruff_fix" }
 
+      opts.formatters = opts.formatters or {}
       opts.formatters.ruff_fix = {
         command = "ruff",
         args = {
@@ -26,17 +57,9 @@ return {
       }
     end,
   },
+
+  -- Python virtual environment selector
   {
-    "mason-org/mason-lspconfig.nvim",
-    opts = {
-      ensure_installed = {
-        "ruff",
-        "zuban",
-      },
-    },
-    dependencies = {
-      { "mason-org/mason.nvim", opts = {} },
-      "neovim/nvim-lspconfig",
-    },
+    "linux-cultist/venv-selector.nvim",
   },
 }
