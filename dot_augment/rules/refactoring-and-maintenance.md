@@ -5,6 +5,97 @@ description: Guidelines for refactoring, code maintenance, and technical debt ma
 
 # Refactoring and Maintenance Guidelines
 
+## ⚠️ Refactoring Scope and Authorization Policy ⚠️
+
+### Scope Limits
+
+**Small refactoring (can proceed without explicit permission):**
+- Renaming variables/functions within a single file
+- Extracting small functions (< 10 lines)
+- Simplifying conditional logic in one function
+- Removing unused imports or variables
+- Fixing code style issues
+
+**Medium refactoring (requires user confirmation):**
+- Refactoring multiple related functions
+- Changing function signatures
+- Restructuring a single class
+- Moving code between files
+- Changes affecting 50-200 lines
+
+**Large refactoring (requires detailed plan and approval):**
+- Refactoring multiple files or modules
+- Changing public APIs
+- Restructuring class hierarchies
+- Consolidating or splitting modules
+- Changes affecting > 200 lines
+
+### Authorization Workflow
+
+**For medium refactoring:**
+```
+I will refactor the following:
+
+Files affected: [list]
+Changes:
+- [specific changes]
+
+Estimated impact: ~150 lines changed
+
+This refactoring will:
+- [benefits]
+- [potential risks]
+
+Proceed? (yes/no)
+```
+
+**For large refactoring:**
+```
+LARGE REFACTORING PLAN
+
+Scope:
+- [detailed scope]
+
+Files affected: [list with line counts]
+Estimated changes: ~500 lines
+
+Plan:
+1. [step 1]
+2. [step 2]
+3. [step 3]
+
+Risks:
+- [potential issues]
+
+Testing strategy:
+- [how to verify]
+
+This is a significant change. Would you like me to:
+1. Proceed with full refactoring
+2. Break into smaller steps
+3. Start with a proof-of-concept
+4. Cancel
+
+Your choice:
+```
+
+### Refactoring Boundaries
+
+**NEVER refactor without explicit permission:**
+- Public APIs used by external code
+- Database schema or migrations
+- Configuration file formats
+- Build or deployment scripts
+- Code in other repositories
+
+**When user says "improve code quality" or "refactor this":**
+1. Analyze scope of changes needed
+2. Present specific refactoring plan
+3. Wait for approval before proceeding
+4. If scope is large, offer to break into smaller steps
+
+---
+
 ## Refactoring Principles
 
 ### Systematic Refactoring Approach

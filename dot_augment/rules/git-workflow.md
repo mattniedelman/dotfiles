@@ -46,6 +46,37 @@ feat(api)!: change authentication response format
 BREAKING CHANGE: Auth endpoint now returns JWT in 'token' field instead of 'access_token'
 ```
 
+## Commit Message Confirmation Workflow
+
+**REQUIRED PROCESS for all commits:**
+
+1. **User requests commit** (using explicit commit language)
+
+2. **AI analyzes changes** and generates a Conventional Commit message following the format
+
+3. **AI presents proposed commit message** to user:
+   ```
+   I will commit these changes with the following message:
+
+   feat(auth): add OAuth2 authentication support
+
+   Implement token bucket algorithm for API rate limiting.
+   Configurable limits per endpoint and per user.
+
+   Is this commit message acceptable? (yes/no/modify)
+   ```
+
+4. **AI waits for user confirmation** before executing `git commit`
+
+5. **If user provides their own message**, AI must:
+   - Check if it follows Conventional Commits format
+   - Check if it uses objective language (no subjective adjectives)
+   - If non-conforming, inform user and suggest corrections
+   - Ask if user wants to use the suggested correction or proceed with their version
+   - Respect user's final decision even if non-conforming
+
+**Exception**: If user provides a complete commit message in their initial request (e.g., "Commit with message: feat(api): add endpoint"), AI may skip confirmation but MUST still validate the message format and suggest corrections if needed.
+
 ## Branch Naming Conventions
 
 **Use Simplified Gitflow:**
@@ -193,3 +224,48 @@ Relates to #456
 - Communicate with team about long-running branches
 - Use draft PRs for work-in-progress that needs early feedback
 
+## Edge Cases and Special Scenarios
+
+### Uncommitted Changes and Branch Switching
+**Scenario**: User asks to switch branches but has uncommitted changes.
+
+**AI behavior**:
+1. Inform user: "You have uncommitted changes. To switch branches, you can either: (a) commit the changes, (b) stash the changes, or (c) discard the changes. Which would you prefer?"
+2. Wait for explicit choice
+3. Do NOT automatically commit, stash, or discard
+
+### "Save My Work"
+**Scenario**: User says "save my work" or "save these changes."
+
+**AI behavior**:
+- Interpret as: write changes to files (which is already done)
+- Do NOT interpret as: commit changes
+- Respond: "The changes have been saved to the files. They are not yet committed to git. Would you like to commit them?"
+
+### Creating Pull Requests
+**Scenario**: User asks to "create a PR" but changes aren't committed.
+
+**AI behavior**:
+1. Check if changes are committed
+2. If not committed, inform user: "To create a PR, changes must be committed first. Would you like me to commit these changes?"
+3. Wait for explicit commit authorization
+4. After committing (if authorized), ask: "Would you like me to push to remote and create the PR?"
+5. Require separate explicit permission for push and PR creation
+
+### Amending Commits
+**Scenario**: User asks to "fix the last commit" or "amend the commit."
+
+**AI behavior**:
+- Treat `git commit --amend` as equivalent to creating a new commit
+- Require explicit permission: "Would you like me to amend the last commit?"
+- Confirm the new commit message
+- Warn if commit has been pushed: "This commit has been pushed to remote. Amending will require force push. Proceed?"
+
+### Interactive Rebase
+**Scenario**: User asks to "clean up commits" or "squash commits."
+
+**AI behavior**:
+- Require explicit permission for rebase operation
+- Explain what will happen: "I will squash commits X, Y, Z into a single commit. This rewrites history."
+- Confirm the final commit message
+- Warn if commits have been pushed: "These commits have been pushed. Rebase will require force push. Proceed?"

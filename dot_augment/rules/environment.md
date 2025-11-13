@@ -59,6 +59,8 @@ realpath <path>
   `/home/mattniedelman/git/project1/`, `/home/mattniedelman/git/project2/`
 - When working with code repositories, use absolute paths starting from
   `/home/mattniedelman/git/`
+- **Note:** `/home/mattniedelman/git` is symlinked to `/mnt/2b20906f-1847-4c8e-94e4-b841290bddc3`
+- Both paths refer to the same location; the system may resolve to the actual mount point
 
 ## Tool Management
 
@@ -72,23 +74,33 @@ realpath <path>
 
 ## Language Server Configuration
 
-**MCP Server Location:**
+**MCP Server Dynamic Workspace:**
 
-- Language server MCPs are configured **above the git repository level**
-- Language servers are positioned to see all repositories under
-  `/home/mattniedelman/git/`
-- **Always use absolute paths** when interacting with language server MCPs
-- The language servers can see all repositories but require absolute path
-  references
+- Language server MCPs are configured to use `$PWD` for dynamic workspace detection
+- When Auggie is launched from a directory, the language servers automatically use that directory as their workspace
+- Language servers will analyze files relative to the directory where Auggie was started
+- This allows language servers to work with any project without hardcoded paths
 
-**Path Requirements:**
+**How It Works:**
 
-- ✅ Correct:
-  `/home/mattniedelman/git/myproject/src/main.py`
-- ❌ Incorrect:
-  `~/git/myproject/src/main.py` (tilde expansion may not work)
-- ❌ Incorrect:
-  `git/myproject/src/main.py` (relative path won't work)
+- Configuration uses `$PWD` in `settings.json`: `"--workspace", "$PWD"`
+- Shell expands `$PWD` to the current working directory when MCP servers start
+- Language servers automatically adapt to whichever project directory you're in
+- No need to reconfigure language servers when switching between projects
+
+**Path Requirements for Language Server Tools:**
+
+- ✅ Correct: `/home/mattniedelman/git/myproject/src/main.py` (absolute path)
+- ✅ Correct: `src/main.py` (relative to workspace where Auggie was launched)
+- ❌ Incorrect: `~/git/myproject/src/main.py` (tilde expansion may not work)
+- ⚠️  Note: Relative paths work when they're relative to the directory where Auggie was launched
+
+**Best Practices:**
+
+- Launch Auggie from the root of the project you want to work on
+- Language servers will automatically use that project as their workspace
+- Use absolute paths for cross-project references
+- Use relative paths for files within the current project
 
 ## Repository Structure
 
@@ -117,5 +129,75 @@ realpath <path>
 **General Guidelines:**
 
 - Prefer absolute paths for cross-repository work
-- Use relative paths within a single repository context
-- Always use absolute paths when interacting with language server tools
+- Use relative paths within a single repository context when Auggie is launched from that repository
+- Language server tools work with both absolute and relative paths (relative to launch directory)
+
+## ⚠️ File and Directory Operation Authorization Policy ⚠️
+
+### Directory Creation
+
+**Allowed without explicit permission:**
+- Creating standard project directories (src/, tests/, docs/, lib/, bin/, etc.) in current workspace
+- Creating __pycache__, .pytest_cache, and other tool-generated directories
+- Creating subdirectories within existing project structure
+
+**Requires explicit permission:**
+- Creating directories outside the current workspace
+- Creating directories in system locations (/etc, /usr, /opt)
+- Creating directories in user home directory (~/)
+- Creating hidden directories (starting with .) that are not standard tool directories
+
+**Before creating non-standard directories:**
+```
+I will create the following directories:
+- /path/to/new/directory
+
+Location: [inside/outside workspace]
+Purpose: [explanation]
+
+Proceed? (yes/no)
+```
+
+### Configuration File Modification
+
+**Operations requiring explicit permission:**
+- Modifying .gitignore when adding sensitive patterns (credentials, secrets, personal data)
+- Modifying pyproject.toml, package.json, or other package configuration
+- Modifying .env files
+- Modifying CI/CD configuration (.github/workflows, .gitlab-ci.yml)
+- Modifying Docker configuration
+- Modifying any configuration in /etc or system directories
+
+**Allowed without explicit permission:**
+- Adding standard ignore patterns to .gitignore (*.pyc, __pycache__/, .venv/, node_modules/, etc.)
+- Adding tool-generated directories to .gitignore
+
+**Before modifying configuration files:**
+```
+I will modify the following configuration:
+
+File: [filename]
+Changes:
+- [specific changes]
+
+This will affect:
+- [impact description]
+
+Proceed? (yes/no)
+```
+
+### Path Safety Checks
+
+**Before ANY file operation outside workspace:**
+1. Verify the path is intentional
+2. Confirm with user:
+   ```
+   ⚠️  OPERATION OUTSIDE WORKSPACE
+
+   This operation will affect: /path/outside/workspace
+
+   Current workspace: /home/user/project
+   Target location: /different/location
+
+   Is this intentional? (yes/no)
+   ```

@@ -26,13 +26,72 @@ description: Core development rules and coding standards for Matt's workflow
   4. Separate groups with blank lines
 
 ### No Nested Functions or Closures
-- **Rule**: Avoid defining functions inside other functions or creating closures
-- **Exception**: Only when explicitly requested for specific design patterns
-- **Rationale**: Nested functions increase complexity and make testing difficult
-- **Alternatives**: 
-  - Use class methods for stateful behavior
-  - Pass parameters explicitly
-  - Create separate module-level functions
+- **Rule**: **NEVER** define functions inside other functions, **NEVER** define classes inside functions, and **NEVER** create closures
+- **Scope**: This prohibition applies to ALL Python code without exception:
+  - **NEVER** use `def` to define a function inside another function
+  - **NEVER** use `def` to define a function inside a class method that captures variables from the method scope
+  - **NEVER** define classes inside functions
+  - **NEVER** create lambda expressions that capture variables from enclosing scopes (closures)
+  - **NEVER** use nested functions even for "helper" functions, callbacks, or decorators
+- **Exception**: Only when the user **explicitly requests** nested functions or closures for a specific technical requirement and provides clear justification
+- **Rationale**:
+  - Nested functions dramatically increase code complexity and cognitive load
+  - Closures create hidden dependencies that are difficult to understand and debug
+  - Nested functions cannot be tested in isolation, reducing test coverage and quality
+  - Code with nested functions is harder to refactor and maintain
+  - Nested functions obscure the true dependencies and data flow of the code
+  - Module-level functions with explicit parameters are always clearer and more testable
+- **Alternatives**:
+  - **Use class methods for stateful behavior**: If a function needs to maintain state or access instance data, make it a method of a class
+  - **Pass parameters explicitly**: Instead of capturing variables from outer scopes, pass them as explicit function parameters
+  - **Create separate module-level functions**: Define functions at module level (top-level of the file) rather than nesting them
+  - **Use classes for related functionality**: Group related functions as methods of a class rather than nesting them
+  - **Extract to private module functions**: Use leading underscore naming (e.g., `_helper_function`) for module-level functions that are implementation details
+- **Examples**:
+  ```python
+  # ❌ PROHIBITED - Nested function
+  def outer_function(x):
+      def inner_function(y):
+          return x + y
+      return inner_function(5)
+
+  # ❌ PROHIBITED - Closure with lambda
+  def create_multiplier(factor):
+      return lambda x: x * factor
+
+  # ❌ PROHIBITED - Class defined inside function
+  def create_handler():
+      class Handler:
+          def handle(self):
+              pass
+      return Handler()
+
+  # ✅ CORRECT - Module-level function with explicit parameters
+  def inner_function(x, y):
+      return x + y
+
+  def outer_function(x):
+      return inner_function(x, 5)
+
+  # ✅ CORRECT - Class method for stateful behavior
+  class Multiplier:
+      def __init__(self, factor):
+          self.factor = factor
+
+      def multiply(self, x):
+          return x * self.factor
+
+  def create_multiplier(factor):
+      return Multiplier(factor)
+
+  # ✅ CORRECT - Class defined at module level
+  class Handler:
+      def handle(self):
+          pass
+
+  def create_handler():
+      return Handler()
+  ```
 
 ## Deep Modules and Simple Interfaces
 
@@ -120,6 +179,45 @@ description: Core development rules and coding standards for Matt's workflow
   - When explicitly requested by the user for a specific purpose
   - Temporary debugging comments (which should be removed before committing)
 
+## Package Management
+
+### Python Package Manager Selection
+- **Rule**: Always use `uv` as the default package manager for Python projects unless `poetry.lock` is explicitly present
+- **Rationale**: `uv` is faster, more modern, and provides better dependency resolution. Only use Poetry when a project has already committed to it
+- **Implementation**:
+  1. **Check for lock files before choosing a package manager**:
+     - If `poetry.lock` exists in the project root: use Poetry
+     - If `uv.lock` exists OR no lock file exists: use `uv`
+  2. **Use the correct commands for each package manager**:
+     - **uv (default)**:
+       - `uv run <command>` instead of `poetry run <command>`
+       - `uv add <package>` instead of `poetry add <package>`
+       - `uv remove <package>` instead of `poetry remove <package>`
+       - `uv sync` to install dependencies
+     - **Poetry (only when poetry.lock exists)**:
+       - `poetry run <command>`
+       - `poetry add <package>`
+       - `poetry remove <package>`
+       - `poetry install` to install dependencies
+  3. **Never assume Poetry is the package manager** - always verify by checking for lock files first
+  4. **When in doubt, default to `uv`** - it's the preferred modern solution
+
+### General Package Management Best Practices
+- **Rule**: Always use appropriate package managers for dependency management instead of manually editing package configuration files
+- **Rationale**: Package managers automatically resolve correct versions, handle dependency conflicts, update lock files, and maintain consistency across environments. Manual editing of package files often leads to version mismatches, dependency conflicts, and broken builds
+- **Implementation**:
+  1. **Always use package manager commands** for installing, updating, or removing dependencies rather than directly editing files like package.json, requirements.txt, Cargo.toml, go.mod, etc.
+  2. **Use the correct package manager commands** for each language/framework:
+     - **JavaScript/Node.js**: Use `npm install`, `npm uninstall`, `yarn add`, `yarn remove`, or `pnpm add/remove`
+     - **Python**: Use `uv add`, `uv remove` (preferred) or `poetry add`, `poetry remove` (when poetry.lock exists)
+     - **Rust**: Use `cargo add`, `cargo remove` (Cargo 1.62+)
+     - **Go**: Use `go get`, `go mod tidy`
+     - **Ruby**: Use `gem install`, `bundle add`, `bundle remove`
+     - **PHP**: Use `composer require`, `composer remove`
+     - **C#/.NET**: Use `dotnet add package`, `dotnet remove package`
+     - **Java**: Use Maven (`mvn dependency:add`) or Gradle commands
+  3. **Exception**: Only edit package files directly when performing complex configuration changes that cannot be accomplished through package manager commands (e.g., custom scripts, build configurations, or repository settings)
+
 ## Testing and Quality
 
 ### Comprehensive Testing
@@ -138,6 +236,99 @@ description: Core development rules and coding standards for Matt's workflow
   - Separate unit tests from integration tests
   - Use meaningful assertions with descriptive failure messages
 
+
+### Test Documentation
+- **Rule**: Test docstrings should provide meaningful context, not restate what is obvious from the test name or code
+- **Rationale**: Redundant docstrings add noise without value. Documentation should explain WHY a test exists, not WHAT it literally does
+- **Implementation**:
+  - Remove docstrings that merely restate the test function name (e.g., "Test that X returns Y" when the test is named `test_x_returns_y`)
+  - Keep docstrings that explain:
+    - Non-obvious business logic or API contracts being verified
+    - Edge cases or boundary conditions being tested
+    - Why the test exists (what behavior it protects against)
+    - Complex test setup or data relationships
+  - Keep AAA (Arrange/Act/Assert) section comments as they provide structure
+  - Remove inline comments that simply restate what the code does
+  - Add inline comments only when they explain non-obvious choices, complex logic, or workarounds
+- **Examples**:
+  ```python
+  # ❌ Redundant - test name already says this
+  def test_threshold_filters_members(self):
+      """Test that threshold filters members."""
+      
+  # ✅ Good - explains non-obvious behavior
+  def test_threshold_filters_members(self):
+      """Verify that clusters remain in response even when all members are filtered out."""
+      
+  # ✅ Good - no docstring needed when test name is clear
+  def test_invalid_uuid_returns_422(self):
+      # Arrange
+      response = client.get("/endpoint/invalid-uuid")
+      
+      # Assert
+      assert response.status_code == 422
+  ```
+
+### Inline Comments for Expected Test Outcomes
+- **Rule**: Include inline comments that explain expected test outcomes when they help readers understand assertions without mental calculation
+- **Rationale**: Comments explaining which specific test data items should pass/fail filtering or other operations provide valuable context that makes tests easier to understand and maintain
+- **When to Add**:
+  - When assertions check counts or filtering results that depend on specific test data values
+  - When the expected outcome requires understanding which items from test fixtures meet certain criteria
+  - When boundary conditions or edge cases are being tested with specific values
+  - When the relationship between test data and expected results is not immediately obvious
+- **When to Skip**:
+  - When the test name and assertion are completely self-explanatory
+  - When the expected value is trivial (e.g., checking for empty list, single item, etc.)
+  - When the comment would just restate the assertion without adding context
+- **Examples**:
+  ```python
+  # ✅ Good - explains which items pass the filter
+  def test_threshold_filters_members(self):
+      # Act
+      response = client.get("/clusters?threshold=0.5")
+      
+      # Assert
+      # Expected: ws1(0.9), ws2(0.7), ws5(0.8), ws6(0.5 - excluded), ws8(0.6)
+      total_members = sum(len(cluster["members"]) for cluster in data["clusters"])
+      expected_filtered_members = 4
+      assert total_members == expected_filtered_members
+  
+  # ✅ Good - explains boundary behavior
+  def test_threshold_exactly_at_boundary(self):
+      # Act
+      response = client.get("/clusters?threshold=0.7")
+      
+      # Assert
+      # ws2 with score 0.7 should be excluded (threshold is >)
+      all_members = [m for cluster in data["clusters"] for m in cluster["members"]]
+      member_ids = {m["workstation_id"] for m in all_members}
+      assert "ws2" not in member_ids
+      assert "ws1" in member_ids
+  
+  # ❌ Redundant - doesn't add value beyond the assertion
+  def test_returns_three_clusters(self):
+      # Act
+      response = client.get("/clusters")
+      
+      # Assert
+      # Should have 3 clusters
+      assert len(data["clusters"]) == 3
+  
+  # ✅ Good - no comment needed, assertion is self-explanatory
+  def test_returns_three_clusters(self):
+      # Act
+      response = client.get("/clusters")
+      
+      # Assert
+      expected_cluster_count = 3
+      assert len(data["clusters"]) == expected_cluster_count
+  ```
+- **Best Practices**:
+  - Place the comment immediately before the assertion or expected value declaration it explains
+  - Be specific about which test data items are included/excluded and why
+  - Include relevant values from test data (e.g., scores, IDs) to make the comment self-contained
+  - Use concise language that focuses on the outcome, not restating the code
 ### Test Structure Pattern
 - **Rule**: All tests must follow the "Arrange, Act, Assert" (AAA) pattern for clarity and consistency
 - **Rationale**: The AAA pattern makes tests easier to read, understand, and maintain by clearly separating test setup, execution, and verification
@@ -163,6 +354,49 @@ description: Core development rules and coding standards for Matt's workflow
       assert result.user_id == user.id
   ```
 - **Exceptions**: Simple one-line tests or property-based tests may deviate from this pattern when the separation would reduce clarity
+
+### Assert Boolean Expressions Directly
+- **Rule**: Never compare boolean expressions to boolean literals (`True` or `False`) in assertions
+- **Rationale**: Comparing a boolean expression to a boolean literal is redundant, less readable, and provides no additional value. It forces readers to parse an unnecessary comparison operation and requires extra variable declarations that don't add clarity
+- **Implementation**:
+  - Assert boolean expressions directly: `assert condition` instead of `assert condition == True`
+  - Use negation for false conditions: `assert not condition` instead of `assert condition == False`
+  - This applies to all assertion contexts, including pytest assertions and other testing frameworks
+- **Examples**:
+  ```python
+  # ❌ Incorrect - Comparing boolean expression to boolean literal
+  expected_is_different_instance = True
+  assert (filtered is not original) == expected_is_different_instance
+  
+  expected_is_smaller = True
+  assert (len(filtered) < len(original)) == expected_is_smaller
+  
+  # ❌ Incorrect - Direct comparison to boolean literal
+  assert (user.is_active == True)
+  assert (result.success == False)
+  
+  # ✅ Correct - Assert boolean expressions directly
+  assert filtered is not original
+  assert len(filtered) < len(original)
+  assert user.is_active
+  assert not result.success
+  
+  # ✅ Correct - When you need an expected value, use it for the actual comparison
+  expected_count = 5
+  assert len(filtered) == expected_count
+  
+  expected_status = "active"
+  assert user.status == expected_status
+  ```
+- **Exception**: The only time to use an `expected_*` boolean variable is when the expected value is computed, comes from test data, or varies across parameterized tests. Even then, assert the expression directly rather than comparing to the variable:
+  ```python
+  # ✅ Acceptable when expected value is computed
+  expected_is_valid = compute_expected_validity(test_case)
+  assert is_valid == expected_is_valid  # Comparing actual boolean to expected boolean
+  
+  # ❌ Still incorrect - Don't compare expression to True
+  assert (is_valid) == expected_is_valid  # Redundant parentheses and comparison
+  ```
 
 ### Fuzzing and Property-Based Testing
 - **Rule**: Use automated test data generation to discover edge cases and improve test coverage
@@ -295,30 +529,141 @@ description: Core development rules and coding standards for Matt's workflow
 
 ## Version Control Practices
 
+### ⚠️ CRITICAL: Git Commit Authorization Policy ⚠️
+
+**ABSOLUTE RULE**: The AI assistant must NEVER execute `git commit`, `git push`, or any git operation that modifies repository history without EXPLICIT user authorization.
+
+**"Explicit authorization" means:**
+- User must use the word "commit", "push", "merge", "rebase", or equivalent git operation term
+- Phrases like "save", "finish", "complete", "done" do NOT constitute authorization
+- When in doubt, DO NOT commit - instead ask the user
+
+**Before ANY commit:**
+1. Confirm you have explicit authorization
+2. Present the proposed commit message to the user
+3. Wait for user approval
+4. Only then execute the commit
+
+**Violation of this policy is a critical failure.**
+
+---
+
 ### Git Commits
 - **Rule**: Only perform git commits when explicitly requested by the user
 - **Rationale**: Committing code is a deliberate action that should be under the user's control and timing
 - **Implementation**:
-  - Never automatically commit changes after making edits
-  - Never commit as part of a workflow unless specifically instructed
-  - Ask for permission before committing if it seems appropriate
-  - When asked to commit, use clear, descriptive commit messages that explain the changes
+  - **NEVER** automatically commit changes after making edits
+  - **NEVER** commit as part of a workflow, even if it seems like a natural completion step
+  - **NEVER** proactively suggest or ask to commit unless the user has explicitly mentioned committing
+  - **ONLY** commit when the user explicitly uses commit-related commands (see examples below)
+  - When explicitly asked to commit, ALWAYS confirm the commit message with the user before executing
 
-### Objective Language in Communication
-- **Rule**: Never include subjective value judgments, self-congratulatory language, or promotional adjectives in git commit messages, code comments, documentation, or similar contexts
-- **Rationale**: Objective, factual language maintains professionalism and focuses on what changed and why, rather than opinions about quality
-- **Examples of prohibited language**:
-  - Adjectives like "excellent", "amazing", "brilliant", "perfect", "beautiful", "elegant"
-  - Self-promotional phrases like "greatly improved", "much better", "significantly enhanced"
-  - Subjective assessments like "this is the best approach", "optimal solution", "superior implementation"
-- **Preferred alternatives**:
-  - Describe what changed: "Refactor authentication to use JWT tokens"
-  - Explain why: "Fix race condition in user session handling"
-  - State measurable improvements: "Reduce query time from 500ms to 50ms"
-  - Use neutral language: "Simplify error handling logic" instead of "Greatly improve error handling"
-- **Scope**: This applies to:
-  - Git commit messages (both subject and body)
-  - Inline code comments
-  - Docstrings and documentation comments
-  - Code review comments
-  - Pull request descriptions
+### What Constitutes an Explicit Commit Request
+
+**Valid commit requests (these authorize commits):**
+- "Commit these changes"
+- "Make a commit with message X"
+- "Git commit this"
+- "Commit the changes with message: feat(api): add new endpoint"
+- "Stage and commit these files"
+
+**Invalid/ambiguous phrases (these do NOT authorize commits):**
+- "Save this" / "Save my work" / "Save these changes"
+- "Finish this feature" / "Complete this task"
+- "We're done here" / "That's good"
+- "Push this to the repo" (requires separate explicit commit request first)
+- "Create a PR" (requires separate explicit commit request first)
+- "Make this permanent"
+- Any phrase that doesn't explicitly use the word "commit" or "git commit"
+
+**When in doubt**: If the user's request doesn't explicitly mention "commit" or "committing," do NOT commit. Instead, inform the user that changes have been made and are ready to commit when they choose to do so.
+
+### Git Operations Requiring Explicit Permission
+
+The following git operations **REQUIRE explicit user permission** and must NEVER be performed automatically:
+
+**Prohibited without explicit permission:**
+- `git commit` - Creating commits
+- `git push` - Pushing to remote repositories
+- `git merge` - Merging branches
+- `git rebase` - Rebasing commits (including interactive rebase)
+- `git cherry-pick` - Cherry-picking commits
+- `git reset --hard` - Hard resets that discard changes
+- `git clean` - Removing untracked files
+- `git branch -D` - Force deleting branches
+- `git tag` - Creating tags
+- `git commit --amend` - Amending commits
+- `git revert` - Reverting commits
+
+**Allowed without explicit permission (read-only or safe operations):**
+- `git status` - Checking repository status
+- `git diff` - Viewing differences
+- `git log` - Viewing commit history
+- `git branch` (list only) - Listing branches
+- `git show` - Showing commit details
+- `git fetch` - Fetching from remote (doesn't modify working tree)
+
+**Requires explicit permission but can be suggested:**
+- `git add` - Staging files (can suggest: "These files are ready to stage. Would you like me to run git add?")
+- `git checkout` / `git switch` - Switching branches (can suggest if user asks to work on different branch)
+- `git stash` - Stashing changes (can suggest if needed for branch switching)
+
+**Critical rule**: When user requests an operation that requires a prerequisite git operation (e.g., "push this" requires committing first), AI must:
+1. Inform user of the prerequisite
+2. Request explicit permission for each operation separately
+3. Never assume permission for prerequisites
+
+### Workflow Completion and Commits
+
+**Critical Rule**: Workflow completion phrases do NOT authorize commits.
+
+**Phrases that complete work but do NOT authorize commits:**
+- "Finish this feature"
+- "Complete this task"
+- "We're done with this"
+- "That's everything"
+- "Implement feature X" (even if implementation is complete)
+- "Fix bug Y" (even if fix is complete)
+- "Wrap this up"
+- "Finalize the changes"
+
+**Correct AI behavior when work is complete:**
+1. Complete all requested code changes
+2. Run tests if requested
+3. Inform user: "I've completed [description of work]. The changes are ready to commit when you're ready. Would you like me to commit these changes?"
+4. Wait for explicit commit authorization
+
+**Exception**: If user's original request explicitly included committing (e.g., "Implement feature X and commit it"), then commit authorization is included. However, AI should still confirm the commit message before executing.
+
+**When user says "finish" or "complete":**
+- Interpret as: finish the code changes only
+- Do NOT interpret as: finish everything including committing
+- After completing code changes, remind user that changes are uncommitted
+
+### Objective Language in Commit Messages
+
+**Rule**: Commit messages must use objective, factual language without subjective value judgments.
+
+**When AI generates commit messages:**
+- **MUST** use objective language
+- **MUST NOT** include: "excellent", "amazing", "brilliant", "perfect", "beautiful", "elegant", "greatly improved", "much better", "significantly enhanced", "optimal", "superior"
+- **MUST** describe what changed and why, using neutral language
+
+**When user provides commit messages:**
+- **SHOULD** validate for objective language
+- **SHOULD** suggest corrections if subjective language detected
+- **MUST** inform user: "The proposed commit message contains subjective language: [specific words]. Suggested objective alternative: [alternative]. Would you like to use the suggested message or proceed with your version?"
+- **MUST** respect user's final decision if they choose to keep subjective language
+
+**Examples of objective alternatives:**
+- ❌ "Greatly improve error handling" → ✅ "Refactor error handling to use custom exception types"
+- ❌ "Add amazing new feature" → ✅ "Add user authentication feature"
+- ❌ "Perfect the API design" → ✅ "Simplify API by consolidating endpoints"
+- ❌ "Optimize performance significantly" → ✅ "Reduce query time from 500ms to 50ms"
+
+**Scope**: This applies to:
+- Git commit messages (both subject and body)
+- Inline code comments
+- Docstrings and documentation comments
+- Code review comments
+- Pull request descriptions
