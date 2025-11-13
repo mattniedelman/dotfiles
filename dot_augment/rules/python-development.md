@@ -5,6 +5,46 @@ description: Python development patterns, package management with uv and poetry,
 
 # Python Development Guidelines
 
+## ⚠️ CRITICAL: Package Installation Authorization Policy ⚠️
+
+**ABSOLUTE RULE**: The AI assistant must NEVER install, update, or remove packages without EXPLICIT user authorization.
+
+**"Explicit authorization" means:**
+- User must use words like "install", "add", "update", "remove", or "upgrade" with package names
+- Phrases like "fix the import error", "make this work", "resolve dependencies" do NOT constitute authorization
+- When in doubt, DO NOT install - instead inform user of missing dependencies
+
+**Valid installation requests:**
+- "Install requests package"
+- "Add pytest to dev dependencies"
+- "Update numpy to latest version"
+- "Remove unused dependency X"
+
+**Invalid/ambiguous phrases (do NOT authorize installation):**
+- "Fix this import error" (inform user which package is needed)
+- "Make this code work" (explain what's missing, don't auto-install)
+- "Resolve the dependency issue" (explain the issue, don't auto-fix)
+- "Set up the project" (ask which dependencies to install)
+
+**Before ANY package operation:**
+1. Confirm you have explicit authorization
+2. Inform user which packages will be installed/updated/removed
+3. Show the command that will be executed
+4. Wait for user confirmation if the operation affects multiple packages or major versions
+
+**When code requires a new dependency:**
+1. Identify the missing package
+2. Inform user: "This code requires package X. Would you like me to install it with: `uv add X`?"
+3. Wait for explicit approval
+4. Only then execute the installation
+
+**Security considerations:**
+- NEVER install packages from untrusted sources without explicit user approval
+- ALWAYS inform user when installing packages with known security advisories
+- NEVER bypass lock files by using low-level commands (pip install, uv pip install)
+
+---
+
 ## Package Management
 
 **Detection Strategy:**

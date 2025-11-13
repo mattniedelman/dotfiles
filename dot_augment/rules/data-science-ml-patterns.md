@@ -5,6 +5,71 @@ description: Data science and machine learning specific coding patterns and best
 
 # Data Science and ML Patterns
 
+## ⚠️ Model and Data Pipeline Operation Authorization ⚠️
+
+### Model Training and Deployment
+
+**Operations requiring explicit permission:**
+- Training or retraining models
+- Deploying models to production
+- Modifying production data pipelines
+- Changing model hyperparameters in production
+- Deleting or archiving models
+
+**Before training models:**
+```
+I will train a model with the following configuration:
+
+Model type: [type]
+Training data: [source, size]
+Estimated time: [duration]
+Estimated cost: [if applicable]
+
+Proceed? (yes/no)
+```
+
+**Before deploying models:**
+```
+⚠️  MODEL DEPLOYMENT
+
+Model: [name/version]
+Target environment: [dev/staging/production]
+
+Validation results:
+- [metrics]
+
+This will replace: [current model if applicable]
+
+For production deployments, have you:
+- Validated model performance? (yes/no)
+- Tested on staging? (yes/no)
+- Prepared rollback plan? (yes/no)
+
+Proceed? (yes/no)
+```
+
+### Data Pipeline Modifications
+
+**Never modify production pipelines without explicit permission**
+
+**Before modifying data pipelines:**
+```
+I will modify the data pipeline:
+
+Pipeline: [name]
+Environment: [dev/staging/production]
+Changes:
+- [specific changes]
+
+Impact:
+- [affected downstream systems]
+- [data processing changes]
+
+Proceed? (yes/no)
+```
+
+---
+
 ## Model Development and Training
 
 ### Model Lifecycle Management
