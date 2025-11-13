@@ -1,5 +1,36 @@
 -- AI Assistance
 -- AI-powered coding tools and assistants
+--
+-- This configuration includes:
+-- 1. Augment.vim - For inline code completions (uses Ctrl+F to accept)
+-- 2. CodeCompanion - For AI chat, inline transformations, and agentic workflows
+--
+-- CodeCompanion is configured to use Augment via ACP (Agent Client Protocol).
+-- Augment's Auggie CLI provides powerful agentic capabilities with deep codebase
+-- understanding through Augment's industry-leading context engine.
+--
+-- Prerequisites:
+--   1. Install Auggie CLI: https://docs.augmentcode.com/cli/installation
+--   2. Authenticate: Run `auggie auth login` in your terminal
+--   3. Verify: Run `auggie --version` to confirm installation
+--
+-- Key bindings:
+--   <leader>aa - Open CodeCompanion action palette
+--   <leader>ac - Toggle CodeCompanion chat
+--   <leader>ap - Open new CodeCompanion chat
+--   <leader>ai - CodeCompanion inline assistant
+--   <leader>at - Add selection to chat (visual mode)
+--   <Ctrl-.>   - Toggle CodeCompanion chat
+--
+-- ACP Support:
+--   Auggie CLI is a built-in ACP adapter in CodeCompanion. The adapter name is
+--   "auggie_cli" (note the _cli suffix). No custom adapter configuration is needed
+--   unless you want to extend the default behavior.
+--
+-- Differences from augment.vim:
+--   - augment.vim: Provides inline code completions (autocomplete-style)
+--   - CodeCompanion + Auggie: Provides chat, agentic workflows, and transformations
+--   Both use Augment's context engine and work together seamlessly.
 
 return {
   {
@@ -13,124 +44,99 @@ return {
     end,
   },
   {
-    "folke/sidekick.nvim",
+    "olimorris/codecompanion.nvim",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "nvim-treesitter/nvim-treesitter",
+    },
     lazy = false,
     opts = {
-      cli = {
-        -- Configure auggie as a custom AI CLI tool
-        tools = {
-          auggie = {
-            cmd = { "auggie" },
+      adapters = {
+        -- Auggie CLI adapter is built-in to CodeCompanion
+        -- No custom configuration needed unless you want to extend it
+        -- See: https://codecompanion.olimorris.dev/configuration/acp.html
+      },
+      strategies = {
+        chat = {
+          adapter = "auggie_cli",
+        },
+        inline = {
+          adapter = "auggie_cli",
+        },
+        agent = {
+          adapter = "auggie_cli",
+        },
+      },
+      display = {
+        chat = {
+          window = {
+            layout = "vertical", -- float|vertical|horizontal|buffer
+            border = "rounded",
+            height = 0.8,
+            width = 0.45,
+            relative = "editor",
+            opts = {
+              breakindent = true,
+              cursorcolumn = false,
+              cursorline = false,
+              foldcolumn = "0",
+              linebreak = true,
+              list = false,
+              signcolumn = "no",
+              spell = false,
+              wrap = true,
+            },
+          },
+          intro_message = "Welcome to CodeCompanion! Type your message below or use `/` for slash commands.",
+          show_settings = true,
+          show_token_count = true,
+        },
+        inline = {
+          diff = {
+            enabled = true,
+            priority = 130,
           },
         },
       },
-      -- Disable default keybindings to avoid conflicts with auggie's prompt enhancer
-      keys = false,
     },
     keys = {
       {
-        "<tab>",
-        function()
-          -- if there is a next edit, jump to it, otherwise apply it if any
-          if not require("sidekick").nes_jump_or_apply() then
-            return "<Tab>" -- fallback to normal tab
-          end
-        end,
-        expr = true,
-        desc = "Goto/Apply Next Edit Suggestion",
-      },
-      {
-        "<c-.>",
-        function()
-          require("sidekick.cli").toggle()
-        end,
-        desc = "Sidekick Toggle",
-        mode = { "n", "t", "i", "x" },
-      },
-      {
         "<leader>aa",
-        function()
-          require("sidekick.cli").toggle()
-        end,
-        desc = "Sidekick Toggle CLI",
+        "<cmd>CodeCompanionActions<cr>",
+        mode = { "n", "v" },
+        desc = "CodeCompanion Actions",
       },
       {
-        "<leader>as",
-        function()
-          require("sidekick.cli").select()
-        end,
-        desc = "Select CLI",
-      },
-      {
-        "<leader>ad",
-        function()
-          require("sidekick.cli").close()
-        end,
-        desc = "Detach a CLI Session",
-      },
-      {
-        "<leader>at",
-        function()
-          require("sidekick.cli").send({ msg = "{this}" })
-        end,
-        mode = { "x", "n" },
-        desc = "Send This",
-      },
-      {
-        "<leader>af",
-        function()
-          require("sidekick.cli").send({ msg = "{file}" })
-        end,
-        desc = "Send File",
-      },
-      {
-        "<leader>av",
-        function()
-          require("sidekick.cli").send({ msg = "{selection}" })
-        end,
-        mode = { "x" },
-        desc = "Send Visual Selection",
+        "<leader>ac",
+        "<cmd>CodeCompanionChat Toggle<cr>",
+        mode = { "n", "v" },
+        desc = "CodeCompanion Chat Toggle",
       },
       {
         "<leader>ap",
-        function()
-          require("sidekick.cli").prompt()
-        end,
-        mode = { "n", "x" },
-        desc = "Sidekick Select Prompt",
+        "<cmd>CodeCompanionChat<cr>",
+        mode = { "n", "v" },
+        desc = "CodeCompanion Chat",
       },
-      -- Note: Ctrl+P is intentionally not mapped to avoid conflict with auggie's prompt enhancer
-      -- Use <leader>ap instead for Sidekick prompt selection
-      -- Keybinding to open Auggie directly
       {
-        "<leader>ag",
-        function()
-          require("sidekick.cli").toggle({ name = "auggie", focus = true })
-        end,
-        desc = "Sidekick Toggle Auggie",
+        "<c-.>",
+        "<cmd>CodeCompanionChat Toggle<cr>",
+        mode = { "n", "v" },
+        desc = "CodeCompanion Chat Toggle",
+      },
+      {
+        "<leader>ai",
+        "<cmd>CodeCompanion<cr>",
+        mode = { "n", "v" },
+        desc = "CodeCompanion Inline",
+      },
+      {
+        "<leader>at",
+        "<cmd>CodeCompanionChat Add<cr>",
+        mode = "v",
+        desc = "CodeCompanion Add to Chat",
       },
     },
-    -- Configure terminal window keybindings to avoid Ctrl+P conflict
-    -- while preserving other useful terminal functionality
-    opts = function(_, opts)
-      opts.cli = opts.cli or {}
-      opts.cli.win = opts.cli.win or {}
-      opts.cli.win.keys = opts.cli.win.keys or {}
-
-      -- Override the default Ctrl+P keybinding to disable it
-      opts.cli.win.keys.prompt = false
-
-      -- Keep other useful terminal keybindings
-      opts.cli.win.keys.buffers = { "<c-b>", "buffers", mode = "nt", desc = "open buffer picker" }
-      opts.cli.win.keys.files = { "<c-f>", "files", mode = "nt", desc = "open file picker" }
-      opts.cli.win.keys.hide_n = { "q", "hide", mode = "n", desc = "hide the terminal window" }
-      opts.cli.win.keys.hide_ctrl_q = { "<c-q>", "hide", mode = "n", desc = "hide the terminal window" }
-      opts.cli.win.keys.hide_ctrl_dot = { "<c-.>", "hide", mode = "nt", desc = "hide the terminal window" }
-      opts.cli.win.keys.hide_ctrl_z = { "<c-z>", "hide", mode = "nt", desc = "hide the terminal window" }
-      opts.cli.win.keys.stopinsert = { "<c-q>", "stopinsert", mode = "t", desc = "enter normal mode" }
-
-      return opts
-    end,
   },
 }
 

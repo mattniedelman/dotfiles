@@ -29,3 +29,4 @@ vim.api.nvim_create_autocmd("FileChangedShellPost", {
     vim.notify("File changed on disk. Buffer reloaded!", vim.log.levels.WARN)
   end,
 })
+require("config.chezmoi")
