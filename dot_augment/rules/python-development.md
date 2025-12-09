@@ -139,6 +139,52 @@ def test_double(input, expected):
     assert double(input) == expected
 ```
 
+**Collection Assertions:** Prefer asserting on entire collections in a single assertion
+
+**Rationale:** Collection-level assertions are more concise, easier to read, and provide clear diff output when they fail. Modern test frameworks like pytest show detailed diffs for collection mismatches.
+
+```python
+# ✅ Preferred - Assert on entire collection
+def test_process_items():
+    result = process_items([1, 2, 3])
+    assert result == [2, 4, 6]
+
+def test_build_mapping():
+    result = build_mapping(["a", "b", "c"])
+    assert result == {"a": 1, "b": 2, "c": 3}
+
+def test_get_unique_values():
+    result = get_unique_values([1, 2, 2, 3, 3, 3])
+    assert result == {1, 2, 3}
+
+# ❌ Avoid - Iterating to assert individual elements
+def test_process_items():
+    result = process_items([1, 2, 3])
+    expected = [2, 4, 6]
+    for i, item in enumerate(result):
+        assert item == expected[i]
+
+def test_build_mapping():
+    result = build_mapping(["a", "b", "c"])
+    assert result["a"] == 1
+    assert result["b"] == 2
+    assert result["c"] == 3
+```
+
+**Exception:** Individual element assertions are acceptable when:
+- You need more granular error messages for debugging complex failures
+- You're testing specific properties of elements that don't affect equality
+- The collection is very large and you only need to verify specific elements
+
+```python
+# Acceptable - Testing specific properties
+def test_user_list_contains_admin():
+    users = get_all_users()
+    admin_users = [u for u in users if u.role == "admin"]
+    assert len(admin_users) > 0
+    assert all(u.has_permission("manage_users") for u in admin_users)
+```
+
 **Anti-Mocking Philosophy:** See core-development-rules.md for comprehensive
 rationale on avoiding mocks
 

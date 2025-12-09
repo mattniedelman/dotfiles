@@ -11,6 +11,7 @@ set -gx EDITOR nvim
 set -gx TERM xterm
 set -gx DIRENV_LOG_FORMAT ""
 set -gx LC_COLLATE C
+set -gx RIPGREP_CONFIG_PATH ~/.ripgreprc
 
 # SSH Agent - prefer 1Password, fallback to system agent
 if test -S ~/.1password/agent.sock

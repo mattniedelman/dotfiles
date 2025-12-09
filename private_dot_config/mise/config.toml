@@ -1,10 +1,10 @@
 [tools]
 python = { version = '3.13', install_env = { MISE_PYTHON_COMPILE = "0", MISE_PYTHON_PRECOMPILED_FLAVOR = "freethreaded+pgo-full" } }
 
-# Modern CLI tool replacements (cargo packages)
+# Modern CLI tool replacements (Rust/cargo packages)
 "cargo:bottom" = "latest"  # Modern top/htop replacement
 "cargo:du-dust" = "latest" # Modern du replacement
-"cargo:duf" = "latest"     # Modern df replacement
+duf = "latest"             # Modern df replacement (Go-based)
 "cargo:eza" = "latest"     # Modern ls replacement (fork of exa)
 "cargo:procs" = "latest"   # Modern ps replacement
 "cargo:xsv" = "latest"
@@ -51,7 +51,6 @@ poetry = "latest"
 pre-commit = "latest"
 ripgrep = "latest"
 ripgrep-all = "latest"
-ruff = "latest"
 rust = "latest"
 rye = "latest"
 shellcheck = "latest"
@@ -68,6 +67,16 @@ zoxide = "latest"
 "npm:@augmentcode/auggie" = "latest"
 "npm:@modelcontextprotocol/server-filesystem" = "latest"
 "npm:@modelcontextprotocol/server-sequential-thinking" = "latest"
+grype = "latest"
+trufflehog = "latest"
+"cargo:wrkflw" = "latest"
+
+# Python tools via pipx
+"pipx:zuban" = "latest"
+"pipx:basedpyright" = "latest"
+"pipx:keyring" = "latest"
+"pipx:aws-sso-util" = "latest"
+"pipx:ruff" = "latest"
 
 
 
