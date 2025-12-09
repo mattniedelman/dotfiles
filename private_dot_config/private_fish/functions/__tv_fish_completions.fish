@@ -69,6 +69,21 @@ function __tv_fish_completions
     # 'complete -C STRING' prints matching completions for STRING.
     set -l comps (complete -C "$line")
 
+    # Sort completions: items ending in / (directories) go to the bottom
+    # This makes files and commands appear first in the tv picker
+    set -l non_dir_comps
+    set -l dir_comps
+    for comp in $comps
+        set -l value (string split -m1 \t -- "$comp")[1]
+        if string match -q "*/" "$value"
+            set -a dir_comps "$comp"
+        else
+            set -a non_dir_comps "$comp"
+        end
+    end
+    # Recombine: non-directories first, then directories
+    set comps $non_dir_comps $dir_comps
+
     if test (count $comps) -eq 0
         # Nothing from fish; show the normal pager
         commandline -f complete-and-search
