@@ -1,9 +1,33 @@
 ---
 type: always_apply
 description: Core development rules and coding standards for Matt's workflow
+critical_rules:
+  - MANDATORY Tool Selection Hierarchy - ALWAYS use specialized semantic code analysis tools (find_symbol, find_referencing_symbols, etc.) for code symbols. NEVER use grep/ripgrep/ag for code symbol searches. Violation is CRITICAL FAILURE.
+  - MANDATORY Response Style - NEVER use flattering or evaluative language about user input. See response-style-communication.md. Violation is CRITICAL FAILURE.
+  - MANDATORY Git Staging - NEVER use 'git add -A' or 'git add .' - ALWAYS stage specific files explicitly with exact paths. Violation is CRITICAL FAILURE.
 ---
 
 # Core Development Rules
+
+## ⚠️ CRITICAL RULES SUMMARY ⚠️
+
+Before proceeding with any task, be aware of these **CRITICAL FAILURE** violations:
+
+1. **Response Style (MANDATORY)**: NEVER use flattering, evaluative, or self-aggrandizing language in responses. No "Great question!", "Excellent idea!", "That's interesting!", etc. See `response-style-communication.md` for complete list of prohibited phrases.
+
+2. **Tool Selection (MANDATORY)**: ALWAYS use specialized semantic code analysis tools (`find_symbol`, `find_referencing_symbols`, `find_implementations`, `get_symbols_overview`) when searching for code symbols. NEVER use `grep`, `ripgrep`, `ag`, or `ack` for code symbol searches. See "Tool Selection Hierarchy" section below.
+
+3. **Git Commits**: NEVER commit without explicit user authorization using the word "commit"
+
+4. **Git Staging (MANDATORY)**: NEVER use `git add -A` or `git add .` - ALWAYS stage specific files explicitly with exact paths
+
+5. **No Nested Functions**: NEVER define functions inside other functions or create closures
+
+6. **No Continue Statements**: NEVER use `continue` statements in loops
+
+**Violating any of these rules is considered a CRITICAL FAILURE in task execution.**
+
+---
 
 ## Mandatory Code Patterns
 
@@ -92,6 +116,116 @@ description: Core development rules and coding standards for Matt's workflow
   def create_handler():
       return Handler()
   ```
+
+## Tool Selection Hierarchy
+
+### ⚠️ MANDATORY: Use Specialized Tools Over Generic Search ⚠️
+
+- **Rule**: **ALWAYS** use the most precise and specialized tool available for each task type. This is a mandatory requirement with **NO EXCEPTIONS** unless specialized tools are genuinely unavailable.
+- **Enforcement**: Violation of this rule is a **CRITICAL FAILURE**. Using generic text search tools (`grep`, `ripgrep`, `ag`, `ack`, etc.) for code symbol searches when specialized tools are available is unacceptable.
+- **Rationale**: Specialized code analysis tools understand language syntax, scope, and semantics, providing more accurate results than text-based search. They reduce false positives and ensure all actual references are found, including those that might be missed by simple text matching. Using the wrong tool leads to incomplete results, missed references, and potential bugs.
+- **Implementation**:
+  - **ALWAYS use language-aware tools** that understand code structure over text-based search tools
+  - **ALWAYS use semantic analysis tools** for code symbols, references, definitions, and implementations
+  - **ONLY use generic text search** for non-code content or when specialized tools are genuinely unavailable
+  - **NEVER use grep/ripgrep/ag/ack** for searching code symbols when semantic tools exist
+
+### Code Analysis Tool Priority (MANDATORY)
+- **Rule**: **MUST** use specialized code analysis tools instead of generic text search when working with code symbols
+- **Absolute Requirement**: Before using ANY search tool, you MUST determine if you are searching for a code symbol. If yes, you MUST use semantic analysis tools.
+- **Tool Selection Guidelines** (in strict priority order):
+  1. **REQUIRED for code symbols**: Use semantic code analysis tools
+     - `find_symbol` - Locate symbol definitions by name or pattern
+     - `find_referencing_symbols` - Find all usages of a class, function, or variable
+     - `find_definition` - Locate where a symbol is defined
+     - `find_implementations` - Find all implementations of an interface or abstract class
+     - `get_symbols_overview` - Get high-level understanding of symbols in a file
+  2. **Second choice**: Use language-specific tools when available
+     - Language servers and LSP-based tools
+     - AST-based analysis tools
+     - IDE-integrated search features
+  3. **ONLY when genuinely unavailable**: Use generic text search ONLY when:
+     - Searching for non-code content (documentation, comments, configuration values)
+     - Searching for string literals or text patterns
+     - Specialized tools are genuinely not available for the language
+     - The search target is definitively not a code symbol
+     - **You MUST justify why semantic tools cannot be used before falling back to text search**
+
+### Correct Tool Selection Examples
+- **✅ Correct - Use semantic analysis for code symbols**:
+  - Use `find_referencing_symbols` to find all usages of a class, function, or variable
+  - Use `find_symbol` to locate where a class or function is defined
+  - Use `find_implementations` to find all implementations of an interface or abstract class
+  - Use `get_symbols_overview` to understand the structure of a file before making changes
+
+- **❌ Incorrect - Don't use text search for code symbols**:
+  - Don't use `grep` or `ripgrep` to search for class names
+  - Don't use `ag` or `ack` to find function calls
+  - Don't use text search to locate variable references
+  - Don't use regex patterns to find method implementations
+
+### When Generic Search Is Appropriate
+- **Rule**: Generic text search tools are appropriate only for specific use cases
+- **Appropriate uses of `grep`, `ripgrep`, `ag`, etc.**:
+  - Searching for TODO comments or documentation notes
+  - Finding configuration values in YAML, JSON, or INI files
+  - Locating string literals or error messages
+  - Searching in non-code files (Markdown, text files, logs)
+  - Finding patterns in data files or output
+  - Searching across file types not supported by semantic tools
+
+### Tool Selection Decision Tree
+```
+Need to search for something?
+│
+├─ Is it a code symbol (class, function, variable, method)?
+│  ├─ YES → Use semantic code analysis tools (find_symbol, find_referencing_symbols, etc.)
+│  └─ NO → Continue to next question
+│
+├─ Is it in a code file but not a symbol (comment, string literal, documentation)?
+│  ├─ YES → Use view tool with search_query_regex or generic text search
+│  └─ NO → Continue to next question
+│
+└─ Is it in a non-code file (config, documentation, data)?
+   └─ YES → Use generic text search (grep, ripgrep, ag)
+```
+
+### Benefits of Specialized Tools
+- **Accuracy**: Understand language syntax and avoid false positives from comments or strings
+- **Completeness**: Find all references including those with different formatting or across files
+- **Context**: Provide symbol type, scope, and relationship information
+- **Refactoring safety**: Enable safe renames and refactoring by finding all true references
+- **Performance**: Optimized for code analysis with indexed symbol databases
+
+### Verification and Compliance
+- **Rule**: Before executing any search operation, you MUST verify you are using the correct tool
+- **Pre-Search Checklist** (MANDATORY):
+  1. **Identify the target**: What am I searching for?
+  2. **Classify the target**: Is it a code symbol (class, function, variable, method, interface)?
+  3. **Select the tool**:
+     - If code symbol → MUST use semantic analysis tools
+     - If non-code content → May use generic text search
+  4. **Verify availability**: Are semantic tools available for this language/project?
+     - If YES → MUST use them (no exceptions)
+     - If NO → Document why and justify text search usage
+- **Self-Correction**: If you catch yourself about to use `grep`, `ripgrep`, `ag`, or `ack` for code symbols, STOP and switch to the appropriate semantic tool
+- **Accountability**: Using the wrong tool type is considered a critical error in task execution
+
+### Prohibited Patterns (NEVER DO THIS)
+- **❌ NEVER** use `grep -r "class ClassName"` to find class definitions
+- **❌ NEVER** use `ripgrep "def function_name"` to find function definitions
+- **❌ NEVER** use `ag "import.*ModuleName"` to find import statements
+- **❌ NEVER** use text search to find "all usages of" any code symbol
+- **❌ NEVER** use regex patterns to locate method calls or variable references
+- **❌ NEVER** justify text search for code symbols with "it's faster" or "it's simpler"
+
+### Required Patterns (ALWAYS DO THIS)
+- **✅ ALWAYS** use `find_symbol` to locate class, function, or variable definitions
+- **✅ ALWAYS** use `find_referencing_symbols` to find all usages of a symbol
+- **✅ ALWAYS** use `find_implementations` to find interface/abstract class implementations
+- **✅ ALWAYS** use `get_symbols_overview` before making changes to understand file structure
+- **✅ ALWAYS** verify semantic tools are truly unavailable before considering text search
+- **✅ ALWAYS** document justification if forced to use text search for code
 
 ## Deep Modules and Simple Interfaces
 
@@ -640,30 +774,109 @@ The following git operations **REQUIRE explicit user permission** and must NEVER
 - Do NOT interpret as: finish everything including committing
 - After completing code changes, remind user that changes are uncommitted
 
-### Objective Language in Commit Messages
+### Objective Language in Code and Documentation
 
-**Rule**: Commit messages must use objective, factual language without subjective value judgments.
+**Rule**: Use objective, factual language in all code-related content. See `response-style-communication.md` for comprehensive guidelines.
 
-**When AI generates commit messages:**
-- **MUST** use objective language
-- **MUST NOT** include: "excellent", "amazing", "brilliant", "perfect", "beautiful", "elegant", "greatly improved", "much better", "significantly enhanced", "optimal", "superior"
-- **MUST** describe what changed and why, using neutral language
-
-**When user provides commit messages:**
-- **SHOULD** validate for objective language
-- **SHOULD** suggest corrections if subjective language detected
-- **MUST** inform user: "The proposed commit message contains subjective language: [specific words]. Suggested objective alternative: [alternative]. Would you like to use the suggested message or proceed with your version?"
-- **MUST** respect user's final decision if they choose to keep subjective language
-
-**Examples of objective alternatives:**
+**Quick reference:**
 - ❌ "Greatly improve error handling" → ✅ "Refactor error handling to use custom exception types"
 - ❌ "Add amazing new feature" → ✅ "Add user authentication feature"
 - ❌ "Perfect the API design" → ✅ "Simplify API by consolidating endpoints"
-- ❌ "Optimize performance significantly" → ✅ "Reduce query time from 500ms to 50ms"
 
-**Scope**: This applies to:
-- Git commit messages (both subject and body)
-- Inline code comments
-- Docstrings and documentation comments
-- Code review comments
-- Pull request descriptions
+### GitHub API Tool for GitHub Resources
+
+**Rule**: Always use the `github-api` tool for accessing and manipulating remote GitHub resources. Never use `web-fetch` for remote GitHub resources.
+
+**Rationale**: The `github-api` tool is specifically designed for GitHub operations, provides proper authentication, structured data responses, and handles rate limiting appropriately. Using `web-fetch` for remote GitHub resources bypasses authentication, provides unstructured HTML instead of API data, and can lead to rate limiting issues.
+
+**Scope**: This rule applies **only to remote GitHub resources** (repositories, issues, PRs, etc. hosted on github.com). It does **not** apply to local workspace files or directories that happen to be part of a GitHub repository.
+
+**Implementation**:
+- **ALWAYS** use the `github-api` tool for remote GitHub operations as the first choice
+- **NEVER** use `web-fetch` to access remote GitHub URLs (github.com, raw.githubusercontent.com, etc.)
+- **Use `gh` CLI as fallback** only when the `github-api` tool genuinely cannot accomplish the task
+- **ALWAYS** use appropriate API endpoints and query parameters for efficient data retrieval
+
+**Common GitHub API Operations**:
+- **Repository operations**:
+  - `GET /repos/{owner}/{repo}` - Get repository details
+  - `GET /repos/{owner}/{repo}/contents/{path}` - Get file contents
+  - `POST /repos/{owner}/{repo}/forks` - Fork a repository
+
+- **Pull request operations**:
+  - `GET /repos/{owner}/{repo}/pulls` - List pull requests (use `state`, `head`, `base` parameters)
+  - `GET /repos/{owner}/{repo}/pulls/{number}` - Get PR details
+  - `POST /repos/{owner}/{repo}/pulls` - Create a pull request
+  - `GET /repos/{owner}/{repo}/pulls/{number}/files` - Get PR file changes
+  - `PATCH /repos/{owner}/{repo}/pulls/{number}` - Update a pull request
+  - `PUT /repos/{owner}/{repo}/pulls/{number}/merge` - Merge a pull request
+
+- **Issue operations**:
+  - `GET /repos/{owner}/{repo}/issues` - List issues (use `filter`, `state`, `labels` parameters)
+  - `GET /issues` - List user's issues across all repos (use `filter` parameter)
+  - `GET /repos/{owner}/{repo}/issues/{number}` - Get issue details
+  - `POST /repos/{owner}/{repo}/issues` - Create an issue
+  - `PATCH /repos/{owner}/{repo}/issues/{number}` - Update an issue
+  - `POST /repos/{owner}/{repo}/issues/{number}/comments` - Comment on an issue
+
+- **Search operations**:
+  - `GET /search/issues` - Search issues and PRs (use `q` parameter with `is:pr`, `is:issue`, `author:@me`, etc.)
+  - `GET /search/code` - Search code
+  - `GET /search/commits` - Search commits (use `author:{username}` or `committer:{username}`)
+
+- **Workflow and CI operations**:
+  - `GET /repos/{owner}/{repo}/actions/runs` - List workflow runs
+  - `GET /repos/{owner}/{repo}/actions/runs/{run_id}` - Get run details
+  - `GET /repos/{owner}/{repo}/commits/{sha}/check-runs` - Get check runs for a commit
+  - `GET /repos/{owner}/{repo}/commits/{sha}/status` - Get commit status (covers more CIs)
+
+- **Release operations**:
+  - `GET /repos/{owner}/{repo}/releases` - List releases
+  - `GET /repos/{owner}/{repo}/releases/{id}` - Get release details
+  - `POST /repos/{owner}/{repo}/releases` - Create a release
+
+**When to use `gh` CLI as fallback**:
+- Only when the `github-api` tool genuinely cannot accomplish the required task
+- When you need interactive operations that are better suited for CLI (e.g., interactive PR creation)
+- When explicitly requested by the user to use the CLI
+- **MUST** document why `github-api` cannot be used before falling back to `gh` CLI
+
+**Prohibited Patterns (NEVER DO THIS)**:
+- **❌ NEVER** use `web-fetch` with remote GitHub URLs:
+  - `web-fetch("https://github.com/{owner}/{repo}/pull/{number}")`
+  - `web-fetch("https://github.com/{owner}/{repo}/issues/{number}")`
+  - `web-fetch("https://raw.githubusercontent.com/{owner}/{repo}/{branch}/{path}")`
+- **❌ NEVER** scrape remote GitHub web pages for data
+- **❌ NEVER** parse HTML from remote GitHub when API data is available
+
+**Required Patterns (ALWAYS DO THIS)**:
+- **✅ ALWAYS** use `github-api` tool for remote GitHub data:
+  - `github-api` with `path="/repos/{owner}/{repo}/pulls/{number}"`
+  - `github-api` with `path="/repos/{owner}/{repo}/issues/{number}"`
+  - `github-api` with `path="/repos/{owner}/{repo}/contents/{path}"` for remote file contents
+- **✅ ALWAYS** use query parameters for filtering (e.g., `state=open`, `author=@me`)
+- **✅ ALWAYS** use search endpoints for complex queries
+
+**Examples**:
+```python
+# ✅ Correct - Use github-api tool for remote GitHub resources
+github-api(path="/repos/{owner}/{repo}/pulls", data={"state": "open", "head": "user:branch-name"})
+github-api(path="/search/issues", data={"q": "is:pr author:@me repo:{owner}/{repo}"})
+github-api(path="/repos/{owner}/{repo}/contents/path/to/file.py")
+
+# ❌ Incorrect - Don't use web-fetch for remote GitHub resources
+web-fetch("https://github.com/{owner}/{repo}/pull/123")
+web-fetch("https://raw.githubusercontent.com/{owner}/{repo}/main/file.py")
+
+# ⚠️ Fallback - Use gh CLI only when github-api cannot do it
+# (Must document why github-api cannot be used)
+gh pr view 123 --json body,comments
+```
+
+**Benefits of `github-api` Tool**:
+- **Authentication**: Uses proper GitHub API authentication automatically
+- **Structured data**: Returns JSON/YAML data instead of HTML
+- **Rate limiting**: Handles API rate limits appropriately
+- **Filtering**: Supports powerful query parameters for efficient data retrieval
+- **Completeness**: Access to all GitHub API endpoints
+- **Consistency**: Uniform interface for all GitHub operations

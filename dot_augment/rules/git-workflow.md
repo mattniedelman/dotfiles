@@ -8,6 +8,13 @@ type: always_apply
 
 **Use Conventional Commits** for all commit messages: `<type>(<scope>): <description>`
 
+**CRITICAL: Keep commit messages concise and to the point**
+- Subject line should be 50-72 characters maximum
+- Use imperative mood ("add feature" not "added feature")
+- No period at the end of subject line
+- Body is optional - only add if truly necessary for context
+- Most commits should be subject-line only
+
 **Types:**
 - `feat`: New feature
 - `fix`: Bug fix
@@ -20,30 +27,28 @@ type: always_apply
 - `ci`: CI/CD configuration changes
 - `chore`: Other changes that don't modify src or test files
 
-**Examples:**
+**Examples (preferred - concise, no body):**
 ```
-feat(auth): add OAuth2 authentication support
-fix(api): resolve race condition in user creation
-docs(readme): update installation instructions
-refactor(database): simplify query builder logic
-test(auth): add integration tests for login flow
+feat(auth): add OAuth2 support
+fix(api): resolve user creation race condition
+docs(readme): update installation steps
+refactor(database): simplify query builder
+test(auth): add login integration tests
 ```
 
-**Commit Body (optional but recommended for complex changes):**
+**Body usage (only when necessary for complex changes):**
 ```
 feat(api): add rate limiting middleware
 
-Implement token bucket algorithm for API rate limiting.
-Configurable limits per endpoint and per user.
-
+Token bucket algorithm with per-endpoint and per-user limits.
 Closes #123
 ```
 
 **Breaking Changes:**
 ```
-feat(api)!: change authentication response format
+feat(api)!: change auth response format
 
-BREAKING CHANGE: Auth endpoint now returns JWT in 'token' field instead of 'access_token'
+BREAKING CHANGE: JWT now in 'token' field instead of 'access_token'
 ```
 
 ## Commit Message Confirmation Workflow
@@ -52,16 +57,16 @@ BREAKING CHANGE: Auth endpoint now returns JWT in 'token' field instead of 'acce
 
 1. **User requests commit** (using explicit commit language)
 
-2. **AI analyzes changes** and generates a Conventional Commit message following the format
+2. **AI analyzes changes** and generates a concise Conventional Commit message
+   - Prefer subject-line only (no body)
+   - Only add body if changes truly require additional context
+   - Keep subject line under 72 characters
 
 3. **AI presents proposed commit message** to user:
    ```
    I will commit these changes with the following message:
 
-   feat(auth): add OAuth2 authentication support
-
-   Implement token bucket algorithm for API rate limiting.
-   Configurable limits per endpoint and per user.
+   feat(auth): add OAuth2 support
 
    Is this commit message acceptable? (yes/no/modify)
    ```
@@ -71,6 +76,7 @@ BREAKING CHANGE: Auth endpoint now returns JWT in 'token' field instead of 'acce
 5. **If user provides their own message**, AI must:
    - Check if it follows Conventional Commits format
    - Check if it uses objective language (no subjective adjectives)
+   - Check if subject line is concise (under 72 characters)
    - If non-conforming, inform user and suggest corrections
    - Ask if user wants to use the suggested correction or proceed with their version
    - Respect user's final decision even if non-conforming
@@ -123,12 +129,11 @@ git checkout main
 git merge --no-ff develop
 ```
 
-**Merge Commit Messages:**
+**Merge Commit Messages (keep concise):**
 ```
 Merge branch 'feature/user-auth' into develop
 
-Adds OAuth2 authentication support with Google and GitHub providers.
-Includes comprehensive test coverage and documentation.
+Adds OAuth2 support with Google and GitHub providers.
 ```
 
 **Exception - Interactive Rebase for Cleanup:**
@@ -207,6 +212,18 @@ Relates to #456
 - Commit often with logical, atomic changes
 - Each commit should represent a single logical change
 - Commits should be buildable and testable
+
+**Staging Changes - CRITICAL RULE:**
+- **NEVER use `git add -A` or `git add .`** - These commands stage all changes indiscriminately
+- **ALWAYS stage specific files explicitly**: `git add path/to/file1.py path/to/file2.py`
+- **Rationale**: Explicit staging ensures:
+  - Only intended changes are committed
+  - No accidental inclusion of unrelated changes
+  - No accidental commits of sensitive data, debug code, or temporary files
+  - Clear understanding of what is being committed
+  - Better commit hygiene and atomic commits
+- **Before committing**: Always review exactly which files are being staged
+- **Exception**: None. Always use explicit file paths.
 
 **Commit Content:**
 - Never commit secrets, API keys, or sensitive data
