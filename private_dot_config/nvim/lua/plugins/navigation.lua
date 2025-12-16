@@ -7,6 +7,9 @@ return {
     event = "VeryLazy",
     opts = {
       delay = 0,
+      spec = {
+        { "<leader>a", group = "AI" },
+      },
     },
     keys = {
       {

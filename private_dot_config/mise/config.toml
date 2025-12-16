@@ -74,7 +74,6 @@ trufflehog = "latest"
 # Python tools via pipx
 "pipx:zuban" = "latest"
 "pipx:basedpyright" = "latest"
-"pipx:keyring" = "latest"
 "pipx:aws-sso-util" = "latest"
 "pipx:ruff" = "latest"
 
