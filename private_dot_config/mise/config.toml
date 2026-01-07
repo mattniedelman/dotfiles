@@ -63,19 +63,20 @@ usage = "latest"
 uv = "latest"
 zoxide = "latest"
 
-# MCP Servers for Augment integration
 "npm:@augmentcode/auggie" = "latest"
+"npm:opencommit" = "latest"
 "npm:@modelcontextprotocol/server-filesystem" = "latest"
 "npm:@modelcontextprotocol/server-sequential-thinking" = "latest"
 grype = "latest"
 trufflehog = "latest"
-"cargo:wrkflw" = "latest"
 
 # Python tools via pipx
 "pipx:zuban" = "latest"
 "pipx:basedpyright" = "latest"
 "pipx:aws-sso-util" = "latest"
 "pipx:ruff" = "latest"
+"pipx:pyright" = "latest"
+delta = "latest"
 
 
 
