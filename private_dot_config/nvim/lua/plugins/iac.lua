@@ -9,6 +9,7 @@ return {
     "mason-org/mason.nvim",
     opts = {
       ensure_installed = {
+        "actionlint", -- GitHub Actions linter
         "trivy", -- Container/IaC security scanner
         "kube-linter", -- Kubernetes linter
       },
@@ -52,6 +53,7 @@ return {
     opts = function(_, opts)
       local nls = require("null-ls")
       opts.sources = vim.list_extend(opts.sources or {}, {
+        nls.builtins.diagnostics.actionlint,
         nls.builtins.diagnostics.kube_linter,
         nls.builtins.diagnostics.trivy,
       })

@@ -1,32 +1,3 @@
--- AI Assistance
--- AI-powered coding tools and assistants
---
--- This configuration includes:
--- 1. Augment.vim - For inline code completions (uses Ctrl+F to accept)
--- 2. Sidekick - For AI CLI tools integration and Next Edit Suggestions
---
--- Prerequisites:
---   1. Install Auggie CLI: https://docs.augmentcode.com/cli/installation
---   2. Authenticate: Run `auggie auth login` in your terminal
---   3. Verify: Run `auggie --version` to confirm installation
---   4. Install AI CLI tools (optional): claude, copilot, gemini, etc.
---
--- Key bindings:
---   <Tab> - Navigate/apply Next Edit Suggestions
---   <leader>aa - Toggle Sidekick CLI
---   <leader>as - Select AI CLI tool
---   <leader>ad - Detach CLI session
---   <leader>at - Send current context to CLI
---   <leader>af - Send file to CLI
---   <leader>av - Send visual selection to CLI
---   <leader>ap - Select prompt to send
---   <leader>ac - Toggle Claude CLI
---
--- Differences from augment.vim:
---   - augment.vim: Provides inline code completions (autocomplete-style)
---   - Sidekick: Provides AI CLI integration and Next Edit Suggestions
---   Both work together seamlessly.
-
 return {
   {
     "augmentcode/augment.vim",
@@ -48,31 +19,31 @@ return {
         },
         win = {
           layout = "right", -- float|left|bottom|top|right
+          -- Disable ctrl+p in sidekick windows to avoid conflict with auggie's enhance prompt
+          keys = {
+            prompt = false, -- Disable ctrl+p for prompt selector
+          },
         },
         tools = {
-          -- Add auggie to the list of available CLI tools
           auggie = {
             cmd = { "auggie" },
           },
         },
         prompts = {
-          -- Custom prompts matching your previous workflow
           explain = "Explain {this}",
           fix = "Can you fix {this}?",
           tests = "Can you write tests for {this}?",
-          commit = "Can you review my changes?",
+          commit = "Generate a concise git commit message for my staged changes. Use conventional commit format (type: description). Be specific about what changed. Only output the commit message, nothing else.",
           lsp = "Can you help me fix the diagnostics in {file}?\n{diagnostics}",
         },
       },
     },
     keys = {
-      -- Tab for Next Edit Suggestions
       {
         "<tab>",
         function()
-          -- if there is a next edit, jump to it, otherwise apply it if any
           if not require("sidekick").nes_jump_or_apply() then
-            return "<Tab>" -- fallback to normal tab
+            return "<Tab>"
           end
         end,
         expr = true,
@@ -160,7 +131,7 @@ return {
           require("sidekick.cli").send({ msg = "{commit}" })
         end,
         mode = { "n", "v" },
-        desc = "Commit Message",
+        desc = "Generate Commit Message",
       },
     },
   },
