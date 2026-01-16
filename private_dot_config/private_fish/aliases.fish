@@ -36,6 +36,11 @@ alias cdr='cd (git rev-parse --show-toplevel)'
 # delta: better git diffs (configured via .gitconfig, not aliased)
 
 # ============================================================================
+# ast-grep (use global config)
+# ============================================================================
+alias sg='sg --config $AST_GREP_CONFIG'
+
+# ============================================================================
 # Kubernetes
 # ============================================================================
 alias k='kubectl'

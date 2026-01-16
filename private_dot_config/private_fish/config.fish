@@ -62,6 +62,9 @@ if status is-interactive
     # TV (version manager)
     command -q tv; and tv init fish | source
 
+    # Direnv (directory-specific environment variables)
+    command -q direnv; and direnv hook fish | source
+
     # ========================================================================
     # Key Bindings
     # ========================================================================

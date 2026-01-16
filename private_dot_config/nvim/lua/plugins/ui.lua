@@ -31,6 +31,12 @@ return {
             },
           },
         },
+        sources = {
+          explorer = {
+            -- Show file previews in the main Neovim window
+            layout = { preset = "sidebar", preview = "main" },
+          },
+        },
       },
     },
   },
