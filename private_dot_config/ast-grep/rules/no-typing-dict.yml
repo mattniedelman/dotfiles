@@ -1,0 +1,24 @@
+id: no-typing-dict
+language: python
+severity: warning
+message: |
+  Use built-in dict[K, V] instead of typing.Dict[K, V] (Python 3.9+).
+
+rule:
+  any:
+    - pattern: "Dict[$KEY, $VALUE]"
+    - pattern: "from typing import Dict"
+
+note: |
+  From python-development.md:
+  "Modern Python 3.9+ syntax"
+  
+  Instead of:
+    from typing import Dict
+    def process(data: Dict[str, int]) -> Dict[str, str]:
+        ...
+  
+  Use:
+    def process(data: dict[str, int]) -> dict[str, str]:
+        ...
+

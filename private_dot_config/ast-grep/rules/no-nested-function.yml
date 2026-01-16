@@ -1,0 +1,35 @@
+id: no-nested-function
+language: python
+severity: error
+message: |
+  Nested functions are prohibited.
+  Extract inner function to module level with appropriate naming (e.g., _helper_name).
+
+rule:
+  kind: function_definition
+  inside:
+    stopBy: end
+    kind: function_definition
+
+note: |
+  From core-development-rules.md:
+  "NEVER define functions inside other functions"
+  
+  Rationale:
+  - Nested functions complicate testing (can't test inner function independently)
+  - They make debugging harder (stack traces less clear)
+  - They often indicate code that should be refactored
+  
+  Instead of:
+    def outer():
+        def inner(x):
+            return x * 2
+        return inner(5)
+  
+  Use:
+    def _inner_impl(x):
+        return x * 2
+    
+    def outer():
+        return _inner_impl(5)
+

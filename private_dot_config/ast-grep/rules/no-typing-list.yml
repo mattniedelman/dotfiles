@@ -1,0 +1,24 @@
+id: no-typing-list
+language: python
+severity: warning
+message: |
+  Use built-in list[T] instead of typing.List[T] (Python 3.9+).
+
+rule:
+  any:
+    - pattern: "List[$TYPE]"
+    - pattern: "from typing import List"
+
+note: |
+  From python-development.md:
+  "Modern Python 3.9+ syntax (list[str] not List[str])"
+  
+  Instead of:
+    from typing import List
+    def process(items: List[str]) -> List[int]:
+        ...
+  
+  Use:
+    def process(items: list[str]) -> list[int]:
+        ...
+

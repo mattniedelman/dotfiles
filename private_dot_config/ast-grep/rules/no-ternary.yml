@@ -1,0 +1,29 @@
+id: no-ternary-expression
+language: python
+severity: error
+message: |
+  Ternary expressions (conditional expressions) are prohibited.
+  Use explicit if/else blocks instead.
+
+rule:
+  kind: conditional_expression
+
+note: |
+  From python-development.md:
+  "Avoid ternary expressions (conditional expressions) entirely"
+  
+  Instead of:
+    status = "active" if user.is_active else "inactive"
+    result = value if condition else default
+  
+  Use:
+    if user.is_active:
+        status = "active"
+    else:
+        status = "inactive"
+    
+    if condition:
+        result = value
+    else:
+        result = default
+

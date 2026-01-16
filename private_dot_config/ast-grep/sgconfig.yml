@@ -1,0 +1,5 @@
+# ast-grep global configuration
+# Usage: sg scan <path>
+
+ruleDirs:
+  - /home/mattniedelman/.config/ast-grep/rules
