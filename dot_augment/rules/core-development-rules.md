@@ -29,93 +29,31 @@ Before proceeding with any task, be aware of these **CRITICAL FAILURE** violatio
 
 ---
 
-## Mandatory Code Patterns
+## Code Patterns (Automated Enforcement)
 
-### Prohibit Continue Statements
-- **Rule**: Never use `continue` statements in loops
-- **Rationale**: Continue statements create hidden control flow that makes code harder to follow and debug
-- **Alternatives**: 
-  - Use early returns in functions
-  - Restructure loops with proper conditionals
-  - Extract loop body into separate functions
-  - Use filter() or list comprehensions for data processing
+The following patterns are enforced by automated linters. See `linting-enforcement.md` for details.
 
-### Import Organization
-- **Rule**: All library imports must be placed at the top of files, immediately after file headers/docstrings
-- **Exception**: Only deviate when explicitly requested for specific technical requirements
-- **Structure**: 
-  1. Standard library imports
-  2. Third-party imports  
-  3. Local application imports
-  4. Separate groups with blank lines
+### Enforced by ast-grep (`~/.config/ast-grep/`)
+These trigger **errors** that must be fixed:
+- **No nested functions or closures** - Extract to module level with explicit parameters
+- **No nested classes** - Define classes at module level
+- **No `continue` statements** - Use early returns or restructure logic
+- **No ternary expressions** - Use explicit if/else blocks
+- **No `assert x == True/False`** - Assert boolean expressions directly
+- **No unittest.mock or pytest-mock** - Use real implementations or fakes
 
-### No Nested Functions or Closures
-- **Rule**: **NEVER** define functions inside other functions, **NEVER** define classes inside functions, and **NEVER** create closures
-- **Scope**: This prohibition applies to ALL Python code without exception:
-  - **NEVER** use `def` to define a function inside another function
-  - **NEVER** use `def` to define a function inside a class method that captures variables from the method scope
-  - **NEVER** define classes inside functions
-  - **NEVER** create lambda expressions that capture variables from enclosing scopes (closures)
-  - **NEVER** use nested functions even for "helper" functions, callbacks, or decorators
-- **Exception**: Only when the user **explicitly requests** nested functions or closures for a specific technical requirement and provides clear justification
-- **Rationale**:
-  - Nested functions dramatically increase code complexity and cognitive load
-  - Closures create hidden dependencies that are difficult to understand and debug
-  - Nested functions cannot be tested in isolation, reducing test coverage and quality
-  - Code with nested functions is harder to refactor and maintain
-  - Nested functions obscure the true dependencies and data flow of the code
-  - Module-level functions with explicit parameters are always clearer and more testable
-- **Alternatives**:
-  - **Use class methods for stateful behavior**: If a function needs to maintain state or access instance data, make it a method of a class
-  - **Pass parameters explicitly**: Instead of capturing variables from outer scopes, pass them as explicit function parameters
-  - **Create separate module-level functions**: Define functions at module level (top-level of the file) rather than nesting them
-  - **Use classes for related functionality**: Group related functions as methods of a class rather than nesting them
-  - **Extract to private module functions**: Use leading underscore naming (e.g., `_helper_function`) for module-level functions that are implementation details
-- **Examples**:
-  ```python
-  # ❌ PROHIBITED - Nested function
-  def outer_function(x):
-      def inner_function(y):
-          return x + y
-      return inner_function(5)
+### Enforced by ruff (`~/.config/ruff/ruff.toml`)
+- **Import organization** - Handled by isort rules (I001, I002)
+- **String formatting** - Use f-strings (UP031, UP032)
+- **Path handling** - Use pathlib (PTH rules)
+- **Modern type hints** - Use `list[str]` not `List[str]` (UP rules)
+- **No blanket suppressions** - Specific rule codes required (PGH rules)
 
-  # ❌ PROHIBITED - Closure with lambda
-  def create_multiplier(factor):
-      return lambda x: x * factor
-
-  # ❌ PROHIBITED - Class defined inside function
-  def create_handler():
-      class Handler:
-          def handle(self):
-              pass
-      return Handler()
-
-  # ✅ CORRECT - Module-level function with explicit parameters
-  def inner_function(x, y):
-      return x + y
-
-  def outer_function(x):
-      return inner_function(x, 5)
-
-  # ✅ CORRECT - Class method for stateful behavior
-  class Multiplier:
-      def __init__(self, factor):
-          self.factor = factor
-
-      def multiply(self, x):
-          return x * self.factor
-
-  def create_multiplier(factor):
-      return Multiplier(factor)
-
-  # ✅ CORRECT - Class defined at module level
-  class Handler:
-      def handle(self):
-          pass
-
-  def create_handler():
-      return Handler()
-  ```
+### Why These Patterns Matter
+- Nested functions cannot be tested in isolation
+- Continue statements create hidden control flow
+- Ternary expressions reduce readability for complex conditions
+- Mocks test configuration, not behavior
 
 ## Tool Selection Hierarchy
 
@@ -267,51 +205,17 @@ Need to search for something?
 ## Python-Specific Best Practices
 
 ### Type Hints and Documentation
-- **Rule**: Use type hints for all public functions and class methods
-- **Rationale**: Improves code clarity and enables better tooling support
+- **Rule**: Use type hints for all public functions and class methods (enforced by mypy)
 - **Documentation**: Include docstrings for all public APIs explaining purpose, parameters, and return values
 
-### Error Handling Consistency
-- **Rule**: Use consistent error handling patterns throughout the codebase
-- **Implementation**:
-  - Prefer specific exception types over generic Exception
-  - Include meaningful error messages with context
-  - Use logging consistently (avoid mixing print, console.print, etc.)
-  - Return appropriate error codes and status information
-
-### Modern Python Idioms
-- **Rule**: Use modern Python features and idioms for cleaner, more maintainable code
-- **Examples**:
-  - Use pathlib for file operations
-  - Prefer f-strings for string formatting
-  - Use dataclasses or Pydantic models for structured data
-  - Leverage context managers for resource management
+### Error Handling
+- Prefer specific exception types over generic Exception
+- Include meaningful error messages with context
+- Use logging consistently (avoid mixing print, console.print, etc.)
 
 ### Comment Placement
-- **Rule**: Write comments on their own line(s) above the code they describe, rather than at the end of a line of code
-- **Rationale**: Standalone comments are easier to read, don't cause line length issues, and provide better context by appearing before the code they explain
-- **Examples**:
-  ```python
-  # ✅ Preferred - Standalone comment
-  # Calculate the weighted average based on user preferences
-  result = sum(value * weight for value, weight in zip(values, weights)) / sum(weights)
-
-  # ❌ Discouraged - Inline comment
-  result = sum(value * weight for value, weight in zip(values, weights)) / sum(weights)  # Calculate weighted average
-
-  # ✅ Preferred - Multi-line explanation
-  # Convert UTC timestamp to local timezone and format as ISO 8601.
-  # This ensures consistency across different deployment environments.
-  local_time = utc_timestamp.astimezone(local_tz).isoformat()
-
-  # ❌ Discouraged - Inline comment that causes line length issues
-  local_time = utc_timestamp.astimezone(local_tz).isoformat()  # Convert to local timezone and format as ISO 8601
-  ```
-- **Exceptions**: Inline comments may be acceptable in these limited cases:
-  - Very brief clarifications of complex expressions where the comment is shorter than the code
-  - Type hints or annotations that are part of the syntax
-  - When explicitly requested by the user for a specific purpose
-  - Temporary debugging comments (which should be removed before committing)
+- Write comments on their own line(s) above the code they describe
+- Avoid inline comments that cause line length issues
 
 ## Package Management
 
@@ -490,47 +394,8 @@ Need to search for something?
 - **Exceptions**: Simple one-line tests or property-based tests may deviate from this pattern when the separation would reduce clarity
 
 ### Assert Boolean Expressions Directly
-- **Rule**: Never compare boolean expressions to boolean literals (`True` or `False`) in assertions
-- **Rationale**: Comparing a boolean expression to a boolean literal is redundant, less readable, and provides no additional value. It forces readers to parse an unnecessary comparison operation and requires extra variable declarations that don't add clarity
-- **Implementation**:
-  - Assert boolean expressions directly: `assert condition` instead of `assert condition == True`
-  - Use negation for false conditions: `assert not condition` instead of `assert condition == False`
-  - This applies to all assertion contexts, including pytest assertions and other testing frameworks
-- **Examples**:
-  ```python
-  # ❌ Incorrect - Comparing boolean expression to boolean literal
-  expected_is_different_instance = True
-  assert (filtered is not original) == expected_is_different_instance
-  
-  expected_is_smaller = True
-  assert (len(filtered) < len(original)) == expected_is_smaller
-  
-  # ❌ Incorrect - Direct comparison to boolean literal
-  assert (user.is_active == True)
-  assert (result.success == False)
-  
-  # ✅ Correct - Assert boolean expressions directly
-  assert filtered is not original
-  assert len(filtered) < len(original)
-  assert user.is_active
-  assert not result.success
-  
-  # ✅ Correct - When you need an expected value, use it for the actual comparison
-  expected_count = 5
-  assert len(filtered) == expected_count
-  
-  expected_status = "active"
-  assert user.status == expected_status
-  ```
-- **Exception**: The only time to use an `expected_*` boolean variable is when the expected value is computed, comes from test data, or varies across parameterized tests. Even then, assert the expression directly rather than comparing to the variable:
-  ```python
-  # ✅ Acceptable when expected value is computed
-  expected_is_valid = compute_expected_validity(test_case)
-  assert is_valid == expected_is_valid  # Comparing actual boolean to expected boolean
-  
-  # ❌ Still incorrect - Don't compare expression to True
-  assert (is_valid) == expected_is_valid  # Redundant parentheses and comparison
-  ```
+- **Rule**: Enforced by ast-grep (`no-assert-equals-true`, `no-assert-equals-false`)
+- **Summary**: Use `assert condition` not `assert condition == True`; use `assert not condition` not `assert condition == False`
 
 ### Fuzzing and Property-Based Testing
 - **Rule**: Use automated test data generation to discover edge cases and improve test coverage
@@ -572,69 +437,12 @@ Need to search for something?
   - Create test-specific implementations that behave like real components but are simpler and faster
   - When mocks are truly necessary, keep them simple and verify behavior, not implementation details
 
-### Linting Error Resolution
-- **Rule**: Always address linting errors by fixing the underlying issue rather than suppressing warnings
-- **Rationale**: Linting errors indicate potential bugs, style inconsistencies, or maintainability issues. Suppressing them without fixing the root cause degrades code quality over time and can hide real problems
-- **Implementation**:
-  - **Never ignore or suppress linting errors** unless explicitly instructed by the user to do so
-  - **Always attempt to fix linting errors** by making appropriate code changes that address the underlying issue
-  - **Balance fixes with system stability** - don't introduce breaking changes or new bugs while fixing linting issues
-  - **Prioritize proper fixes over suppressions** - refactor code, split long lines, add type hints, or restructure logic as needed
-
-### When Linting Errors Cannot Be Fixed
-- **Rule**: Follow a structured approval process before suppressing any linting error
-- **Process**:
-  1. **Explain the situation**: Describe to the user why the linting error exists and why it's difficult to address
-  2. **Analyze consequences**: Explain the potential consequences of fixing it versus leaving it
-  3. **Request explicit approval**: Ask the user for permission before adding any suppression
-  4. **Document the suppression**: If approved, add an inline suppression comment that:
-     - Uses the linter-specific syntax (e.g., `# noqa: E501` for flake8, `# type: ignore[error-code]` for mypy, `# ruff: noqa: RULE` for ruff)
-     - Includes a brief explanation of why the suppression is necessary
-     - References the specific linting rule being suppressed (not a blanket ignore)
-
-### Appropriate Suppression Scenarios
-- **Rule**: Only suppress linting errors in specific, justified cases with user approval
-- **Examples of appropriate scenarios** (only with explicit user approval):
-  - **Line length violations**: URLs or long string literals that cannot be reasonably split without breaking functionality
-  - **Type checking issues**: Third-party libraries that lack proper type stubs or have incorrect type definitions
-  - **False positives**: Intentional use of patterns that trigger false positives in specific, well-understood contexts
-  - **Generated code**: Auto-generated code where manual fixes would be overwritten
-  - **Performance-critical code**: Cases where the "correct" pattern has measurable performance implications
-- **Examples of inappropriate suppressions** (should always be fixed instead):
-  - Line length violations in regular code (refactor into multiple lines or extract to variables)
-  - Missing type hints (add proper type annotations)
-  - Unused imports or variables (remove them)
-  - Style violations (fix the style to match project standards)
-  - Complexity warnings (refactor to reduce complexity)
-
-### Suppression Best Practices
-- **Rule**: When suppressions are necessary and approved, follow these guidelines
-- **Implementation**:
-  - **Never use blanket suppressions**: Avoid `# noqa` without specifying the rule code, or `# type: ignore` without the specific error
-  - **Be specific**: Always reference the exact linting rule being suppressed (e.g., `# noqa: E501` not just `# noqa`)
-  - **Add context**: Include a brief comment explaining why the suppression is necessary
-  - **Minimize scope**: Use inline suppressions for specific lines rather than file-level or block-level ignores
-  - **Review regularly**: Suppressions should be revisited during refactoring to see if they can be removed
-- **Examples**:
-  ```python
-  # ✅ Good - Specific suppression with explanation
-  # This URL cannot be split without breaking the API endpoint
-  VERY_LONG_API_URL = "https://api.example.com/v1/very/long/endpoint/path/that/cannot/be/shortened"  # noqa: E501
-
-  # ✅ Good - Specific type ignore with context
-  # Third-party library missing type stubs, tracked in issue #123
-  result = external_library.process(data)  # type: ignore[no-untyped-call]
-
-  # ❌ Bad - Blanket suppression without explanation
-  result = some_function()  # noqa
-
-  # ❌ Bad - Generic type ignore
-  result = some_function()  # type: ignore
-
-  # ❌ Bad - Should be fixed instead of suppressed
-  very_long_line = first_value + second_value + third_value + fourth_value + fifth_value  # noqa: E501
-  # Should be: Split into multiple lines or extract to variables
-  ```
+### Linting
+- **Rule**: See `linting-enforcement.md` for complete linting workflow
+- **Key points**:
+  - Fix linting errors rather than suppressing them
+  - Never use blanket `# noqa` or `# type: ignore` - always specify the rule
+  - Request user approval before adding any suppression
 
 ## Code Organization
 
@@ -880,3 +688,175 @@ gh pr view 123 --json body,comments
 - **Filtering**: Supports powerful query parameters for efficient data retrieval
 - **Completeness**: Access to all GitHub API endpoints
 - **Consistency**: Uniform interface for all GitHub operations
+
+## Notes Management
+
+> Notes are managed using the basic-memory tools (`write_note`, `search_notes`, `read_note`, etc.)
+
+### Proactive Knowledge Preservation
+
+**Rule**: The AI assistant must proactively consider updating notes throughout all work sessions, rather than only storing information when explicitly requested.
+
+**Rationale**: Valuable insights, patterns, and decisions discovered during development sessions are often lost when not captured. Proactive notes management creates a persistent, searchable collection that improves AI effectiveness in future sessions and provides standalone documentation value for the user.
+
+### When to Update Notes
+
+The AI assistant should actively consider storing information in notes after:
+
+1. **Completing significant work**:
+   - Implementing a new feature or fixing a complex bug
+   - Setting up new infrastructure, services, or development environments
+   - Completing a refactoring effort or architectural change
+   - Resolving a challenging debugging session
+
+2. **Learning new patterns**:
+   - Discovering how a particular system or codebase works
+   - Understanding project-specific conventions or workflows
+   - Finding effective approaches to recurring problems
+   - Identifying anti-patterns or pitfalls to avoid
+
+3. **Discovering useful information**:
+   - Finding undocumented APIs, configurations, or system behaviors
+   - Identifying dependencies between components
+   - Uncovering historical context or design rationale
+   - Locating important resources or reference materials
+
+4. **Observing team dynamics and expertise**:
+   - Reviewing PRs that reveal someone's particular expertise or working style
+   - Collaborating on code that shows effective patterns or complementary skills
+   - Code review interactions that demonstrate consistent strengths or knowledge areas
+   - Project work that reveals informal leadership or ownership patterns
+
+### What Types of Information to Store
+
+**Technical patterns and solutions**:
+- Architectural decisions and their rationale
+- Code patterns that work well in this codebase
+- Solutions to complex technical challenges
+- Integration patterns between services or systems
+- Performance optimizations and their context
+
+**Project-specific configurations**:
+- Development environment setup procedures
+- Build and deployment workflows
+- Testing strategies and patterns
+- Tool configurations and their purposes
+- Environment-specific settings and variables
+
+**Debugging insights**:
+- Root causes of tricky bugs and how they were identified
+- Troubleshooting approaches that proved effective
+- Common error patterns and their solutions
+- System behaviors that caused confusion initially
+
+**User preferences and standards**:
+- Coding style preferences observed during collaboration
+- Preferred tools, libraries, and approaches
+- Review feedback patterns and expectations
+- Communication preferences and workflows
+
+**Standalone documentation**:
+- API documentation and usage examples
+- System architecture overviews
+- Onboarding information for new contributors
+- Decision logs and change histories
+- Notes that have reference value independent of AI assistance
+
+**Team member insights and collaboration patterns**:
+- Individual strengths, expertise areas, and technical specializations observed during code reviews
+- Working styles and preferences discovered through PR interactions and collaboration
+- Project ownership and responsibility areas identified through commit history and code contributions
+- Communication patterns and preferred collaboration methods
+- Areas where team members consistently provide valuable input or catch important issues
+- Technical mentoring relationships and knowledge transfer patterns
+- Domain expertise mapping (who knows what systems/technologies best)
+
+**Privacy considerations for team information**:
+- Focus exclusively on professional capabilities and working patterns
+- Store only information relevant to effective collaboration and project success
+- Avoid personal information, opinions, or subjective assessments of character
+- Frame observations positively (strengths and expertise, not weaknesses)
+- Information should be factual and based on observable work patterns
+- When in doubt, ask the user before storing team-related information
+
+### Storage Criteria
+
+Information should be stored in notes if it meets **either** criterion:
+
+1. **Future AI utility**: Would help the AI assistant work more effectively in future sessions
+   - Reduces need to re-discover information
+   - Enables faster context building
+   - Prevents repeating past mistakes
+   - Supports more informed decision-making
+
+2. **Standalone value**: Serves as useful documentation, notes, or reference material for the user
+   - Has value even without AI involvement
+   - Would be useful for team members or future maintainers
+   - Captures institutional knowledge
+   - Provides searchable reference material
+
+### Implementation Guidelines
+
+**Active consideration**: At natural transition points in work sessions, the AI should explicitly consider whether valuable information has been generated that warrants storage:
+- "This debugging session revealed important insights about [system]. Should I store this in notes for future reference?"
+- "The approach we used to solve [problem] might be useful to document. Would you like me to add it to notes?"
+
+**Proactive suggestions**: When significant work is completed, the AI should mention if information appears worth preserving:
+- "I've completed the implementation. The architectural pattern we used here might be worth documenting in notes for future sessions."
+- "This configuration took some trial and error to get right. I can store the working setup in notes if that would be helpful."
+
+**Organization**: Use meaningful folder structures and note titles that facilitate future retrieval:
+- Group related information logically
+- Use descriptive titles that indicate content
+- Include relevant tags for searchability
+- Cross-reference related notes when appropriate
+
+**Content quality**: Ensure stored information is:
+- Clear and understandable without additional context
+- Accurate and up-to-date
+- Actionable where applicable
+- Appropriately detailed for its purpose
+
+### What NOT to Store
+
+Avoid storing information that:
+- Is trivial or easily re-discoverable
+- Contains sensitive credentials or secrets
+- Is highly volatile and likely to become stale quickly
+- Duplicates information already well-documented elsewhere
+- Is specific to a single, one-off task with no future relevance
+
+### Examples of Good Storage Opportunities
+
+```
+✅ "After debugging for an hour, discovered that the auth service requires
+   specific header formatting that isn't documented. Should store this."
+
+✅ "The deployment process required several non-obvious steps. Worth
+   documenting for future reference."
+
+✅ "User prefers explicit error handling over broad try/except. Should
+   note this coding preference."
+
+✅ "Found that performance issues were caused by N+1 queries in this
+   pattern. Good to document the fix approach."
+
+✅ "Sarah's PR reviews consistently catch edge cases in error handling.
+   She has deep expertise in the payments system and auth flows."
+
+✅ "Alex is the go-to person for Kubernetes and infrastructure questions.
+   He authored most of the Helm charts and deployment pipelines."
+
+✅ "Code reviews show that the backend team prefers async discussions
+   on complex PRs before scheduling sync meetings."
+
+❌ "Ran 'git status' to check file changes." (too trivial)
+
+❌ "Fixed a typo in variable name." (too minor, no future value)
+
+❌ "API key is xyz123..." (contains secrets)
+
+❌ "John seems disorganized and often misses meetings." (personal/negative)
+
+❌ "Maria is difficult to work with." (subjective character assessment)
+```

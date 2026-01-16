@@ -78,7 +78,17 @@
     "/home/mattniedelman/.local/state/nvim",
     "/home/mattniedelman/.config/mise",
     "/mnt/2b20906f-1847-4c8e-94e4-b841290bddc3/imprivata/docs",
-    "/home/mattniedelman/tmp/tenant"
+    "/home/mattniedelman/tmp/tenant/*",
+    "/home/mattniedelman/Documents",
+    "/mnt/2b20906f-1847-4c8e-94e4-b841290bddc3/imprivata/imprivata-ai/.github",
+    "/home/mattniedelman/tmp/csvdiff",
+    "/mnt/2b20906f-1847-4c8e-94e4-b841290bddc3/imprivata/icp-iac-envs",
+    "/home/mattniedelman/.aws",
+    "/mnt/2b20906f-1847-4c8e-94e4-b841290bddc3/tensorzero",
+    "/home/mattniedelman/tmp/a",
+    "/mnt/2b20906f-1847-4c8e-94e4-b841290bddc3/imprivata/fw",
+    "/home/mattniedelman/git",
+    "/mnt/2b20906f-1847-4c8e-94e4-b841290bddc3/imprivata"
   ],
   "verbose": true,
   "mcpServers": {
@@ -97,17 +107,39 @@
         "/mnt/2b20906f-1847-4c8e-94e4-b841290bddc3/imprivata"
       ]
     },
-    "sequential-thinking": {
+    "think-strategies": {
       "command": "npx",
       "args": [
-        "@modelcontextprotocol/server-sequential-thinking"
+        "github:aaronsb/think-strategies",
+        "--storage-path",
+        "/home/mattniedelman/Documents/thinking"
       ]
     },
-    "memory": {
+    "basic-memory": {
+      "command": "uvx",
+      "args": [
+        "basic-memory",
+        "mcp"
+      ]
+    },
+    "git": {
       "command": "npx",
       "args": [
-        "-y",
-        "@modelcontextprotocol/server-memory"
+        "@cyanheads/git-mcp-server@latest"
+      ],
+      "env": {
+        "MCP_LOG_LEVEL": "info",
+        "GIT_USERNAME": "Matt Niedelman",
+        "GIT_EMAIL": "matt.niedelman@imprivata.com"
+      }
+    },
+    "kubernetes": {
+      "command": "npx",
+      "args": [
+        "kubernetes-mcp-server@latest",
+        "--read-only",
+        "--toolsets",
+        "core,helm"
       ]
     },
     "serena": {
@@ -119,9 +151,20 @@
         "start-mcp-server",
         "--context",
         "ide-assistant",
-        "--project",
-        "$PWD"
+        "--project-from-cwd"
       ]
+    },
+    "ast-grep": {
+      "command": "uvx",
+      "args": [
+        "--from",
+        "git+https://github.com/ast-grep/ast-grep-mcp",
+        "ast-grep-server"
+      ],
+      "env": {
+        "AST_GREP_CONFIG": "/home/mattniedelman/.config/ast-grep/sgconfig.yml"
+      }
     }
-  }
+  },
+  "shell": "fish"
 }
