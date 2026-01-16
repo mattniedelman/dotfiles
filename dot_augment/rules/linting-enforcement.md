@@ -2,33 +2,57 @@
 
 **Rule Type**: `always_apply` - This rule is applied to every interaction involving code changes
 
-## Core Principle
+## Linting Stack
 
-Before completing any code changes, ALWAYS run the project's configured linters on all modified files and address ALL diagnostics by fixing the underlying issues rather than suppressing warnings.
+Matt's development environment uses a layered linting approach:
+
+### 1. Global Ruff Configuration
+- **Location**: `~/.config/ruff/ruff.toml`
+- **Coverage**: `select = ['ALL']` with sensible ignores
+- **What it enforces**:
+  - Import organization (isort)
+  - Unused imports/variables
+  - f-strings over .format() and % formatting
+  - pathlib over os.path
+  - No blanket `# noqa` or `# type: ignore`
+  - Type hint style (modern generics)
+  - Docstring conventions
+  - All pycodestyle, pyflakes, pyupgrade, and more
+
+### 2. ast-grep Structural Rules
+- **Location**: `~/.config/ast-grep/sgconfig.yml` (with rules in `~/.config/ast-grep/rules/`)
+- **What it enforces** (not covered by ruff):
+  - No nested functions or classes
+  - No `continue` statements
+  - No ternary expressions
+  - No `assert x == True/False`
+  - No unittest.mock or pytest-mock imports
+
+### 3. mypy Type Checking
+- Use `mypy --strict` for comprehensive type checking
 
 ## Mandatory Linting Workflow
 
-### 1. Automatic Linter Detection
-- **Rule**: Automatically detect the project's linting configuration before running linters
-- **Implementation**:
-  - Check for common configuration files:
-    - **Python**: `pyproject.toml`, `ruff.toml`, `.ruff.toml`, `setup.cfg`, `.flake8`, `mypy.ini`, `pylint.rc`
-    - **JavaScript/TypeScript**: `.eslintrc`, `.eslintrc.json`, `.eslintrc.js`, `eslint.config.js`, `package.json` (eslintConfig)
-    - **Rust**: `Cargo.toml` (clippy configuration)
-    - **Go**: `.golangci.yml`, `.golangci.yaml`
-  - If multiple linters are configured, run all of them
-  - If no linter configuration is found, ask the user which linter to use
+### After Making Python Code Changes
 
-### 2. Run Linters on Modified Files
-- **Rule**: After making any code edits, run all configured linters on the modified files
-- **Implementation**:
-  - Use the appropriate linter commands for the detected language/framework:
-    - **Python**: `ruff check <file>`, `mypy <file>`, `flake8 <file>`, `pylint <file>`
-    - **JavaScript/TypeScript**: `eslint <file>`, `tsc --noEmit` (for TypeScript)
-    - **Rust**: `cargo clippy`
-    - **Go**: `golangci-lint run <file>`
-  - Run linters with appropriate flags to show all diagnostics
-  - Capture and analyze all linter output
+Run in this order:
+
+```bash
+# 1. ast-grep (structural rules) - errors are blocking
+sg scan <file>
+
+# 2. ruff (style, imports, modern Python)
+ruff check <file>
+
+# 3. mypy (type checking)
+mypy <file>
+```
+
+### Priority of Fixes
+1. **ast-grep errors**: MUST fix before proceeding (nested functions, continue, ternary, mocks)
+2. **ruff errors**: MUST fix (most can be auto-fixed with `ruff check --fix`)
+3. **mypy errors**: MUST fix for type safety
+4. **ast-grep warnings**: SHOULD fix (os.path usage can proceed with justification)
 
 ### 3. Address All Diagnostics
 - **Rule**: Fix all linting diagnostics by addressing the underlying issues
