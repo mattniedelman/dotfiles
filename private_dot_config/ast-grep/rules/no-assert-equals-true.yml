@@ -1,0 +1,25 @@
+id: no-assert-equals-true
+language: python
+severity: error
+message: |
+  Don't compare to True in assertions.
+  Use 'assert expression' directly instead of 'assert expression == True'.
+
+rule:
+  kind: assert_statement
+  has:
+    kind: comparison_operator
+    regex: "==\\s*True"
+
+note: |
+  From core-development-rules.md:
+  "Never compare boolean expressions to boolean literals in assertions"
+  
+  Instead of:
+    assert is_valid == True
+    assert (user.is_active == True)
+  
+  Use:
+    assert is_valid
+    assert user.is_active
+

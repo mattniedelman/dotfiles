@@ -1,0 +1,25 @@
+id: no-assert-equals-false
+language: python
+severity: error
+message: |
+  Don't compare to False in assertions.
+  Use 'assert not expression' instead of 'assert expression == False'.
+
+rule:
+  kind: assert_statement
+  has:
+    kind: comparison_operator
+    regex: "==\\s*False"
+
+note: |
+  From core-development-rules.md:
+  "Never compare boolean expressions to boolean literals in assertions"
+  
+  Instead of:
+    assert is_valid == False
+    assert (result.success == False)
+  
+  Use:
+    assert not is_valid
+    assert not result.success
+

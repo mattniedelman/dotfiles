@@ -1,0 +1,15 @@
+id: no-os-path-isdir
+language: python
+severity: warning
+message: |
+  Avoid os.path.isdir(). Use pathlib.Path.is_dir() instead.
+
+rule:
+  pattern: os.path.isdir($PATH)
+
+fix: Path($PATH).is_dir()
+
+note: |
+  From python-development.md:
+  "Use pathlib.Path not os.path"
+

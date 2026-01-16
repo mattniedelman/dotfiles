@@ -1,0 +1,23 @@
+id: no-percent-format
+language: python
+severity: warning
+message: |
+  Avoid %-formatting for strings.
+  Use f-strings instead for better readability.
+
+rule:
+  kind: binary_operator
+  has:
+    kind: string
+  regex: "%"
+
+note: |
+  From python-development.md:
+  "Use f-strings, not .format() or %"
+  
+  Instead of:
+    message = "%s is %d years old" % (name, age)
+  
+  Use:
+    message = f"{name} is {age} years old"
+

@@ -1,0 +1,24 @@
+id: no-typing-set
+language: python
+severity: warning
+message: |
+  Use built-in set[T] instead of typing.Set[T] (Python 3.9+).
+
+rule:
+  any:
+    - pattern: "Set[$TYPE]"
+    - pattern: "from typing import Set"
+
+note: |
+  From python-development.md:
+  "Modern Python 3.9+ syntax"
+  
+  Instead of:
+    from typing import Set
+    def unique_items(items: Set[str]) -> Set[int]:
+        ...
+  
+  Use:
+    def unique_items(items: set[str]) -> set[int]:
+        ...
+

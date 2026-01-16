@@ -1,0 +1,15 @@
+id: no-os-path-isfile
+language: python
+severity: warning
+message: |
+  Avoid os.path.isfile(). Use pathlib.Path.is_file() instead.
+
+rule:
+  pattern: os.path.isfile($PATH)
+
+fix: Path($PATH).is_file()
+
+note: |
+  From python-development.md:
+  "Use pathlib.Path not os.path"
+
