@@ -1,6 +1,11 @@
-# Linting Enforcement
+---
+type: always_apply
+priority: HIGH
+description: Linting workflow, suppression policies, and code quality enforcement
+last_updated: 2025-01-26
+---
 
-**Rule Type**: `always_apply` - This rule is applied to every interaction involving code changes
+# Linting Enforcement
 
 ## Linting Stack
 
@@ -142,92 +147,20 @@ very_long_line = first_value + second_value + third_value + fourth_value + fifth
 
 ## Extensive Fix Scenarios
 
-### When Linting Requires Many Fixes
+**Auto-fix thresholds:**
 
-**Auto-fix limits:**
-- **1-20 simple issues**: Auto-fix without asking (safe changes like unused imports, whitespace)
-- **21-50 issues**: Inform user and ask permission before fixing
-- **51+ issues**: Present options to user
+| Issue Count | Action |
+|-------------|--------|
+| 1-20 simple issues | Auto-fix without asking (unused imports, whitespace) |
+| 21-50 issues | Inform user and ask permission |
+| 51+ issues | Present options: fix all, critical only, file-by-file, or skip |
 
-**When linting finds 51+ issues:**
-
-```
-EXTENSIVE LINTING FIXES REQUIRED
-
-Linter found [number] issues across [number] files.
-
-Issue breakdown:
-- [number] errors (must fix)
-- [number] warnings (should fix)
-- [number] style issues (optional)
-
-Estimated changes: ~[number] lines
-
-Options:
-1. Fix all issues now (may take time and affect many files)
-2. Fix critical issues only (errors, not warnings)
-3. Fix file-by-file with your approval for each
-4. Show me the issues and let me decide which to fix
-5. Skip linting fixes for now
-
-Your choice:
-```
-
-### Invasive Fix Scenarios
-
-**When fixes would significantly change code structure:**
-
-```
-⚠️  INVASIVE LINTING FIXES DETECTED
-
-Some linting fixes would require significant code changes:
-- [description of invasive changes]
-
-Examples:
-- Refactoring complex functions to reduce complexity
-- Restructuring code to fix type errors
-- Breaking up long functions
-
-These changes go beyond simple formatting.
-
-Options:
-1. Proceed with all fixes (including invasive ones)
-2. Skip invasive fixes, only apply simple fixes
-3. Review invasive fixes one-by-one for approval
-4. Skip all linting fixes
-
-Your choice:
-```
-
-### File-by-File Approval Workflow
-
-**When user chooses file-by-file approval:**
-
-For each file with issues:
-```
-File: [filename]
-Issues: [number]
-- [list of issues]
-
-Fix these issues? (yes/no/skip remaining)
-```
-
----
+**Invasive fixes** (refactoring, restructuring): Always ask before proceeding.
 
 ## Integration with Development Workflow
 
-This linting enforcement rule integrates with the existing development workflow:
-
-1. **After making code edits**: Run linters automatically
-2. **Before committing code**: Ensure all linting diagnostics are resolved
-3. **During code review**: Verify that no suppressions were added without justification
-4. **As part of CI/CD**: Linting checks should pass in automated pipelines
-
-## Relationship to Existing Rules
-
-This rule complements and enforces the linting guidelines in `core-development-rules.md`:
-- Builds on the "Linting Error Resolution" section
-- Enforces the "When Linting Errors Cannot Be Fixed" process
-- Implements the "Appropriate Suppression Scenarios" guidelines
-- Ensures the "Suppression Best Practices" are followed consistently
+1. **After code edits**: Run linters automatically
+2. **Before committing**: Ensure all diagnostics resolved
+3. **During review**: Verify no unjustified suppressions
+4. **In CI/CD**: Linting checks must pass
 

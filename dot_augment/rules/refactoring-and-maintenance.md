@@ -1,6 +1,8 @@
 ---
 type: agent_requested
+priority: STANDARD
 description: Guidelines for refactoring, code maintenance, and technical debt management
+last_updated: 2025-01-26
 ---
 
 # Refactoring and Maintenance Guidelines

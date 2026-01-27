@@ -1,0 +1,151 @@
+# Augment Agent Rules Directory
+
+This directory contains rules and guidelines that govern the behavior of the Augment AI assistant.
+
+## Quick Reference: Priority Levels
+
+| Priority | Type | Enforcement | Files |
+|----------|------|-------------|-------|
+| **CRITICAL** | `always_apply` | Violations are penalized | `response-style-communication.md`, `core-development-rules.md` |
+| **HIGH** | `always_apply` | Always active for relevant domains | `git-workflow.md`, `linting-enforcement.md`, `environment.md`, `security.md`, `helm-kubernetes-guidelines.md`, `python-development.md`, `authorization-policies.md` |
+| **STANDARD** | `agent_requested` | Guidance for specific scenarios | `api-design-patterns.md`, `error-handling-observability.md`, `refactoring-and-maintenance.md`, `data-science-ml-patterns.md` |
+
+---
+
+## Rule Conflict Resolution
+
+When rules appear to conflict, apply this precedence:
+
+1. **CRITICAL rules always take precedence** over HIGH and STANDARD rules
+2. **Explicit user requests override default rules** (except security-critical operations)
+3. **More specific rules override general rules** (e.g., Python-specific rules override general coding rules)
+4. **Scope constraints always apply** - never do more than asked, even if rules suggest it
+5. **Security rules cannot be overridden** by user requests (secrets, SQL injection, etc.)
+
+### Common Conflict Resolutions
+
+| Conflict | Resolution |
+|----------|------------|
+| Auto-fix linting vs. scope limits | Only auto-fix in files being modified for user's request |
+| Small refactoring allowed vs. no unsolicited work | Small refactoring only within scope of user's request |
+| Proactive notes vs. no unsolicited files | Notes are allowed; documentation files are not |
+| User says "fix it" vs. authorization required | Ask for clarification on what "fix" means |
+
+---
+
+## CRITICAL Priority (Violations are Penalized)
+
+These rules are enforced with the same severity as scope violations:
+
+### 1. response-style-communication.md
+- NEVER use evaluative language ("Great question!", "Excellent idea!")
+- Direct, professional responses without flattery
+- Objective language in all code and documentation
+
+### 2. core-development-rules.md
+- **Tool Selection**: ALWAYS use semantic tools for code symbols (never grep/ripgrep)
+- **Git Staging**: NEVER use `git add -A` or `git add .`
+- **Git Commits**: NEVER commit without explicit authorization
+- **Code Patterns**: No nested functions, no continue statements
+
+---
+
+## HIGH Priority (Always Apply When Relevant)
+
+### 3. git-workflow.md
+- Conventional Commits format
+- Branch naming conventions
+- Commit authorization workflow
+
+### 4. linting-enforcement.md
+- Run linters after code changes: ast-grep → ruff → mypy
+- Fix errors rather than suppress
+- Approval required for suppressions
+
+### 5. environment.md
+- Path resolution rules
+- Workspace structure
+- Tool management (mise)
+
+### 6. security.md
+- Never hardcode secrets
+- Authorization for security-related changes
+- SQL injection prevention
+
+### 7. helm-kubernetes-guidelines.md
+- CRITICAL: Never manage namespaces in Helm charts
+- Chart structure and values organization
+
+### 8. python-development.md
+- Package management: uv (default) or poetry (if poetry.lock exists)
+- Authorization required for package installation
+- Testing with pytest, type hints required
+
+### 9. authorization-policies.md
+- Unified authorization matrix for all operations
+- Defines EXPLICIT, CONFIRM, SUGGEST, ALLOWED, REFUSE levels
+- Single source of truth for permission requirements
+
+### 10. Notes Management (in core-development-rules.md)
+- Consult basic-memory at session start
+- Capture reasoning (WHY, not just WHAT)
+- Keep notes current as decisions evolve
+
+### 11. Structured Thinking (in core-development-rules.md)
+- Use think-strategies for complex debugging, architecture, investigations
+- Skip for simple, well-defined tasks
+
+---
+
+## STANDARD Priority (Apply When Relevant)
+
+### 12. api-design-patterns.md
+- RESTful API design principles
+- Client interface patterns
+- FastAPI-specific patterns
+
+### 13. error-handling-observability.md
+- Specific exception types
+- Structured logging
+- Observability practices
+
+### 14. refactoring-and-maintenance.md
+- Scope limits: small (<10 lines) without permission
+- Medium/large refactoring requires approval
+- Technical debt management
+
+### 15. data-science-ml-patterns.md
+- Model operation authorization
+- BERTopic patterns
+- Testing ML code
+
+---
+
+## Frontmatter Schema
+
+All rule files should include this frontmatter:
+
+```yaml
+---
+type: always_apply | agent_requested
+priority: CRITICAL | HIGH | STANDARD
+description: Brief description of the rule's purpose
+last_updated: YYYY-MM-DD
+---
+```
+
+## Adding New Rules
+
+1. Create file with proper frontmatter (see schema above)
+2. Use clear section headers and concise examples
+3. Update this README with the new rule's priority level
+4. Cross-reference related rules where appropriate
+
+## Rule Enforcement
+
+The AI assistant is evaluated on:
+- **CRITICAL rule adherence** (heavily penalized for violations)
+- **Completeness** (missing downstream changes is a failure)
+- **Scope adherence** (no unsolicited work)
+- **File creation discipline** (only when necessary)
+

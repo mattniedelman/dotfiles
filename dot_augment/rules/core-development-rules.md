@@ -1,6 +1,8 @@
 ---
 type: always_apply
+priority: CRITICAL
 description: Core development rules and coding standards for Matt's workflow
+last_updated: 2025-01-26
 critical_rules:
   - MANDATORY Tool Selection Hierarchy - ALWAYS use specialized semantic code analysis tools (find_symbol, find_referencing_symbols, etc.) for code symbols. NEVER use grep/ripgrep/ag for code symbol searches. Violation is CRITICAL FAILURE.
   - MANDATORY Response Style - NEVER use flattering or evaluative language about user input. See response-style-communication.md. Violation is CRITICAL FAILURE.
@@ -57,113 +59,134 @@ These trigger **errors** that must be fixed:
 
 ## Tool Selection Hierarchy
 
-### ⚠️ MANDATORY: Use Specialized Tools Over Generic Search ⚠️
+### ⚠️ MANDATORY: Semantic Tools for Code Symbols ⚠️
 
-- **Rule**: **ALWAYS** use the most precise and specialized tool available for each task type. This is a mandatory requirement with **NO EXCEPTIONS** unless specialized tools are genuinely unavailable.
-- **Enforcement**: Violation of this rule is a **CRITICAL FAILURE**. Using generic text search tools (`grep`, `ripgrep`, `ag`, `ack`, etc.) for code symbol searches when specialized tools are available is unacceptable.
-- **Rationale**: Specialized code analysis tools understand language syntax, scope, and semantics, providing more accurate results than text-based search. They reduce false positives and ensure all actual references are found, including those that might be missed by simple text matching. Using the wrong tool leads to incomplete results, missed references, and potential bugs.
-- **Implementation**:
-  - **ALWAYS use language-aware tools** that understand code structure over text-based search tools
-  - **ALWAYS use semantic analysis tools** for code symbols, references, definitions, and implementations
-  - **ONLY use generic text search** for non-code content or when specialized tools are genuinely unavailable
-  - **NEVER use grep/ripgrep/ag/ack** for searching code symbols when semantic tools exist
+**CRITICAL FAILURE** to use generic text search (`grep`, `ripgrep`, `ag`, `ack`) for code symbols when semantic tools are available.
 
-### Code Analysis Tool Priority (MANDATORY)
-- **Rule**: **MUST** use specialized code analysis tools instead of generic text search when working with code symbols
-- **Absolute Requirement**: Before using ANY search tool, you MUST determine if you are searching for a code symbol. If yes, you MUST use semantic analysis tools.
-- **Tool Selection Guidelines** (in strict priority order):
-  1. **REQUIRED for code symbols**: Use semantic code analysis tools
-     - `find_symbol` - Locate symbol definitions by name or pattern
-     - `find_referencing_symbols` - Find all usages of a class, function, or variable
-     - `find_definition` - Locate where a symbol is defined
-     - `find_implementations` - Find all implementations of an interface or abstract class
-     - `get_symbols_overview` - Get high-level understanding of symbols in a file
-  2. **Second choice**: Use language-specific tools when available
-     - Language servers and LSP-based tools
-     - AST-based analysis tools
-     - IDE-integrated search features
-  3. **ONLY when genuinely unavailable**: Use generic text search ONLY when:
-     - Searching for non-code content (documentation, comments, configuration values)
-     - Searching for string literals or text patterns
-     - Specialized tools are genuinely not available for the language
-     - The search target is definitively not a code symbol
-     - **You MUST justify why semantic tools cannot be used before falling back to text search**
+| Search Target | Required Tool | Fallback (justify use) |
+|--------------|---------------|------------------------|
+| Symbol definitions | `find_symbol` | Never for code symbols |
+| Symbol usages | `find_referencing_symbols` | Never for code symbols |
+| Implementations | `find_implementations` | Never for code symbols |
+| File structure | `get_symbols_overview` | Never for code symbols |
+| Comments, TODOs | `view` with `search_query_regex` | `grep`/`ripgrep` |
+| Config files (YAML, JSON) | `grep`/`ripgrep` | - |
+| String literals, logs | `grep`/`ripgrep` | - |
 
-### Correct Tool Selection Examples
-- **✅ Correct - Use semantic analysis for code symbols**:
-  - Use `find_referencing_symbols` to find all usages of a class, function, or variable
-  - Use `find_symbol` to locate where a class or function is defined
-  - Use `find_implementations` to find all implementations of an interface or abstract class
-  - Use `get_symbols_overview` to understand the structure of a file before making changes
+### Decision Rule
 
-- **❌ Incorrect - Don't use text search for code symbols**:
-  - Don't use `grep` or `ripgrep` to search for class names
-  - Don't use `ag` or `ack` to find function calls
-  - Don't use text search to locate variable references
-  - Don't use regex patterns to find method implementations
+**Before ANY search**: Is the target a code symbol (class, function, variable, method)?
+- **YES** → MUST use semantic tools. No exceptions.
+- **NO** → May use text search.
 
-### When Generic Search Is Appropriate
-- **Rule**: Generic text search tools are appropriate only for specific use cases
-- **Appropriate uses of `grep`, `ripgrep`, `ag`, etc.**:
-  - Searching for TODO comments or documentation notes
-  - Finding configuration values in YAML, JSON, or INI files
-  - Locating string literals or error messages
-  - Searching in non-code files (Markdown, text files, logs)
-  - Finding patterns in data files or output
-  - Searching across file types not supported by semantic tools
+### Prohibited Patterns
+- ❌ `grep -r "class ClassName"` or `ripgrep "def function_name"`
+- ❌ Text search for "all usages of" any code symbol
+- ❌ Justifying text search with "it's faster" or "it's simpler"
 
-### Tool Selection Decision Tree
+## Structured Thinking for Complex Tasks
+
+### When to Use Think-Strategies
+
+**Rule**: Use the `think-strategies` MCP tools when task complexity exceeds what can be reliably handled through direct action. The overhead of structured thinking is justified when the cost of mistakes or missed considerations is high.
+
+**Complexity indicators that warrant structured thinking**:
+
+1. **Multiple competing hypotheses**:
+   - Debugging where the root cause is unclear
+   - Performance issues with several possible sources
+   - Flaky tests with intermittent failures
+   - Security vulnerabilities with multiple potential vectors
+
+2. **Significant architectural decisions**:
+   - Designing new systems or major components
+   - Choosing between fundamentally different approaches
+   - Decisions with long-term implications that are costly to reverse
+   - Tradeoffs involving multiple stakeholders or concerns
+
+3. **Complex refactoring or migrations**:
+   - Changes touching many files or systems
+   - Refactoring with unclear scope or dependencies
+   - Database migrations with data transformation
+   - API changes affecting multiple consumers
+
+4. **Investigation and analysis**:
+   - Understanding unfamiliar codebases
+   - Reverse-engineering undocumented systems
+   - Root cause analysis for production incidents
+   - Security audits or vulnerability assessments
+
+5. **Multi-step planning**:
+   - Tasks requiring coordination across multiple systems
+   - Work that must be done in a specific order
+   - Changes with rollback considerations
+   - Migrations requiring careful sequencing
+
+### Strategy Selection Guide
+
+Choose the appropriate thinking strategy based on the problem type:
+
+| Problem Type | Recommended Strategy | When to Use |
+|-------------|---------------------|-------------|
+| Step-by-step problem solving | `chain_of_thought` | Linear problems with clear progression |
+| Debugging with hypotheses | `react` | Need to form hypothesis → test → observe → refine |
+| Exploring alternatives | `tree_of_thoughts` | Multiple valid approaches to evaluate |
+| Breaking down complex tasks | `rewoo` | Planning before execution, separating reasoning from action |
+| Self-correction needed | `self_consistency` | High-stakes decisions needing verification |
+| Stepping back for context | `step_back` | When stuck in details, need broader perspective |
+| Navigating tradeoffs | `trilemma` | Decisions with competing constraints |
+
+### When NOT to Use Structured Thinking
+
+**Skip think-strategies for**:
+- Simple, well-defined tasks with clear implementation paths
+- Routine code changes (adding a field, fixing a typo, updating a dependency)
+- Tasks where the approach is obvious and low-risk
+- Quick lookups or information retrieval
+- Following explicit user instructions with no ambiguity
+
+**Rule of thumb**: If you can confidently execute the task in 2-3 steps without needing to track state or consider alternatives, proceed directly. If you find yourself uncertain, backtracking, or juggling multiple considerations, invoke structured thinking.
+
+### Using Think-Strategies Effectively
+
+**Session management**:
+- Use `think-session-manager` to resume prior thinking sessions on ongoing problems
+- Search for related sessions before starting new investigations
+- Persist sessions for complex problems that may span multiple conversations
+
+**Integration with other tools**:
+- Use `plannedActions` to queue tool calls that will inform the next thought
+- Use `actionResults` to incorporate tool outputs into reasoning
+- Combine with basic-memory to document conclusions and decisions
+
+**Quality reflection**:
+- Use the `qualityRating` field to self-assess reasoning quality
+- Adjust approach if ratings indicate poor fit between strategy and problem
+
+### Examples
+
 ```
-Need to search for something?
-│
-├─ Is it a code symbol (class, function, variable, method)?
-│  ├─ YES → Use semantic code analysis tools (find_symbol, find_referencing_symbols, etc.)
-│  └─ NO → Continue to next question
-│
-├─ Is it in a code file but not a symbol (comment, string literal, documentation)?
-│  ├─ YES → Use view tool with search_query_regex or generic text search
-│  └─ NO → Continue to next question
-│
-└─ Is it in a non-code file (config, documentation, data)?
-   └─ YES → Use generic text search (grep, ripgrep, ag)
+❌ Task: "Add a created_at field to the User model"
+   → Direct action. Simple, well-defined, low-risk.
+
+✅ Task: "Figure out why the payment processing is sometimes failing"
+   → Use react strategy. Multiple hypotheses, need to investigate and refine.
+
+❌ Task: "Update the README with the new API endpoint"
+   → Direct action. Straightforward documentation update.
+
+✅ Task: "Design the caching layer for the API"
+   → Use tree_of_thoughts. Multiple valid approaches (Redis, in-memory, CDN),
+     need to evaluate tradeoffs.
+
+❌ Task: "Run the tests and fix any failures"
+   → Direct action initially. Escalate to structured thinking if failures
+     are complex or interconnected.
+
+✅ Task: "Migrate from REST to GraphQL without breaking existing clients"
+   → Use rewoo strategy. Complex multi-step migration requiring careful
+     planning before execution.
 ```
-
-### Benefits of Specialized Tools
-- **Accuracy**: Understand language syntax and avoid false positives from comments or strings
-- **Completeness**: Find all references including those with different formatting or across files
-- **Context**: Provide symbol type, scope, and relationship information
-- **Refactoring safety**: Enable safe renames and refactoring by finding all true references
-- **Performance**: Optimized for code analysis with indexed symbol databases
-
-### Verification and Compliance
-- **Rule**: Before executing any search operation, you MUST verify you are using the correct tool
-- **Pre-Search Checklist** (MANDATORY):
-  1. **Identify the target**: What am I searching for?
-  2. **Classify the target**: Is it a code symbol (class, function, variable, method, interface)?
-  3. **Select the tool**:
-     - If code symbol → MUST use semantic analysis tools
-     - If non-code content → May use generic text search
-  4. **Verify availability**: Are semantic tools available for this language/project?
-     - If YES → MUST use them (no exceptions)
-     - If NO → Document why and justify text search usage
-- **Self-Correction**: If you catch yourself about to use `grep`, `ripgrep`, `ag`, or `ack` for code symbols, STOP and switch to the appropriate semantic tool
-- **Accountability**: Using the wrong tool type is considered a critical error in task execution
-
-### Prohibited Patterns (NEVER DO THIS)
-- **❌ NEVER** use `grep -r "class ClassName"` to find class definitions
-- **❌ NEVER** use `ripgrep "def function_name"` to find function definitions
-- **❌ NEVER** use `ag "import.*ModuleName"` to find import statements
-- **❌ NEVER** use text search to find "all usages of" any code symbol
-- **❌ NEVER** use regex patterns to locate method calls or variable references
-- **❌ NEVER** justify text search for code symbols with "it's faster" or "it's simpler"
-
-### Required Patterns (ALWAYS DO THIS)
-- **✅ ALWAYS** use `find_symbol` to locate class, function, or variable definitions
-- **✅ ALWAYS** use `find_referencing_symbols` to find all usages of a symbol
-- **✅ ALWAYS** use `find_implementations` to find interface/abstract class implementations
-- **✅ ALWAYS** use `get_symbols_overview` before making changes to understand file structure
-- **✅ ALWAYS** verify semantic tools are truly unavailable before considering text search
-- **✅ ALWAYS** document justification if forced to use text search for code
 
 ## Deep Modules and Simple Interfaces
 
@@ -219,42 +242,18 @@ Need to search for something?
 
 ## Package Management
 
-### Python Package Manager Selection
-- **Rule**: Always use `uv` as the default package manager for Python projects unless `poetry.lock` is explicitly present
-- **Rationale**: `uv` is faster, more modern, and provides better dependency resolution. Only use Poetry when a project has already committed to it
-- **Implementation**:
-  1. **Check for lock files before choosing a package manager**:
-     - If `poetry.lock` exists in the project root: use Poetry
-     - If `uv.lock` exists OR no lock file exists: use `uv`
-  2. **Use the correct commands for each package manager**:
-     - **uv (default)**:
-       - `uv run <command>` instead of `poetry run <command>`
-       - `uv add <package>` instead of `poetry add <package>`
-       - `uv remove <package>` instead of `poetry remove <package>`
-       - `uv sync` to install dependencies
-     - **Poetry (only when poetry.lock exists)**:
-       - `poetry run <command>`
-       - `poetry add <package>`
-       - `poetry remove <package>`
-       - `poetry install` to install dependencies
-  3. **Never assume Poetry is the package manager** - always verify by checking for lock files first
-  4. **When in doubt, default to `uv`** - it's the preferred modern solution
+**Primary Reference**: See `python-development.md` for detailed Python package management.
 
-### General Package Management Best Practices
-- **Rule**: Always use appropriate package managers for dependency management instead of manually editing package configuration files
-- **Rationale**: Package managers automatically resolve correct versions, handle dependency conflicts, update lock files, and maintain consistency across environments. Manual editing of package files often leads to version mismatches, dependency conflicts, and broken builds
-- **Implementation**:
-  1. **Always use package manager commands** for installing, updating, or removing dependencies rather than directly editing files like package.json, requirements.txt, Cargo.toml, go.mod, etc.
-  2. **Use the correct package manager commands** for each language/framework:
-     - **JavaScript/Node.js**: Use `npm install`, `npm uninstall`, `yarn add`, `yarn remove`, or `pnpm add/remove`
-     - **Python**: Use `uv add`, `uv remove` (preferred) or `poetry add`, `poetry remove` (when poetry.lock exists)
-     - **Rust**: Use `cargo add`, `cargo remove` (Cargo 1.62+)
-     - **Go**: Use `go get`, `go mod tidy`
-     - **Ruby**: Use `gem install`, `bundle add`, `bundle remove`
-     - **PHP**: Use `composer require`, `composer remove`
-     - **C#/.NET**: Use `dotnet add package`, `dotnet remove package`
-     - **Java**: Use Maven (`mvn dependency:add`) or Gradle commands
-  3. **Exception**: Only edit package files directly when performing complex configuration changes that cannot be accomplished through package manager commands (e.g., custom scripts, build configurations, or repository settings)
+### Quick Reference
+
+| Lock File Present | Use Package Manager |
+|-------------------|---------------------|
+| `poetry.lock` | Poetry |
+| `uv.lock` or none | uv (default) |
+
+**CRITICAL**: Never bypass lock files with low-level commands (`pip install`, `uv pip install`).
+
+**Non-Python Languages**: Use appropriate package managers (npm/yarn/pnpm for JS, cargo for Rust, go mod for Go). Never manually edit package files when commands are available. See `authorization-policies.md` for installation authorization requirements.
 
 ## Testing and Quality
 
@@ -689,9 +688,46 @@ gh pr view 123 --json body,comments
 - **Completeness**: Access to all GitHub API endpoints
 - **Consistency**: Uniform interface for all GitHub operations
 
-## Notes Management
+## Notes Management (Living Documentation System)
 
-> Notes are managed using the basic-memory tools (`write_note`, `search_notes`, `read_note`, etc.)
+> Notes are managed using the basic-memory tools (`write_note`, `search_notes`, `read_note`, `build_context`, `recent_activity`, etc.)
+
+### Purpose: Living Documentation
+
+**Rule**: Basic-memory serves as living documentation of the user's projects, choices, and reasoning. It must be treated as both a primary reference source AND an actively maintained knowledge base.
+
+**Core Principles**:
+1. **Reference First**: Consult basic-memory before starting work on any project or topic
+2. **Maintain Actively**: Keep notes up-to-date as decisions are made and understanding evolves
+3. **Capture Reasoning**: Document not just what was done, but WHY - the choices, tradeoffs, and context
+4. **Evolve Continuously**: Notes are living documents that should be updated, not just appended to
+
+### Session Initialization: Consult Basic-Memory First
+
+**Rule**: At the start of any work session involving a project, codebase, or topic that may have prior context, the AI assistant MUST check basic-memory for relevant information.
+
+**Implementation**:
+1. **Search for context**: Use `search_notes` or `build_context` to find relevant prior notes
+2. **Check recent activity**: Use `recent_activity` to see what has been documented recently
+3. **Apply prior knowledge**: Use discovered context to inform the current session
+
+**When to consult basic-memory**:
+- Starting work on any named project or repository
+- Revisiting a topic that was previously discussed
+- Making architectural or design decisions
+- Before suggesting approaches to problems
+- When the user references prior work or decisions
+
+**Example initialization patterns**:
+```
+User: "Let's work on the data-pipeline project"
+AI: (Internally) Search basic-memory for "data-pipeline" to find prior context,
+    decisions, patterns, and any documented issues or preferences.
+
+User: "How should we handle authentication?"
+AI: (Internally) Check if there are notes about authentication decisions or
+    patterns before suggesting an approach.
+```
 
 ### Proactive Knowledge Preservation
 
@@ -794,6 +830,77 @@ Information should be stored in notes if it meets **either** criterion:
    - Would be useful for team members or future maintainers
    - Captures institutional knowledge
    - Provides searchable reference material
+
+### Documenting Choices and Reasoning
+
+**Rule**: Notes should capture not just WHAT was done, but WHY - the context, alternatives considered, tradeoffs, and reasoning behind decisions.
+
+**Why document reasoning**:
+- Future sessions can understand the constraints that led to a decision
+- Prevents re-litigating decisions that were already carefully considered
+- Allows revisiting decisions when circumstances change
+- Creates institutional memory that survives context switches
+
+**What to capture**:
+- The problem or need that prompted the decision
+- Alternatives that were considered
+- Tradeoffs between the options
+- Why the chosen approach was selected
+- Any constraints or assumptions that influenced the choice
+- Known limitations or future considerations
+
+**Example decision documentation**:
+```
+Decision: Use DuckDB for local analytics instead of PostgreSQL
+
+Context: Need embedded analytics for the data pipeline project
+
+Alternatives considered:
+1. SQLite - Simpler but lacks columnar storage for analytics workloads
+2. PostgreSQL - Full-featured but requires external server management
+3. DuckDB - Embedded, columnar, excellent pandas integration
+
+Why DuckDB:
+- No server management overhead for development environments
+- Native parquet and pandas support fits our data workflow
+- Columnar storage provides good performance for our analytical queries
+- Easy migration path to cloud data warehouses later
+
+Tradeoffs accepted:
+- Less mature than PostgreSQL for production workloads
+- Smaller community and fewer resources for troubleshooting
+
+Future considerations:
+- May need to migrate to cloud warehouse for production scale
+- Monitor for concurrent write limitations
+```
+
+### Keeping Notes Current (Living Documentation)
+
+**Rule**: Notes must be treated as living documents that evolve with the project. Outdated notes are worse than no notes - they create confusion and waste time.
+
+**Update triggers**:
+- When a documented decision is revised or reversed
+- When new information invalidates previous understanding
+- When project architecture or patterns change
+- When dependencies or tools are upgraded
+- When documented problems are solved or become irrelevant
+
+**Update workflow**:
+1. Before making changes, check if relevant notes exist
+2. After completing significant work, review related notes for accuracy
+3. Use `edit_note` to update existing notes rather than creating duplicates
+4. Add dated entries for major changes to preserve history when appropriate
+
+**Proactive maintenance prompts**:
+- "I notice the notes about [topic] may be outdated based on our current work. Should I update them?"
+- "This change affects the documented architecture. Let me update the relevant notes."
+- "The approach documented in [note] has evolved. I'll update it to reflect current practice."
+
+**Version tracking in notes**:
+- For significant changes, consider adding a "History" or "Changelog" section
+- Note when major decisions were made or revised
+- Reference related decisions or dependent notes
 
 ### Implementation Guidelines
 

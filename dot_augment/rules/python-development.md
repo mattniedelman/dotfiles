@@ -1,6 +1,8 @@
 ---
 type: agent_requested
+priority: HIGH
 description: Python development patterns, package management with uv and poetry, testing with pytest, type safety, code organization, and modern Python best practices
+last_updated: 2025-01-26
 ---
 
 # Python Development Guidelines

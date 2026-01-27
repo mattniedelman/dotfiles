@@ -1,6 +1,8 @@
 ---
 type: agent_requested
+priority: STANDARD
 description: Data science and machine learning specific coding patterns and best practices
+last_updated: 2025-01-26
 ---
 
 # Data Science and ML Patterns

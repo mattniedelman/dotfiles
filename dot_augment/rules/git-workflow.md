@@ -1,5 +1,8 @@
 ---
 type: always_apply
+priority: HIGH
+description: Git workflow, conventional commits, branch naming, and version control practices
+last_updated: 2025-01-26
 ---
 
 # Git Workflow and Commit Conventions
