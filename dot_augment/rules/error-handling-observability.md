@@ -1,6 +1,8 @@
 ---
 type: agent_requested
+priority: STANDARD
 description: Error handling patterns, structured logging, observability with OpenTelemetry, metrics, tracing, and monitoring best practices
+last_updated: 2025-01-26
 ---
 
 # Error Handling and Observability

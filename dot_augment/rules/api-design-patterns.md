@@ -1,6 +1,8 @@
 ---
 type: agent_requested
+priority: STANDARD
 description: API design patterns and interface guidelines for building maintainable services
+last_updated: 2025-01-26
 ---
 
 # API Design Patterns
