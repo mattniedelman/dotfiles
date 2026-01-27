@@ -1,3 +1,6 @@
+# Minimum mise version required for this config
+min_version = "2024.11.0"
+
 [tools]
 python = { version = '3.13', install_env = { MISE_PYTHON_COMPILE = "0", MISE_PYTHON_PRECOMPILED_FLAVOR = "freethreaded+pgo-full" } }
 
@@ -15,7 +18,7 @@ action-validator = "latest"
 actionlint = "latest"
 amazon-ecr-credential-helper = "latest"
 atuin = "latest"
-aws-cli = "latest"
+aws-cli = "2"              # Pinned to major version for stability
 bat = "latest"
 bat-extras = "latest"
 chezmoi = "latest"
@@ -31,14 +34,14 @@ fzf = "latest"
 github-cli = "latest"
 glow = "latest"
 go = 'latest'
-helm = "latest"
+helm = "3"                 # Pinned to major version for stability
 java = "17.0.2"
 jq = "latest"
 k3d = "latest"
 kube-capacity = "latest"
 kube-linter = "latest"
 kube-score = "latest"
-kubectl = "latest"
+kubectl = "1.31"           # Pinned - should match cluster version
 kubesec = "latest"
 loki-logcli = "latest"
 lua = "latest"
@@ -72,10 +75,10 @@ trufflehog = "latest"
 
 # Python tools via pipx
 "pipx:zuban" = "latest"
-"pipx:basedpyright" = "latest"
+"pipx:basedpyright" = "latest"  # Enhanced fork of pyright with additional features
 "pipx:aws-sso-util" = "latest"
 "pipx:ruff" = "latest"
-"pipx:pyright" = "latest"
+# Removed duplicate pyright - basedpyright provides superset functionality
 delta = "latest"
 podman = "latest"
 kubectx = "latest"
@@ -93,11 +96,7 @@ always_keep_install = false  # deleted on failure by default
 
 # configure how frequently (in minutes) to fetch updated plugin repository changes
 # this is updated whenever a new runtime is installed
-# (note: this isn't currently implemented but there are plans to add it: https://github.com/jdx/mise/issues/128)
 plugin_autoupdate_last_check_duration = '1 week' # set to 0 to disable updates
-
-# config files with these prefixes will be trusted by default
-trusted_config_paths = ['~/work/my-trusted-projects']
 
 verbose = false      # set to true to see full installation output, see `MISE_VERBOSE`
 http_timeout = "30s" # set the timeout for http requests as duration string, see `MISE_HTTP_TIMEOUT`
@@ -105,21 +104,35 @@ jobs = 4             # number of plugins or runtimes to install in parallel. The
 raw = false          # set to true to directly pipe plugins to stdin/stdout/stderr
 yes = false          # set to true to automatically answer yes to all prompts
 
-not_found_auto_install = false # see MISE_NOT_FOUND_AUTO_INSTALL
+not_found_auto_install = true # automatically install missing tools when command not found
 task_output = "prefix"        # see Tasks Runner for more information
 paranoid = false              # see MISE_PARANOID
 
-shorthands_file = '~/.config/mise/shorthands.toml' # path to the shorthands file, see `MISE_SHORTHANDS_FILE`
-disable_default_shorthands = false                 # disable the default shorthands, see `MISE_DISABLE_DEFAULT_SHORTHANDS`
+disable_default_shorthands = false # disable the default shorthands, see `MISE_DISABLE_DEFAULT_SHORTHANDS`
 
 env_file = '.env' # load env vars from a dotenv file, see `MISE_ENV_FILE`
 
 experimental = true # enable experimental features
 
 # configure messages displayed when entering directories with config files
-status = { missing_tools = "if_other_versions_installed", show_env = false, show_tools = false }
-idiomatic_version_file_enable_tools = ["python"]
+status = { missing_tools = "if_other_versions_installed", show_env = false, show_tools = true }
 
-# "_" is a special key for information you'd like to put into mise.toml that mise will never parse
-[_]
-foo = "bar"
+# Enable reading native version files for these tools (.nvmrc, .python-version, etc.)
+idiomatic_version_file_enable_tools = ["python", "node", "go", "java"]
+
+# Common tasks for mise management
+[tasks.upgrade]
+description = "Upgrade all tools to latest versions"
+run = "mise upgrade --bump"
+
+[tasks.doctor]
+description = "Check mise health and configuration"
+run = "mise doctor"
+
+[tasks.outdated]
+description = "Show outdated tools"
+run = "mise outdated"
+
+[tasks.prune]
+description = "Remove unused tool versions"
+run = "mise prune"
