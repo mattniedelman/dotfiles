@@ -30,7 +30,8 @@ return {
     opts = {
       ensure_installed = {
         "jq", -- JSON processor/formatter
-        "yq", -- YAML processor/formatter
+        "yamlfmt", -- YAML formatter (supports yamllint-compatible options)
+        "doctoc", -- Markdown TOC generator
       },
     },
   },
@@ -41,7 +42,32 @@ return {
     opts = function(_, opts)
       opts.formatters_by_ft = opts.formatters_by_ft or {}
       opts.formatters_by_ft.json = { "jq" }
-      opts.formatters_by_ft.yaml = { "yq" }
+      opts.formatters_by_ft.yaml = { "yamlfmt" }
+    end,
+  },
+
+  -- Markdown table of contents (doctoc)
+  -- Auto-generates/updates TOC on save for all markdown files
+  -- Add <!-- DOCTOC SKIP --> to skip a file
+  {
+    "nvim-lua/plenary.nvim", -- dependency for async job
+    ft = "markdown",
+    config = function()
+      vim.api.nvim_create_autocmd("BufWritePost", {
+        pattern = "*.md",
+        callback = function()
+          local file = vim.fn.expand("%:p")
+          vim.fn.jobstart({ "doctoc", "--notitle", file }, {
+            on_exit = function(_, code)
+              if code == 0 then
+                vim.schedule(function()
+                  vim.cmd("checktime")
+                end)
+              end
+            end,
+          })
+        end,
+      })
     end,
   },
 }

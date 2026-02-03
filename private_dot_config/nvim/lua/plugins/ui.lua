@@ -32,6 +32,10 @@ return {
           },
         },
         sources = {
+          files = {
+            -- Include hidden files that are tracked by git
+            hidden = true,
+          },
           explorer = {
             -- Show file previews in the main Neovim window
             layout = { preset = "sidebar", preview = "main" },

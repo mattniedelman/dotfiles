@@ -10,6 +10,7 @@ ignore = [
     'D203', # conflict with D211
     'D212', # conflict with D213
     'FIX002', # disallows todo comments
+    'COM812', # trailing comma, incompatible with formatter
     'ISC001', # disallows single line string concat, incompatible with formatter
     'RET504', # makes you not assign immediately before returning
     'TC001', # requires type-checking blocks

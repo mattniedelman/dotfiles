@@ -60,7 +60,6 @@ shellcheck = "latest"
 shfmt = "latest"
 skaffold = "latest"
 sqlite = "latest"
-sshuttle = "latest"
 trivy = "latest"
 usage = "latest"
 uv = "latest"
@@ -70,19 +69,32 @@ zoxide = "latest"
 "npm:aicommits" = "develop"
 "npm:@modelcontextprotocol/server-filesystem" = "latest"
 "npm:@modelcontextprotocol/server-sequential-thinking" = "latest"
+"npm:jscpd" = "latest"  # Copy-paste detection
 grype = "latest"
 trufflehog = "latest"
+
+# Linters for efm-langserver (with team configs)
+checkov = "latest"              # IaC security scanner
+tflint = "latest"               # Terraform linter
+terrascan = "latest"            # Terraform security (deprecated upstream)
+hadolint = "latest"             # Dockerfile linter
+"pipx:yamllint" = "latest"      # YAML linter
+"npm:markdownlint-cli2" = "latest"  # Markdown linter (markdownlint-cli2 preferred)
+"go:github.com/mattn/efm-langserver" = "latest"  # General-purpose language server
 
 # Python tools via pipx
 "pipx:zuban" = "latest"
 "pipx:basedpyright" = "latest"  # Enhanced fork of pyright with additional features
 "pipx:aws-sso-util" = "latest"
 "pipx:ruff" = "latest"
+"pipx:sshuttle" = "latest"
 # Removed duplicate pyright - basedpyright provides superset functionality
 delta = "latest"
 podman = "latest"
 kubectx = "latest"
 ast-grep = "latest"
+yamlfmt = "latest"
+"npm:doctoc" = "latest"
 
 
 
@@ -115,7 +127,7 @@ env_file = '.env' # load env vars from a dotenv file, see `MISE_ENV_FILE`
 experimental = true # enable experimental features
 
 # configure messages displayed when entering directories with config files
-status = { missing_tools = "if_other_versions_installed", show_env = false, show_tools = true }
+status = { missing_tools = "if_other_versions_installed", show_env = false, show_tools = false }
 
 # Enable reading native version files for these tools (.nvmrc, .python-version, etc.)
 idiomatic_version_file_enable_tools = ["python", "node", "go", "java"]
