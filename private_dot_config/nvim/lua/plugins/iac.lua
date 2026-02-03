@@ -55,9 +55,7 @@ return {
       opts.sources = vim.list_extend(opts.sources or {}, {
         nls.builtins.diagnostics.actionlint,
         nls.builtins.diagnostics.kube_linter,
-        nls.builtins.diagnostics.trivy,
       })
     end,
   },
 }
-
