@@ -66,6 +66,12 @@ Violations of these rules are treated with the same severity as:
 - ❌ "greatly improved", "much better", "significantly enhanced"
 - ❌ "optimal", "superior", "ideal", "best"
 
+**MUST NOT use violent or militaristic metaphors:**
+- ❌ "battle-tested", "battle-hardened", "war-tested"
+- ❌ "bulletproof", "bombproof", "armor"
+- ❌ "kill", "nuke", "blast" (when referring to processes or data)
+- ✅ Use neutral alternatives: "proven in production", "hardened", "robust", "terminate", "remove"
+
 **Examples:**
 - ❌ "Greatly improve error handling" → ✅ "Refactor error handling to use custom exception types"
 - ❌ "Add amazing new feature" → ✅ "Add user authentication feature"
@@ -81,6 +87,28 @@ Violations of these rules are treated with the same severity as:
 - Ask clarifying questions without preamble
 - Report results objectively
 
+## ASCII-Only Characters
+
+**Always use plain ASCII characters instead of Unicode typographic variants.**
+
+Word processors, documentation tools, and copy-paste from web sources often introduce Unicode lookalikes that cause issues in code, configs, and terminal output.
+
+| Category | ❌ Avoid (Unicode) | ✅ Use (ASCII) |
+|----------|-------------------|----------------|
+| **Dashes** | — (em dash), – (en dash) | - (hyphen-minus) |
+| **Double quotes** | " " (curly) | " (straight) |
+| **Single quotes** | ' ' (curly) | ' (straight) |
+| **Apostrophes** | ' (right single quote) | ' (apostrophe) |
+| **Ellipsis** | … (single character) | ... (three periods) |
+| **Spaces** | ` ` (non-breaking), ` ` (em space) | ` ` (regular space) |
+| **Minus sign** | − (minus U+2212) | - (hyphen-minus) |
+
+**Examples:**
+
+- ❌ "This is the issue — it fails silently" → ✅ "This is the issue - it fails silently"
+- ❌ `config["key"]` → ✅ `config["key"]`
+- ❌ `it's broken` (curly apostrophe) → ✅ `it's broken` (straight)
+
 ## Enforcement
 
-**Self-check**: Before responding, verify no evaluative phrases, flattery, or enthusiasm language. Every sentence should focus on technical content. Get straight to the answer.
+**Self-check**: Before responding, verify no evaluative phrases, flattery, or enthusiasm language. Every sentence should focus on technical content. Get straight to the answer. No em dashes.

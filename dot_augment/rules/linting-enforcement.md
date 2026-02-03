@@ -33,8 +33,9 @@ Matt's development environment uses a layered linting approach:
   - No `assert x == True/False`
   - No unittest.mock or pytest-mock imports
 
-### 3. mypy Type Checking
-- Use `mypy --strict` for comprehensive type checking
+### 3. Type Checking (pyright or zuban preferred)
+- Prefer **pyright** or **zuban** over mypy for type checking
+- Use strict mode for comprehensive type checking
 
 ## Mandatory Linting Workflow
 
@@ -49,14 +50,15 @@ sg scan <file>
 # 2. ruff (style, imports, modern Python)
 ruff check <file>
 
-# 3. mypy (type checking)
-mypy <file>
+# 3. Type checking (prefer pyright or zuban)
+pyright <file>
+# or: zuban <file>
 ```
 
 ### Priority of Fixes
 1. **ast-grep errors**: MUST fix before proceeding (nested functions, continue, ternary, mocks)
 2. **ruff errors**: MUST fix (most can be auto-fixed with `ruff check --fix`)
-3. **mypy errors**: MUST fix for type safety
+3. **Type errors**: MUST fix for type safety
 4. **ast-grep warnings**: SHOULD fix (os.path usage can proceed with justification)
 
 ### 3. Address All Diagnostics

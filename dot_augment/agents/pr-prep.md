@@ -142,6 +142,14 @@ Instead of committing automatically:
 - Ask: "Ready to commit these changes?"
 - Wait for explicit "commit" or "yes" response
 
+### Push Workflow
+**Push is blocked by tool permissions.** After committing:
+1. Inform user: "Changes committed. Ready to push when you run `git push` manually."
+2. Do NOT attempt to push - this is denied by configuration
+3. User must push from their terminal
+
+This ensures the user has final control over what goes to remote.
+
 ## Integration with MCP Tools
 
 - **git MCP server**: Check status, diff, and branches
@@ -169,3 +177,9 @@ Files:
 Ready to commit? (Waiting for explicit authorization)
 ```
 
+## Rule References
+
+This agent enforces policies from:
+- `git-workflow.md` - Conventional Commits format and staging rules
+- `authorization-policies.md` - Authorization matrix (commits require EXPLICIT permission)
+- `linting-enforcement.md` - Linting workflow: ast-grep → ruff → mypy

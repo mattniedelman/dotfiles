@@ -6,8 +6,8 @@ This directory contains rules and guidelines that govern the behavior of the Aug
 
 | Priority | Type | Enforcement | Files |
 |----------|------|-------------|-------|
-| **CRITICAL** | `always_apply` | Violations are penalized | `response-style-communication.md`, `core-development-rules.md` |
-| **HIGH** | `always_apply` | Always active for relevant domains | `git-workflow.md`, `linting-enforcement.md`, `environment.md`, `security.md`, `helm-kubernetes-guidelines.md`, `python-development.md`, `authorization-policies.md` |
+| **CRITICAL** | `always_apply` | Violations are penalized | `response-style-communication.md`, `core-development-rules.md` (includes Notes Management) |
+| **HIGH** | `always_apply` | Always active for relevant domains | `git-workflow.md`, `linting-enforcement.md`, `environment.md`, `security.md`, `helm-kubernetes-guidelines.md`, `python-development.md`, `authorization-policies.md`, `specs-based-development.md` |
 | **STANDARD** | `agent_requested` | Guidance for specific scenarios | `api-design-patterns.md`, `error-handling-observability.md`, `refactoring-and-maintenance.md`, `data-science-ml-patterns.md` |
 
 ---
@@ -48,6 +48,12 @@ These rules are enforced with the same severity as scope violations:
 - **Git Commits**: NEVER commit without explicit authorization
 - **Code Patterns**: No nested functions, no continue statements
 
+### 3. Notes Management (in core-development-rules.md) — CRITICAL
+- **Session Start**: MUST check basic-memory when user mentions a project, prior work, or decisions
+- **Task Completion**: MUST evaluate notes update after completing significant work
+- **End of Session**: MUST review if new knowledge, changed decisions, or stale notes exist
+- **Failure to update notes when triggers are met is a violation**
+
 ---
 
 ## HIGH Priority (Always Apply When Relevant)
@@ -58,7 +64,8 @@ These rules are enforced with the same severity as scope violations:
 - Commit authorization workflow
 
 ### 4. linting-enforcement.md
-- Run linters after code changes: ast-grep → ruff → mypy
+- Run linters after code changes: ast-grep → ruff → pyright/zuban
+- Prefer pyright or zuban over mypy for type checking
 - Fix errors rather than suppress
 - Approval required for suppressions
 
@@ -86,14 +93,16 @@ These rules are enforced with the same severity as scope violations:
 - Defines EXPLICIT, CONFIRM, SUGGEST, ALLOWED, REFUSE levels
 - Single source of truth for permission requirements
 
-### 10. Notes Management (in core-development-rules.md)
-- Consult basic-memory at session start
-- Capture reasoning (WHY, not just WHAT)
-- Keep notes current as decisions evolve
-
-### 11. Structured Thinking (in core-development-rules.md)
+### 10. Structured Thinking (in core-development-rules.md)
 - Use think-strategies for complex debugging, architecture, investigations
 - Skip for simple, well-defined tasks
+
+### 11. specs-based-development.md
+- **Automatically active** in any git repository
+- Specs-driven workflow inspired by Ralph Wiggum technique
+- "Don't assume not implemented" — always search before implementing
+- Gap analysis: compare specs vs code before building
+- Backpressure: tests, types, lints must pass before task completion
 
 ---
 
