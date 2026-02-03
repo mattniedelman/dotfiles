@@ -12,6 +12,7 @@ set -gx TERM xterm
 set -gx DIRENV_LOG_FORMAT ""
 set -gx LC_COLLATE C
 set -gx RIPGREP_CONFIG_PATH ~/.ripgreprc
+set -gx AST_GREP_CONFIG /home/mattniedelman/.config/ast-grep/sgconfig.yml
 
 # SSH Agent - prefer 1Password, fallback to system agent
 if test -S ~/.1password/agent.sock
