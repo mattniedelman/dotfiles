@@ -153,3 +153,9 @@ Proceed with refactoring? (Waiting for approval)
 - **codebase-retrieval**: Understand patterns and context
 - **git**: Check for uncommitted changes before starting
 
+## Rule References
+
+This agent enforces policies from:
+- `refactoring-and-maintenance.md` - Scope limits and approval requirements
+- `authorization-policies.md` - Authorization matrix for refactoring scope
+- `core-development-rules.md` - Semantic tool requirements (never use grep)

@@ -162,7 +162,9 @@ snyk container test <image-name>
 
 ## Integration with MCP
 
-- **docker MCP server**: Inspect running containers if available
 - **filesystem MCP server**: Access Dockerfile and compose files
 - **codebase-retrieval**: Find related configuration files
+- **serena**: Semantic analysis of Dockerfile patterns
+
+Note: For runtime container inspection, use `docker` CLI commands via launch-process.
 

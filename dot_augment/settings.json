@@ -12,52 +12,31 @@
       "permission": {
         "type": "ask-user"
       },
-      "shellInputRegex": "^(rm|sudo)\\s"
+      "shellInputRegex": "\\b(rm|sudo)\\b"
+    },
+    {
+      "toolName": "launch-process",
+      "permission": {
+        "type": "deny"
+      },
+      "shellInputRegex": "\\bgit\\b"
     },
     {
       "toolName": "launch-process",
       "permission": {
         "type": "ask-user"
       },
-      "shellInputRegex": "(git commit)\\s"
+      "shellInputRegex": "(uv add|uv pip install|pip install|poetry add)\\s"
     },
     {
       "toolName": "launch-process",
       "permission": {
-        "type": "deny"
+        "type": "ask-user"
       },
-      "shellInputRegex": "git push"
-    },
-    {
-      "toolName": "launch-process",
-      "permission": {
-        "type": "deny"
-      },
-      "shellInputRegex": "git add\\s+(-A|--all)\\s*"
-    },
-    {
-      "toolName": "launch-process",
-      "permission": {
-        "type": "deny"
-      },
-      "shellInputRegex": "git add\\s+\\.\\s*"
-    },
-    {
-      "toolName": "launch-process",
-      "permission": {
-        "type": "deny"
-      },
-      "shellInputRegex": "git add\\s+\\*\\s*"
-    },
-    {
-      "toolName": "launch-process",
-      "permission": {
-        "type": "deny"
-      },
-      "shellInputRegex": "git add\\s+(-u|--update)\\s*"
+      "shellInputRegex": "(uv remove|pip uninstall|poetry remove)\\s"
     }
   ],
-  "vimMode": true,
+  "vimMode": false,
   "indexingAllowDirs": [
     "/mnt/2b20906f-1847-4c8e-94e4-b841290bddc3/imprivata/workstation-clustering",
     "/home/mattniedelman/.local/share/mise/installs/node/25.1.0/lib/node_modules/@augmentcode/auggie",
@@ -88,7 +67,10 @@
     "/home/mattniedelman/tmp/a",
     "/mnt/2b20906f-1847-4c8e-94e4-b841290bddc3/imprivata/fw",
     "/home/mattniedelman/git",
-    "/mnt/2b20906f-1847-4c8e-94e4-b841290bddc3/imprivata"
+    "/mnt/2b20906f-1847-4c8e-94e4-b841290bddc3/imprivata",
+    "/home/mattniedelman/tmp/kb",
+    "/home/mattniedelman/.config",
+    "/mnt/2b20906f-1847-4c8e-94e4-b841290bddc3/niri"
   ],
   "verbose": true,
   "mcpServers": {
@@ -129,6 +111,7 @@
       ],
       "env": {
         "MCP_LOG_LEVEL": "info",
+        "LOGS_DIR": "~/.augment/logs/git-mcp-server",
         "GIT_USERNAME": "Matt Niedelman",
         "GIT_EMAIL": "matt.niedelman@imprivata.com"
       }

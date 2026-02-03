@@ -692,6 +692,38 @@ gh pr view 123 --json body,comments
 
 > Notes are managed using the basic-memory tools (`write_note`, `search_notes`, `read_note`, `build_context`, `recent_activity`, etc.)
 
+### CRITICAL: Mandatory Notes Triggers
+
+**These triggers are enforced at CRITICAL priority. Skipping them is a violation.**
+
+#### Session Start (MUST check basic-memory)
+When the user's first message involves ANY of these, IMMEDIATELY call `recent_activity` and/or `search_notes`:
+- A named project, repository, or codebase
+- A topic previously discussed (architecture, patterns, decisions)
+- References to "we did", "last time", "before", or similar prior work
+- Technical decisions or design questions
+
+**Failure mode**: Proceeding without checking basic-memory when context likely exists.
+
+#### Task Completion (MUST consider notes update)
+After completing ANY of these, explicitly evaluate whether notes need updating:
+- Implementing a feature or fixing a non-trivial bug
+- Making an architectural or design decision
+- Discovering how something works (debugging, investigation)
+- Setting up infrastructure, environments, or tooling
+- Resolving a problem that took significant effort
+
+**Required action**: Either update relevant notes OR explicitly state "No notes update needed because [reason]."
+
+#### End of Session Checklist
+Before ending a substantive work session, review:
+1. **New knowledge**: Did we learn anything worth preserving?
+2. **Changed decisions**: Did any documented decisions change?
+3. **Stale notes**: Did we encounter outdated information in notes?
+4. **Patterns discovered**: Did we establish patterns worth documenting?
+
+**If any answer is "yes"**: Update notes before concluding.
+
 ### Purpose: Living Documentation
 
 **Rule**: Basic-memory serves as living documentation of the user's projects, choices, and reasoning. It must be treated as both a primary reference source AND an actively maintained knowledge base.
@@ -762,6 +794,22 @@ The AI assistant should actively consider storing information in notes after:
    - Collaborating on code that shows effective patterns or complementary skills
    - Code review interactions that demonstrate consistent strengths or knowledge areas
    - Project work that reveals informal leadership or ownership patterns
+
+5. **Discovery and Investigation** (CRITICAL):
+   - When locating where functionality is implemented in a codebase (e.g., "found that user authentication is handled in `auth/providers.py`")
+   - When discovering what data or capabilities are available through an API, database, or external service
+   - When mapping out system architecture or component relationships during exploration
+   - When identifying undocumented behaviors, quirks, or constraints of a system
+   - When reverse-engineering how existing code works
+
+   **Rationale**: These discoveries represent valuable knowledge that prevents redundant investigation in future sessions. Documenting "where things are" and "what's available" creates a searchable map of the codebase and its integrations.
+
+   **What to capture**:
+   - Location of key functionality (file paths, class/function names)
+   - Available API endpoints, parameters, and response structures
+   - Database schemas, available tables, and key relationships
+   - External service capabilities and integration patterns
+   - System behaviors that weren't obvious from documentation
 
 ### What Types of Information to Store
 

@@ -98,3 +98,9 @@ These are enforced by ast-grep and ruff - just verify linting passed:
 - Style preferences that are subjective
 - Typos in comments (focus on code correctness)
 
+## Rule References
+
+This agent enforces policies from:
+- `linting-enforcement.md` - Linting workflow and suppression policies
+- `python-development.md` - Package management (uv/poetry), testing, type hints
+- `core-development-rules.md` - No nested functions, no continue statements
