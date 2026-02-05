@@ -65,6 +65,13 @@ function __tv_fish_completions
     # Text up to the cursor (best for computing completions)
     set -l line (commandline -cp)
 
+    # For commands with tv channel triggers, use tv's smart autocomplete instead
+    # This enables channels like git-diff which provide richer completions
+    if string match -qr '^git (add|restore)\b' "$line"
+        tv_smart_autocomplete
+        return
+    end
+
     # Ask fish to produce completions for this line.
     # 'complete -C STRING' prints matching completions for STRING.
     set -l comps (complete -C "$line")

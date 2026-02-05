@@ -84,6 +84,9 @@ if status is-interactive
     # Abbreviations (built-in Fish feature)
     test -f ~/.config/fish/abbreviations.fish; and source ~/.config/fish/abbreviations.fish
 
+    # Augment CLI slash commands (/note, /todo, /tasks, etc.)
+    test -f ~/.config/fish/augment.fish; and source ~/.config/fish/augment.fish
+
     # Machine-specific settings (not version controlled)
     test -f ~/.config/fish/local.fish; and source ~/.config/fish/local.fish
 end
