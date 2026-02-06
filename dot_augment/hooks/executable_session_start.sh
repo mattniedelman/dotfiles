@@ -1,4 +1,4 @@
-#!/usr/bin/env -S uv run --quiet --directory /home/mattniedelman/.augment/hooks
+#!/usr/bin/env -S uv run --quiet --script --directory /home/mattniedelman/.augment/hooks
 """
 SessionStart hook: Inject project context and remind to check basic-memory.
 

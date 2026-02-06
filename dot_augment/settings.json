@@ -149,5 +149,50 @@
       }
     }
   },
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/mattniedelman/.augment/hooks/session_start.sh"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/mattniedelman/.augment/hooks/stop_notes_reminder.sh"
+          }
+        ],
+        "metadata": {
+          "includeConversationData": true
+        }
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "save-file|str-replace-editor",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/mattniedelman/.augment/hooks/ascii_check.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "save-file|str-replace-editor",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/mattniedelman/.augment/hooks/auto_lint.sh"
+          }
+        ]
+      }
+    ]
+  },
   "shell": "fish"
 }
