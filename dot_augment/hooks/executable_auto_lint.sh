@@ -1,4 +1,4 @@
-#!/usr/bin/env -S uv run --quiet --directory /home/mattniedelman/.augment/hooks
+#!/usr/bin/env -S uv run --quiet --script --directory /home/mattniedelman/.augment/hooks
 """
 PostToolUse hook: Auto-run formatters and linters on modified files.
 
