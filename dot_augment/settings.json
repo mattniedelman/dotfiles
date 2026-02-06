@@ -175,7 +175,7 @@
     ],
     "PostToolUse": [
       {
-        "matcher": "save-file|str-replace-editor",
+        "matcher": "save-file|str-replace-editor|mcp:^(write|edit|save|replace|insert)_",
         "hooks": [
           {
             "type": "command",
@@ -184,7 +184,7 @@
         ]
       },
       {
-        "matcher": "save-file|str-replace-editor",
+        "matcher": "save-file|str-replace-editor|mcp:^(write|edit|save|replace|insert)_",
         "hooks": [
           {
             "type": "command",
