@@ -39,6 +39,8 @@ def main() -> None:
 
     context_message = f"""Project: {project}
 
+IMPORTANT: Review available_skills list and invoke any relevant skills before responding.
+
 Check basic-memory for prior context on this project:
 - Use build_context or recent_activity to see what's been worked on
 - Search for related notes before starting new work
