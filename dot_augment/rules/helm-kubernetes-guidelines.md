@@ -9,12 +9,14 @@ last_updated: 2025-01-27
 
 ## ⚠️ CRITICAL: Helm Chart Namespace Management Rule ⚠️
 
-**ABSOLUTE RULE**: Helm charts in this project must NEVER manage namespaces directly.
+**ABSOLUTE RULE**:
+Helm charts in this project must NEVER manage namespaces directly.
 
 ### Prohibited Actions
 
 1. **DO NOT create Namespace resources** within Helm charts
-   - No `kind: Namespace` manifests in any chart template
+   - No `kind:
+     Namespace` manifests in any chart template
    - Namespaces are infrastructure concerns, not application concerns
 
 2. **DO NOT include `namespace` as a configurable value**
@@ -43,9 +45,11 @@ helm upgrade my-release ./my-chart --namespace my-namespace
 
 ### When Namespace Reference is Necessary
 
-In rare cases where you must reference the namespace (e.g., in RoleBinding subjects, ClusterRoleBinding, or cross-namespace references):
+In rare cases where you must reference the namespace (e.g., in RoleBinding
+subjects, ClusterRoleBinding, or cross-namespace references):
 
 **✅ CORRECT - Use the built-in Helm template variable:**
+
 ```yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
@@ -58,6 +62,7 @@ subjects:
 ```
 
 **❌ INCORRECT - Hardcoded or values-based namespace:**
+
 ```yaml
 # DON'T DO THIS
 subjects:
@@ -72,27 +77,41 @@ subjects:
   namespace: {{ .Values.namespace }}  # ❌ From values
 ```
 
-**However, prefer omitting explicit namespace references entirely when possible**, as Kubernetes will default to the release namespace for namespaced resources.
+**However, prefer omitting explicit namespace references entirely when
+possible**, as Kubernetes will default to the release namespace for namespaced
+resources.
 
 ### Rationale
 
-1. **Separation of Concerns**: Namespace lifecycle should be managed independently from application deployment
-2. **Prevents Conflicts**: Avoids namespace ownership conflicts and allows multiple releases in different namespaces
-3. **Multi-tenancy Support**: Enables better isolation and reusability across environments
-4. **Helm Best Practices**: Follows official Helm recommendations for chart portability
-5. **Flexibility**: Allows the same chart to be deployed to any namespace without modification
+1. **Separation of Concerns**:
+   Namespace lifecycle should be managed independently from application
+   deployment
+2. **Prevents Conflicts**:
+   Avoids namespace ownership conflicts and allows multiple releases in
+   different namespaces
+3. **Multi-tenancy Support**:
+   Enables better isolation and reusability across environments
+4. **Helm Best Practices**:
+   Follows official Helm recommendations for chart portability
+5. **Flexibility**:
+   Allows the same chart to be deployed to any namespace without modification
 
 ### Enforcement
 
-- **Code Review**: All Helm chart changes must be reviewed for namespace management violations
-- **Testing**: Chart installation tests must verify namespace is not managed by the chart
-- **CI/CD**: Automated checks should flag any `kind: Namespace` resources in charts
+- **Code Review**:
+  All Helm chart changes must be reviewed for namespace management violations
+- **Testing**:
+  Chart installation tests must verify namespace is not managed by the chart
+- **CI/CD**:
+  Automated checks should flag any `kind:
+  Namespace` resources in charts
 
 ## Helm Chart Best Practices
 
 ### Chart Structure
 
-- **Rule**: Follow standard Helm chart directory structure
+- **Rule**:
+  Follow standard Helm chart directory structure
 - **Implementation**:
   - `Chart.yaml` - Chart metadata and dependencies
   - `values.yaml` - Default configuration values
@@ -102,32 +121,39 @@ subjects:
 
 ### Values Organization
 
-- **Rule**: Organize values.yaml hierarchically and document all options
+- **Rule**:
+  Organize values.yaml hierarchically and document all options
 - **Implementation**:
   - Group related configuration together
   - Provide sensible defaults for all values
   - Document each value with inline comments
-  - Use consistent naming conventions (camelCase or snake_case, but be consistent)
+  - Use consistent naming conventions (camelCase or snake_case, but be
+    consistent)
 
 ### Template Helpers
 
-- **Rule**: Use named templates for repeated logic
+- **Rule**:
+  Use named templates for repeated logic
 - **Implementation**:
   - Define common labels in `_helpers.tpl`
   - Create reusable template functions for names, labels, selectors
-  - Follow naming convention: `<chart-name>.<helper-name>`
+  - Follow naming convention:
+    `<chart-name>.<helper-name>`
 
 ### Resource Naming
 
-- **Rule**: Use consistent, predictable resource names
+- **Rule**:
+  Use consistent, predictable resource names
 - **Implementation**:
-  - Use `{{ include "mychart.fullname" . }}` for resource names
+  - Use `{{ include "mychart.fullname" .
+    }}` for resource names
   - Include release name in resource names for uniqueness
   - Avoid hardcoded resource names
 
 ### Labels and Selectors
 
-- **Rule**: Apply consistent labels to all resources
+- **Rule**:
+  Apply consistent labels to all resources
 - **Implementation**:
   - Use recommended Kubernetes labels (app.kubernetes.io/*)
   - Include chart name, version, instance, and managed-by labels
@@ -137,7 +163,8 @@ subjects:
 
 ### Resource Limits and Requests
 
-- **Rule**: Always define resource limits and requests for containers
+- **Rule**:
+  Always define resource limits and requests for containers
 - **Implementation**:
   - Set both CPU and memory limits
   - Set both CPU and memory requests
@@ -146,7 +173,8 @@ subjects:
 
 ### Health Checks
 
-- **Rule**: Implement liveness and readiness probes for all deployments
+- **Rule**:
+  Implement liveness and readiness probes for all deployments
 - **Implementation**:
   - Define appropriate probe endpoints
   - Configure reasonable timeout and period values
@@ -155,7 +183,8 @@ subjects:
 
 ### Security Context
 
-- **Rule**: Apply security best practices to all workloads
+- **Rule**:
+  Apply security best practices to all workloads
 - **Implementation**:
   - Run containers as non-root user when possible
   - Set read-only root filesystem where applicable
@@ -164,10 +193,10 @@ subjects:
 
 ### ConfigMaps and Secrets
 
-- **Rule**: Externalize configuration using ConfigMaps and Secrets
+- **Rule**:
+  Externalize configuration using ConfigMaps and Secrets
 - **Implementation**:
   - Never hardcode sensitive data in templates
   - Use Secrets for sensitive information
   - Use ConfigMaps for non-sensitive configuration
   - Support external secret management systems (e.g., External Secrets Operator)
-

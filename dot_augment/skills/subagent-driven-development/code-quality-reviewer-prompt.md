@@ -6,7 +6,7 @@ Use this template when dispatching a code quality reviewer subagent.
 
 **Only dispatch after spec compliance review passes.**
 
-```
+```text
 Use the code-reviewer template at requesting-code-review/code-reviewer.md
 
 Provide:
@@ -17,4 +17,5 @@ Provide:
   DESCRIPTION: [task summary]
 ```
 
-**Code reviewer returns:** Strengths, Issues (Critical/Important/Minor), Assessment
+**Code reviewer returns:** Strengths, Issues (Critical/Important/Minor),
+Assessment

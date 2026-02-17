@@ -7,11 +7,14 @@ description: Use when starting feature work that needs isolation from current wo
 
 ## Overview
 
-Git worktrees create isolated workspaces sharing the same repository, allowing work on multiple branches simultaneously without switching.
+Git worktrees create isolated workspaces sharing the same repository, allowing
+work on multiple branches simultaneously without switching.
 
-**Core principle:** Systematic directory selection + safety verification = reliable isolation.
+**Core principle:** Systematic directory selection + safety verification =
+reliable isolation.
 
-**Announce at start:** "I'm using the using-git-worktrees skill to set up an isolated workspace."
+**Announce at start:** "I'm using the using-git-worktrees skill to set up an
+isolated workspace."
 
 ## Directory Selection Process
 
@@ -25,7 +28,8 @@ ls -d .worktrees 2>/dev/null     # Preferred (hidden)
 ls -d worktrees 2>/dev/null      # Alternative
 ```
 
-**If found:** Use that directory. If both exist, `.worktrees` wins.
+**If found:** Use that directory.
+If both exist, `.worktrees` wins.
 
 ### 2. Check Project Config
 
@@ -35,7 +39,7 @@ Look for worktree directory preference in project configuration.
 
 If no directory exists and no preference specified:
 
-```
+```text
 No worktree directory found. Where should I create worktrees?
 
 1. .worktrees/ (project-local, hidden)
@@ -56,11 +60,13 @@ git check-ignore -q .worktrees 2>/dev/null || git check-ignore -q worktrees 2>/d
 ```
 
 **If NOT ignored:**
+
 1. Add appropriate line to .gitignore
 2. Commit the change
 3. Proceed with worktree creation
 
-**Why critical:** Prevents accidentally committing worktree contents to repository.
+**Why critical:** Prevents accidentally committing worktree contents to
+repository.
 
 ### For Global Directory (~/.config/superpowers/worktrees)
 
@@ -111,7 +117,7 @@ Run tests to ensure worktree starts clean.
 
 ### 5. Report Location
 
-```
+```text
 Worktree ready at <full-path>
 Tests passing (<N> tests, 0 failures)
 Ready to implement <feature-name>
@@ -131,13 +137,16 @@ Ready to implement <feature-name>
 ## Red Flags
 
 **Never:**
+
 - Create worktree without verifying it's ignored (project-local)
 - Skip baseline test verification
 - Proceed with failing tests without asking
 - Assume directory location when ambiguous
 
 **Always:**
-- Follow directory priority: existing > config > ask
+
+- Follow directory priority:
+  existing > config > ask
 - Verify directory is ignored for project-local
 - Auto-detect and run project setup
 - Verify clean test baseline
@@ -145,10 +154,13 @@ Ready to implement <feature-name>
 ## Integration
 
 **Called by:**
-- **brainstorming** (Phase 4) - REQUIRED when design is approved and implementation follows
+
+- **brainstorming** (Phase 4) - REQUIRED when design is approved and
+  implementation follows
 - **subagent-driven-development** - REQUIRED before executing any tasks
 - **executing-plans** - REQUIRED before executing any tasks
 - Any skill needing isolated workspace
 
 **Pairs with:**
+
 - **finishing-a-development-branch** - REQUIRED for cleanup after work complete

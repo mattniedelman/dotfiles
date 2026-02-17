@@ -2,48 +2,63 @@
 type: agent_requested
 priority: HIGH
 description: Python development patterns, package management with uv and poetry, testing with pytest, type safety, code organization, and modern Python best practices
-last_updated: 2025-01-26
+last_updated: 2025-02-13
 ---
 
 # Python Development Guidelines
 
 ## ⚠️ CRITICAL: Package Installation Authorization Policy ⚠️
 
-**ABSOLUTE RULE**: The AI assistant must NEVER install, update, or remove packages without EXPLICIT user authorization.
+**ABSOLUTE RULE**:
+The AI assistant must NEVER install, update, or remove packages without EXPLICIT
+user authorization.
 
 **"Explicit authorization" means:**
-- User must use words like "install", "add", "update", "remove", or "upgrade" with package names
-- Phrases like "fix the import error", "make this work", "resolve dependencies" do NOT constitute authorization
+
+- User must use words like "install", "add", "update", "remove", or "upgrade"
+  with package names
+- Phrases like "fix the import error", "make this work", "resolve dependencies"
+  do NOT constitute authorization
 - When in doubt, DO NOT install - instead inform user of missing dependencies
 
 **Valid installation requests:**
+
 - "Install requests package"
 - "Add pytest to dev dependencies"
 - "Update numpy to latest version"
 - "Remove unused dependency X"
 
 **Invalid/ambiguous phrases (do NOT authorize installation):**
+
 - "Fix this import error" (inform user which package is needed)
 - "Make this code work" (explain what's missing, don't auto-install)
 - "Resolve the dependency issue" (explain the issue, don't auto-fix)
 - "Set up the project" (ask which dependencies to install)
 
 **Before ANY package operation:**
+
 1. Confirm you have explicit authorization
 2. Inform user which packages will be installed/updated/removed
 3. Show the command that will be executed
-4. Wait for user confirmation if the operation affects multiple packages or major versions
+4. Wait for user confirmation if the operation affects multiple packages or
+   major versions
 
 **When code requires a new dependency:**
+
 1. Identify the missing package
-2. Inform user: "This code requires package X. Would you like me to install it with: `uv add X`?"
+2. Inform user:
+   "This code requires package X.
+   Would you like me to install it with:
+   `uv add X`?"
 3. Wait for explicit approval
 4. Only then execute the installation
 
 **Security considerations:**
+
 - NEVER install packages from untrusted sources without explicit user approval
 - ALWAYS inform user when installing packages with known security advisories
-- NEVER bypass lock files by using low-level commands (pip install, uv pip install)
+- NEVER bypass lock files by using low-level commands (pip install, uv pip
+  install)
 
 ---
 
@@ -95,7 +110,7 @@ Low-level commands bypass these safeguards and can cause dependency conflicts.
 
 **Optional Tool Configuration (CAN be in separate files):**
 
-- Tool configurations (ruff, mypy, pytest, black, coverage) can live in:
+- Tool configurations (ruff, pytest, coverage) can live in:
   - `pyproject.toml` (consolidated approach)
   - Separate files (`ruff.toml`, `mypy.ini`, `pytest.ini`) for better
     organization
@@ -141,9 +156,13 @@ def test_double(input, expected):
     assert double(input) == expected
 ```
 
-**Collection Assertions:** Prefer asserting on entire collections in a single assertion
+**Collection Assertions:** Prefer asserting on entire collections in a single
+assertion
 
-**Rationale:** Collection-level assertions are more concise, easier to read, and provide clear diff output when they fail. Modern test frameworks like pytest show detailed diffs for collection mismatches.
+**Rationale:** Collection-level assertions are more concise, easier to read, and
+provide clear diff output when they fail.
+Modern test frameworks like pytest show detailed diffs for collection
+mismatches.
 
 ```python
 # ✅ Preferred - Assert on entire collection
@@ -174,6 +193,7 @@ def test_build_mapping():
 ```
 
 **Exception:** Individual element assertions are acceptable when:
+
 - You need more granular error messages for debugging complex failures
 - You're testing specific properties of elements that don't affect equality
 - The collection is very large and you only need to verify specific elements
@@ -237,8 +257,7 @@ class DataProcessor:
 - `Protocol` for structural subtyping
 - `Generic[T]` for generic classes
 
-**Type Checking:** Use mypy as the standard type checker, configured in
-pyproject.toml
+**Type Checking:** Use pyright or zuban (preferred over mypy) for type checking
 
 **Documentation Benefit:** Type hints serve as inline documentation, reducing
 the need for verbose parameter descriptions
@@ -316,8 +335,9 @@ if os.path.exists(config_path):
 
 **Data Structures:** Strong preference for Pydantic models for structured data
 
-**Strong Preference:** Use Pydantic models (provides validation, serialization,
-better type safety)
+**Required:** Use Pydantic models for all data structures (provides validation,
+serialization, better type safety).
+Dataclasses are banned via ast-grep rules.
 
 ```python
 from pydantic import BaseModel, EmailStr, Field
@@ -327,20 +347,15 @@ class User(BaseModel):
     email: EmailStr
     age: int = Field(ge=0, le=150)
 
-    class Config:
-        frozen = True  # Make immutable if needed
-```
+    model_config = {"frozen": True}  # Make immutable if needed
 
-**Dataclasses:** Only use when Pydantic is overkill (simple internal data
-structures with no validation needs)
 
-```python
-from dataclasses import dataclass
-
-@dataclass(frozen=True)
-class Point:
+# For simple coordinate-like structures, still use Pydantic:
+class Point(BaseModel):
     x: float
     y: float
+
+    model_config = {"frozen": True}
 ```
 
 **Context Managers:** Use `with` statements for file operations, database
@@ -515,7 +530,7 @@ If the project uses a specific style or tool, continue using it.
 - uv for fast dependency management
 - ruff for linting and formatting
 - pytest for testing
-- mypy for type checking
+- pyright or zuban for type checking
 
 **Reproducibility:** Ensure environments and dependencies are reproducible
 

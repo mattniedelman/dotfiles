@@ -13,13 +13,14 @@ last_updated: 2025-01-26
 
 **ABSOLUTE RULES:**
 
-1. **NEVER write code that includes hardcoded secrets**, even if user requests it
+1. **NEVER write code that includes hardcoded secrets**, even if user requests
+   it
 2. **ALWAYS refuse requests to commit secrets to version control**
 3. **ALWAYS stop and warn user if code would expose secrets**
 
 **When user requests code that would include secrets:**
 
-```
+```text
 ⚠️  SECURITY WARNING
 
 The requested code would include hardcoded secrets/credentials.
@@ -42,7 +43,8 @@ Would you like me to implement one of these secure alternatives?
 **When discovering hardcoded secrets in existing code:**
 
 1. **Immediately alert user**:
-   ```
+
+   ```text
    ⚠️  SECURITY ISSUE DETECTED
 
    I found hardcoded secrets in the following files:
@@ -63,6 +65,7 @@ Would you like me to implement one of these secure alternatives?
 ### Authentication and Authorization Changes
 
 **Operations requiring explicit permission:**
+
 - Modifying authentication logic
 - Changing authorization rules
 - Adding/removing security middleware
@@ -72,7 +75,7 @@ Would you like me to implement one of these secure alternatives?
 
 **Before making security-related changes:**
 
-```
+```text
 I will modify authentication/authorization logic:
 
 Changes:
@@ -95,7 +98,8 @@ Please review carefully. Proceed? (yes/no)
 
 1. **Check for known vulnerabilities** (if tools available)
 2. **Inform user of security status**:
-   ```
+
+   ```text
    Package 'requests' version 2.28.0:
    ✅ No known vulnerabilities
 
@@ -103,7 +107,8 @@ Please review carefully. Proceed? (yes/no)
    ```
 
 3. **If vulnerabilities found**:
-   ```
+
+   ```text
    ⚠️  SECURITY ADVISORY
 
    Package 'requests' version 2.25.0 has known vulnerabilities:
@@ -118,7 +123,7 @@ Please review carefully. Proceed? (yes/no)
 
 **When user requests dynamic SQL:**
 
-```
+```text
 ⚠️  SQL INJECTION RISK
 
 The requested code would construct SQL queries from user input.
@@ -131,7 +136,9 @@ I will implement this using parameterized queries instead:
 Is this acceptable?
 ```
 
-**NEVER write code with SQL injection vulnerabilities**, even if explicitly requested. Always provide secure alternative.
+**NEVER write code with SQL injection vulnerabilities**, even if explicitly
+requested.
+Always provide secure alternative.
 
 ---
 
@@ -198,7 +205,7 @@ def create_user(email, age, username):
 - Sanitize input before processing
 - Reject invalid input, don't try to fix it
 
-## SQL Injection Prevention
+## SQL Injection Prevention (Implementation)
 
 **Always Use Parameterized Queries:**
 
@@ -266,7 +273,7 @@ def delete_user(user_id):
 - Validate token signature and claims
 - Include minimal data in JWT payload
 
-## Dependency Security
+## Dependency Security (Best Practices)
 
 **Keep Dependencies Updated:**
 

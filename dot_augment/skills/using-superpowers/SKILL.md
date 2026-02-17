@@ -6,22 +6,31 @@ description: Use when starting any conversation - establishes how to find and us
 <EXTREMELY-IMPORTANT>
 If you think there is even a 1% chance a skill might apply to what you are doing, you ABSOLUTELY MUST invoke the skill.
 
-IF A SKILL APPLIES TO YOUR TASK, YOU DO NOT HAVE A CHOICE. YOU MUST USE IT.
+IF A SKILL APPLIES TO YOUR TASK, YOU DO NOT HAVE A CHOICE.
+YOU MUST USE IT.
 
-This is not negotiable. This is not optional. You cannot rationalize your way out of this.
+This is not negotiable.
+This is not optional.
+You cannot rationalize your way out of this.
 </EXTREMELY-IMPORTANT>
 
 ## How to Access Skills
 
-**In Augment Agent:** Skills are loaded via the skills system. When you see a skill in the available_skills list, read it and follow it directly.
+**In Augment Agent:** Skills are loaded via the skills system.
+When you see a skill in the available_skills list, read it and follow it
+directly.
 
-**In other environments:** Check your platform's documentation for how skills are loaded.
+**In other environments:** Check your platform's documentation for how skills
+are loaded.
 
 # Using Skills
 
 ## The Rule
 
-**Invoke relevant or requested skills BEFORE any response or action.** Even a 1% chance a skill might apply means that you should invoke the skill to check. If an invoked skill turns out to be wrong for the situation, you don't need to use it.
+**Invoke relevant or requested skills BEFORE any response or action.** Even a 1%
+chance a skill might apply means that you should invoke the skill to check.
+If an invoked skill turns out to be wrong for the situation, you don't need to
+use it.
 
 ```dot
 digraph skill_flow {
@@ -68,20 +77,26 @@ These thoughts mean STOP—you're rationalizing:
 
 When multiple skills could apply, use this order:
 
-1. **Process skills first** (brainstorming, debugging) - these determine HOW to approach the task
-2. **Implementation skills second** (frontend-design, mcp-builder) - these guide execution
+1. **Process skills first** (brainstorming, debugging) - these determine HOW to
+   approach the task
+2. **Implementation skills second** (frontend-design, mcp-builder) - these guide
+   execution
 
 "Let's build X" → brainstorming first, then implementation skills.
 "Fix this bug" → debugging first, then domain-specific skills.
 
 ## Skill Types
 
-**Rigid** (TDD, debugging): Follow exactly. Don't adapt away discipline.
+**Rigid** (TDD, debugging):
+Follow exactly.
+Don't adapt away discipline.
 
-**Flexible** (patterns): Adapt principles to context.
+**Flexible** (patterns):
+Adapt principles to context.
 
 The skill itself tells you which.
 
 ## User Instructions
 
-Instructions say WHAT, not HOW. "Add X" or "Fix Y" doesn't mean skip workflows.
+Instructions say WHAT, not HOW.
+"Add X" or "Fix Y" doesn't mean skip workflows.

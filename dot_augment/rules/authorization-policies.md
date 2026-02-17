@@ -2,35 +2,54 @@
 type: always_apply
 priority: HIGH
 description: Unified authorization policies for all operations requiring explicit user permission
-last_updated: 2025-01-27
+last_updated: 2026-02-13
 ---
 
 # Authorization Policies
 
-This file consolidates all authorization requirements. Other rule files reference this as the single source of truth.
+This file consolidates all authorization requirements.
+Other rule files reference this as the single source of truth.
 
 ## Authorization Matrix
 
 | Operation Category | Authorization Level | Authorizing Keywords | Notes |
 |-------------------|---------------------|---------------------|-------|
-| **Git: commit** | EXPLICIT | "commit", "git commit" | Must confirm message before executing |
-| **Git: push** | EXPLICIT | "push" | Requires commit first |
-| **Git: merge/rebase** | EXPLICIT | "merge", "rebase" | History-modifying operations |
-| **Git: staging** | SUGGEST | - | Can suggest; never use `git add -A` or `git add .` |
-| **Package: install** | EXPLICIT | "install", "add" + package name | Inform which packages before executing |
-| **Package: update** | EXPLICIT | "update", "upgrade" + package name | Show version changes |
-| **Package: remove** | EXPLICIT | "remove", "uninstall" + package name | Confirm before removing |
-| **Refactoring: small** | ALLOWED | - | <10 lines, within scope of user's request |
-| **Refactoring: medium** | CONFIRM | - | 50-200 lines, present plan first |
-| **Refactoring: large** | EXPLICIT | - | >200 lines, detailed plan + approval |
-| **Security: auth changes** | EXPLICIT | - | Any authentication/authorization logic |
-| **Security: secrets** | REFUSE | - | Never write hardcoded secrets |
-| **Database: schema** | EXPLICIT | - | Migrations, DDL operations |
-| **Database: data modification** | EXPLICIT | - | UPDATE, DELETE on production data |
-| **File: create** | ALLOWED | - | Only when necessary for task |
-| **File: delete** | EXPLICIT | "delete", "remove" + file | Confirm before deleting |
-| **ML: model training** | EXPLICIT | "train", "fit" | Resource-intensive operations |
-| **ML: model deployment** | EXPLICIT | "deploy", "publish" | Production-affecting operations |
+| **Git:
+  commit** | EXPLICIT | "commit", "git commit" | Must confirm message before executing |
+| **Git:
+  push** | EXPLICIT | "push" | Requires commit first |
+| **Git:
+  merge/rebase** | EXPLICIT | "merge", "rebase" | History-modifying operations |
+| **Git:
+  staging** | SUGGEST | - | Can suggest; never use `git add -A` or `git add .` |
+| **Package:
+  install** | EXPLICIT | "install", "add" + package name | Inform which packages before executing |
+| **Package:
+  update** | EXPLICIT | "update", "upgrade" + package name | Show version changes |
+| **Package:
+  remove** | EXPLICIT | "remove", "uninstall" + package name | Confirm before removing |
+| **Refactoring:
+  small** | ALLOWED | - | <10 lines, within scope of user's request |
+| **Refactoring:
+  medium** | CONFIRM | - | 50-200 lines, present plan first |
+| **Refactoring:
+  large** | EXPLICIT | - | >200 lines, detailed plan + approval |
+| **Security:
+  auth changes** | EXPLICIT | - | Any authentication/authorization logic |
+| **Security:
+  secrets** | REFUSE | - | Never write hardcoded secrets |
+| **Database:
+  schema** | EXPLICIT | - | Migrations, DDL operations |
+| **Database:
+  data modification** | EXPLICIT | - | UPDATE, DELETE on production data |
+| **File:
+  create** | ALLOWED | - | Only when necessary for task |
+| **File:
+  delete** | EXPLICIT | "delete", "remove" + file | Confirm before deleting |
+| **ML:
+  model training** | EXPLICIT | "train", "fit" | Resource-intensive operations |
+| **ML:
+  model deployment** | EXPLICIT | "deploy", "publish" | Production-affecting operations |
 
 ## Authorization Levels
 
@@ -55,13 +74,21 @@ This file consolidates all authorization requirements. Other rule files referenc
 
 ## Git Operations Quick Reference
 
-**Prohibited without explicit permission:**
-`git commit`, `git push`, `git merge`, `git rebase`, `git reset --hard`, `git clean`, `git branch -D`, `git commit --amend`, `git revert`, `git cherry-pick`
+**CRITICAL:
+All git operations MUST use the git MCP server tools.** Direct `git` commands
+via `launch-process` are blocked.
+See `git-mcp-required.md`.
 
-**Allowed (read-only):**
-`git status`, `git diff`, `git log`, `git show`, `git fetch`
+**Prohibited without explicit permission:** `git_commit_git`, `git_push_git`,
+`git_merge_git`, `git_rebase_git`, `git_reset_git` (hard), `git_clean_git`,
+`git_branch_git` (force delete), `git_cherry_pick_git`
 
-**CRITICAL**: Never use `git add -A` or `git add .` - always stage specific files.
+**Allowed (read-only):** `git_status_git`, `git_diff_git`, `git_log_git`,
+`git_show_git`, `git_fetch_git`
+
+**CRITICAL**:
+Never use `git_add_git` with `all:
+true` - always stage specific files.
 
 ## Refactoring Scope Quick Reference
 
@@ -71,14 +98,19 @@ This file consolidates all authorization requirements. Other rule files referenc
 | Medium | 50-200 | Present plan, wait for confirmation |
 | Large | >200 | Detailed plan with risks, explicit approval |
 
-**Never refactor without permission:** Public APIs, database schema, config formats, build scripts.
+**Never refactor without permission:** Public APIs, database schema, config
+formats, build scripts.
 
 ## Security Quick Reference
 
-**Always refuse:** Hardcoded secrets, committing secrets, SQL injection vulnerabilities.
+**Always refuse:** Hardcoded secrets, committing secrets, SQL injection
+vulnerabilities.
 
-**Always require permission:** Auth logic, authorization rules, CORS, session management.
+**Always require permission:** Auth logic, authorization rules, CORS, session
+management.
 
 ## Cross-Reference
 
-Referenced by: `core-development-rules.md`, `git-workflow.md`, `python-development.md`, `refactoring-and-maintenance.md`, `security.md`, `data-science-ml-patterns.md`
+Referenced by:
+`core-development-rules.md`, `git-workflow.md`, `python-development.md`,
+`refactoring-and-maintenance.md`, `security.md`, `data-science-ml-patterns.md`

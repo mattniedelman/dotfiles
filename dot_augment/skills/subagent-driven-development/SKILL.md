@@ -5,9 +5,12 @@ description: Use when executing implementation plans with independent tasks in t
 
 # Subagent-Driven Development
 
-Execute plan by dispatching fresh subagent per task, with two-stage review after each: spec compliance review first, then code quality review.
+Execute plan by dispatching fresh subagent per task, with two-stage review after
+each:
+spec compliance review first, then code quality review.
 
-**Core principle:** Fresh subagent per task + two-stage review (spec then quality) = high quality, fast iteration
+**Core principle:** Fresh subagent per task + two-stage review (spec then
+quality) = high quality, fast iteration
 
 ## When to Use
 
@@ -30,9 +33,11 @@ digraph when_to_use {
 ```
 
 **vs. Executing Plans (parallel session):**
+
 - Same session (no context switch)
 - Fresh subagent per task (no context pollution)
-- Two-stage review after each task: spec compliance first, then code quality
+- Two-stage review after each task:
+  spec compliance first, then code quality
 - Faster iteration (no human-in-loop between tasks)
 
 ## The Process
@@ -47,7 +52,8 @@ digraph when_to_use {
    - Dispatch code quality reviewer subagent
    - If quality issues found, implementer fixes, quality reviewer re-reviews
    - Mark task complete
-3. After all tasks: dispatch final code reviewer for entire implementation
+3. After all tasks:
+   dispatch final code reviewer for entire implementation
 4. Use superpowers:finishing-a-development-branch
 
 ## Prompt Templates
@@ -59,14 +65,17 @@ digraph when_to_use {
 ## Advantages
 
 **vs. Manual execution:**
+
 - Subagents follow TDD naturally
 - Fresh context per task (no confusion)
 - Parallel-safe (subagents don't interfere)
 - Subagent can ask questions (before AND during work)
 
 **Quality gates:**
+
 - Self-review catches issues before handoff
-- Two-stage review: spec compliance, then code quality
+- Two-stage review:
+  spec compliance, then code quality
 - Review loops ensure fixes actually work
 - Spec compliance prevents over/under-building
 - Code quality ensures implementation is well-built
@@ -74,6 +83,7 @@ digraph when_to_use {
 ## Red Flags
 
 **Never:**
+
 - Start implementation on main/master branch without explicit user consent
 - Skip reviews (spec compliance OR code quality)
 - Proceed with unfixed issues
@@ -84,11 +94,13 @@ digraph when_to_use {
 - Move to next task while either review has open issues
 
 **If subagent asks questions:**
+
 - Answer clearly and completely
 - Provide additional context if needed
 - Don't rush them into implementation
 
 **If reviewer finds issues:**
+
 - Implementer (same subagent) fixes them
 - Reviewer reviews again
 - Repeat until approved
@@ -97,13 +109,20 @@ digraph when_to_use {
 ## Integration
 
 **Required workflow skills:**
-- **superpowers:using-git-worktrees** - REQUIRED: Set up isolated workspace before starting
+
+- **superpowers:using-git-worktrees** - REQUIRED:
+  Set up isolated workspace before starting
 - **superpowers:writing-plans** - Creates the plan this skill executes
-- **superpowers:requesting-code-review** - Code review template for reviewer subagents
-- **superpowers:finishing-a-development-branch** - Complete development after all tasks
+- **superpowers:requesting-code-review** - Code review template for reviewer
+  subagents
+- **superpowers:finishing-a-development-branch** - Complete development after
+  all tasks
 
 **Subagents should use:**
+
 - **superpowers:test-driven-development** - Subagents follow TDD for each task
 
 **Alternative workflow:**
-- **superpowers:executing-plans** - Use for parallel session instead of same-session execution
+
+- **superpowers:executing-plans** - Use for parallel session instead of
+  same-session execution

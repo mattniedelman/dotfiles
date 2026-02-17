@@ -5,11 +5,14 @@ description: Help organize, link, and maintain the Basic Memory knowledge graph 
 
 # Knowledge Organize
 
-This skill helps users maintain a healthy, well-connected knowledge graph. As notes accumulate, it becomes valuable to periodically organize, link, and curate the knowledge base.
+This skill helps users maintain a healthy, well-connected knowledge graph.
+As notes accumulate, it becomes valuable to periodically organize, link, and
+curate the knowledge base.
 
 ## When to Use
 
 Use this skill when:
+
 - User asks to organize their notes
 - User wants to find connections between notes
 - User mentions orphan or unlinked notes
@@ -17,13 +20,15 @@ Use this skill when:
 - User asks about duplicate or similar notes
 - User wants help with folder organization
 - User asks to review or audit their notes
-- Phrases like "help me organize", "find related notes", "what's not linked", "clean up my notes"
+- Phrases like "help me organize", "find related notes", "what's not linked",
+  "clean up my notes"
 
 ## Organization Capabilities
 
 ### 1. Find Orphan Notes
 
-Identify notes that have no relations to other notes - they're isolated in the knowledge graph.
+Identify notes that have no relations to other notes - they're isolated in the
+knowledge graph.
 
 ```python
 # Get all notes
@@ -38,6 +43,7 @@ mcp__basic-memory__search_notes(
 ```
 
 **What to do with orphans:**
+
 - Suggest potential relations based on content similarity
 - Ask if they should be linked to existing topics
 - Propose creating hub notes to connect related orphans
@@ -67,6 +73,7 @@ mcp__basic-memory__search_notes(
 ```
 
 **Relation types to suggest:**
+
 - `relates-to` - General topical connection
 - `extends` - Builds upon or expands
 - `implements` - Realizes a concept
@@ -95,6 +102,7 @@ mcp__basic-memory__search_notes(
 ```
 
 **Actions for duplicates:**
+
 - Merge into a single comprehensive note
 - Link them with `supersedes` or `updates` relations
 - Differentiate by adding context about their distinct focus
@@ -119,6 +127,7 @@ mcp__basic-memory__list_directory(
 ```
 
 **Organization suggestions:**
+
 - Group related notes into topic folders
 - Create subfolders for large categories
 - Suggest consistent naming conventions
@@ -144,6 +153,7 @@ mcp__basic-memory__search_notes(
 ```
 
 **Tag improvements:**
+
 - Suggest tag standardization (pick one variant)
 - Propose new tags for common themes
 - Identify notes missing obvious tags
@@ -250,34 +260,44 @@ Organize around a specific subject:
 3. **Preserve permalinks** - Moving is okay, changing permalinks breaks links
 4. **Show the graph** - Help user visualize connections
 5. **Explain suggestions** - Say why a relation makes sense
-6. **Respect user's system** - Enhance their organization, don't impose a new one
+6. **Respect user's system** - Enhance their organization, don't impose a new
+   one
 
 ## Example Conversations
 
 **User:** "Help me organize my notes"
 
 **Claude:**
+
 1. Runs health check on the knowledge base
-2. Reports: "You have 47 notes. I found 12 orphan notes and 3 potential duplicates."
-3. Asks: "Would you like to start by connecting the orphan notes, or review the duplicates first?"
+2. Reports:
+   "You have 47 notes.
+   I found 12 orphan notes and 3 potential duplicates."
+3. Asks:
+   "Would you like to start by connecting the orphan notes, or review the
+   duplicates first?"
 
 **User:** "Find notes that should be linked to my API design note"
 
 **Claude:**
+
 1. Reads the API design note
 2. Searches for related content
-3. Suggests: "I found 5 notes that could relate:
+3. Suggests:
+   "I found 5 notes that could relate:
    - 'REST Best Practices' -> relates-to
    - 'Authentication Flow' -> implements
-   - 'Rate Limiting Decision' -> extends
-   Would you like me to add any of these relations?"
+   - 'Rate Limiting Decision' -> extends Would you like me to add any of these
+     relations?"
 
 **User:** "Are there any notes about similar topics?"
 
 **Claude:**
+
 1. Analyzes note titles and content
 2. Identifies clusters of similar notes
-3. Reports: "I found these potential overlaps:
+3. Reports:
+   "I found these potential overlaps:
    - 'Auth Flow' and 'Authentication Design' cover similar ground
-   - 'DB Schema v1' and 'DB Schema v2' might need a 'supersedes' relation
-   Would you like to review any of these?"
+   - 'DB Schema v1' and 'DB Schema v2' might need a 'supersedes' relation Would
+     you like to review any of these?"

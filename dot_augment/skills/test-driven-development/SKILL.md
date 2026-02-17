@@ -7,36 +7,46 @@ description: Use when implementing any feature or bugfix, before writing impleme
 
 ## Overview
 
-Write the test first. Watch it fail. Write minimal code to pass.
+Write the test first.
+Watch it fail.
+Write minimal code to pass.
 
-**Core principle:** If you didn't watch the test fail, you don't know if it tests the right thing.
+**Core principle:** If you didn't watch the test fail, you don't know if it
+tests the right thing.
 
 **Violating the letter of the rules is violating the spirit of the rules.**
 
 ## When to Use
 
 **Always:**
+
 - New features
 - Bug fixes
 - Refactoring
 - Behavior changes
 
 **Exceptions (ask first):**
+
 - Throwaway prototypes
 - Generated code
 - Configuration files
 
-Thinking "skip TDD just this once"? Stop. That's rationalization.
+Thinking "skip TDD just this once"?
+Stop.
+That's rationalization.
 
 ## The Iron Law
 
-```
+```text
 NO PRODUCTION CODE WITHOUT A FAILING TEST FIRST
 ```
 
-Write code before the test? Delete it. Start over.
+Write code before the test?
+Delete it.
+Start over.
 
 **No exceptions:**
+
 - Don't keep it as "reference"
 - Don't "adapt" it while writing tests
 - Don't look at it
@@ -49,34 +59,40 @@ Write code before the test? Delete it. Start over.
 Write one minimal test showing what should happen.
 
 **Requirements:**
+
 - One behavior
 - Clear name
 - Real code (no mocks unless unavoidable)
 
 ### Verify RED - Watch It Fail
 
-**MANDATORY. Never skip.**
+**MANDATORY.
+Never skip.**
 
 ```bash
 npm test path/to/test.test.ts
 ```
 
 Confirm:
+
 - Test fails (not errors)
 - Failure message is expected
 - Fails because feature missing (not typos)
 
-**Test passes?** You're testing existing behavior. Fix test.
+**Test passes?** You're testing existing behavior.
+Fix test.
 
 ### GREEN - Minimal Code
 
-Write simplest code to pass the test. Don't add features beyond the test.
+Write simplest code to pass the test.
+Don't add features beyond the test.
 
 ### Verify GREEN - Watch It Pass
 
 **MANDATORY.**
 
 Confirm:
+
 - Test passes
 - Other tests still pass
 - Output pristine (no errors, warnings)
@@ -84,11 +100,13 @@ Confirm:
 ### REFACTOR - Clean Up
 
 After green only:
+
 - Remove duplication
 - Improve names
 - Extract helpers
 
-Keep tests green. Don't add behavior.
+Keep tests green.
+Don't add behavior.
 
 ### Repeat
 
@@ -104,11 +122,15 @@ Next failing test for next feature.
 
 ## Why Order Matters
 
-**"I'll write tests after to verify it works"** - Tests written after code pass immediately. Passing immediately proves nothing.
+**"I'll write tests after to verify it works"** - Tests written after code pass
+immediately.
+Passing immediately proves nothing.
 
-**"I already manually tested all the edge cases"** - Manual testing is ad-hoc. Automated tests are systematic.
+**"I already manually tested all the edge cases"** - Manual testing is ad-hoc.
+Automated tests are systematic.
 
-**"Deleting X hours of work is wasteful"** - Sunk cost fallacy. Working code without real tests is technical debt.
+**"Deleting X hours of work is wasteful"** - Sunk cost fallacy.
+Working code without real tests is technical debt.
 
 ## Common Rationalizations
 
@@ -130,7 +152,9 @@ Next failing test for next feature.
 - "I'm being pragmatic"
 - "This is different because..."
 
-**All of these mean: Delete code. Start over with TDD.**
+**All of these mean:
+Delete code.
+Start over with TDD.**
 
 ## Verification Checklist
 
@@ -145,7 +169,9 @@ Before marking work complete:
 - [ ] Tests use real code (mocks only if unavoidable)
 - [ ] Edge cases and errors covered
 
-Can't check all boxes? You skipped TDD. Start over.
+Can't check all boxes?
+You skipped TDD.
+Start over.
 
 ## When Stuck
 
@@ -158,7 +184,7 @@ Can't check all boxes? You skipped TDD. Start over.
 
 ## Final Rule
 
-```
+```text
 Production code → test exists and failed first
 Otherwise → not TDD
 ```
