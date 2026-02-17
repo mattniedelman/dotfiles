@@ -5,11 +5,13 @@ description: Capture insights, decisions, and learnings from conversations into 
 
 # Knowledge Capture
 
-This skill helps you capture valuable information from conversations into Basic Memory's knowledge graph using structured notes with observations and relations.
+This skill helps you capture valuable information from conversations into Basic
+Memory's knowledge graph using structured notes with observations and relations.
 
 ## When to Use
 
 Use this skill when:
+
 - Important decisions are made during a conversation
 - Technical insights or patterns are discovered
 - Problems are solved and the solution should be preserved
@@ -22,12 +24,19 @@ Use this skill when:
 ### 1. Identify Valuable Information
 
 Look for:
-- **Decisions**: Choices made and their rationale
-- **Insights**: New understanding or "aha" moments
-- **Patterns**: Reusable approaches or solutions
-- **Trade-offs**: Options considered and why one was chosen
-- **Learnings**: What worked, what didn't, and why
-- **Context**: Background that would help future understanding
+
+- **Decisions**:
+  Choices made and their rationale
+- **Insights**:
+  New understanding or "aha" moments
+- **Patterns**:
+  Reusable approaches or solutions
+- **Trade-offs**:
+  Options considered and why one was chosen
+- **Learnings**:
+  What worked, what didn't, and why
+- **Context**:
+  Background that would help future understanding
 
 ### 2. Structure the Note
 
@@ -68,6 +77,7 @@ Main content organized logically.
 ### 3. Choose Appropriate Categories
 
 Common observation categories:
+
 - `[decision]` - Choices made
 - `[insight]` - Understanding gained
 - `[pattern]` - Reusable approaches
@@ -83,6 +93,7 @@ Common observation categories:
 ### 4. Create Meaningful Relations
 
 Link to related knowledge:
+
 - `relates-to` - General association
 - `implements` - Realizes a spec or design
 - `extends` - Builds upon existing concept
@@ -119,6 +130,7 @@ mcp__basic-memory__read_note(
 ## Folder Organization
 
 Choose appropriate folders:
+
 - `decisions/` - Architecture and design decisions
 - `learnings/` - Insights and lessons learned
 - `patterns/` - Reusable approaches

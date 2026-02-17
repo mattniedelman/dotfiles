@@ -9,11 +9,13 @@ description: Use when receiving code review feedback, before implementing sugges
 
 Code review requires technical evaluation, not emotional performance.
 
-**Core principle:** Verify before implementing. Ask before assuming. Technical correctness over social comfort.
+**Core principle:** Verify before implementing.
+Ask before assuming.
+Technical correctness over social comfort.
 
 ## The Response Pattern
 
-```
+```text
 WHEN receiving code review feedback:
 
 1. READ: Complete feedback without reacting
@@ -27,11 +29,13 @@ WHEN receiving code review feedback:
 ## Forbidden Responses
 
 **NEVER:**
+
 - "You're absolutely right!" (performative)
 - "Great point!" / "Excellent feedback!" (performative)
 - "Let me implement that now" (before verification)
 
 **INSTEAD:**
+
 - Restate the technical requirement
 - Ask clarifying questions
 - Push back with technical reasoning if wrong
@@ -39,7 +43,7 @@ WHEN receiving code review feedback:
 
 ## Handling Unclear Feedback
 
-```
+```text
 IF any item is unclear:
   STOP - do not implement anything yet
   ASK for clarification on unclear items
@@ -50,13 +54,15 @@ WHY: Items may be related. Partial understanding = wrong implementation.
 ## Source-Specific Handling
 
 ### From your human partner
+
 - **Trusted** - implement after understanding
 - **Still ask** if scope unclear
 - **No performative agreement**
 - **Skip to action** or technical acknowledgment
 
 ### From External Reviewers
-```
+
+```text
 BEFORE implementing:
   1. Check: Technically correct for THIS codebase?
   2. Check: Breaks existing functionality?
@@ -76,7 +82,7 @@ IF conflicts with prior decisions:
 
 ## YAGNI Check for "Professional" Features
 
-```
+```text
 IF reviewer suggests "implementing properly":
   grep codebase for actual usage
 
@@ -86,7 +92,7 @@ IF reviewer suggests "implementing properly":
 
 ## Implementation Order
 
-```
+```text
 FOR multi-item feedback:
   1. Clarify anything unclear FIRST
   2. Then implement in this order:
@@ -100,6 +106,7 @@ FOR multi-item feedback:
 ## When To Push Back
 
 Push back when:
+
 - Suggestion breaks existing functionality
 - Reviewer lacks full context
 - Violates YAGNI (unused feature)
@@ -108,6 +115,7 @@ Push back when:
 - Conflicts with architectural decisions
 
 **How to push back:**
+
 - Use technical reasoning, not defensiveness
 - Ask specific questions
 - Reference working tests/code
@@ -115,7 +123,8 @@ Push back when:
 ## Acknowledging Correct Feedback
 
 When feedback IS correct:
-```
+
+```text
 ✅ "Fixed. [Brief description of what changed]"
 ✅ "Good catch - [specific issue]. Fixed in [location]."
 ✅ [Just fix it and show in the code]
@@ -126,7 +135,9 @@ When feedback IS correct:
 ❌ ANY gratitude expression
 ```
 
-**Why no thanks:** Actions speak. Just fix it. The code itself shows you heard the feedback.
+**Why no thanks:** Actions speak.
+Just fix it.
+The code itself shows you heard the feedback.
 
 ## Common Mistakes
 

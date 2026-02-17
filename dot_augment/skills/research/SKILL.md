@@ -5,23 +5,28 @@ description: Research a topic thoroughly and produce a structured report saved t
 
 # Research
 
-This skill helps conduct thorough research on a topic and produces a structured report that gets saved to Basic Memory for future reference.
+This skill helps conduct thorough research on a topic and produces a structured
+report that gets saved to Basic Memory for future reference.
 
 ## When to Use
 
 Use this skill when:
+
 - User asks to research or investigate something
 - User wants to understand a concept, technology, or approach
 - User needs context gathered before making a decision
-- User asks "what is...", "how does... work", "explore...", "investigate..."
+- User asks "what is...", "how does...
+  work", "explore...", "investigate..."
 - User wants findings documented for later
-- Phrases like "research this", "look into", "find out about", "explore options for"
+- Phrases like "research this", "look into", "find out about", "explore options
+  for"
 
 ## Research Process
 
 ### 1. Understand the Research Question
 
 Clarify what specifically to investigate:
+
 - What is the core question or topic?
 - What scope - broad overview or deep dive?
 - Any specific aspects to focus on?
@@ -32,18 +37,21 @@ Clarify what specifically to investigate:
 Use available tools to collect information:
 
 **For codebase research:**
+
 - Search the codebase for relevant code
 - Read documentation and comments
 - Trace how things connect
 - Look at tests for usage examples
 
 **For concept research:**
+
 - Use web search for current information
 - Fetch documentation from official sources
 - Look for examples and best practices
 - Compare alternatives if relevant
 
 **For Basic Memory context:**
+
 ```python
 # Check what we already know
 mcp__basic-memory__search_notes(
@@ -62,6 +70,7 @@ mcp__basic-memory__build_context(
 ### 3. Analyze and Synthesize
 
 Organize findings into coherent insights:
+
 - Identify key concepts and how they relate
 - Note patterns, trade-offs, and considerations
 - Highlight what's most relevant to the user's needs
@@ -145,12 +154,14 @@ mcp__basic-memory__write_note(
 Adjust based on the research type:
 
 ### Quick Investigation
+
 - Focused summary
 - 2-3 key findings
 - Direct recommendation
 - Saved to `research/` folder
 
 ### Deep Dive
+
 - Comprehensive analysis
 - Multiple sections
 - Detailed evidence
@@ -158,12 +169,14 @@ Adjust based on the research type:
 - Saved to `research/` folder
 
 ### Decision Support
+
 - Options evaluated
 - Pros/cons for each
 - Clear recommendation with rationale
 - Saved to `decisions/` or `research/` folder
 
 ### Technical Exploration
+
 - How it works
 - Architecture/design
 - Code examples
@@ -185,6 +198,7 @@ Adjust based on the research type:
 **User:** "Research how other projects handle database migrations"
 
 **Claude:**
+
 1. Searches codebase for migration patterns
 2. Checks Basic Memory for related decisions
 3. Looks up best practices online
@@ -195,6 +209,7 @@ Adjust based on the research type:
 **User:** "Investigate the MCP protocol"
 
 **Claude:**
+
 1. Fetches MCP documentation
 2. Searches for examples in codebase
 3. Checks Basic Memory for prior context
@@ -205,6 +220,7 @@ Adjust based on the research type:
 **User:** "Look into authentication options for the API"
 
 **Claude:**
+
 1. Researches common auth patterns (JWT, OAuth, API keys)
 2. Checks existing codebase auth implementation
 3. Evaluates trade-offs for the use case

@@ -5,11 +5,13 @@ description: Guide implementation based on specs stored in Basic Memory, followi
 
 # Spec-Driven Development
 
-This skill guides implementation work based on specifications stored in the Basic Memory "specs" project, following the process defined in SPEC-1.
+This skill guides implementation work based on specifications stored in the
+Basic Memory "specs" project, following the process defined in SPEC-1.
 
 ## When to Use
 
 Use this skill when:
+
 - Implementing a feature defined by a spec
 - Creating a new specification before implementation
 - Reviewing implementation against spec criteria
@@ -29,6 +31,7 @@ From SPEC-1, the workflow is:
 ## Spec Structure
 
 Every spec contains:
+
 - **Why** - The reasoning and problem being solved
 - **What** - What is affected or changed
 - **How** - High-level approach to implementation
@@ -174,6 +177,7 @@ When reviewing against a spec:
 ### Starting Implementation
 
 1. **Read the spec thoroughly**
+
    ```python
    mcp__basic-memory__read_note(
        identifier="SPEC-XX: Feature Name",
@@ -190,6 +194,7 @@ When reviewing against a spec:
    - Identify what to implement first
 
 4. **Mark first item in-progress**
+
    ```python
    mcp__basic-memory__edit_note(
        identifier="SPEC-XX",
@@ -216,16 +221,23 @@ When reviewing against a spec:
 
 ## Spec Naming Convention
 
-Format: `SPEC-X: Descriptive Title`
+Format:
+`SPEC-X:
+Descriptive Title`
 
 Examples:
-- `SPEC-24: Postgres Database Migration`
-- `SPEC-25: Cloud Index Service`
-- `SPEC-26: Multi-User Security and Permissions`
+
+- `SPEC-24:
+  Postgres Database Migration`
+- `SPEC-25:
+  Cloud Index Service`
+- `SPEC-26:
+  Multi-User Security and Permissions`
 
 ## Common Spec Patterns
 
 ### Feature Spec
+
 ```markdown
 ## Why
 User need or problem
@@ -240,6 +252,7 @@ Implementation phases with checkboxes
 ```
 
 ### Architecture Spec
+
 ```markdown
 ## Why
 Technical debt or scalability need
@@ -254,6 +267,7 @@ Migration strategy with rollback plan
 ```
 
 ### Process Spec
+
 ```markdown
 ## Why
 Workflow improvement need
