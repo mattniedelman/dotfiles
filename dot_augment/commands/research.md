@@ -6,20 +6,24 @@ allowed-tools: mcp__basic-memory__write_note, mcp__basic-memory__search_notes, m
 
 # Research
 
-Research a topic thoroughly and produce a structured report saved to Basic Memory.
+Research a topic thoroughly and produce a structured report saved to Basic
+Memory.
 
 ## Prerequisites
 
-First, read and follow the skill at: `~/.augment/skills/research/SKILL.md`
+First, read and follow the skill at:
+`~/.augment/skills/research/SKILL.md`
 
 ## Arguments
 
 - `$1` - Topic to research (required)
-- `$2` - Folder to save report (optional, default: "research")
+- `$2` - Folder to save report (optional, default:
+  "artifacts/research")
 
 ## Your Task
 
-Conduct thorough research on: **$ARGUMENTS**
+Conduct thorough research on:
+**$ARGUMENTS**
 
 ### 1. Check Existing Knowledge
 
@@ -29,7 +33,8 @@ First, see what we already know:
 search_notes_basic-memory(query="$1")
 ```
 
-Read any relevant existing notes to avoid duplicating research. Build context from related notes:
+Read any relevant existing notes to avoid duplicating research.
+Build context from related notes:
 
 ```python
 build_context_basic-memory(url="memory://related-topic", depth=2)
@@ -71,7 +76,7 @@ Create a structured report following the template in the research skill.
 write_note_basic-memory(
     title="Research: $1",
     content="[report content]",
-    directory="$2" or "research",
+    directory="$2" or "artifacts/research",
     tags=["research", ...]
 )
 ```
@@ -101,7 +106,7 @@ Always end with:
 ```
 ## 📝 Research Complete
 
-**Saved to:** research/[topic].md
+**Saved to:** artifacts/research/[topic].md
 
 **Key Findings:**
 1. [Most important finding]
@@ -115,4 +120,3 @@ Would you like me to:
 - Research a related topic?
 - Connect this to existing notes?
 ```
-

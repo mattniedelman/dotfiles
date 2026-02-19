@@ -6,26 +6,30 @@ allowed-tools: write_note_basic-memory, search_notes_basic-memory
 
 # Note
 
-Quickly capture any type of note to Basic Memory. Fast capture with sensible defaults - no questions asked.
+Quickly capture any type of note to Basic Memory.
+Fast capture with sensible defaults - no questions asked.
 
 ## IMPORTANT: Use Basic Memory Tools
 
-**ALWAYS use `write_note_basic-memory()` to create notes.** Do NOT use filesystem tools.
+**ALWAYS use `write_note_basic-memory()` to create notes.** Do NOT use
+filesystem tools.
 
 ## Note Types
 
 | Type | Directory | Use Case |
 |------|-----------|----------|
-| `thought` | `notes/` | Default - quick thoughts, observations |
+| `thought` | `_meta/working/` | Default - quick thoughts, observations |
 | `todo` | `planning/tasks/backlog/` | Tasks and action items |
-| `idea` | `notes/ideas/` | Ideas to explore later |
-| `meeting` | `notes/meetings/` | Quick meeting notes |
+| `idea` | `_meta/working/ideas/` | Ideas to explore later |
+| `meeting` | `_meta/working/meetings/` | Quick meeting notes |
 
 ## Arguments
 
 - `$1` - Note content (required)
-- `type:<type>` - Note type (optional, default: `thought`)
-- `priority:P0|P1|P2|P3` - For todos only (default: P2)
+- `type:<type>` - Note type (optional, default:
+  `thought`)
+- `priority:P0|P1|P2|P3` - For todos only (default:
+  P2)
 - `project:<name>` - Related project (optional)
 
 ## Your Task
@@ -33,10 +37,16 @@ Quickly capture any type of note to Basic Memory. Fast capture with sensible def
 ### 1. Parse Input
 
 Extract from `$ARGUMENTS`:
-- **Content**: The main text
-- **Type**: Look for `type:todo`, `type:idea`, etc. (default: `thought`)
-- **Priority**: For todos, look for `priority:P0`, etc. (default: P2)
-- **Project**: Look for `project:<name>` (optional)
+- **Content**:
+  The main text
+- **Type**:
+  Look for `type:todo`, `type:idea`, etc. (default:
+  `thought`)
+- **Priority**:
+  For todos, look for `priority:P0`, etc. (default:
+  P2)
+- **Project**:
+  Look for `project:<name>` (optional)
 
 **Type inference** - If no explicit type, infer from content:
 - Contains "fix", "add", "implement", "update", "refactor" → `todo`
@@ -63,7 +73,7 @@ write_note_basic-memory(
 
 - indexed_by [[Knowledge Graph Index]]
 """,
-    directory="notes",
+    directory="_meta/working",
     tags=["thought", "raw", "<project-if-provided>"]
 )
 ```
@@ -124,7 +134,7 @@ write_note_basic-memory(
 
 - indexed_by [[Knowledge Graph Index]]
 """,
-    directory="notes/ideas",
+    directory="_meta/working/ideas",
     tags=["idea", "explore", "<project-if-provided>"]
 )
 ```
@@ -157,7 +167,7 @@ write_note_basic-memory(
 
 - indexed_by [[Knowledge Graph Index]]
 """,
-    directory="notes/meetings",
+    directory="_meta/working/meetings",
     tags=["meeting", "raw", "<project-if-provided>"]
 )
 ```
@@ -168,23 +178,23 @@ Brief confirmation based on type:
 
 ```
 ✅ Captured: **<Title>**
-   Type: thought | Location: notes/<name>.md
+   Type: thought | Location: _meta/working/<name>.md
 
 ✅ Added to backlog: **<Task>**
    Priority: P2 | Location: planning/tasks/backlog/<name>.md
 
 ✅ Idea saved: **<Title>**
-   Location: notes/ideas/<name>.md
+   Location: _meta/working/ideas/<name>.md
 
 ✅ Meeting note: **<Title>**
-   Location: notes/meetings/<name>.md
+   Location: _meta/working/meetings/<name>.md
 ```
 
 ## Examples
 
 ```
 /note The API response time seems slow lately
-→ Creates thought in notes/
+→ Creates thought in _meta/working/
 
 /note Fix the flaky test in alert-summarizer
 → Infers todo, creates in planning/tasks/backlog/
@@ -193,10 +203,10 @@ Brief confirmation based on type:
 → Creates P1 task in backlog
 
 /note type:idea What if we used GraphQL instead of REST
-→ Creates idea in notes/ideas/
+→ Creates idea in _meta/working/ideas/
 
 /note type:meeting Standup - Sarah blocked on API
-→ Creates meeting note in notes/meetings/
+→ Creates meeting note in _meta/working/meetings/
 
 /note Database connection pooling might help project:data-layer
 → Creates thought tagged with data-layer
@@ -204,5 +214,6 @@ Brief confirmation based on type:
 
 ## Quick Capture Philosophy
 
-This command is for **fast capture**. Don't ask questions - just save it with sensible defaults. Notes can be enhanced later with `/enhance`.
-
+This command is for **fast capture**.
+Don't ask questions - just save it with sensible defaults.
+Notes can be enhanced later with `/enhance`.

@@ -8,6 +8,46 @@ description: Capture insights, decisions, and learnings from conversations into 
 This skill helps you capture valuable information from conversations into Basic
 Memory's knowledge graph using structured notes with observations and relations.
 
+## CRITICAL: Mandatory Triggers
+
+### Session Start (MUST check basic-memory)
+
+When the user's first message involves ANY of these, IMMEDIATELY call
+`recent_activity` and/or `search_notes`:
+
+- A named project, repository, or codebase
+- A topic previously discussed (architecture, patterns, decisions)
+- References to "we did", "last time", "before", or similar prior work
+- Technical decisions or design questions
+
+### Task Completion (MUST consider notes update)
+
+After completing ANY of these, explicitly evaluate whether notes need updating:
+
+- Implementing a feature or fixing a non-trivial bug
+- Making an architectural or design decision
+- Discovering how something works (debugging, investigation)
+- Setting up infrastructure, environments, or tooling
+- Resolving a problem that took significant effort
+
+**Required**:
+Either update relevant notes OR state "No notes update needed because [reason]."
+
+### End of Session Checklist
+
+Before ending a substantive work session, review:
+
+1. **New knowledge**:
+   Did we learn anything worth preserving?
+2. **Changed decisions**:
+   Did any documented decisions change?
+3. **Stale notes**:
+   Did we encounter outdated information?
+4. **Patterns discovered**:
+   Did we establish patterns worth documenting?
+
+If any answer is "yes", update notes before concluding.
+
 ## When to Use
 
 Use this skill when:
@@ -18,6 +58,8 @@ Use this skill when:
 - Design trade-offs are discussed
 - Architecture or implementation approaches are chosen
 - Learnings from debugging or investigation emerge
+- Discovering where functionality is implemented in a codebase
+- Mapping out system architecture or component relationships
 
 ## Capture Process
 
@@ -69,9 +111,9 @@ Main content organized logically.
 
 ## Relations
 
-- relates-to [[Related Concept]]
-- implements [[Parent Spec or Design]]
-- learned-from [[Source of Learning]]
+- relates-to \[[Related Concept]\]
+- implements \[[Parent Spec or Design]\]
+- learned-from \[[Source of Learning]\]
 ```
 
 ### 3. Choose Appropriate Categories
@@ -102,6 +144,65 @@ Link to related knowledge:
 - `depends-on` - Requires another concept
 - `solves` - Addresses a problem
 
+### 5. Use Correct Link Formats
+
+**Body/navigation links** (clickable in Obsidian):
+
+```markdown
+See [[specs/my-spec-name|My Spec Name]] for details.
+```
+
+- Use `[[permalink|Display Title]]` format
+- `permalink` is the note path without `.md`
+- Required because filenames are slugified (title-only links won't resolve)
+
+**Relations section** (for Basic Memory knowledge graph):
+
+```markdown
+## Relations
+
+- implements \[[Parent Spec]\]
+- relates-to \[[Related Topic]\]
+```
+
+- Use escaped brackets `\[[...]]\]` for semantic relations
+- These don't need to be clickable - they're for the knowledge graph
+
+### 6. Use Inline Hashtags for Attributes
+
+For skills, strengths, and categorical attributes (especially in person notes),
+use **inline hashtags**:
+
+```markdown
+## Technical Strengths
+
+#architecture-design #api-development #aws-integration #documentation
+```
+
+**Why inline hashtags:**
+
+- More compact and scannable than bullet lists
+- Automatically linked by Obsidian for navigation
+- No duplication between frontmatter tags and body content
+- Works well for both discovery and search
+
+**When NOT to use hashtags:**
+
+- For relationships to other notes (use wiki links)
+- For observations in the Relations section (use relation types)
+- For structural metadata (use frontmatter)
+
+### 7. File Naming for Obsidian Compatibility
+
+For notes that will be frequently wiki-linked (teams, indexes, key concepts),
+**use the exact title with spaces as the filename**:
+
+- ✅ `AI Engineering Team.md` - resolves `[[AI Engineering Team]]`
+- ❌ `ai-engineering-team.md` - may NOT resolve even with aliases
+
+Obsidian's alias resolution can be unreliable.
+Direct filename matching is most reliable for wiki-link resolution.
+
 ## MCP Tools to Use
 
 ```python
@@ -131,11 +232,14 @@ mcp__basic-memory__read_note(
 
 Choose appropriate folders:
 
-- `decisions/` - Architecture and design decisions
-- `learnings/` - Insights and lessons learned
-- `patterns/` - Reusable approaches
-- `debug-logs/` - Problem investigations
-- `conversations/` - Imported conversation summaries
+- `artifacts/architecture/` - Architecture decisions and system designs
+- `artifacts/specs/` - Design specs and requirements
+- `artifacts/research/` - Research reports and findings
+- `artifacts/patterns/` - Reusable approaches and patterns
+- `knowledge/concepts/` - Technical concepts and learnings
+- `knowledge/technologies/` - Technology notes
+- `_meta/working/` - Work-in-progress notes
+- `journal/sessions/YYYY/MM/` - Session case studies (by date)
 
 ## Examples
 
@@ -173,8 +277,8 @@ Use context manager pattern for HTTP clients instead of module-level singletons.
 
 ## Relations
 
-- implements [[SPEC-16 MCP Cloud Service Consolidation]]
-- enables [[Cloud App Integration]]
+- implements \[[SPEC-16 MCP Cloud Service Consolidation]\]
+- enables \[[Cloud App Integration]\]
 ```
 
 ### Capturing a Debugging Insight
@@ -208,9 +312,19 @@ Enabled WAL (Write-Ahead Logging) mode for the database connection.
 
 ## Relations
 
-- solves [[Sync Performance Issues]]
-- relates-to [[SPEC-19 Sync Performance]]
+- solves \[[Sync Performance Issues]\]
+- relates-to \[[SPEC-19 Sync Performance]\]
 ```
+
+## What NOT to Store
+
+Avoid storing information that:
+
+- Is trivial or easily re-discoverable
+- Contains sensitive credentials or secrets
+- Is highly volatile and likely to become stale quickly
+- Duplicates information already well-documented elsewhere
+- Is specific to a single, one-off task with no future relevance
 
 ## Best Practices
 
@@ -221,3 +335,4 @@ Enabled WAL (Write-Ahead Logging) mode for the database connection.
 5. **Include context** - Future you won't remember the situation
 6. **Prefer facts over opinions** - Observations should be verifiable
 7. **Keep notes atomic** - One concept per note when possible
+8. **Keep notes current** - Update when decisions change or info becomes stale

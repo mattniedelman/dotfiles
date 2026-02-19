@@ -50,7 +50,7 @@ Once you understand what you're building, present the design in small sections
 write_note_basic-memory(
     title="Design: <topic>",
     content="[design content]",
-    directory="specs",
+    directory="artifacts/specs",
     tags=["design", "spec", "<topic-tags>"]
 )
 ```

@@ -18,10 +18,16 @@ Use this skill when:
 - Designing a feature using external libraries
 - Implementing code that depends on library behavior
 - User mentions a library/framework and needs guidance
+- **Before starting work** on any task involving libraries or frameworks
 
 ## Prerequisites
 
 The `docs-crawler` MCP server must be configured in Augment settings.
+
+## Pre-Work Documentation Check (CRITICAL)
+
+**Before starting work** on any task involving a library, framework, tool, or
+service, check if documentation has already been crawled.
 
 ## Workflow
 
@@ -84,35 +90,10 @@ mcp__basic-memory__search_notes(
 
 # Build context around a concept
 mcp__basic-memory__build_context(
-    url="memory://docs/pydantic/examples",
+    url="memory://docs/pydantic/*",
     depth=2
 )
 ```
-
-### 5. Use the Three Pillars
-
-Documentation is organized into three types:
-
-**Memory** (`docs/{source}/memory/`):
-
-- API reference, function signatures
-- Parameter types and return values
-- Use for:
-  "What parameters does X accept?"
-
-**Reasoning** (`docs/{source}/reasoning/`):
-
-- Design philosophy, best practices
-- When and why to use certain features
-- Use for:
-  "When should I use X vs Y?"
-
-**Examples** (`docs/{source}/examples/`):
-
-- Code samples, tutorials
-- Usage patterns
-- Use for:
-  "Show me how to use X"
 
 ## Depth Strategy Guide
 
@@ -160,6 +141,26 @@ Documentation is organized into three types:
 2. Search memory pillar for "AsyncClient.get"
 3. Return exact signature and parameters
 
+## llms.txt Discovery
+
+When asked to review documentation for any tool, library, framework, or service:
+
+1. **Search for llms.txt first** - Look for an `llms.txt` file at the
+   documentation root
+   - Common locations:
+     `https://docs.example.com/llms.txt`, `https://example.com/llms.txt`
+   - This file provides a structured index optimized for AI consumption
+
+2. **Use llms.txt as the primary index** - When found, use it to:
+   - Understand the full scope of available documentation
+   - Identify the most relevant pages for the current task
+   - Navigate directly to authoritative sources
+
+3. **Fetch relevant pages from the index** - Based on the user's request, fetch
+   specific documentation pages listed in llms.txt
+
+4. **Fall back to web search** - If no llms.txt exists, use web-fetch or search
+
 ## Best Practices
 
 1. **Check before crawling** - Don't re-crawl unnecessarily
@@ -169,3 +170,4 @@ Documentation is organized into three types:
 4. **Combine with web search** - For very recent changes, supplement with
    web-fetch
 5. **Update stale docs** - Suggest refresh for docs older than 30 days
+6. **Search for llms.txt** - When reviewing external documentation

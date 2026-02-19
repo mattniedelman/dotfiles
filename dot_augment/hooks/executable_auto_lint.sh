@@ -8,7 +8,9 @@ Works with both Augment CLI and Claude Code via the unified adapter.
 
 from __future__ import annotations
 
+import os
 import subprocess
+import sys
 from collections.abc import Callable
 from pathlib import Path
 
@@ -18,15 +20,39 @@ from cchooks import PostToolUseContext
 AST_GREP_CONFIG = Path.home() / ".config/ast-grep/sgconfig.yml"
 TEAM_LINTER_CONFIGS = Path.home() / "git/imprivata/ai/.github/linters/configs"
 
+# Set AUTO_LINT_DEBUG=1 to see debug output
+DEBUG = os.environ.get("AUTO_LINT_DEBUG", "0") == "1"
 
-def run_command(cmd: list[str]) -> tuple[int, str]:
-    """Run a command and return exit code and output."""
+
+def debug(msg: str) -> None:
+    """Print debug message to stderr if DEBUG is enabled."""
+    if DEBUG:
+        print(f"[auto_lint] {msg}", file=sys.stderr)
+
+
+def find_project_root(file_path: str) -> Path | None:
+    """Find the nearest parent directory containing pyproject.toml."""
+    path = Path(file_path).resolve()
+    for parent in path.parents:
+        if (parent / "pyproject.toml").exists():
+            return parent
+    return None
+
+
+def run_command(cmd: list[str], cwd: Path | None = None) -> tuple[int, str]:
+    """Run a command and return exit code and combined output."""
     try:
+        debug(f"Running: {' '.join(cmd)} (cwd={cwd})")
         result = subprocess.run(  # noqa: S603
-            cmd, capture_output=True, text=True, check=False
+            cmd, capture_output=True, text=True, check=False, cwd=cwd
         )
-        return result.returncode, result.stdout + result.stderr
+        output = result.stdout + result.stderr
+        debug(f"  Exit code: {result.returncode}")
+        if result.returncode != 0 and output.strip():
+            debug(f"  Output: {output[:200]}")
+        return result.returncode, output
     except FileNotFoundError:
+        debug(f"  Command not found: {cmd[0]}")
         return -1, f"Command not found: {cmd[0]}"
 
 
@@ -55,7 +81,7 @@ def format_python(files: list[str]) -> list[str]:
     for f in files:
         run_command(["ruff", "format", f])
         run_command(["ruff", "check", "--fix", "--select=I", f])  # imports
-        run_command(["ruff", "check", "--fix", f])
+        run_command(["ruff", "check", "--fix", "--ignore=F401,F841", f])
     return []
 
 
@@ -63,15 +89,21 @@ def lint_python(files: list[str]) -> list[str]:
     """Lint Python files with ruff, zuban, and ast-grep."""
     errors: list[str] = []
     for f in files:
-        code, out = run_command(["ruff", "check", "--output-format=concise", f])
+        project_root = find_project_root(f)
+        code, out = run_command(
+            ["ruff", "check", "--output-format=concise", f], cwd=project_root
+        )
         if code != 0 and out.strip():
             errors.append(f"ruff ({f}):\n{out}")
         code, out = run_command(
-            ["zuban", "check", "--ignore-missing-imports", "--show-error-codes", f]
+            ["zuban", "check", "--ignore-missing-imports", "--show-error-codes", f],
+            cwd=project_root,
         )
         if code != 0 and out.strip():
             errors.append(f"zuban ({f}):\n{out}")
-        code, out = run_command(["sg", "scan", "--config", str(AST_GREP_CONFIG), f])
+        code, out = run_command(
+            ["sg", "scan", "--config", str(AST_GREP_CONFIG), f], cwd=project_root
+        )
         if code != 0 and out.strip():
             errors.append(f"ast-grep ({f}):\n{out}")
     return errors
@@ -322,14 +354,19 @@ def get_handlers(
 
 def main() -> None:
     """Auto-run formatters and linters on modified files."""
+    debug("Hook invoked")
     ctx = create_unified_context()
+    debug(f"Context type: {type(ctx).__name__}")
 
     if not isinstance(ctx, PostToolUseContext):
+        debug("Not a PostToolUseContext, exiting")
         ctx.output.exit_success()
         return
 
     file_changes = _get_file_changes(ctx)
+    debug(f"File changes: {file_changes}")
     if not file_changes:
+        debug("No file changes, exiting")
         ctx.output.exit_success()
         return
 
@@ -341,8 +378,10 @@ def main() -> None:
         and change.get("path", "")
         and Path(change.get("path", "")).is_file()
     ]
+    debug(f"Modified files: {modified_files}")
 
     if not modified_files:
+        debug("No modified files after filtering, exiting")
         ctx.output.exit_success()
         return
 
@@ -357,23 +396,30 @@ def main() -> None:
         if linter:
             lint_groups.setdefault(linter, []).append(f)
 
+    debug(f"Format groups: {len(format_groups)}, Lint groups: {len(lint_groups)}")
+
     # Run formatters first (they modify files)
     for formatter, files in format_groups.items():
+        debug(f"Running formatter {formatter.__name__} on {files}")
         formatter(files)
 
     # Run linters and collect errors
     lint_output: list[str] = []
     for linter, files in lint_groups.items():
+        debug(f"Running linter {linter.__name__} on {files}")
         lint_output.extend(linter(files))
 
+    debug(f"Lint output count: {len(lint_output)}")
     if lint_output:
         context = (
             "LINT ERRORS detected in modified files. "
             "You MUST fix these before proceeding:\n\n"
         )
         context += "\n".join(lint_output)
+        debug("Adding context with lint errors")
         ctx.output.add_context(context)
     else:
+        debug("No lint errors, exiting success")
         ctx.output.exit_success()
 
 

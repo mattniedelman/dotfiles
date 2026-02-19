@@ -83,7 +83,7 @@ Use `write_note_basic-memory` to create the case study:
 ```python
 write_note_basic-memory(
     title="Why Ripgrep Smart Case Was Not Working",
-    directory="case-studies/debugging",
+    directory="journal/sessions/2025/11",  # Use YYYY/MM from session date
     tags=["case-study", "debugging", "ripgrep", "fish-shell"],
     content=<content>
 )
@@ -184,26 +184,30 @@ search_notes_basic-memory(query="case-study session_id:abc123")
 ```
 
 Or browse:
-`case-studies/{category}/`
+`journal/sessions/YYYY/MM/`
 
 ## Directory Structure
 
-Case studies live in Basic Memory under `case-studies/`:
+Case studies live in Basic Memory under `journal/`:
 
 ```text
-case-studies/
+journal/
+├── sessions/                       # Session case studies organized by date
+│   ├── 2025/
+│   │   ├── 10/                     # October 2025 sessions
+│   │   ├── 11/                     # November 2025 sessions
+│   │   └── 12/                     # December 2025 sessions
+│   └── 2026/
+│       ├── 01/                     # January 2026 sessions
+│       └── 02/                     # February 2026 sessions
 ├── arcs/                           # Multi-session arc summaries
 │   └── data-fabric-api-adr-arc.md
-├── debugging/
-│   └── why-ripgrep-smart-case-was-not-working.md
-├── documentation/
-│   ├── co-authoring-the-data-fabric-api-adr.md
-│   └── writing-a-git-ops-strategy-adr-with-the-agent.md
-├── exploration/
-│   └── brainstorming-the-data-fabric-api-architecture.md
-└── investigation/
-    └── evaluating-hasura-for-data-fabric.md
+└── reviews/                        # Monthly reviews
+    └── monthly-review-february-2026.md
 ```
+
+**Note:** Session directory is determined by the `date` field in Metadata
+section (YYYY/MM).
 
 ## Available Tools
 
