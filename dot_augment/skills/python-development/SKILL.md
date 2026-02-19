@@ -9,6 +9,22 @@ Use this skill for Python development guidance beyond basic constraints.
 
 ## Testing with pytest
 
+**Configuration in pyproject.toml:** Use `[tool.pytest]` (pytest 9.0+) with
+native TOML types, or `[tool.pytest.ini_options]` (pytest 6.0+) with INI-style
+strings:
+
+```toml
+# pytest 9.0+ - native TOML (preferred)
+[tool.pytest]
+testpaths = ["tests"]
+addopts = ["--cov=src", "-v"]  # Array, not string
+
+# pytest 6.0+ - INI-style
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "--cov=src -v"  # String, not array
+```
+
 **Organization:** Mirror source structure (`src/module.py` →
 `tests/test_module.py`)
 

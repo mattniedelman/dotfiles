@@ -152,6 +152,16 @@
       "type": "stdio",
       "command": "thv proxy stdio grafana",
       "args": []
+    },
+    "prometheus-nonprod": {
+      "type": "stdio",
+      "command": "thv proxy stdio prometheus-nonprod",
+      "args": []
+    },
+    "prometheus-prod": {
+      "type": "stdio",
+      "command": "thv proxy stdio prometheus-prod",
+      "args": []
     }
   },
   "hooks": {

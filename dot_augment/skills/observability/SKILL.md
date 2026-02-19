@@ -122,6 +122,46 @@ def set_request_id():
 - Use OpenTelemetry for unified correlation
 - Prefer auto-instrumentation
 
+## OpenTelemetry Auto-Instrumentation
+
+### Log Level Configuration
+
+**OTEL does NOT control your app's log level.** You still need Python logging
+config:
+
+```python
+import logging
+import os
+
+logging.basicConfig(
+    level=os.getenv("LOG_LEVEL", "INFO"),
+    format="%(levelname)s - %(name)s - %(message)s",
+)
+```
+
+| Variable | Controls |
+|----------|----------|
+| `LOG_LEVEL` | Your application's log level |
+| `OTEL_LOG_LEVEL` | OTEL SDK internal debug logging |
+
+### Running with OTEL
+
+```bash
+# Both variables are independent
+LOG_LEVEL=DEBUG \
+OTEL_SERVICE_NAME=my-service \
+OTEL_TRACES_EXPORTER=console \
+opentelemetry-instrument uvicorn myapp:app
+```
+
+### What OTEL Adds
+
+- `trace_id` and `span_id` attributes on log records
+- Automatic spans for frameworks (FastAPI, SQLAlchemy, boto, etc.)
+- Export to collectors (OTLP, console, etc.)
+
+OTEL layers on top of Python logging - it does not replace it.
+
 ## Alerting
 
 ### Define SLIs and SLOs

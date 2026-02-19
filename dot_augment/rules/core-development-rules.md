@@ -217,12 +217,38 @@ See the `github-workflow` skill for detailed API reference and patterns.
 
 See the `knowledge-capture` skill for detailed notes guidance including:
 
+- **Proactive decision capture** (during conversation, automatic)
 - Mandatory triggers (session start, task completion, end of session)
 - What to capture and what to avoid
 - Person note formatting
 
-**Critical requirement:** MUST check basic-memory at session start when context
-likely exists.
-MUST evaluate notes update after completing significant work.
+### CRITICAL: Proactive Decision Capture
 
-**Failure to update notes when triggers are met is a CRITICAL violation.**
+**Automatically capture design decisions, architectural choices, and technical
+trade-offs to Basic Memory immediately when they occur during conversation.**
+
+| Capture When | Directory | Example |
+|--------------|-----------|---------|
+| Architecture decisions made | `artifacts/architecture/` | Framework choice, component structure |
+| Design decisions made | `artifacts/specs/` | API design, data models |
+| Patterns established | `knowledge/patterns/` | Implementation conventions |
+| Trade-offs chosen | `artifacts/architecture/` | Option A over B with rationale |
+
+**Behavior**:
+
+- Do NOT ask permission - capture automatically
+- Notify user:
+  `📝 Captured decision:
+  [title]`
+- Include:
+  Context, Decision, Alternatives Considered, Consequences
+- Tag observations:
+  `[decision]`, `[tradeoff]`, `[constraint]`
+
+**Critical requirements:**
+
+- MUST check basic-memory at session start when context likely exists
+- MUST capture decisions immediately when made (not deferred to session end)
+- MUST evaluate notes update after completing significant work
+
+**Failure to capture decisions when triggers are met is a CRITICAL violation.**
