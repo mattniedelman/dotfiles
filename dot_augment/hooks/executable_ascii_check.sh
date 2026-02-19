@@ -8,10 +8,14 @@ Directly modifies files to replace problematic Unicode with ASCII equivalents.
 
 from __future__ import annotations
 
+import os
 from pathlib import Path
 
 from augment_adapter import create_unified_context
 from cchooks import PostToolUseContext
+
+# Get workspace root from Augment environment variable
+WORKSPACE_ROOT = Path(os.environ.get("AUGMENT_PROJECT_DIR", ".")).resolve()
 
 # Unicode characters: (name, ascii_replacement)
 UNICODE_REPLACEMENTS: dict[str, tuple[str, str]] = {
@@ -98,7 +102,10 @@ def main() -> None:
             continue
 
         # Check if file exists and read current content
+        # Resolve paths relative to workspace root (paths from Augment are relative)
         path = Path(file_path)
+        if not path.is_absolute():
+            path = WORKSPACE_ROOT / file_path
         if not path.is_file():
             continue
 
@@ -112,7 +119,7 @@ def main() -> None:
         if replacements:
             # Write the fixed content back
             path.write_text(fixed_content, encoding="utf-8")
-            fixes_applied.append(f"{file_path}: replaced {', '.join(replacements)}")
+            fixes_applied.append(f"{path}: replaced {', '.join(replacements)}")
 
     if fixes_applied:
         notice = "ASCII auto-fix applied:\n" + "\n".join(fixes_applied)

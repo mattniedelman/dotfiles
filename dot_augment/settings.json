@@ -26,7 +26,7 @@
       "permission": {
         "type": "ask-user"
       },
-      "shellInputRegex": "\\b(rm|sudo)\\b"
+      "shellInputRegex": "\\bsudo\\b"
     },
     {
       "toolName": "launch-process",
@@ -118,7 +118,11 @@
       "args": [
         "-y",
         "@cyanheads/git-mcp-server"
-      ]
+      ],
+      "env": {
+        "MCP_LOG_LEVEL": "error",
+        "LOGS_DIR": "/home/mattniedelman/.local/state/git-mcp-server/logs"
+      }
     },
     "docs-crawler": {
       "type": "stdio",
@@ -142,6 +146,11 @@
     "obsidian": {
       "type": "stdio",
       "command": "thv proxy stdio obsidian",
+      "args": []
+    },
+    "grafana": {
+      "type": "stdio",
+      "command": "thv proxy stdio grafana",
       "args": []
     }
   },
@@ -170,6 +179,15 @@
       }
     ],
     "PostToolUse": [
+      {
+        "matcher": "sub-agent-ralph-.*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/mattniedelman/.augment/hooks/ralph_monitor.sh"
+          }
+        ]
+      },
       {
         "matcher": "save-file|str-replace-editor|mcp:^(write|edit|save|replace|insert)_",
         "hooks": [

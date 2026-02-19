@@ -1,6 +1,6 @@
 ---
 name: monthly-review
-description: Generate concise monthly review reports for engineering leadership presentations with highlights, lowlights, strategic goals, and quarterly goal tracking
+description: Use when generating monthly review reports for engineering leadership - highlights, lowlights, strategic goals, and quarterly goal tracking
 ---
 
 # Monthly Review

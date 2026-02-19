@@ -1,6 +1,6 @@
 ---
 name: knowledge-organize
-description: Help organize, link, and maintain the Basic Memory knowledge graph - find orphan notes, suggest relations, identify duplicates, and improve overall knowledge structure
+description: Use when organizing the Basic Memory knowledge graph - find orphan notes, suggest relations, identify duplicates, and improve structure
 ---
 
 # Knowledge Organize

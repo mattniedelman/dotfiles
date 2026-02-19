@@ -18,6 +18,8 @@ from augment_adapter import create_unified_context
 from cchooks import PostToolUseContext
 
 AST_GREP_CONFIG = Path.home() / ".config/ast-grep/sgconfig.yml"
+# Get workspace root from Augment environment variable
+WORKSPACE_ROOT = Path(os.environ.get("AUGMENT_PROJECT_DIR", ".")).resolve()
 TEAM_LINTER_CONFIGS = Path.home() / "git/imprivata/ai/.github/linters/configs"
 
 # Set AUTO_LINT_DEBUG=1 to see debug output
@@ -371,13 +373,20 @@ def main() -> None:
         return
 
     # Collect files that were modified (not deleted) and still exist
-    modified_files = [
-        change.get("path", "")
-        for change in file_changes
-        if change.get("changeType", "") != "delete"
-        and change.get("path", "")
-        and Path(change.get("path", "")).is_file()
-    ]
+    # Resolve paths relative to workspace root (paths from Augment are relative)
+    modified_files: list[str] = []
+    for change in file_changes:
+        if change.get("changeType", "") == "delete":
+            continue
+        rel_path = change.get("path", "")
+        if not rel_path:
+            continue
+        # Try absolute path first, then resolve relative to workspace
+        path = Path(rel_path)
+        if not path.is_absolute():
+            path = WORKSPACE_ROOT / rel_path
+        if path.is_file():
+            modified_files.append(str(path))
     debug(f"Modified files: {modified_files}")
 
     if not modified_files:

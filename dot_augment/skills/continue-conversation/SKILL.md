@@ -1,6 +1,6 @@
 ---
 name: continue-conversation
-description: Resume previous work by building context from Basic Memory knowledge graph using memory URLs and recent activity
+description: Use when resuming previous work - builds context from Basic Memory knowledge graph using memory URLs and recent activity
 ---
 
 # Continue Conversation

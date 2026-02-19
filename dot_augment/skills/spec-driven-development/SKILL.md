@@ -1,6 +1,6 @@
 ---
 name: spec-driven-development
-description: Guide implementation based on specs stored in Basic Memory, following the SPEC-1 specification-driven development process
+description: Use when implementing from specs stored in Basic Memory - follows the SPEC-1 specification-driven development process
 ---
 
 # Spec-Driven Development

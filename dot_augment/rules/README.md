@@ -19,9 +19,9 @@ When referring to the CLI command, use `auggie`.
 
 | Priority | Type | Enforcement | Files |
 |----------|------|-------------|-------|
-| **CRITICAL** | `always_apply` | Violations are penalized | `response-style-communication.md`, `core-development-rules.md` (includes Notes Management), `git-mcp-required.md`, `environment.md`  |
+| **CRITICAL** | `always_apply` | Violations are penalized | `response-style-communication.md`, `core-development-rules.md` (includes Notes Management), `git-mcp-required.md` |
 | **HIGH** | `always_apply` | Always active for relevant domains | `git-workflow.md`, `linting-enforcement.md`, `environment.md`, `security.md`, `helm-kubernetes-guidelines.md`, `python-development.md`, `authorization-policies.md` |
-| **STANDARD** | `agent_requested` | Guidance for specific scenarios | `api-design-patterns.md`, `error-handling-observability.md`, `refactoring-and-maintenance.md`, `data-science-ml-patterns.md` |
+| **STANDARD** | `agent_requested` | Guidance for specific scenarios | (migrated to skills) |
 
 ---
 
@@ -141,17 +141,6 @@ These rules are enforced with the same severity as scope violations:
 
 - Use think-strategies for complex debugging, architecture, investigations
 - Skip for simple, well-defined tasks
-
----
-
-## STANDARD Priority (Apply When Relevant)
-
-### 13. refactoring-and-maintenance.md
-
-- Scope limits:
-  small (<10 lines) without permission
-- Medium/large refactoring requires approval
-- Technical debt management
 
 ---
 
