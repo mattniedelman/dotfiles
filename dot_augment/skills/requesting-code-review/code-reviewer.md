@@ -29,6 +29,19 @@ git diff {BASE_SHA}..{HEAD_SHA}
 
 ## Review Checklist
 
+**Unnecessary Changes (Check First):**
+
+- Any changes unrelated to the stated task?
+- Unnecessary refactoring mixed with feature work?
+- Accidental changes like:
+  - `list(iterator)` before iteration (wastes memory)
+  - Variable renames with no benefit
+  - Reordering imports/code for no reason
+  - Adding intermediate variables that don't help
+  - Removing then re-adding similar code
+- If found:
+  flag as "Unnecessary Change" - revert or justify
+
 **Code Quality:**
 
 - Clean separation of concerns?
@@ -147,6 +160,13 @@ Be specific.]
    - File: indexer.ts:130
    - Issue: No "X of Y" counter for long operations
    - Impact: Users don't know how long to wait
+
+#### Unnecessary Changes (Revert)
+1. **Iterator materialized without reason**
+   - File: client.py:488
+   - Change: `rows = list(result)` then `for row in rows:`
+   - Issue: Original `for row in result:` was correct; list() wastes memory
+   - Fix: Revert to direct iteration
 
 ### Recommendations
 - Add progress reporting for user experience

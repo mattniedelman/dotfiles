@@ -10,6 +10,68 @@ Memory's knowledge graph using structured notes with observations and relations.
 
 ## CRITICAL: Mandatory Triggers
 
+### Proactive Decision Capture (MUST capture immediately)
+
+**Capture decisions automatically during conversation** - do not wait for task
+completion or session end.
+When ANY of these occur, immediately write a note:
+
+- **Architectural decisions**:
+  Framework choices, system design patterns, component structure
+- **Design decisions**:
+  API design, data models, interface contracts
+- **Technical trade-offs**:
+  User explicitly chooses option A over option B
+- **Implementation patterns**:
+  Conventions established for the codebase
+- **Configuration decisions**:
+  Non-obvious settings with rationale
+- **Integration approaches**:
+  How external services are connected
+
+**Behavior**:
+
+1. Capture immediately after the decision is made
+2. Do NOT ask permission - just capture
+3. Notify user:
+   `📝 Captured decision:
+   [title]`
+
+**Decision note structure**:
+
+```markdown
+## Context
+What prompted this decision
+
+## Decision
+What was chosen and why
+
+## Alternatives Considered
+What other options were evaluated and why they weren't chosen
+
+## Consequences
+Implications, trade-offs, and constraints this creates
+
+## Observations
+
+- [decision] The core choice made #tag
+- [tradeoff] What was given up for what was gained #tag
+- [constraint] Limitations this creates #tag
+
+## Relations
+
+- relates-to \[[Related Concept]\]
+- implements \[[Parent Spec]\]
+```
+
+**Directory mapping**:
+
+| Decision Type | Directory |
+|---------------|-----------|
+| Architecture decisions | `artifacts/architecture/` |
+| Design specifications | `artifacts/specs/` |
+| Reusable patterns | `knowledge/patterns/` |
+
 ### Session Start (MUST check basic-memory)
 
 When the user's first message involves ANY of these, IMMEDIATELY call
