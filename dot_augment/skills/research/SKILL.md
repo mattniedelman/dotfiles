@@ -143,7 +143,7 @@ tags:
 mcp__basic-memory__write_note(
     title="Research: [Topic]",
     content="[Full report content]",
-    folder="research",
+    folder="artifacts/research",
     tags=["research", "topic-tags"],
     project="main"
 )
@@ -158,7 +158,7 @@ Adjust based on the research type:
 - Focused summary
 - 2-3 key findings
 - Direct recommendation
-- Saved to `research/` folder
+- Saved to `artifacts/research/` folder
 
 ### Deep Dive
 
@@ -166,14 +166,14 @@ Adjust based on the research type:
 - Multiple sections
 - Detailed evidence
 - Comparison of options
-- Saved to `research/` folder
+- Saved to `artifacts/research/` folder
 
 ### Decision Support
 
 - Options evaluated
 - Pros/cons for each
 - Clear recommendation with rationale
-- Saved to `decisions/` or `research/` folder
+- Saved to `artifacts/architecture/` or `artifacts/research/` folder
 
 ### Technical Exploration
 
@@ -181,7 +181,7 @@ Adjust based on the research type:
 - Architecture/design
 - Code examples
 - Integration considerations
-- Saved to `research/` folder
+- Saved to `artifacts/research/` folder
 
 ## Best Practices
 
@@ -203,7 +203,7 @@ Adjust based on the research type:
 2. Checks Basic Memory for related decisions
 3. Looks up best practices online
 4. Produces report comparing approaches
-5. Saves to `research/Database Migration Approaches.md`
+5. Saves to `artifacts/research/Database Migration Approaches.md`
 6. Presents summary with recommendation
 
 **User:** "Investigate the MCP protocol"
@@ -214,7 +214,7 @@ Adjust based on the research type:
 2. Searches for examples in codebase
 3. Checks Basic Memory for prior context
 4. Produces comprehensive report on MCP
-5. Saves to `research/MCP Protocol Overview.md`
+5. Saves to `artifacts/research/MCP Protocol Overview.md`
 6. Presents key concepts and how to use them
 
 **User:** "Look into authentication options for the API"
@@ -225,5 +225,5 @@ Adjust based on the research type:
 2. Checks existing codebase auth implementation
 3. Evaluates trade-offs for the use case
 4. Produces decision-support report
-5. Saves to `research/API Authentication Options.md`
+5. Saves to `artifacts/research/API Authentication Options.md`
 6. Recommends approach with rationale

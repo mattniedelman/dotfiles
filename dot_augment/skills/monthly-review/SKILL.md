@@ -33,7 +33,8 @@ Use this skill when:
 
 3. **Key Metric Changes**
    - Only notable metric changes
-   - If nothing significant: "None"
+   - If nothing significant:
+     "None"
    - Don't fabricate metrics
 
 4. **Strategic Goals (Forward Looking Priorities)**
@@ -62,7 +63,8 @@ shown when presenting to leadership who expects them.
 
 ### 1. Determine Review Period
 
-- Default: Current month or most recent completed month
+- Default:
+  Current month or most recent completed month
 - Use explicit month/year if provided by user
 
 ### 2. Gather Data from Basic Memory
@@ -154,7 +156,7 @@ After user approves the draft:
 write_note_basic-memory(
     title="Monthly Review - <Month> <Year>",
     content="[report content]",
-    directory="reviews/monthly",
+    directory="journal/reviews",
     tags=["review", "monthly", "YYYY-MM", "presented"]
 )
 ```

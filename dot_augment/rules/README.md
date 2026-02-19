@@ -19,8 +19,8 @@ When referring to the CLI command, use `auggie`.
 
 | Priority | Type | Enforcement | Files |
 |----------|------|-------------|-------|
-| **CRITICAL** | `always_apply` | Violations are penalized | `response-style-communication.md`, `core-development-rules.md` (includes Notes Management), `git-mcp-required.md` |
-| **HIGH** | `always_apply` | Always active for relevant domains | `git-workflow.md`, `linting-enforcement.md`, `environment.md`, `security.md`, `helm-kubernetes-guidelines.md`, `python-development.md`, `authorization-policies.md`, `specs-based-development.md`, `documentation-review.md` |
+| **CRITICAL** | `always_apply` | Violations are penalized | `response-style-communication.md`, `core-development-rules.md` (includes Notes Management), `git-mcp-required.md`, `environment.md`  |
+| **HIGH** | `always_apply` | Always active for relevant domains | `git-workflow.md`, `linting-enforcement.md`, `environment.md`, `security.md`, `helm-kubernetes-guidelines.md`, `python-development.md`, `authorization-policies.md` |
 | **STANDARD** | `agent_requested` | Guidance for specific scenarios | `api-design-patterns.md`, `error-handling-observability.md`, `refactoring-and-maintenance.md`, `data-science-ml-patterns.md` |
 
 ---
@@ -142,51 +142,16 @@ These rules are enforced with the same severity as scope violations:
 - Use think-strategies for complex debugging, architecture, investigations
 - Skip for simple, well-defined tasks
 
-### 13. specs-based-development.md
-
-- **Automatically active** in any git repository
-- Specs-driven workflow inspired by Ralph Wiggum technique
-- "Don't assume not implemented" - always search before implementing
-- Gap analysis:
-  compare specs vs code before building
-- Backpressure:
-  tests, types, lints must pass before task completion
-
-### 14. documentation-review.md
-
-- Search for `llms.txt` first when reviewing any documentation
-- Use llms.txt as primary index for AI-optimized navigation
-- Fetch specific pages from the index based on user's request
-- Fall back to web search if llms.txt unavailable
-
 ---
 
 ## STANDARD Priority (Apply When Relevant)
 
-### 15. api-design-patterns.md
-
-- RESTful API design principles
-- Client interface patterns
-- FastAPI-specific patterns
-
-### 16. error-handling-observability.md
-
-- Specific exception types
-- Structured logging
-- Observability practices
-
-### 17. refactoring-and-maintenance.md
+### 13. refactoring-and-maintenance.md
 
 - Scope limits:
   small (<10 lines) without permission
 - Medium/large refactoring requires approval
 - Technical debt management
-
-### 18. data-science-ml-patterns.md
-
-- Model operation authorization
-- BERTopic patterns
-- Testing ML code
 
 ---
 

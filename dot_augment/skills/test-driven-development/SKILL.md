@@ -190,3 +190,67 @@ Otherwise → not TDD
 ```
 
 No exceptions without explicit permission.
+
+---
+
+## Test Quality Guidelines
+
+### Test Structure (AAA Pattern)
+
+All tests must follow "Arrange, Act, Assert":
+
+```python
+def test_user_authentication():
+    # Arrange
+    user = User(username="test_user")
+    auth_service = AuthenticationService()
+
+    # Act
+    result = auth_service.authenticate(user.username, "password")
+
+    # Assert
+    assert result.is_authenticated is True
+```
+
+### Test Documentation
+
+- Remove docstrings that restate the test name
+- Keep docstrings that explain non-obvious behavior or edge cases
+- Keep AAA section comments for structure
+
+### Avoid Mocks
+
+Strongly discourage mocks, stubs, and test doubles:
+
+**Preferred alternatives:**
+
+- Dependency injection with real implementations
+- In-memory databases (SQLite, DuckDB)
+- Lightweight fake implementations
+- Real instances with test data
+
+**When mocks are acceptable:**
+
+- Truly external systems (payment APIs, SMS gateways)
+- Prohibitively expensive cloud services
+- Even then, prefer fake implementations over mock frameworks
+
+### Assert Booleans Directly
+
+```python
+# ✅ Correct
+assert condition
+assert not condition
+
+# ❌ Wrong
+assert condition == True
+assert condition == False
+```
+
+### Fuzzing and Property-Based Testing
+
+Use automated test data generation:
+
+- **Polyfactory** for Pydantic models
+- **Hypothesis** for property-based testing
+- **Faker** for realistic sample data

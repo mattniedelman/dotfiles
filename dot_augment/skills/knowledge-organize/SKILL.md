@@ -180,14 +180,14 @@ A hub linking all architecture-related decisions and patterns.
 
 ## Decisions
 
-- [[Database Selection Decision]]
-- [[API Design Patterns]]
-- [[Authentication Architecture]]
+- [[decisions/database-selection-decision|Database Selection Decision]]
+- [[decisions/api-design-patterns|API Design Patterns]]
+- [[decisions/authentication-architecture|Authentication Architecture]]
 
 ## Patterns
 
-- [[Repository Pattern]]
-- [[Async Client Pattern]]
+- [[patterns/repository-pattern|Repository Pattern]]
+- [[patterns/async-client-pattern|Async Client Pattern]]
 
 ## Observations
 
@@ -243,6 +243,86 @@ Thorough review and improvement:
 5. **Structure phase** - Reorganize folders if needed
 6. **Index phase** - Create hub notes for major topics
 
+### Comprehensive Knowledge Graph Audit
+
+A periodic, thorough audit of the entire knowledge graph:
+
+#### Person Notes Audit
+
+1. Query GitHub for each person's recent commit activity (last 30-60 days)
+2. Update "Total Commits" count if changed
+3. Verify "Primary Repositories" list based on current activity
+4. Ensure skills use **inline hashtags** format (`#architecture-design`)
+5. Follow the standardized [[Person Note Template]]
+
+```bash
+# Get commits for a user in last 60 days
+gh api "/repos/{owner}/{repo}/commits?author={username}&since=$(date -d '60 days ago' -I)"
+```
+
+#### Project Notes Audit
+
+1. Check linked repository for recent activity
+2. Update project status (active, maintenance, archived, planning)
+3. Verify the project is linked from the projects-index
+4. Ensure specs and architecture docs are linked
+
+#### Repository Notes Audit
+
+1. Verify contributor list is current
+2. Update technology stack if dependencies changed
+3. Check that CI/CD status reflects current state
+4. Ensure repository is linked from relevant project notes
+
+#### Design Documents Audit
+
+1. Ensure each spec is linked from its parent project note
+2. Ensure each architecture doc is linked from relevant repository notes
+3. Update specs-index and architecture-index with new documents
+4. Create stub pages for frequently-referenced missing documents
+5. Add missing `relates_to` or `implements` relations
+
+#### Audit Summary Report
+
+After completing an audit, generate a summary with:
+
+- Files updated, notes created
+- Notes requiring manual review
+- Missing links identified and resolved
+- Stub pages created
+
+#### Fixing Broken Wiki Links (Obsidian Compatibility)
+
+When wiki links like `[[AI Engineering Team]]` don't resolve in Obsidian:
+
+**Root cause**:
+Obsidian resolves `[[Link Text]]` by looking for a file named `Link Text.md`.
+Slugified filenames (`ai-engineering-team.md`) may NOT resolve even with
+`aliases` in frontmatter - alias resolution can be unreliable.
+
+**Solution**:
+Rename files to match their wiki link text exactly:
+
+```bash
+# ❌ Broken: ai-engineering-team.md
+# ✅ Fixed: AI Engineering Team.md
+mv "ai-engineering-team.md" "AI Engineering Team.md"
+```
+
+**When creating frequently-linked notes** (teams, indexes, key concepts):
+
+1. Use exact title with spaces in filename:
+   `AI Engineering Team.md`
+2. Do NOT rely on aliases for link resolution
+3. Test the link resolves in Obsidian before committing
+
+**Diagnosing broken links**:
+
+1. Use Obsidian MCP tools to inspect the file exists:
+   `obsidian_list_notes_obsidian` with the directory path
+2. Check if filename matches the link text exactly
+3. If slugified, rename to include spaces
+
 ### Topic-Focused Organization
 
 Organize around a specific subject:
@@ -253,6 +333,103 @@ Organize around a specific subject:
 4. Suggest new notes to fill gaps
 5. Create topic index note
 
+### 8. Convert Session References to Wiki Links
+
+For arc documents that reference sessions by ID, convert them to wiki-style
+links pointing to the actual case study notes.
+
+**Before:**
+
+```markdown
+- **3bb59894**: Created ADR for simplified data layer access interface
+```
+
+**After:**
+
+```markdown
+- [[journal/sessions/2025/12/creating-an-adr-for-simplified-data-layer-access|Creating an ADR for Simplified Data Layer Access]]: Created ADR for simplified data layer access interface
+```
+
+**Process:**
+
+1. Read the arc document to find session ID patterns (`**xxxxxxxx**:`)
+2. For each session ID, search Basic Memory:
+
+   ```python
+   mcp__basic-memory__search_notes(
+       query="session_id: 3bb59894",
+       page_size=2,
+       project="main"
+   )
+   ```
+
+3. Get the **permalink** from the search result (e.g.,
+   `journal/sessions/2025/12/creating-an-adr-for-simplified-data-layer-access`)
+4. If found, use `edit_note_basic-memory` with `find_replace` operation
+5. Replace `**session_id**:
+   description` with `[[permalink|Title]]:
+   description`
+6. If not found, keep the bold session ID format (some sessions may not have
+   been documented as individual case studies)
+
+**Tips:**
+
+- Search for session IDs in parallel batches (10-12 at a time) for efficiency
+- Use the **permalink** for the link target, **title** for display text
+- Format:
+  `[[permalink|Title]]` - this works in both Obsidian AND Basic Memory
+- Some arcs use table format instead of bullet lists - adjust replacement
+  pattern accordingly
+- Track found vs not-found to report completion statistics
+
+## Wiki Link Format
+
+Basic Memory and Obsidian use different link formats for different purposes:
+
+### Body/Navigation Links
+
+For clickable links in the note body (outside the Relations section), use:
+
+```markdown
+[[permalink|Display Title]]
+```
+
+**Example:**
+
+```markdown
+- [[journal/sessions/2025/12/creating-an-adr|Creating an ADR]]: Description here
+```
+
+- `permalink`:
+  The note's path without `.md` (e.g., `case-studies/documentation/my-note`)
+- `Display Title`:
+  Human-readable title shown in rendered markdown
+
+This format works in **both** Obsidian AND Basic Memory because:
+
+- Obsidian uses the permalink to locate the file
+- Basic Memory resolves the note via permalink
+
+**Why title-only links don't work:**
+
+- `[[Creating an ADR]]` fails because filenames are slugified
+  (`creating-an-adr.md`)
+- Obsidian can't find a file matching the exact title
+
+### Relations Section Links
+
+For semantic relations in the Relations section, use standard wiki-link format:
+
+```markdown
+## Relations
+
+- relates_to [[Topic Name]]
+- implements [[Parent Concept]]
+```
+
+These are standard Obsidian wiki links that Basic Memory parses for the
+knowledge graph.
+
 ## Best Practices
 
 1. **Work incrementally** - Don't reorganize everything at once
@@ -262,6 +439,8 @@ Organize around a specific subject:
 5. **Explain suggestions** - Say why a relation makes sense
 6. **Respect user's system** - Enhance their organization, don't impose a new
    one
+7. **Use correct link format** - `[[permalink|Title]]` for body links,
+   `[[Topic]]` for relations
 
 ## Example Conversations
 

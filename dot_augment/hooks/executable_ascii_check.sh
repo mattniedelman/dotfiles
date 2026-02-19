@@ -15,15 +15,23 @@ from cchooks import PostToolUseContext
 
 # Unicode characters: (name, ascii_replacement)
 UNICODE_REPLACEMENTS: dict[str, tuple[str, str]] = {
-    "\u2014": ("em dash", "-"),
+    # Dashes
+    "\u2014": ("em dash", " -- "),  # Spaces added; duplicates cleaned up later
     "\u2013": ("en dash", "-"),
+    "\u2212": ("minus sign", "-"),
+    # Quotes
     "\u201c": ("left curly quote", '"'),
     "\u201d": ("right curly quote", '"'),
     "\u2018": ("left single quote", "'"),
     "\u2019": ("right single quote", "'"),
+    # Ellipsis
     "\u2026": ("ellipsis", "..."),
+    # Non-breaking spaces (all variants)
     "\u00a0": ("non-breaking space", " "),
-    "\u2212": ("minus sign", "-"),
+    "\u202f": ("narrow no-break space", " "),
+    "\u2007": ("figure space", " "),
+    "\u2060": ("word joiner", ""),
+    "\ufeff": ("zero-width no-break space/BOM", ""),
 }
 
 
@@ -41,6 +49,10 @@ def fix_content(content: str) -> tuple[str, list[str]]:
             count = fixed.count(unicode_char)
             fixed = fixed.replace(unicode_char, ascii_replacement)
             replacements_made.append(f"{count}x {name}")
+
+    # Clean up duplicate spaces (e.g., from " -- " replacing em dash next to existing space)
+    while "  " in fixed:
+        fixed = fixed.replace("  ", " ")
 
     return fixed, replacements_made
 

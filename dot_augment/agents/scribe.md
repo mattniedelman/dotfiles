@@ -70,12 +70,24 @@ For each note, capture:
 
 ### Folder Structure
 ```
+knowledge/          - Entity knowledge
+  concepts/         - Technical concepts and learnings
+  technologies/     - Technology notes
+  people/           - Team member insights (be factual)
+  organization/     - Teams and org structure
+artifacts/          - Created work
+  architecture/     - Cross-cutting design decisions
+  specs/            - Design specifications
+  research/         - Research reports
+  patterns/         - Reusable patterns and practices
 projects/           - Project-specific notes
   {project-name}/   - Grouped by project
-architecture/       - Cross-cutting design decisions
-debugging/          - Problem/solution pairs
-patterns/           - Reusable patterns and practices
-team/               - Team member insights (be factual)
+journal/            - Temporal records
+  sessions/YYYY/MM/ - Session case studies by date
+  reviews/          - Monthly reviews
+  arcs/             - Multi-session arcs
+planning/           - Tasks, epics, roadmaps
+_meta/              - Guidelines, reference, working notes
 ```
 
 ### Naming Conventions
