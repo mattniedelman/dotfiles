@@ -13,7 +13,7 @@ return {
         "yamlls", -- YAML (configured by LazyVim lang.yaml extra)
         "jsonls", -- JSON (configured by LazyVim lang.json extra)
         "jqls", -- JSON/jq
-        "marksman", -- Markdown (configured by LazyVim lang.markdown extra)
+        "marksman", -- Markdown LSP
         "tombi", -- TOML
       },
     },
@@ -32,6 +32,8 @@ return {
         "jq", -- JSON processor/formatter
         "yamlfmt", -- YAML formatter (supports yamllint-compatible options)
         "doctoc", -- Markdown TOC generator
+        "markdownlint-cli2", -- Markdown linter
+        "markdown-toc", -- Markdown TOC generator
       },
     },
   },
@@ -44,5 +46,18 @@ return {
       opts.formatters_by_ft.json = { "jq" }
       opts.formatters_by_ft.yaml = { "yamlfmt" }
     end,
+  },
+
+  -- Disable render-markdown.nvim (replaced by markview.nvim)
+  { "MeanderingProgrammer/render-markdown.nvim", enabled = false },
+
+  -- Markdown previewer with wrap support for tables
+  {
+    "OXY2DEV/markview.nvim",
+    lazy = false,
+    ft = { "markdown", "norg", "rmd", "org", "vimwiki", "Avante" },
+    opts = {
+      -- Uses defaults which include wrap support for tables
+    },
   },
 }

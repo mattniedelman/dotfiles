@@ -9,3 +9,4 @@ vim.opt.swapfile = false
 -- Auto-reload settings
 vim.opt.autoread = true -- Automatically read file when changed outside of vim
 vim.opt.updatetime = 250 -- Faster completion and file change detection
+vim.opt.confirm = false -- Don't prompt to save/reload, just do it silently

@@ -1,7 +1,7 @@
 -- LSP Infrastructure & General Language Servers
 -- Core LSP setup and language servers for general-purpose languages
 -- Language-specific LSP servers are configured in their respective files:
---   - python.lua: ruff, zuban
+--   - python.lua: ruff, ty
 --   - shell.lua: bashls, fish_lsp, awk_ls
 --   - markup.lua: yamlls, jqls, marksman, tombi
 

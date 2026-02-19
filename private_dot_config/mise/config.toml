@@ -31,6 +31,7 @@ dua = "latest"
 duckdb = "latest"
 fd = "latest"
 fzf = "latest"
+television = "latest"      # Modern fuzzy finder (tv)
 github-cli = "latest"
 glow = "latest"
 go = 'latest'
@@ -95,6 +96,9 @@ kubectx = "latest"
 ast-grep = "latest"
 yamlfmt = "latest"
 "npm:doctoc" = "latest"
+"pipx:crawl4ai" = "latest"
+"cargo:https://github.com/razziel89/mdslw" = "branch:main"
+"pipx:ty" = "latest"
 
 
 
