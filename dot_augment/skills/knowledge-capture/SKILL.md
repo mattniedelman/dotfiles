@@ -1,6 +1,6 @@
 ---
 name: knowledge-capture
-description: Capture insights, decisions, and learnings from conversations into structured Basic Memory notes with observations and relations
+description: Use when capturing insights, decisions, and learnings into Basic Memory notes with observations and relations
 ---
 
 # Knowledge Capture

@@ -1,6 +1,6 @@
 ---
 name: structured-thinking
-description: Use think-strategies MCP tools for complex debugging, architecture decisions, and investigations that exceed simple direct action
+description: Use when facing complex debugging, architecture decisions, or investigations - leverages think-strategies MCP tools
 ---
 
 # Structured Thinking

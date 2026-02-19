@@ -1,6 +1,6 @@
 ---
 name: python-development
-description: Python patterns, testing with pytest, type hints, modern Python practices, and code organization
+description: Use when developing Python applications - patterns, testing with pytest, type hints, modern practices, and code organization
 ---
 
 # Python Development Patterns

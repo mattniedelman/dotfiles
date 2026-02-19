@@ -1,6 +1,6 @@
 ---
 name: git-workflow
-description: Conventional commits, branch naming, PR guidelines, merge strategies, and git workflow best practices
+description: Use when working with git - conventional commits, branch naming, PR guidelines, merge strategies, and workflow best practices
 ---
 
 # Git Workflow

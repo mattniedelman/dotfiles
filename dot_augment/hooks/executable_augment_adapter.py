@@ -93,8 +93,9 @@ def _transform_post_tool_use(data: dict[str, Any]) -> dict[str, Any]:
         "tool_input": data.get("tool_input", {}),
         "tool_response": tool_response,
         "cwd": cwd,
-        # Preserve Augment-specific fields for access via ctx.raw
+        # Preserve Augment-specific fields for access via ctx._input_data
         "file_changes": data.get("file_changes", []),
+        "workspace_roots": data.get("workspace_roots", []),
     }
 
 
@@ -108,6 +109,8 @@ def _transform_pre_tool_use(data: dict[str, Any]) -> dict[str, Any]:
         "tool_name": data.get("tool_name", "unknown"),
         "tool_input": data.get("tool_input", {}),
         "cwd": cwd,
+        # Preserve Augment-specific fields for access via ctx._input_data
+        "workspace_roots": data.get("workspace_roots", []),
     }
 
 

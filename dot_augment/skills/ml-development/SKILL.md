@@ -1,21 +1,51 @@
 ---
 name: ml-development
-description: Machine learning and data science development patterns - model lifecycle, pipelines, BERTopic, testing, and authorization
+description: Use when working with ML systems - model lifecycle, authorization, and pointers to specialized ML skills for agents, clustering, and anomaly detection
 ---
 
 # ML Development
 
-Guide for machine learning and data science development patterns.
+Hub for machine learning development patterns and specialized skills.
 
-## When to Use
+## Specialized Skills
 
-Use this skill when:
+For specific ML domains, use the dedicated skills:
 
-- Training or deploying ML models
-- Building data pipelines
-- Working with topic modeling (BERTopic)
-- Testing ML code
-- Managing model lifecycle
+| Domain | Skill | Use Case |
+|--------|-------|----------|
+| **Supervised Learning** | | |
+| Regression | `superpowers:regression-modeling` | Linear, Ridge, XGBoost for continuous targets |
+| Classification | `superpowers:classification-modeling` | Binary/multiclass, imbalanced data |
+| **Unsupervised Learning** | | |
+| Clustering | `superpowers:clustering-analysis` | K-Means, DBSCAN, HDBSCAN |
+| Topic Modeling | `superpowers:topic-modeling-bertopic` | BERTopic, document clustering |
+| Dimensionality | `superpowers:dimensionality-reduction` | PCA, UMAP, t-SNE, feature selection |
+| **Deep Learning** | | |
+| PyTorch | `superpowers:pytorch-deep-learning` | Neural networks, training loops, GPU |
+| NLP | `superpowers:nlp-text-processing` | Embeddings, classification, NER |
+| **Probabilistic** | | |
+| Bayesian | `superpowers:probabilistic-modeling` | Pyro, uncertainty, A/B testing |
+| **Formal Methods** | | |
+| Distributed Systems | `superpowers:formal-methods-distributed` | FizzBee, TLA+, Quint, consensus, safety |
+| **Agentic AI** | | |
+| Agent Design | `superpowers:agentic-ai-design` | Tools, planning, memory systems |
+| Multi-Agent | `superpowers:multi-agent-patterns` | Orchestration, delegation, debate |
+| Agent Tools | `superpowers:agentic-tools` | Tool schemas, sandboxing, composition |
+| MCP Servers | `superpowers:mcp-server-development` | Creating MCP tool servers |
+| AI Patterns | `superpowers:ai-design-patterns` | RAG, caching, fallbacks, prompts |
+| **Operations** | | |
+| Testing | `superpowers:ai-testing-patterns` | Model validation, agent testing |
+| Monitoring | `superpowers:ai-monitoring` | Drift detection, metrics, alerting |
+| Pipelines | `superpowers:argo-workflows-hera` | Workflow orchestration, scheduling |
+
+## When to Use This Skill
+
+Use this general skill for:
+
+- Model lifecycle and versioning
+- Authorization requirements
+- Testing patterns that apply across ML domains
+- Performance and resource management
 
 ## Authorization Requirements
 

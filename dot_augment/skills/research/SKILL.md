@@ -1,6 +1,6 @@
 ---
 name: research
-description: Research a topic thoroughly and produce a structured report saved to Basic Memory - investigate concepts, gather context, and document findings
+description: Use when researching a topic - produces structured reports saved to Basic Memory with concepts, context, and findings
 ---
 
 # Research

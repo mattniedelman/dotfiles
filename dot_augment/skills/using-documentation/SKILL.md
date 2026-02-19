@@ -1,6 +1,6 @@
 ---
 name: using-documentation
-description: Access and use library documentation intelligently - check existing crawled docs, trigger crawls when needed, and search for specific information
+description: Use when accessing library documentation - check crawled docs, trigger crawls when needed, and search for information
 ---
 
 # Using Documentation

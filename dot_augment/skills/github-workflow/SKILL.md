@@ -1,6 +1,6 @@
 ---
 name: github-workflow
-description: Guide for GitHub API operations using the github-api tool - PRs, issues, CI status, releases, and search
+description: Use when performing GitHub API operations - PRs, issues, CI status, releases, and search via the github-api tool
 ---
 
 # GitHub Workflow

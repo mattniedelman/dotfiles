@@ -1,6 +1,6 @@
 ---
 name: api-design
-description: API design patterns - RESTful endpoints, client interfaces, service integration, and FastAPI-specific patterns
+description: Use when designing APIs - RESTful endpoints, client interfaces, service integration, and FastAPI-specific patterns
 ---
 
 # API Design

@@ -1,6 +1,6 @@
 ---
 name: auglog-documenter
-description: Document Augment CLI sessions as first-person case studies in Basic Memory
+description: Use when documenting Augment CLI sessions as first-person case studies in Basic Memory
 ---
 
 # Auglog Documenter

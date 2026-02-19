@@ -1,6 +1,6 @@
 ---
 name: observability
-description: Error handling patterns, structured logging, and observability - logs, metrics, traces, correlation IDs, and alerting
+description: Use when implementing observability - error handling, structured logging, metrics, traces, correlation IDs, and alerting
 ---
 
 # Observability
