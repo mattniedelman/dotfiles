@@ -37,27 +37,23 @@ local lsp_cleanup_group = vim.api.nvim_create_augroup("LspCleanup", { clear = tr
 vim.api.nvim_create_autocmd({ "BufDelete", "BufWipeout" }, {
   group = lsp_cleanup_group,
   callback = function(args)
-    local bufnr = args.buf
+    pcall(function()
+      local bufnr = args.buf
+      local clients = vim.lsp.get_clients({ bufnr = bufnr }) or {}
 
-    -- Get all LSP clients attached to this buffer
-    local clients = vim.lsp.get_clients({ bufnr = bufnr })
+      for _, client in ipairs(clients) do
+        local attached_buffers = vim.lsp.get_buffers_by_client_id(client.id) or {}
+        local other_buffers = vim.tbl_filter(function(buf)
+          return buf ~= bufnr and vim.api.nvim_buf_is_valid(buf)
+        end, attached_buffers)
 
-    for _, client in ipairs(clients) do
-      -- Check if this client is attached to any other buffers
-      local attached_buffers = vim.lsp.get_buffers_by_client_id(client.id)
-      local other_buffers = vim.tbl_filter(function(buf)
-        return buf ~= bufnr and vim.api.nvim_buf_is_valid(buf)
-      end, attached_buffers)
-
-      -- If no other valid buffers are attached, stop the client
-      if #other_buffers == 0 then
-        vim.schedule(function()
-          if client and client.id then
-            vim.lsp.stop_client(client.id)
-          end
-        end)
+        if #other_buffers == 0 and client and client.id then
+          vim.schedule(function()
+            pcall(vim.lsp.stop_client, client.id, true)
+          end)
+        end
       end
-    end
+    end)
   end,
 })
 
@@ -65,10 +61,20 @@ vim.api.nvim_create_autocmd({ "BufDelete", "BufWipeout" }, {
 vim.api.nvim_create_autocmd("VimLeavePre", {
   group = lsp_cleanup_group,
   callback = function()
-    local clients = vim.lsp.get_clients()
-    for _, client in ipairs(clients) do
-      vim.lsp.stop_client(client.id)
-    end
+    pcall(function()
+      -- Clear any pending messages before cleanup
+      vim.cmd("silent! messages clear")
+
+      local clients = vim.lsp.get_clients() or {}
+      for _, client in ipairs(clients) do
+        if client and client.id then
+          pcall(vim.lsp.stop_client, client.id, true)
+        end
+      end
+    end)
+
+    -- Clear any error messages generated during cleanup
+    vim.cmd("silent! messages clear")
   end,
 })
 
