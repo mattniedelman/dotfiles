@@ -31,7 +31,17 @@ end
 # ============================================================================
 # Git Aliases
 # ============================================================================
-alias cdr='cd (git rev-parse --show-toplevel)'
+# cdr: cd to git root, preserving symlink paths in PWD
+# git rev-parse --show-toplevel returns the real path, so we substitute
+# the resolved portion of PWD with the original PWD prefix to keep symlinks
+function cdr
+    set -l toplevel (git rev-parse --show-toplevel 2>/dev/null)
+    or return 1
+    set -l real_pwd (realpath $PWD)
+    # If PWD contains a symlink, substitute the real path portion with the symlink path
+    set -l target (string replace $real_pwd $PWD $toplevel)
+    cd $target
+end
 
 # delta: better git diffs (configured via .gitconfig, not aliased)
 
