@@ -108,22 +108,34 @@ Word processors, documentation tools, and copy-paste from web sources often
 introduce Unicode lookalikes that cause issues in code, configs, and terminal
 output.
 
-| Category | ❌ Avoid (Unicode) | ✅ Use (ASCII) |
-|----------|-------------------|----------------|
-| **Dashes** | -- (em dash), - (en dash) | - (hyphen-minus) |
-| **Double quotes** | " " (curly) | " (straight) |
-| **Single quotes** | ' ' (curly) | ' (straight) |
-| **Apostrophes** | ' (right single quote) | ' (apostrophe) |
-| **Ellipsis** | ... (single character) | ... (three periods) |
-| **Spaces** | ` ` (non-breaking), ` ` (em space) | ` ` (regular space) |
-| **Minus sign** | - (minus U+2212) | - (hyphen-minus) |
+| Category | Avoid (Unicode) | Use (ASCII) |
+|----------|-----------------|-------------|
+| **Dashes** | U+2014 em dash, U+2013 en dash | U+002D hyphen-minus `-` |
+| **Double quotes** | U+201C U+201D curly quotes | U+0022 straight quote `"` |
+| **Single quotes** | U+2018 U+2019 curly quotes | U+0027 apostrophe `'` |
+| **Ellipsis** | U+2026 single character | Three periods `...` |
+| **Spaces** | U+00A0 non-breaking, U+2003 em space | U+0020 regular space |
+| **Minus sign** | U+2212 minus sign | U+002D hyphen-minus `-` |
 
-**Examples:**
+**Common sources of non-ASCII characters:**
 
-- ❌ "This is the issue -- it fails silently" → ✅ "This is the issue - it fails
-  silently"
-- ❌ `config["key"]` → ✅ `config["key"]`
-- ❌ `it's broken` (curly apostrophe) → ✅ `it's broken` (straight)
+- Copy-paste from Word, Google Docs, Slack, web pages
+- Conversation history and summaries (often contain U+00A0 non-breaking spaces)
+- AI-generated content that uses typographic characters
+
+### Hook Behavior
+
+The `ascii_fixer.sh` hook runs on PostToolUse and fixes these characters
+automatically.
+When `str-replace-editor` fails with "oldStr did not appear verbatim" and the
+hook reports "ASCII auto-fix applied":
+
+1. The non-breaking spaces were in your `old_str` parameter, not the file
+2. The hook fixed them and the content was likely written successfully
+3. Re-read the file - it may already contain your changes
+
+This happens when copy-pasting from conversation history or summaries that
+contain invisible Unicode characters.
 
 ## Terminology Standards
 
