@@ -27,15 +27,6 @@ return {
     event = { "BufWritePre" },
     cmd = { "ConformInfo" },
     opts = {
-      format_on_save = function(bufnr)
-        local bufname = vim.api.nvim_buf_get_name(bufnr)
-        -- Disable autoformat for files in /tmp
-        if bufname:match("^/tmp/") then
-          return false
-        end
-        -- Default format-on-save settings
-        return { timeout_ms = 500, lsp_format = "fallback" }
-      end,
       formatters_by_ft = {
         lua = { "stylua" },
         go = { "gofumpt", "goimports" },

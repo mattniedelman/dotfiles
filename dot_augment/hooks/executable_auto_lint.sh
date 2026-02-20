@@ -422,7 +422,10 @@ def main() -> None:
     if lint_output:
         context = (
             "LINT ERRORS detected in modified files. "
-            "You MUST fix these before proceeding:\n\n"
+            "You MUST fix ALL of these before proceeding.\n\n"
+            "IMPORTANT: Pre-existing errors are NOT exempt. "
+            "Do NOT skip errors because they were 'already there' or 'out of scope'. "
+            "All errors must be fixed unless the user has explicitly said to ignore them.\n\n"
         )
         context += "\n".join(lint_output)
         debug("Adding context with lint errors")

@@ -103,13 +103,27 @@ write_note_basic-memory(
 - category: debugging|documentation|exploration|etc
 - type: case-study
 
+## Initial Prompt
+
+> [Exact verbatim text of the user's first message that started the session]
+
+This provides immediate context for what triggered the session.
+
 ## What I Was Doing
 
-[1-2 sentences of context]
+[1-2 sentences of context beyond the prompt - why this mattered, what led to it]
 
 ## What Happened
 
-[2-3 paragraphs narrative]
+[2-3 paragraphs narrative with direct quotes woven in]
+
+Include direct excerpts from key moments:
+
+> **Me:** [verbatim user message]
+>
+> **Agent:** [verbatim agent response, can be abbreviated with [...] for long responses]
+
+The narrative should flow around these excerpts, not just summarize them.
 
 ## Key Takeaways
 
@@ -117,13 +131,25 @@ write_note_basic-memory(
 - Point two
 - Point three
 
-## Session Log (abbreviated)
+## Notable Exchanges
 
-### Exchange 1
-**Me:** [user message]
-**Agent:** [summary of response]
+Include 3-5 pivotal moments with full verbatim text:
 
-[Include key exchanges, not all 100+]
+### [Descriptive Label - e.g., "The Breakthrough Moment"]
+
+> **Me:** [exact user message]
+>
+> **Agent:** [exact agent response - include enough to show the substance]
+
+[1-2 sentences explaining why this exchange mattered]
+
+### [Another Key Moment]
+
+> **Me:** [exact text]
+>
+> **Agent:** [exact text]
+
+[Brief commentary]
 
 ## Relations
 
@@ -156,13 +182,46 @@ For arcs, create:
 | def456 | investigation | 20 | 30 min | Validating alternatives |
 | ghi789 | documentation | 100 | multi-day | Writing final doc |
 
+## Opening Prompts
+
+How each session began:
+
+**Session 1 (abc123):**
+> [Exact first message from session 1]
+
+**Session 2 (def456):**
+> [Exact first message from session 2]
+
+**Session 3 (ghi789):**
+> [Exact first message from session 3]
+
 ## The Story
 
 ### Phase 1: [Name]
-[What happened in first session]
+
+[Narrative of first session with direct excerpts woven in]
+
+> **Me:** [key message from session]
+>
+> **Agent:** [key response]
+
+[Continue narrative...]
 
 ### Phase 2: [Name]
-[What happened in second session]
+
+[Narrative with excerpts from second session]
+
+## Pivotal Moments Across the Arc
+
+### [Label - e.g., "When the approach crystallized"]
+
+From session [ID]:
+
+> **Me:** [verbatim]
+>
+> **Agent:** [verbatim]
+
+[Why this mattered to the arc]
 
 ## Key Learnings
 
@@ -289,7 +348,43 @@ recent = [
 5. **Highlight the collaboration** - what the human directed vs agent discovered
 6. **Include honest assessments** - dead ends and pivots are valuable too
 7. **Duration honesty** - use "multi-day" for sessions with overnight gaps
-8. **Abbreviate session logs** - include key exchanges, not every single one
-9. **Add relations** - link to skills demonstrated, tools involved, artifacts
+8. **Add relations** - link to skills demonstrated, tools involved, artifacts
    produced
-10. **Consider arcs** - if sessions are related, document them as an arc
+9. **Consider arcs** - if sessions are related, document them as an arc
+
+## Excerpt Guidelines
+
+**Always include the initial prompt verbatim** - this grounds the entire case
+study in what actually started the session.
+
+**Use direct quotes liberally** - the actual words reveal nuance that summaries
+lose:
+
+- Copy/paste exact text from the session log
+- Use `>` blockquote formatting for all excerpts
+- Use `[...]` to abbreviate long responses while keeping key content
+- Include enough context that excerpts make sense standalone
+
+**Select exchanges that show:**
+
+- The initial framing (always the first prompt)
+- Turning points where understanding shifted
+- Moments of confusion or course correction
+- The breakthrough or resolution
+- Interesting agent reasoning or tool usage
+
+**Weave excerpts into narrative** - don't just dump quotes.
+Introduce them:
+
+- "When I asked about X, the response surprised me:"
+- "The key insight came when the agent noticed:"
+- "After several attempts, I tried a different approach:"
+
+**Length guidance:**
+
+- Initial prompt:
+  always full verbatim
+- Notable exchanges:
+  3-5 per session, enough text to show substance
+- Agent responses:
+  can abbreviate with `[...]` but keep the meat

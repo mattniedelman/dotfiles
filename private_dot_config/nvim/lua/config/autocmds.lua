@@ -78,4 +78,14 @@ vim.api.nvim_create_autocmd("VimLeavePre", {
   end,
 })
 
+-- Disable autoformat for files in /tmp
+local disable_autoformat_group = vim.api.nvim_create_augroup("DisableAutoformat", { clear = true })
+vim.api.nvim_create_autocmd("BufReadPost", {
+  group = disable_autoformat_group,
+  pattern = "/tmp/*",
+  callback = function()
+    vim.b.autoformat = false
+  end,
+})
+
 require("config.chezmoi")
