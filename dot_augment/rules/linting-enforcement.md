@@ -2,13 +2,25 @@
 type: always_apply
 priority: HIGH
 description: Linting suppression policies and approval workflow
-last_updated: 2026-02-19
+last_updated: 2026-02-20
 ---
 
 # Linting Enforcement
 
 Linting runs automatically via `auto_lint.sh` hook after every file edit.
 See `core-development-rules.md` for enforced patterns.
+
+## CRITICAL: All Lint Errors Must Be Addressed
+
+**Pre-existing lint errors are NOT exempt.** All lint errors in modified files
+must be fixed, regardless of whether they existed before the current work.
+
+- Do NOT skip errors because they were "already there"
+- Do NOT rationalize ignoring errors as "out of scope"
+- Pre-existing errors are technical debt to be fixed when the file is touched
+
+**Only exception:** User has explicitly said to ignore a specific error in the
+current conversation.
 
 ## Linting Stack (Automated)
 
@@ -24,6 +36,7 @@ See `core-development-rules.md` for enforced patterns.
 2. **ruff errors** - MUST fix (most auto-fixable with `--fix`)
 3. **Type errors** - MUST fix
 4. **ast-grep warnings** - SHOULD fix
+5. **Pre-existing errors** - MUST fix (no special treatment)
 
 ## Suppression Policy
 

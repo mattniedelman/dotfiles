@@ -99,6 +99,7 @@ yamlfmt = "latest"
 "pipx:crawl4ai" = "latest"
 "cargo:https://github.com/razziel89/mdslw" = "branch:main"
 "pipx:ty" = "latest"
+aws-sigv4-proxy = "1.11.1"
 
 
 

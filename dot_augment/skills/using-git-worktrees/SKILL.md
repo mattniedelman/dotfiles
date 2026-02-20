@@ -18,18 +18,29 @@ isolated workspace."
 
 ## Directory Selection Process
 
-Follow this priority order:
-
-### 1. Check Existing Directories
+**CRITICAL:
+Worktree directories MUST be inside the repository root, NOT siblings.**
 
 ```bash
-# Check in priority order
-ls -d .worktrees 2>/dev/null     # Preferred (hidden)
-ls -d worktrees 2>/dev/null      # Alternative
+# Get the repo root - ALL paths are relative to this
+REPO_ROOT=$(git rev-parse --show-toplevel)
+```
+
+Follow this priority order:
+
+### 1. Check Existing Directories (Inside Repo)
+
+```bash
+# Check in priority order - INSIDE the repo
+ls -d "$REPO_ROOT/.worktrees" 2>/dev/null     # Preferred (hidden)
+ls -d "$REPO_ROOT/worktrees" 2>/dev/null      # Alternative
 ```
 
 **If found:** Use that directory.
 If both exist, `.worktrees` wins.
+
+**WRONG (sibling):** `/path/to/parent/worktrees/repo-name-branch/` **CORRECT
+(inside):** `/path/to/parent/repo-name/.worktrees/branch-name/`
 
 ### 2. Check Project Config
 
@@ -42,11 +53,13 @@ If no directory exists and no preference specified:
 ```text
 No worktree directory found. Where should I create worktrees?
 
-1. .worktrees/ (project-local, hidden)
+1. .worktrees/ (inside repo, hidden) - RECOMMENDED
 2. ~/.config/superpowers/worktrees/<project-name>/ (global location)
 
 Which would you prefer?
 ```
+
+**Note:** Option 1 creates `$REPO_ROOT/.worktrees/`, not a sibling directory.
 
 ## Safety Verification
 
@@ -74,13 +87,26 @@ No .gitignore verification needed - outside project entirely.
 
 ## Creation Steps
 
-### 1. Detect Project Name
+### 1. Detect Project Root and Name
 
 ```bash
-project=$(basename "$(git rev-parse --show-toplevel)")
+REPO_ROOT=$(git rev-parse --show-toplevel)
+project=$(basename "$REPO_ROOT")
 ```
 
-### 2. Create Worktree
+### 2. Verify Target Path is Inside Repo
+
+**CRITICAL CHECK before creating any worktree:**
+
+```bash
+# The worktree parent directory MUST start with $REPO_ROOT
+worktree_parent="$REPO_ROOT/.worktrees"  # or $REPO_ROOT/worktrees
+
+# WRONG - this would be a sibling:
+# worktree_parent="$(dirname "$REPO_ROOT")/worktrees"  # DO NOT DO THIS
+```
+
+### 3. Create Worktree
 
 ```bash
 # Create worktree with new branch
@@ -88,7 +114,7 @@ git worktree add "$path" -b "$BRANCH_NAME"
 cd "$path"
 ```
 
-### 3. Run Project Setup
+### 4. Run Project Setup
 
 Auto-detect and run appropriate setup:
 
@@ -107,7 +133,7 @@ if [ -f pyproject.toml ]; then poetry install; fi
 if [ -f go.mod ]; then go mod download; fi
 ```
 
-### 4. Verify Clean Baseline
+### 5. Verify Clean Baseline
 
 Run tests to ensure worktree starts clean.
 
@@ -115,7 +141,7 @@ Run tests to ensure worktree starts clean.
 
 **If tests pass:** Report ready.
 
-### 5. Report Location
+### 6. Report Location
 
 ```text
 Worktree ready at <full-path>
@@ -138,10 +164,29 @@ Ready to implement <feature-name>
 
 **Never:**
 
+- Create worktree directory as a SIBLING to the repo (e.g., `../worktrees/`)
 - Create worktree without verifying it's ignored (project-local)
 - Skip baseline test verification
 - Proceed with failing tests without asking
 - Assume directory location when ambiguous
+
+**Example of WRONG placement:**
+
+```text
+/home/user/projects/
+├── my-repo/                    # Main repo
+└── worktrees/                  # WRONG - sibling directory
+    └── my-repo-feature-branch/
+```
+
+**Example of CORRECT placement:**
+
+```text
+/home/user/projects/
+└── my-repo/                    # Main repo
+    └── .worktrees/             # CORRECT - inside repo
+        └── feature-branch/
+```
 
 **Always:**
 
