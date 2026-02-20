@@ -345,8 +345,8 @@ Adjust the STORM depth based on the request:
 1. **Phase 3:** Synthesize outline (Core concepts, Implementation options,
    Security, Operations, Trade-offs)
 
-1. **Phase 4:** Generate and save report to
-   `knowledge/research/storm-research-kubernetes-service-mesh-options.md`
+1. **Phase 4:** Generate report and save to Basic Memory via
+   `write_note_basic-memory()` in `knowledge/research/` directory
 
 ## Completion Format
 
