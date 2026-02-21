@@ -1,0 +1,12 @@
+[Unit]
+Description=Basic Memory MCP Server (Streamable HTTP)
+After=network.target
+
+[Service]
+ExecStart=/home/mattniedelman/.local/bin/basic-memory mcp --transport streamable-http --host 127.0.0.1
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=default.target
+

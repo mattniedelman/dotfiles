@@ -1,0 +1,13 @@
+secrets:
+    provider_type: encrypted
+    setup_completed: true
+clients:
+    registered_clients: []
+    auto_discovery: false
+registry_url: ""
+registry_api_url: ""
+local_registry_path: ""
+allow_private_registry_ip: false
+default_group_migration: true
+telemetry_config_migration: true
+middleware_telemetry_migration: true

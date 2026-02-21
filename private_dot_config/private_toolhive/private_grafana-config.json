@@ -1,0 +1,116 @@
+{
+  "schema_version": "v0.1.0",
+  "image": "docker.io/grafana/mcp-grafana:0.10.0",
+  "tools": [
+    "add_activity_to_incident",
+    "create_alert_rule",
+    "create_annotation",
+    "create_folder",
+    "create_graphite_annotation",
+    "create_incident",
+    "delete_alert_rule",
+    "fetch_pyroscope_profile",
+    "find_error_pattern_logs",
+    "find_slow_requests",
+    "generate_deeplink",
+    "get_alert_group",
+    "get_alert_rule_by_uid",
+    "get_annotation_tags",
+    "get_annotations",
+    "get_assertions",
+    "get_current_oncall_users",
+    "get_dashboard_by_uid",
+    "get_dashboard_panel_queries",
+    "get_dashboard_property",
+    "get_dashboard_summary",
+    "get_datasource_by_name",
+    "get_datasource_by_uid",
+    "get_incident",
+    "get_oncall_shift",
+    "get_panel_image",
+    "get_sift_analysis",
+    "get_sift_investigation",
+    "list_alert_groups",
+    "list_alert_rules",
+    "list_contact_points",
+    "list_datasources",
+    "list_incidents",
+    "list_loki_label_names",
+    "list_loki_label_values",
+    "list_oncall_schedules",
+    "list_oncall_teams",
+    "list_oncall_users",
+    "list_pyroscope_label_names",
+    "list_pyroscope_label_values",
+    "list_pyroscope_profile_types",
+    "list_sift_investigations",
+    "patch_annotation",
+    "query_loki_logs",
+    "query_loki_patterns",
+    "query_loki_stats",
+    "search_dashboards",
+    "search_folders",
+    "update_alert_rule",
+    "update_annotation",
+    "update_dashboard"
+  ],
+  "cmd_args": [
+    "-transport",
+    "stdio"
+  ],
+  "name": "grafana",
+  "container_name": "grafana",
+  "base_name": "grafana",
+  "transport": "stdio",
+  "host": "127.0.0.1",
+  "port": 23999,
+  "target_host": "127.0.0.1",
+  "permission_profile": {
+    "name": "network",
+    "network": {
+      "outbound": {
+        "insecure_allow_all": true
+      },
+      "inbound": {}
+    }
+  },
+  "env_vars": {
+    "GRAFANA_ORG_ID": "1",
+    "GRAFANA_URL": "https://g-d364abe43b.grafana-workspace.us-east-2.amazonaws.com",
+    "MCP_TRANSPORT": "stdio"
+  },
+  "container_labels": {
+    "toolhive": "true",
+    "toolhive-basename": "grafana",
+    "toolhive-name": "grafana",
+    "toolhive-port": "23999",
+    "toolhive-transport": "stdio"
+  },
+  "secrets": [
+    "GRAFANA_SERVICE_ACCOUNT_TOKEN,target=GRAFANA_SERVICE_ACCOUNT_TOKEN"
+  ],
+  "proxy_mode": "streamable-http",
+  "group": "default",
+  "ignore_config": {
+    "LoadGlobal": true,
+    "PrintOverlays": false
+  },
+  "middleware_configs": [
+    {
+      "type": "auth",
+      "parameters": {}
+    },
+    {
+      "type": "mcp-parser",
+      "parameters": {}
+    },
+    {
+      "type": "usagemetrics",
+      "parameters": {}
+    },
+    {
+      "type": "recovery",
+      "parameters": null
+    }
+  ]
+}

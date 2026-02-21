@@ -1,0 +1,12 @@
+[metadata]
+name = "git-diff"
+description = "A channel to select files and directories from git diff commands"
+requirements = ["git"]
+
+[source]
+# Show both individual files and all ancestor directories
+# Files come from git diff + untracked, directories extracted recursively
+command = "begin; git diff --name-only HEAD; git ls-files --others --exclude-standard; end | while read -l f; echo $f; set -l d $f; while set d (dirname $d); and test $d != '.'; echo $d/; end; end | sort -u"
+
+[preview]
+command = "git diff HEAD --color=always -- '{}' 2>/dev/null || git diff --no-index /dev/null '{}' --color=always 2>/dev/null || ls -la '{}'"

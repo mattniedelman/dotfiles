@@ -1,0 +1,54 @@
+# Ghostty config - replicated from kitty setup
+# ==============================================
+
+# Font settings (matching kitty)
+font-family = "Hack Nerd Font"
+font-size = 13
+
+# Scrollback (matching kitty's 100000 lines)
+scrollback-limit = 100000000
+
+# Copy on select (like kitty's copy_on_select yes)
+copy-on-select = clipboard
+app-notifications = no-clipboard-copy
+
+# Window decorations
+window-decoration = true
+
+# Theme
+theme = Kanagawa Wave
+
+# Split styling
+unfocused-split-opacity = 0.9
+split-divider-color = #54546D
+
+# Rendering options for smoother splits
+window-vsync = true
+alpha-blending = linear-corrected
+async-backend = io_uring
+
+# Resize overlay position
+resize-overlay-position = bottom-right
+
+# -----------------------------------------------------------------------------
+# Keybindings (matching kitty)
+# -----------------------------------------------------------------------------
+
+# Split creation (matching kitty's ctrl+\ and ctrl+-)
+keybind = ctrl+\=new_split:right
+keybind = ctrl+-=new_split:down
+
+# Split navigation (matching kitty's ctrl+j/k/h/l)
+keybind = ctrl+h=goto_split:left
+keybind = ctrl+j=goto_split:down
+keybind = ctrl+k=goto_split:up
+keybind = ctrl+l=goto_split:right
+
+# Close single pane/split (not the whole tab)
+keybind = ctrl+shift+w=close_surface
+
+# Toggle zoom (like kitty's ctrl+alt+z toggle_layout stack)
+keybind = ctrl+alt+z=toggle_split_zoom
+
+# Reset window size (like kitty's ctrl+home resize_window reset)
+keybind = ctrl+home=reset_window_size
