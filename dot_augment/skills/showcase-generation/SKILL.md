@@ -1,4 +1,5 @@
 ---
+name: showcase-generation
 description: Use when generating or updating annotated files for the showcase repository
 ---
 
@@ -73,13 +74,19 @@ case-studies/{case-name}/
 
 ### README.md (Main Narrative)
 
-The primary document. Include:
+The primary document.
+Include:
 
-- **Overview table**: Sessions, total exchanges, date range, pattern, artifacts
-- **The Problem**: What I was trying to solve
-- **Session Timeline**: Brief summary of each session with quotes
-- **What Made This Work**: Patterns that contributed to success
-- **Key Takeaways**: Bullets summarizing learnings
+- **Overview table**:
+  Sessions, total exchanges, date range, pattern, artifacts
+- **The Problem**:
+  What I was trying to solve
+- **Session Timeline**:
+  Brief summary of each session with quotes
+- **What Made This Work**:
+  Patterns that contributed to success
+- **Key Takeaways**:
+  Bullets summarizing learnings
 
 ### arc.md (Arc Metadata)
 
@@ -124,23 +131,29 @@ Structured metadata pulled from Basic Memory arc notes:
 Each session file provides substantive detail beyond what's in the README.
 Include:
 
-- **Metadata**: session_id, date, exchanges, category
-- **Initial Prompt**: The actual prompt (or summary if long)
-- **What I Was Doing**: Context for why this session happened
-- **What Happened**: Detailed subsections describing the work
-- **Key Takeaways**: Session-specific learnings
+- **Metadata**:
+  session_id, date, exchanges, category
+- **Initial Prompt**:
+  The actual prompt (or summary if long)
+- **What I Was Doing**:
+  Context for why this session happened
+- **What Happened**:
+  Detailed subsections describing the work
+- **Key Takeaways**:
+  Session-specific learnings
 
 **Session file substance matters.** Include:
 
-- Actual quotes from the conversation (with `> **Me:**` and `> **Agent:**` format)
+- Actual quotes from the conversation (with `> **Me:**` and `> **Agent:**`
+  format)
 - Structured "What Happened" subsections describing phases of work
 - Specific details that add value beyond the README summary
 
 ### Single-Session Arcs
 
-Single-session arcs are valid case studies. Marathon sessions (300+ exchanges)
-often contain enough material for a complete case study with iterative
-refinement within one conversation.
+Single-session arcs are valid case studies.
+Marathon sessions (300+ exchanges) often contain enough material for a complete
+case study with iterative refinement within one conversation.
 
 ## Markdownlint Patterns
 
@@ -201,9 +214,12 @@ INFO for request/response summaries, DEBUG for detailed execution flow.
 
 Pull case study content from Basic Memory:
 
-1. **Arc notes**: `journal/arcs/multi-session-arc-{name}`
-2. **Session notes**: `journal/sessions/YYYY/MM/{session-name}`
-3. **Learning notes**: `learnings/{topic}`
+1. **Arc notes**:
+   `journal/arcs/multi-session-arc-{name}`
+2. **Session notes**:
+   `journal/sessions/YYYY/MM/{session-name}`
+3. **Learning notes**:
+   `learnings/{topic}`
 
 Include actual quotes and specific details from these sources rather than
 generic summaries.
@@ -416,5 +432,7 @@ Before completing any showcase file:
 - [ ] Consecutive blockquotes use `>` continuation (not blank lines)
 - [ ] No markdown headers inside blockquotes
 - [ ] Links to related items are valid
-- [ ] Line count is appropriate (full: 100-200, summary: 30-60)
+- [ ] Line count is appropriate (full:
+  100-200, summary:
+  30-60)
 - [ ] Session files include actual quotes and substantive detail
