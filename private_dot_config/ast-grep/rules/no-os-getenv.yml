@@ -1,0 +1,43 @@
+id: no-os-getenv
+language: python
+severity: warning
+message: |
+  Avoid reading environment variables directly. Use pydantic-settings instead.
+
+rule:
+  any:
+    - pattern: os.getenv($$$ARGS)
+    - pattern: os.environ.get($$$ARGS)
+    - pattern: os.environ[$KEY]
+    - pattern: getenv($$$ARGS)
+    - pattern: environ.get($$$ARGS)
+    - pattern: environ[$KEY]
+
+note: |
+  Direct environment variable access scatters configuration throughout
+  the codebase and lacks validation, typing, and documentation.
+
+  Instead of:
+    timeout = int(os.getenv("TIMEOUT", "30"))
+    api_key = os.environ["API_KEY"]
+    debug = os.environ.get("DEBUG", "false").lower() == "true"
+
+  Use pydantic-settings:
+    from pydantic_settings import BaseSettings
+
+    class Settings(BaseSettings):
+        timeout: int = 30
+        api_key: str
+        debug: bool = False
+
+        model_config = SettingsConfigDict(env_prefix="MYAPP_")
+
+    settings = Settings()
+
+  Benefits:
+  - Centralized configuration with clear documentation
+  - Automatic type conversion and validation
+  - IDE support with autocomplete
+  - Easy to test with different configurations
+  - Environment variable prefixes to avoid collisions
+  - Support for .env files out of the box

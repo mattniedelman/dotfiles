@@ -1,0 +1,43 @@
+id: no-string-concat-in-loop
+language: python
+severity: warning
+message: |
+  String concatenation with += in a loop is O(n²). Use str.join() or a list instead.
+
+rule:
+  all:
+    - pattern: $VAR += $VAL
+    - inside:
+        stopBy: end
+        any:
+          - kind: for_statement
+          - kind: while_statement
+constraints:
+  VAL:
+    kind: string
+
+note: |
+  Strings in Python are immutable. Each += creates a new string and
+  copies all previous content, resulting in O(n²) time complexity.
+
+  Instead of:
+    result = ""
+    for item in items:
+        result += str(item) + ", "
+
+  Use str.join():
+    result = ", ".join(str(item) for item in items)
+
+  Or build a list and join:
+    parts = []
+    for item in items:
+        parts.append(str(item))
+    result = ", ".join(parts)
+
+  Or use a list comprehension:
+    result = ", ".join([str(item) for item in items])
+
+  Performance difference:
+  - 1,000 items: ~10x slower with +=
+  - 10,000 items: ~100x slower with +=
+  - 100,000 items: ~1000x slower with +=

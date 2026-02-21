@@ -1,0 +1,32 @@
+id: no-import-in-function
+language: python
+severity: error
+message: |
+  Imports inside functions are prohibited.
+  Move import statements to the top of the module.
+
+rule:
+  any:
+    - kind: import_statement
+    - kind: import_from_statement
+  inside:
+    stopBy: end
+    kind: function_definition
+
+note: |
+  Rationale:
+  - Imports at module level are evaluated once at import time
+  - Imports inside functions are re-evaluated on each call
+  - Module-level imports make dependencies explicit and visible
+  - Tools like linters and type checkers work better with top-level imports
+
+  Instead of:
+    def process_file(path):
+        from pathlib import Path
+        return Path(path).read_text()
+
+  Use:
+    from pathlib import Path
+
+    def process_file(path):
+        return Path(path).read_text()

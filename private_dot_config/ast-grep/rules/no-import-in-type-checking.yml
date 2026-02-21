@@ -1,0 +1,41 @@
+id: no-import-in-type-checking
+language: python
+severity: error
+message: |
+  Imports inside `if TYPE_CHECKING:` blocks are prohibited.
+  Use regular imports instead - type-checking-only imports can cause runtime issues with some libraries.
+
+rule:
+  any:
+    - kind: import_statement
+    - kind: import_from_statement
+  inside:
+    stopBy: end
+    kind: if_statement
+    has:
+      kind: identifier
+      field: condition
+      regex: "^TYPE_CHECKING$"
+
+note: |
+  Rationale:
+  - Some libraries like SQLAlchemy require actual imports at runtime for proper functionality
+  - Forward references with string annotations (`"ClassName"`) can fail with runtime introspection
+  - ORM relationships, serializers, and other dynamic systems may not work correctly
+  - Avoiding TYPE_CHECKING blocks ensures consistent behavior between runtime and type checking
+
+  Instead of:
+    from typing import TYPE_CHECKING
+
+    if TYPE_CHECKING:
+        from sqlalchemy import Column
+
+    class User:
+        id: "Column[int]"
+
+  Use:
+    from sqlalchemy import Column
+
+    class User:
+        id: Column[int]
+

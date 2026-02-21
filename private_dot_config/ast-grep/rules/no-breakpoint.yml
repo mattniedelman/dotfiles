@@ -1,0 +1,19 @@
+id: no-breakpoint
+language: python
+severity: error
+message: |
+  Remove breakpoint() before committing - debug code should not be in production.
+
+rule:
+  pattern: "breakpoint()"
+
+note: |
+  breakpoint() is useful during development but should never be
+  committed to the repository.
+  
+  If you need debugging in production, use:
+  - Proper logging with appropriate levels
+  - Structured logging for searchability
+  - Observability tools (tracing, metrics)
+  - Remote debugging tools if absolutely necessary
+

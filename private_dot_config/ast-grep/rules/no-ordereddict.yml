@@ -1,0 +1,25 @@
+id: no-ordereddict
+language: python
+severity: warning
+message: |
+  Use regular dict instead of OrderedDict (dicts maintain order since Python 3.7).
+
+rule:
+  any:
+    - pattern: "OrderedDict($$$ARGS)"
+    - pattern: "from collections import OrderedDict"
+
+note: |
+  Since Python 3.7, regular dicts maintain insertion order.
+  
+  Instead of:
+    from collections import OrderedDict
+    data = OrderedDict([('a', 1), ('b', 2)])
+  
+  Use:
+    data = {'a': 1, 'b': 2}
+  
+  Note: OrderedDict still has some unique features like move_to_end()
+  and equality comparison that considers order. Only use it if you
+  specifically need those features.
+

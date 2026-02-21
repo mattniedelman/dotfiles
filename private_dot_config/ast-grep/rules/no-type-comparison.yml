@@ -1,0 +1,36 @@
+id: no-type-comparison
+language: python
+severity: warning
+message: |
+  Use isinstance() instead of type() comparison.
+
+rule:
+  any:
+    - pattern: "type($X) == $TYPE"
+    - pattern: "type($X) is $TYPE"
+    - pattern: "type($X) != $TYPE"
+    - pattern: "type($X) is not $TYPE"
+    - pattern: "$TYPE == type($X)"
+    - pattern: "$TYPE is type($X)"
+    - pattern: "$TYPE != type($X)"
+    - pattern: "$TYPE is not type($X)"
+
+note: |
+  type() comparison doesn't account for inheritance, while
+  isinstance() properly handles subclasses.
+
+  Instead of:
+    if type(obj) == MyClass:
+        ...
+    if type(obj) is str:
+        ...
+
+  Use:
+    if isinstance(obj, MyClass):
+        ...
+    if isinstance(obj, str):
+        ...
+
+  isinstance() also supports multiple types:
+    if isinstance(obj, (str, bytes)):
+        ...

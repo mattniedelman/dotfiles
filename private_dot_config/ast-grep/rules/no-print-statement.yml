@@ -1,0 +1,30 @@
+id: no-print-statement
+language: python
+severity: warning
+message: |
+  Avoid print() statements. Use proper logging instead.
+
+rule:
+  pattern: print($$$ARGS)
+
+note: |
+  Print statements are often left in production code accidentally
+  and lack the features of proper logging.
+
+  Instead of:
+    print("Processing:", item)
+    print(f"Error: {error}")
+
+  Use logging:
+    import logging
+    logger = logging.getLogger(__name__)
+
+    logger.info("Processing: %s", item)
+    logger.error("Error: %s", error)
+
+  Benefits:
+  - Log levels (DEBUG, INFO, WARNING, ERROR, CRITICAL)
+  - Configurable output (file, stdout, external services)
+  - Structured logging support
+  - Can be filtered and routed
+  - Includes timestamps and context automatically

@@ -1,0 +1,24 @@
+id: no-os-listdir
+language: python
+severity: warning
+message: |
+  Use Path.iterdir() instead of os.listdir().
+
+rule:
+  any:
+    - pattern: "os.listdir($$$ARGS)"
+    - pattern: "from os import listdir"
+
+note: |
+  pathlib provides an iterator that yields Path objects.
+  
+  Instead of:
+    import os
+    for name in os.listdir(directory):
+        full_path = os.path.join(directory, name)
+  
+  Use:
+    from pathlib import Path
+    for path in Path(directory).iterdir():
+        # path is already a full Path object
+

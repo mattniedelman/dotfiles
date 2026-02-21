@@ -1,0 +1,24 @@
+id: no-os-path-splitext
+language: python
+severity: warning
+message: |
+  Use Path.suffix and Path.stem instead of os.path.splitext().
+
+rule:
+  any:
+    - pattern: "os.path.splitext($PATH)"
+    - pattern: "from os.path import splitext"
+
+note: |
+  pathlib provides cleaner access to file extensions.
+  
+  Instead of:
+    import os.path
+    name, ext = os.path.splitext(filename)
+  
+  Use:
+    from pathlib import Path
+    p = Path(filename)
+    name = p.stem  # filename without extension
+    ext = p.suffix  # extension including the dot
+

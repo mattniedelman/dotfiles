@@ -1,0 +1,48 @@
+id: no-mutable-class-attribute
+language: python
+severity: error
+message: |
+  Mutable class attributes are shared between all instances. Use instance attributes or field(default_factory=...).
+
+rule:
+  kind: assignment
+  any:
+    - has:
+        kind: list
+        field: right
+    - has:
+        kind: dictionary
+        field: right
+    - has:
+        kind: set
+        field: right
+    - pattern: $ATTR = set()
+  inside:
+    kind: expression_statement
+    inside:
+      kind: block
+      inside:
+        kind: class_definition
+
+note: |
+  Mutable class attributes are shared between ALL instances of the class,
+  not per-instance. This is the class-level version of the mutable default
+  argument problem.
+
+  Instead of:
+    class User:
+        roles = []  # Shared between ALL users!
+
+  Use instance attributes in __init__:
+    class User:
+        def __init__(self):
+            self.roles = []
+
+  Or with dataclasses:
+    @dataclass
+    class User:
+        roles: list[str] = field(default_factory=list)
+
+  Or with Pydantic:
+    class User(BaseModel):
+        roles: list[str] = Field(default_factory=list)

@@ -1,0 +1,38 @@
+id: no-nonlocal-statement
+language: python
+severity: warning
+message: |
+  The 'nonlocal' keyword captures variables from parent scope.
+  Consider passing the value as a function parameter instead.
+
+rule:
+  kind: nonlocal_statement
+  inside:
+    stopBy: end
+    kind: function_definition
+
+note: |
+  Rationale:
+  - Nonlocal variables create implicit dependencies on parent scope
+  - Functions should receive all inputs via their signature
+  - Makes the function harder to test in isolation
+  - Parent scope mutations are a form of hidden side effect
+  
+  Instead of:
+    def outer():
+        total = 0
+        def add(x):
+            nonlocal total
+            total += x
+        add(1)
+        return total
+  
+  Use:
+    def add(total: int, x: int) -> int:
+        return total + x
+    
+    def outer():
+        total = 0
+        total = add(total, 1)
+        return total
+

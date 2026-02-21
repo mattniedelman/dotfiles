@@ -1,0 +1,23 @@
+id: no-typing-optional
+language: python
+severity: warning
+message: |
+  Use X | None instead of Optional[X] (Python 3.10+).
+
+rule:
+  any:
+    - pattern: "Optional[$TYPE]"
+    - pattern: "from typing import Optional"
+
+note: |
+  Modern Python 3.10+ supports union syntax with |.
+  
+  Instead of:
+    from typing import Optional
+    def get_user(id: int) -> Optional[User]:
+        ...
+  
+  Use:
+    def get_user(id: int) -> User | None:
+        ...
+

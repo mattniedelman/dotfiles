@@ -1,0 +1,39 @@
+id: no-time-sleep-in-tests
+language: python
+severity: warning
+message: |
+  Avoid time.sleep() in tests. Use polling, events, or async patterns instead.
+
+rule:
+  pattern: "time.sleep($DURATION)"
+
+note: |
+  time.sleep() in tests is usually a sign of a race condition being
+  papered over. It makes tests slow and flaky.
+  
+  Instead of:
+    def test_async_operation():
+        start_operation()
+        time.sleep(2)  # Wait for completion
+        assert is_complete()
+  
+  Use polling with timeout:
+    def test_async_operation():
+        start_operation()
+        for _ in range(20):
+            if is_complete():
+                break
+            time.sleep(0.1)
+        assert is_complete()
+  
+  Or use proper async patterns:
+    async def test_async_operation():
+        await start_operation()
+        await asyncio.wait_for(completion_event.wait(), timeout=2.0)
+        assert is_complete()
+  
+  Or use tenacity for retries:
+    @retry(stop=stop_after_delay(2), wait=wait_fixed(0.1))
+    def wait_for_complete():
+        assert is_complete()
+
