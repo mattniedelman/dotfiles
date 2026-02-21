@@ -1,0 +1,36 @@
+id: no-dataclass
+language: python
+severity: warning
+message: |
+  Use Pydantic BaseModel instead of dataclass.
+
+rule:
+  any:
+    - pattern: "@dataclass"
+    - pattern: "@dataclass($$$ARGS)"
+    - pattern: "from dataclasses import dataclass"
+
+note: |
+  Pydantic provides validation, serialization, and better tooling.
+  
+  Instead of:
+    from dataclasses import dataclass
+    
+    @dataclass
+    class User:
+        name: str
+        age: int
+  
+  Use:
+    from pydantic import BaseModel
+    
+    class User(BaseModel):
+        name: str
+        age: int
+  
+  Benefits of Pydantic:
+  - Built-in validation
+  - JSON serialization with model_dump()
+  - Schema generation
+  - Better IDE support
+

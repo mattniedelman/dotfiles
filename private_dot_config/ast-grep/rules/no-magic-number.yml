@@ -1,0 +1,45 @@
+id: no-magic-number
+language: python
+severity: hint
+message: |
+  Magic number in comparison. Consider using a named constant or configuration.
+
+rule:
+  kind: comparison_operator
+  has:
+    kind: integer
+    regex: "^[2-9]|[1-9][0-9]+$"
+
+note: |
+  Magic numbers are numeric literals without clear meaning.
+  They make code harder to understand and maintain.
+
+  Instead of:
+    if retry_count > 3:
+    if timeout < 30:
+    if len(items) > 100:
+
+  Use configuration (preferred):
+    if retry_count > settings.max_retries:
+    if timeout < config.default_timeout:
+
+  Or class attributes:
+    class RetryPolicy:
+        max_retries: int = 3
+
+    if retry_count > policy.max_retries:
+
+  Or default arguments:
+    def fetch(url: str, max_retries: int = 3) -> Response:
+        if retry_count > max_retries:
+            ...
+
+  Avoid module-level constants (see no-module-level-variable rule).
+
+  Acceptable magic numbers:
+  - 0, 1, -1 (common boundary values)
+  - Numbers in tests with clear context
+  - Mathematical constants (use math.pi, etc.)
+
+  Note: This rule only catches numbers in comparisons.
+  It may have false positives; use judgment.

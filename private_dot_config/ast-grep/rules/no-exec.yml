@@ -1,0 +1,23 @@
+id: no-exec
+language: python
+severity: error
+message: |
+  exec() is a security risk. Avoid executing arbitrary code.
+
+rule:
+  pattern: "exec($$$ARGS)"
+
+note: |
+  exec() executes arbitrary Python code and is a major security risk.
+  
+  Instead of dynamically executing code, consider:
+  - Using a plugin system with well-defined interfaces
+  - Configuration-driven behavior
+  - Strategy pattern for runtime behavior selection
+  - importlib for dynamic module loading
+  
+  If you absolutely need dynamic code execution, ensure:
+  - Input is never from untrusted sources
+  - Code is thoroughly sandboxed
+  - There's a strong justification documented
+

@@ -1,0 +1,22 @@
+id: no-os-getcwd
+language: python
+severity: warning
+message: |
+  Use Path.cwd() instead of os.getcwd().
+
+rule:
+  any:
+    - pattern: "os.getcwd()"
+    - pattern: "from os import getcwd"
+
+note: |
+  pathlib provides a more consistent interface for path operations.
+  
+  Instead of:
+    import os
+    current = os.getcwd()
+  
+  Use:
+    from pathlib import Path
+    current = Path.cwd()
+

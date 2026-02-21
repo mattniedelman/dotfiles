@@ -1,0 +1,27 @@
+id: no-star-import
+language: python
+severity: warning
+message: |
+  Avoid wildcard imports. Import specific names instead.
+
+rule:
+  pattern: "from $MODULE import *"
+
+note: |
+  Wildcard imports pollute the namespace and make it unclear where
+  names come from, hurting readability and tooling.
+  
+  Instead of:
+    from os.path import *
+    from mymodule import *
+  
+  Use explicit imports:
+    from os.path import join, exists, dirname
+    from mymodule import MyClass, my_function
+  
+  Benefits:
+  - Clear dependencies
+  - Better IDE support (autocomplete, go-to-definition)
+  - Easier to track unused imports
+  - No accidental name shadowing
+

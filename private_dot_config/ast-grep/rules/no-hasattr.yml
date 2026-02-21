@@ -1,0 +1,36 @@
+id: no-hasattr
+language: python
+severity: warning
+message: |
+  hasattr() is often a code smell. Consider using protocols or explicit checks.
+
+rule:
+  pattern: "hasattr($OBJ, $ATTR)"
+
+note: |
+  hasattr() indicates duck typing that should be made explicit with
+  protocols or proper type hints. If you can define the expected
+  interface, you MUST do so instead of using hasattr().
+
+  Instead of:
+    if hasattr(obj, 'process'):
+        obj.process()
+
+  Use a Protocol:
+    from typing import Protocol
+
+    class Processable(Protocol):
+        def process(self) -> None: ...
+
+    def handle(obj: Processable) -> None:
+        obj.process()
+
+  Or use try/except for EAFP style:
+    try:
+        obj.process()
+    except AttributeError:
+        handle_missing()
+
+  hasattr() is ONLY acceptable when working with truly unknown objects
+  (e.g., plugin systems, compatibility shims for optional dependencies).
+  If you control the types involved, define a Protocol instead.

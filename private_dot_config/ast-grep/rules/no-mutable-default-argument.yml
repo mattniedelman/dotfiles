@@ -1,0 +1,38 @@
+id: no-mutable-default-argument
+language: python
+severity: error
+message: |
+  Mutable default arguments are shared between calls. Use None and create inside function.
+
+rule:
+  kind: default_parameter
+  has:
+    field: value
+    any:
+      - kind: list
+      - kind: dictionary
+      - pattern: set()
+
+note: |
+  Mutable default arguments are a classic Python gotcha. The default
+  value is created once when the function is defined, not each time
+  it's called.
+
+  Instead of:
+    def append_to(item, target=[]):
+        target.append(item)
+        return target
+
+  Use:
+    def append_to(item, target=None):
+        if target is None:
+            target = []
+        target.append(item)
+        return target
+
+  Or with type hints:
+    def append_to(item: str, target: list[str] | None = None) -> list[str]:
+        if target is None:
+            target = []
+        target.append(item)
+        return target

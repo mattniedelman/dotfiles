@@ -1,0 +1,60 @@
+id: no-module-level-variable
+language: python
+severity: warning
+message: |
+  Avoid module-level variables. Consider using configuration, default arguments, or class attributes instead.
+
+rule:
+  all:
+    - kind: assignment
+    - inside:
+        kind: expression_statement
+        inside:
+          kind: module
+    - not:
+        any:
+          - pattern: "$NAME: $TYPE = $VALUE"
+          - has:
+              kind: call
+              field: right
+          - has:
+              kind: identifier
+              field: left
+              regex: "^__[a-z_]+__$"
+
+note: |
+  Module-level variables with hardcoded literals create implicit global
+  state that makes code harder to test, configure, and reason about.
+
+  Exceptions (not flagged):
+  - Explicit type annotations: MyType: TypeAlias = str | int
+  - Function/class calls: app = FastAPI(), logger = getLogger(__name__)
+  - Dunder variables: __all__, __version__, etc.
+
+  Instead of:
+    config = {"timeout": 30}
+    max_retries = 5
+    _cache = {}
+
+  Consider:
+  1. Configuration objects:
+       @dataclass
+       class Config:
+           timeout: int = 30
+           max_retries: int = 5
+
+  2. Default function arguments:
+       def fetch(url: str, timeout: int = 30): ...
+
+  3. Class attributes:
+       class Client:
+           default_timeout = 30
+
+  4. Explicit type aliases (use TypeAlias annotation):
+       MyType: TypeAlias = str | int
+
+  Benefits:
+  - Easier to test with different values
+  - Clear ownership and scope
+  - Configuration can vary per environment
+  - No hidden dependencies

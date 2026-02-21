@@ -1,0 +1,36 @@
+id: no-len-comparison
+language: python
+severity: warning
+message: |
+  Use truthiness instead of len() comparison for empty checks.
+
+rule:
+  any:
+    - pattern: "len($X) == 0"
+    - pattern: "len($X) > 0"
+    - pattern: "len($X) != 0"
+    - pattern: "len($X) < 1"
+    - pattern: "len($X) >= 1"
+    - pattern: "0 == len($X)"
+    - pattern: "0 < len($X)"
+    - pattern: "0 != len($X)"
+
+note: |
+  Python collections are truthy when non-empty and falsy when empty.
+  Using len() for empty checks is verbose and less Pythonic.
+  
+  Instead of:
+    if len(items) == 0:
+        ...
+    if len(items) > 0:
+        ...
+  
+  Use:
+    if not items:
+        ...
+    if items:
+        ...
+  
+  Note: len() comparison is appropriate when checking for a specific
+  length other than 0, e.g., len(items) == 3.
+

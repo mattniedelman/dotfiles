@@ -1,0 +1,35 @@
+id: no-mock-patch
+language: python
+severity: warning
+message: |
+  Avoid mock.patch - use dependency injection or real implementations instead.
+
+rule:
+  any:
+    - pattern: "@patch($$$ARGS)"
+    - pattern: "@mock.patch($$$ARGS)"
+    - pattern: "with patch($$$ARGS): $$$BODY"
+    - pattern: "with mock.patch($$$ARGS): $$$BODY"
+    - pattern: "patch($$$ARGS)"
+
+note: |
+  Mocking often tests implementation details rather than behavior,
+  leading to brittle tests that break during refactoring.
+  
+  Instead of:
+    @patch('mymodule.external_service')
+    def test_something(mock_service):
+        mock_service.return_value = "fake"
+        ...
+  
+  Use dependency injection:
+    def test_something():
+        fake_service = FakeExternalService()
+        result = my_function(service=fake_service)
+        ...
+  
+  Or use real implementations:
+  - In-memory databases
+  - Test containers
+  - Fake implementations that mirror real behavior
+

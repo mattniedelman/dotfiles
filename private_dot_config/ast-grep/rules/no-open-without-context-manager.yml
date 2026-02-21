@@ -1,0 +1,26 @@
+id: no-open-without-context-manager
+language: python
+severity: warning
+message: |
+  Avoid bare open() without context manager.
+  Use 'with open(...) as f:' to ensure proper resource cleanup.
+
+rule:
+  pattern: open($$$ARGS)
+  not:
+    inside:
+      stopBy: end
+      kind: with_statement
+
+note: |
+  From python-development.md:
+  "Use context managers for resource management"
+
+  Instead of:
+    f = open("data.txt")
+    data = f.read()
+    f.close()
+
+  Use:
+    with open("data.txt") as f:
+        data = f.read()

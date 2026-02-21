@@ -1,0 +1,37 @@
+id: no-bool-comparison
+language: python
+severity: warning
+message: |
+  Don't compare to True/False explicitly. Use the value directly or with 'not'.
+
+rule:
+  any:
+    - pattern: $EXPR == True
+    - pattern: $EXPR == False
+    - pattern: $EXPR is True
+    - pattern: $EXPR is False
+    - pattern: True == $EXPR
+    - pattern: False == $EXPR
+    - pattern: True is $EXPR
+    - pattern: False is $EXPR
+
+note: |
+  Explicit comparison to True/False is redundant and can cause bugs
+  with truthy/falsy values.
+
+  Instead of:
+    if is_valid == True:
+    if flag == False:
+    if result is True:
+
+  Use:
+    if is_valid:
+    if not flag:
+    if result:  # or 'if result is not None:' if checking for None
+
+  Why this matters:
+  - `1 == True` is True, but `2 == True` is False
+  - `[] == False` is False (empty list is falsy but not equal to False)
+
+  Exception: When you specifically need to distinguish True from
+  other truthy values (rare), use 'is True'.

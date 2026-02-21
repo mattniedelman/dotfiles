@@ -1,0 +1,33 @@
+id: no-f-string-without-placeholder
+language: python
+severity: warning
+message: |
+  f-string without placeholders. Use a regular string instead.
+
+rule:
+  kind: string
+  has:
+    kind: string_start
+    regex: "^f['\"]"
+  not:
+    has:
+      kind: interpolation
+
+note: |
+  An f-string without any {expression} placeholders is unnecessary
+  and may indicate a forgotten interpolation.
+
+  Instead of:
+    message = f"Hello world"
+    query = f"SELECT * FROM users"
+
+  Use regular strings:
+    message = "Hello world"
+    query = "SELECT * FROM users"
+
+  Or if you intended to interpolate:
+    message = f"Hello {name}"
+    query = f"SELECT * FROM {table}"
+
+  The f-prefix adds minor overhead and suggests interpolation
+  is happening when it isn't.

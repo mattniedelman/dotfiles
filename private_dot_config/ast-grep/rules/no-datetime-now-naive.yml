@@ -1,0 +1,33 @@
+id: no-datetime-now-naive
+language: python
+severity: warning
+message: |
+  datetime.now() without timezone creates a naive datetime. Pass a timezone argument.
+
+rule:
+  any:
+    - pattern: datetime.now()
+    - pattern: datetime.datetime.now()
+
+note: |
+  datetime.now() without a timezone argument returns a "naive" datetime
+  that has no timezone information, leading to bugs when code runs in
+  different timezones or when comparing/converting times.
+
+  Instead of:
+    from datetime import datetime
+    now = datetime.now()
+
+  Use timezone-aware datetimes:
+    from datetime import datetime, timezone
+    now = datetime.now(timezone.utc)
+
+  Or with a specific timezone:
+    from zoneinfo import ZoneInfo
+    now = datetime.now(ZoneInfo("America/New_York"))
+
+  Benefits:
+  - Explicit about which timezone
+  - Safe timezone conversions
+  - No ambiguity in distributed systems
+  - Consistent behavior across servers

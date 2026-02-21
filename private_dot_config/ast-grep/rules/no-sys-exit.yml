@@ -1,0 +1,41 @@
+id: no-sys-exit
+language: python
+severity: warning
+message: |
+  Avoid sys.exit() and exit(). Raise exceptions or return error codes instead.
+
+rule:
+  any:
+    - pattern: sys.exit($$$ARGS)
+    - pattern: exit($$$ARGS)
+    - pattern: quit($$$ARGS)
+
+note: |
+  sys.exit() makes code untestable and hard to compose into larger
+  applications. It immediately terminates the process.
+
+  Instead of:
+    if error:
+        print("Error occurred")
+        sys.exit(1)
+
+  In libraries/modules, raise exceptions:
+    if error:
+        raise ConfigurationError("Error occurred")
+
+  In CLI entry points, catch and convert to exit codes:
+    def main() -> int:
+        try:
+            run_application()
+            return 0
+        except ConfigurationError as e:
+            logger.error(str(e))
+            return 1
+
+    if __name__ == "__main__":
+        sys.exit(main())
+
+  Benefits:
+  - Code is testable (can catch exceptions)
+  - Functions can be composed
+  - Clear separation between logic and process control

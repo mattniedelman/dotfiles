@@ -1,0 +1,35 @@
+id: no-pytest-raises-without-match
+language: python
+severity: warning
+message: |
+  Use match= parameter with pytest.raises to verify the exception message.
+
+rule:
+  any:
+    - pattern: "pytest.raises($EXCEPTION)"
+      not:
+        inside:
+          kind: as_pattern
+    - pattern: "with pytest.raises($EXCEPTION): $$$BODY"
+
+note: |
+  Without match=, pytest.raises only checks the exception type,
+  not whether it's the specific error you expect.
+
+  Instead of:
+    with pytest.raises(ValueError):
+        validate(invalid_data)
+
+  Use:
+    with pytest.raises(ValueError, match="must be positive"):
+        validate(invalid_data)
+
+  Or capture and inspect:
+    with pytest.raises(ValueError) as exc_info:
+        validate(invalid_data)
+    assert "must be positive" in str(exc_info.value)
+
+  Benefits:
+  - Catches the right exception, not just any ValueError
+  - Documents expected behavior
+  - Fails fast if error message changes unexpectedly

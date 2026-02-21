@@ -1,0 +1,43 @@
+id: no-json-loads-untyped
+language: python
+severity: warning
+message: |
+  json.loads() returns untyped data. Consider using Pydantic for validation and typing.
+
+rule:
+  any:
+    - pattern: json.loads($$$ARGS)
+    - pattern: json.load($$$ARGS)
+
+note: |
+  json.loads() returns Any, losing all type safety. The returned
+  data structure is unchecked and can cause runtime errors.
+
+  Instead of:
+    data = json.loads(response.text)
+    name = data["user"]["name"]  # No type checking, may KeyError
+
+  Use Pydantic for validation and typing:
+    from pydantic import BaseModel
+
+    class User(BaseModel):
+        name: str
+        email: str
+
+    class Response(BaseModel):
+        user: User
+
+    data = Response.model_validate_json(response.text)
+    name = data.user.name  # Fully typed, validated
+
+  Or with TypeAdapter for simple cases:
+    from pydantic import TypeAdapter
+
+    adapter = TypeAdapter(list[int])
+    numbers = adapter.validate_json("[1, 2, 3]")
+
+  Benefits:
+  - Type safety and IDE autocomplete
+  - Automatic validation
+  - Clear error messages for invalid data
+  - Self-documenting data structures

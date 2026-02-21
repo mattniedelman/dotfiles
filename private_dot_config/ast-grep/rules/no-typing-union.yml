@@ -1,0 +1,23 @@
+id: no-typing-union
+language: python
+severity: warning
+message: |
+  Use X | Y instead of Union[X, Y] (Python 3.10+).
+
+rule:
+  any:
+    - pattern: "Union[$$$TYPES]"
+    - pattern: "from typing import Union"
+
+note: |
+  Modern Python 3.10+ supports union syntax with |.
+  
+  Instead of:
+    from typing import Union
+    def process(value: Union[str, int, float]) -> Union[str, None]:
+        ...
+  
+  Use:
+    def process(value: str | int | float) -> str | None:
+        ...
+

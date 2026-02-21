@@ -1,0 +1,27 @@
+id: no-setattr
+language: python
+severity: warning
+message: |
+  Avoid setattr(). Use direct attribute assignment or reconsider the design.
+
+rule:
+  pattern: setattr($$$ARGS)
+
+note: |
+  setattr() bypasses static type checking and IDE support. If direct
+  attribute assignment is possible, you MUST use it instead.
+
+  Instead of:
+    setattr(obj, "name", value)
+
+  Use direct assignment:
+    obj.name = value
+
+  Refactor to eliminate setattr():
+  1. Use a dictionary for truly dynamic keys: obj.data["name"] = value
+  2. Use dataclass or Pydantic for structured data
+  3. Redesign to avoid dynamic attribute names
+
+  setattr() is ONLY acceptable when the attribute name is genuinely
+  unknown at write time (e.g., ORM internals, deserialization frameworks).
+  If you're passing a string literal to setattr(), you're doing it wrong.

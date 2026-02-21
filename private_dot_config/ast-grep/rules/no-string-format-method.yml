@@ -1,0 +1,27 @@
+id: no-string-format-method
+language: python
+severity: warning
+message: |
+  Avoid .format() for string formatting.
+  Use f-strings instead for better readability.
+
+rule:
+  pattern: $STR.format($$$ARGS)
+constraints:
+  STR:
+    kind: string
+
+fix: |
+  Consider converting to f-string:
+  "{name} is {age}".format(name=n, age=a) → f"{n} is {a}"
+
+note: |
+  From python-development.md:
+  "Use f-strings, not .format() or %"
+
+  Instead of:
+    message = "{} is {} years old".format(name, age)
+    message = "{name} is {age}".format(name=name, age=age)
+
+  Use:
+    message = f"{name} is {age} years old"
