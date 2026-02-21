@@ -1,0 +1,5 @@
+[languages]
+bash = ["/home/mattniedelman/.local/share/mise/installs/shfmt/3.12.0/shfmt -i 2 -"]
+sh = ["/home/mattniedelman/.local/share/mise/installs/shfmt/3.12.0/shfmt -i 2 -"]
+json = ["/home/mattniedelman/.local/share/mise/installs/jq/1.8.1/jq ."]
+python = ["/home/mattniedelman/.local/share/mise/installs/pipx-ruff/0.14.14/bin/ruff format -"]
