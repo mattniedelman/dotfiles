@@ -100,6 +100,8 @@ yamlfmt = "latest"
 "cargo:https://github.com/razziel89/mdslw" = "branch:main"
 "pipx:ty" = "latest"
 aws-sigv4-proxy = "1.11.1"
+"cargo:lychee" = "latest"
+"cargo:cbfmt" = "latest"
 
 
 
