@@ -60,8 +60,8 @@ Implications, trade-offs, and constraints this creates
 
 ## Relations
 
-- relates-to \[[Related Concept]\]
-- implements \[[Parent Spec]\]
+- relates-to \[[related-concept]]
+- implements \[[parent-spec]]
 ```
 
 **Directory mapping**:
@@ -173,9 +173,9 @@ Main content organized logically.
 
 ## Relations
 
-- relates-to \[[Related Concept]\]
-- implements \[[Parent Spec or Design]\]
-- learned-from \[[Source of Learning]\]
+- relates-to \[[related-concept]]
+- implements \[[parent-spec-or-design]]
+- learned-from \[[source-of-learning]]
 ```
 
 ### 3. Choose Appropriate Categories
@@ -208,27 +208,48 @@ Link to related knowledge:
 
 ### 5. Use Correct Link Formats
 
-**Body/navigation links** (clickable in Obsidian):
+**CRITICAL:
+Always use kebab-case for wiki-links**
+
+Wiki-links MUST use kebab-case to match filenames:
 
 ```markdown
-See [[specs/my-spec-name|My Spec Name]] for details.
+# ✅ Correct - kebab-case matches filename
+See [[ai-development]] for details.
+The [[alert-summarizer-project]] uses [[fastapi-service]].
+
+# ❌ Wrong - Title Case doesn't match filename
+See [[AI Development]] for details.
+The [[Alert Summarizer Project]] uses [[FastAPI Service]].
 ```
 
-- Use `[[permalink|Display Title]]` format
-- `permalink` is the note path without `.md`
-- Required because filenames are slugified (title-only links won't resolve)
+**Why kebab-case:**
+
+- Filenames are kebab-case (e.g., `ai-development.md`)
+- Link checkers (lychee) verify by filename, not aliases
+- Consistent format across all links
+- No ambiguity about casing or spacing
+
+**With display text** (when readability matters):
+
+```markdown
+See [[ai-development|AI Development]] for details.
+```
+
+- Use sparingly - plain kebab-case is preferred for consistency
+- Display text adds maintenance burden
 
 **Relations section** (for Basic Memory knowledge graph):
 
 ```markdown
 ## Relations
 
-- implements \[[Parent Spec]\]
-- relates-to \[[Related Topic]\]
+- implements \[[parent-spec]]
+- relates-to \[[related-topic]]
 ```
 
-- Use escaped brackets `\[[...]]\]` for semantic relations
-- These don't need to be clickable - they're for the knowledge graph
+- Use escaped brackets `\[[...]]` for semantic relations
+- Still use kebab-case for the link target
 
 ### 6. Use Inline Hashtags for Attributes
 
@@ -254,16 +275,16 @@ use **inline hashtags**:
 - For observations in the Relations section (use relation types)
 - For structural metadata (use frontmatter)
 
-### 7. File Naming for Obsidian Compatibility
+### 7. File Naming Convention
 
-For notes that will be frequently wiki-linked (teams, indexes, key concepts),
-**use the exact title with spaces as the filename**:
+**All files use kebab-case filenames:**
 
-- ✅ `AI Engineering Team.md` - resolves `[[AI Engineering Team]]`
-- ❌ `ai-engineering-team.md` - may NOT resolve even with aliases
+- ✅ `ai-engineering-team.md` - link with `[[ai-engineering-team]]`
+- ✅ `alert-summarizer-project.md` - link with `[[alert-summarizer-project]]`
+- ❌ `AI Engineering Team.md` - spaces in filenames cause issues
 
-Obsidian's alias resolution can be unreliable.
-Direct filename matching is most reliable for wiki-link resolution.
+**Consistency rule:** Filename and wiki-link should always match exactly (both
+kebab-case).
 
 ## MCP Tools to Use
 
@@ -339,8 +360,8 @@ Use context manager pattern for HTTP clients instead of module-level singletons.
 
 ## Relations
 
-- implements \[[SPEC-16 MCP Cloud Service Consolidation]\]
-- enables \[[Cloud App Integration]\]
+- implements \[[spec-16-mcp-cloud-service-consolidation]]
+- enables \[[cloud-app-integration]]
 ```
 
 ### Capturing a Debugging Insight
@@ -374,8 +395,8 @@ Enabled WAL (Write-Ahead Logging) mode for the database connection.
 
 ## Relations
 
-- solves \[[Sync Performance Issues]\]
-- relates-to \[[SPEC-19 Sync Performance]\]
+- solves \[[sync-performance-issues]]
+- relates-to \[[spec-19-sync-performance]]
 ```
 
 ## What NOT to Store

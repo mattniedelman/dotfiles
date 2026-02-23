@@ -49,6 +49,7 @@ Use this skill when:
 | [Goal name] | [Strategic goal it maps to] | [What changed this month] | [Status] | [What's next] |
 
 **Status Values:**
+
 - `Done` - Completed
 - `Done (v1)` - First version shipped, more work planned
 - `Done-ish` - Mostly done, ongoing support/maintenance
@@ -71,22 +72,22 @@ shown when presenting to leadership who expects them.
 
 ```python
 # Get recent activity
-recent_activity_basic-memory(timeframe="30 days")
+recent_activity_basic - memory(timeframe="30 days")
 
 # Search for completed work
-search_notes_basic-memory(query="completed done finished shipped")
+search_notes_basic - memory(query="completed done finished shipped")
 
 # Search for decisions made
-search_notes_basic-memory(query="decision decided")
+search_notes_basic - memory(query="decision decided")
 
 # Search for challenges/issues
-search_notes_basic-memory(query="blocked issue problem challenge")
+search_notes_basic - memory(query="blocked issue problem challenge")
 ```
 
 ### 3. Check for Quarterly Goals
 
 ```python
-search_notes_basic-memory(query="quarterly goals tactical goals strategic goals")
+search_notes_basic - memory(query="quarterly goals tactical goals strategic goals")
 ```
 
 If not found, prompt user to provide them.
@@ -96,14 +97,14 @@ If not found, prompt user to provide them.
 Only if specifically requested or relevant to the review:
 
 ```python
-github-api(
-    path="/search/issues",
-    data={"q": "is:pr is:merged author:@me merged:>YYYY-MM-01"}
+search_pull_requests_github(
+    query="is:merged author:@me merged:>YYYY-MM-01", owner="imprivata-ai"
 )
 ```
 
 **Note:** GitHub PR data is typically NOT included in the presentation unless
 there's a specific reason (e.g., metrics review, team velocity discussion).
+The GitHub MCP server is read-only.
 
 ## Report Template
 
@@ -153,11 +154,11 @@ there's a specific reason (e.g., metrics review, team velocity discussion).
 After user approves the draft:
 
 ```python
-write_note_basic-memory(
+write_note_basic - memory(
     title="Monthly Review - <Month> <Year>",
     content="[report content]",
     directory="journal/reviews",
-    tags=["review", "monthly", "YYYY-MM", "presented"]
+    tags=["review", "monthly", "YYYY-MM", "presented"],
 )
 ```
 

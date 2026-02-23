@@ -19,6 +19,21 @@ persistent investigation.
 - Building mental model of complex subsystem
 - Preparing to debug or extend existing functionality
 
+## Output Storage
+
+**CRITICAL:** All deep dive output MUST be saved to Basic Memory using
+`write_note_basic-memory`.
+NEVER use `save-file` or write files to the local filesystem.
+
+## Related Skills
+
+**Use `storm` instead if:** You need multi-perspective research on external
+options, trade-off analysis with citations, or are making decisions that require
+outside context (e.g., "should we use X or Y?").
+
+**Use `storm` after if:** Deep dive reveals gaps that require researching
+external solutions, best practices, or alternative approaches.
+
 ## Deep Dive Process
 
 ```text
@@ -163,13 +178,17 @@ view(path="file.py", search_query_regex="if.*not|assert|validate")
 6. **Questions Answered** - What we now understand
 7. **Questions Remaining** - What's still unclear
 
-**Save to Basic Memory:**
+**Save to Basic Memory (REQUIRED):**
+
+MUST use `write_note_basic-memory` - NEVER use `save-file` or write to the local
+filesystem.
+The `directory` parameter is a Basic Memory path, not a filesystem path.
 
 ```python
 write_note_basic-memory(
-  title="Deep Dive: [Topic]",
+  title="[Topic]",
   content="[synthesis content]",
-  directory="knowledge/deep-dives",
+  directory="knowledge/research",
   tags=["deep-dive", "understanding", "<topic-tags>"]
 )
 ```
@@ -181,7 +200,7 @@ Present findings progressively during exploration, then provide final synthesis:
 ```markdown
 ## Deep Dive Complete: [Topic]
 
-**Saved to:** knowledge/deep-dives/[topic].md
+**Saved to Basic Memory:** `memory://knowledge/research/[topic]`
 
 ### Mental Model
 

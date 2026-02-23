@@ -5,6 +5,14 @@ description: Use when receiving code review feedback, before implementing sugges
 
 # Code Review Reception
 
+## Iron Law
+
+**NO IMPLEMENTATION WITHOUT VERIFICATION FIRST.**
+
+This means:
+Before typing any code change in response to review feedback, you must verify
+the suggestion against the actual codebase, not assume correctness.
+
 ## Overview
 
 Code review requires technical evaluation, not emotional performance.
@@ -149,3 +157,34 @@ The code itself shows you heard the feedback.
 | Assuming reviewer is right | Check if breaks things |
 | Avoiding pushback | Technical correctness > comfort |
 | Partial implementation | Clarify all items first |
+
+## Rationalization Table
+
+| Excuse | Reality |
+|--------|---------|
+| "The reviewer is senior" | Seniority doesn't mean they know THIS codebase |
+| "It's a simple change" | Simple changes still break things; verify |
+| "I understand what they want" | Understanding intent != verifying correctness |
+| "They probably tested it" | Never assume; verify in YOUR context |
+| "I'll lose credibility if I push back" | Wrong implementation loses more credibility |
+| "It's faster to just do it" | Fixing wrong implementations is slower |
+
+## Red Flags
+
+Stop and reconsider if you catch yourself thinking:
+
+- "I should just agree to be polite"
+- "They're probably right, no need to check"
+- "I don't want to seem difficult"
+- "Let me just implement all of it quickly"
+- "Questioning this would be rude"
+
+## Spirit vs Letter
+
+**Spirit:** Technical verification protects the codebase.
+Reviewers can be wrong.
+Your job is correctness, not agreement.
+
+**Letter:** Following the verification checklist mechanically while assuming the
+reviewer is right defeats the purpose.
+Actually check if the suggestion works for THIS codebase.

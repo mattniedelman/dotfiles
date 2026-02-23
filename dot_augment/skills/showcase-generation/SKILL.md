@@ -5,6 +5,86 @@ description: Use when generating or updating annotated files for the showcase re
 
 # Showcase Generation
 
+## Planning Phase (Required Before Generation)
+
+Before generating any showcase content, complete this planning phase to ensure
+depth and coverage.
+This prevents the "breadth without depth" failure mode of autonomous generation.
+
+### Step 1: Discover Available Content
+
+Query Basic Memory for source material:
+
+```text
+1. Search for multi-session arcs: search_notes(query="multi-session arc")
+2. List arc notes: build_context(url="memory://journal/arcs/*")
+3. Check session notes: recent_activity(timeframe="30d")
+```
+
+### Step 2: Inventory Case Study Candidates
+
+Create a candidate list with selection criteria:
+
+| Arc | Sessions | Exchanges | Pattern | Showcase Value |
+| --- | -------- | --------- | ------- | -------------- |
+| {name} | {count} | {total} | {pattern} | High/Medium/Low |
+
+**Showcase value criteria:**
+
+- **High**:
+  Multiple sessions, clear narrative arc, demonstrates skill/command usage,
+  contains pivots or insights
+- **Medium**:
+  Useful pattern, fewer sessions, less dramatic arc
+- **Low**:
+  Routine work, minimal learning content
+
+### Step 3: Plan Reference Depth
+
+Decide which items get full-depth (100-200 lines) vs summary (30-60 lines):
+
+| Category | Full Depth | Summary | Skip |
+| -------- | ---------- | ------- | ---- |
+| Rules | Core workflow rules | Utility rules | - |
+| Skills | Top 6-8 most used | Domain-specific | Rarely used |
+| Agents | Ralph loop agents | Utility agents | Experimental |
+| Hooks | Core hooks | Simple wrappers | - |
+| Commands | /brainstorm, /ralph, /dive | Utility commands | - |
+
+### Step 4: Identify Emergent Insights
+
+Before writing, identify insights that require dialogue to surface:
+
+- What patterns emerged across multiple arcs?
+- What "bootstrap" moments changed the configuration?
+- What named concepts exist (e.g., "The Iron Law", "Bootstrap Pattern")?
+- What trade-offs were consciously chosen?
+
+**If running autonomously:** Flag these for later interactive enrichment rather
+than inventing generic content.
+
+### Step 5: Create Content Plan
+
+Output a content plan before generating files:
+
+```markdown
+## Content Plan
+
+### Case Studies (prioritized)
+1. {name} - {why high value} - Full treatment
+2. {name} - {why medium value} - Standard treatment
+3. {name} - Skip or brief mention
+
+### Reference Sections
+- Rules: Full depth for {list}, summary for {list}
+- Skills: Full depth for {list}, summary for {list}
+- etc.
+
+### Identified Gaps
+- Need interactive session to surface: {topic}
+- Missing source material for: {topic}
+```
+
 ## Perspective: First-Person from Matt's POV
 
 All showcase content is written from **Matt's perspective as the developer** who
@@ -36,6 +116,65 @@ The AI is a tool he uses, not the narrator.
 | "This elegant solution..." | "This approach..." |
 | "The AI brilliantly handles..." | "The AI handles..." |
 | "greatly improved", "much better" | Specific measurable claims or nothing |
+
+## Voice and Depth
+
+### Personal Voice vs Generic Explanation
+
+Interactive sessions produce content with Matt's specific voice and insights.
+Autonomous generation tends toward generic explanations.
+
+**Interactive voice (preferred):**
+
+> "I use the Basic Memory MCP to keep a living knowledge base of my work, as I
+> work."
+>
+> "Have the AI modify its config every time it does something 'wrong'. It will
+> get better at doing what you actually want faster than you think."
+
+**Generic voice (avoid in philosophy/overview docs):**
+
+> "The agent should never perform destructive operations without explicit
+> permission."
+>
+> "Basic Memory provides persistent knowledge storage."
+
+### When to Flag for Interactive Enrichment
+
+Mark sections that need dialogue to surface authentic voice:
+
+```markdown
+<!-- TODO: Interactive enrichment needed -->
+<!-- This section explains the mechanism but lacks Matt's specific insights -->
+<!-- about why he chose this approach or what he learned from using it -->
+```
+
+### Depth Indicators
+
+Full-depth annotations should include these personal elements:
+
+- **"Why I created this"** - The specific problem, not a generic use case
+- **Named patterns** - If Matt has a name for it ("The Bootstrap Pattern", "The
+  Iron Law"), use it
+- **Trade-off rationale** - Why this choice over alternatives, from experience
+- **Evolution notes** - How this changed over time based on usage
+
+### Emergent Insights to Capture
+
+These insights only surface through extended dialogue:
+
+- Bootstrap moments:
+  "When I first started, I did X.
+  Now I do Y because..."
+- Named concepts:
+  Patterns Matt has named and uses repeatedly
+- Cross-cutting learnings:
+  Insights that apply across multiple arcs
+- Counter-intuitive discoveries:
+  Things that worked differently than expected
+
+**If autonomous:** Note that these are missing rather than inventing
+placeholders.
 
 ## Model Names
 
@@ -231,195 +370,33 @@ generic summaries.
 For core workflow items.
 Include:
 
-- **Why I Created This**:
-  My problem and how this solves it
-- **How It Works**:
-  Section-by-section breakdown
-- **Key Design Decisions**:
-  Why I chose this approach
-- **Integration Points**:
-  How it connects to other config
-- **Example in Action**:
-  Real scenario showing the behavior
+- Why I Created This
+- How It Works (detailed breakdown)
+- Key Design Decisions
+- Integration Points
+- Example in Action
 
-### Summary Annotations (30-60 lines)
+### Summary Annotations (30-50 lines)
 
-For utility/domain-specific items.
+For less critical items.
 Include:
 
-- **Purpose**:
-  1-2 sentences on what it does
-- **Key Points**:
-  3-5 bullets of main behaviors
-- **Notable Choices**:
-  1-2 design decisions
-- **Related Items**:
-  Links to related config
+- Purpose (1-2 sentences)
+- Key Points (3-5 bullets)
+- Notable Choices
+- Related Items
 
-## Directory Structure
+See `REFERENCE.md` for complete templates and examples.
 
-```text
-matt-niedelman-imprivata/     # Repository root (no intermediate showcase/)
-├── README.md                 # Entry point, "My Setup" section
-├── .markdownlint.json        # Lint config for showcase
-├── docs/
-│   ├── plans/                # Implementation plans
-│   ├── philosophy.md         # Operating philosophy
-│   ├── architecture.md       # Configuration by purpose
-│   └── getting-started.md    # How to adopt these patterns
-├── case-studies/             # Narrative walkthroughs
-│   └── {case-name}/
-│       ├── README.md         # Main narrative (100-200 lines)
-│       ├── arc.md            # Arc metadata and session timeline
-│       └── sessions/         # Individual session summaries
-│           └── 01-{session-name}.md
-├── reference/                # Annotated config files
-│   ├── rules/
-│   │   ├── README.md         # Lists all rules
-│   │   └── {rule}-annotated.md
-│   ├── agents/
-│   │   ├── README.md         # Lists all agents
-│   │   └── {agent}-annotated.md
-│   ├── hooks/
-│   │   ├── README.md         # Lists all hooks
-│   │   └── {hook}-annotated.md
-│   ├── skills/
-│   │   ├── README.md         # Lists all skills
-│   │   └── {skill}-annotated.md
-│   ├── commands/
-│   │   ├── README.md         # Lists all commands
-│   │   └── {command}-annotated.md
-│   ├── mcp-servers/
-│   │   ├── README.md         # Lists all MCP servers
-│   │   └── {server}.md       # Server documentation
-│   └── ast-grep/
-│       ├── README.md
-│       └── example-rules.md
-└── specs/                    # Feature specifications
-```
+## Reference Content
 
-## Source Links
+See `REFERENCE.md` for detailed patterns:
 
-Every annotated file must link to its source in the dotfiles submodule:
-
-```markdown
-# {Name} - Annotated
-
-**Source:** [{filename}](../../dotfiles/dot_augment/{category}/{filename})
-```
-
-- **Not a blockquote** - plain bold text to avoid MD028 errors
-- **Relative path** - from `reference/{category}/` to `dotfiles/dot_augment/`
-- **Category mapping:**
-  - Rules:
-    `dotfiles/dot_augment/rules/{name}.md`
-  - Agents:
-    `dotfiles/dot_augment/agents/{name}.md`
-  - Hooks:
-    `dotfiles/dot_augment/hooks/executable_{name}.{sh|py}`
-  - Skills:
-    `dotfiles/dot_augment/skills/{name}/SKILL.md`
-  - Commands:
-    `dotfiles/dot_augment/commands/{name}.md`
-  - MCP Servers:
-    No source link (configured in settings.json, not individual files)
-  - ast-grep:
-    `dotfiles/private_dot_config/ast-grep/`
-  - ruff:
-    `dotfiles/private_dot_config/ruff/`
-
-### Hook Implementation
-
-**Hook files must have `.sh` extension** but can use any interpreter via the
-shebang line (Python, Node, Ruby, Go, etc.).
-For complex Python hooks, use cchooks with `augment_adapter.py`.
-
-Alternative SDKs:
-Go (cc-tools), TypeScript (claude-hooks), PHP (claude-code-hooks-sdk).
-
-### Hook Event Types
-
-Use consistent event names (PascalCase as they appear in settings.json):
-
-| Event | When | Can Block |
-|-------|------|-----------|
-| `SessionStart` | Conversation begins | No |
-| `SessionEnd` | Session ends | No |
-| `PreToolUse` | Before tool execution | Yes (exit 2) |
-| `PostToolUse` | After tool execution | No |
-| `Stop` | Agent stops responding | Yes (exit 2) |
-
-### Path References in Content
-
-When referencing config paths in prose or tables, link to the dotfiles
-submodule:
-
-| Original Path | Link Format |
-|---------------|-------------|
-| `~/.config/ast-grep/rules/` | `[~/.config/ast-grep/rules/](../../dotfiles/private_dot_config/ast-grep/rules/)` |
-| `~/.config/ruff/ruff.toml` | `[ruff.toml](../../dotfiles/private_dot_config/ruff/ruff.toml)` |
-| `~/.augment/agents/` | `[~/.augment/agents/](../../dotfiles/dot_augment/agents/)` |
-
-**Shorten link text in tables** to stay under 120 characters per line.
-
-## Annotation Template: Full Depth
-
-```markdown
-# {Name} - Annotated
-
-**Source:** [{filename}](../../dotfiles/dot_augment/{category}/{filename})
-
-## Why I Created This
-
-{1-2 paragraphs explaining the problem I faced and why I built this solution}
-
-## How It Works
-
-### {Section 1}
-
-{Explanation of what this section does and why I structured it this way}
-
-## Key Design Decisions
-
-### {Decision 1}
-
-**Choice:** {What I chose}
-**Alternatives:** {What I considered}
-**Rationale:** {Why this approach won}
-
-## Integration Points
-
-- Links to {related-rule} for {reason}
-- Works with {agent-name} during {workflow}
-
-## Example in Action
-
-{Concrete scenario showing this config affecting AI behavior}
-```
-
-## Annotation Template: Summary
-
-```markdown
-# {Name}
-
-## Purpose
-
-{1-2 sentence description of what this does}
-
-## Key Points
-
-- {Main behavior 1}
-- {Main behavior 2}
-- {Main behavior 3}
-
-## Notable Choices
-
-- {Design decision and brief rationale}
-
-## Related Items
-
-- [{related-item}](./{path}) - {why related}
-```
+- Markdownlint patterns and fixes
+- Directory structure
+- Source link mapping
+- Full-depth and summary annotation templates
+- Execution modes (autonomous vs interactive)
 
 ## Quality Checklist
 
@@ -436,3 +413,5 @@ Before completing any showcase file:
   100-200, summary:
   30-60)
 - [ ] Session files include actual quotes and substantive detail
+- [ ] Planning phase completed before generation (for autonomous mode)
+- [ ] Gaps flagged for interactive enrichment (for autonomous mode)
