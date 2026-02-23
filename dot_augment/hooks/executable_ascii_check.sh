@@ -12,7 +12,7 @@ import os
 from pathlib import Path
 
 from augment_adapter import create_unified_context
-from cchooks import PostToolUseContext
+from cchooks import PostToolUseContext, PreToolUseContext
 
 # Get workspace root from Augment environment variable
 WORKSPACE_ROOT = Path(os.environ.get("AUGMENT_PROJECT_DIR", ".")).resolve()
@@ -78,15 +78,54 @@ def _get_file_changes(ctx: PostToolUseContext) -> list[dict]:
     return []
 
 
+def _get_target_file_from_tool_input(ctx: PreToolUseContext) -> Path | None:
+    """Extract the target file path from tool input for PreToolUse."""
+    tool_input = ctx.tool_input
+    # str-replace-editor and save-file use 'path'
+    file_path = tool_input.get("path", "")
+    if not file_path:
+        return None
+    path = Path(file_path)
+    if not path.is_absolute():
+        # Try workspace_roots from context first, then fall back to env var
+        raw_data = ctx._input_data  # noqa: SLF001
+        workspace_roots = raw_data.get("workspace_roots", [])
+        if workspace_roots:
+            workspace = Path(workspace_roots[0])
+        else:
+            workspace = WORKSPACE_ROOT
+        path = workspace / file_path
+    if path.is_file():
+        return path
+    return None
+
+
 def main() -> None:
     """Auto-fix Unicode lookalike characters in modified files."""
     ctx = create_unified_context()
+
+    # Handle PreToolUse - fix files BEFORE str-replace-editor reads them
+    if isinstance(ctx, PreToolUseContext):
+        target_file = _get_target_file_from_tool_input(ctx)
+        if target_file:
+            try:
+                content = target_file.read_text(encoding="utf-8")
+                fixed_content, replacements = fix_content(content)
+                if replacements:
+                    target_file.write_text(fixed_content, encoding="utf-8")
+                    ctx.output.exit_success()
+                    return
+            except (OSError, UnicodeDecodeError):
+                pass
+        ctx.output.exit_success()
+        return
 
     if not isinstance(ctx, PostToolUseContext):
         ctx.output.exit_success()
         return
 
     file_changes = _get_file_changes(ctx)
+
     if not file_changes:
         ctx.output.exit_success()
         return
@@ -117,7 +156,6 @@ def main() -> None:
         fixed_content, replacements = fix_content(content)
 
         if replacements:
-            # Write the fixed content back
             path.write_text(fixed_content, encoding="utf-8")
             fixes_applied.append(f"{path}: replaced {', '.join(replacements)}")
 

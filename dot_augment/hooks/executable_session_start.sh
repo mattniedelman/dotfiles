@@ -82,13 +82,25 @@ def main() -> None:
         return
 
     project = Path(workspace).name
+    workspace_path = Path(workspace)
     agents = discover_agents()
     agents_section = format_agents_section(agents)
+
+    # Check if workspace is a git repository
+    is_git_repo = (workspace_path / ".git").exists()
+    git_init_section = ""
+    if is_git_repo:
+        git_init_section = f"""
+
+**Git MCP Initialization Required:**
+Call `git_set_working_dir_git` with path `{workspace}` before any git operations.
+The git MCP server requires this initialization at session start."""
 
     context_message = f"""Project: {project}
 
 IMPORTANT: Review available_skills list and invoke any relevant skills before responding.
 {agents_section}
+{git_init_section}
 
 Check basic-memory for prior context on this project:
 - Use build_context or recent_activity to see what's been worked on

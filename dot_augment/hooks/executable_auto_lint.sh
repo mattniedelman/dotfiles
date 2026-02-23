@@ -21,6 +21,7 @@ AST_GREP_CONFIG = Path.home() / ".config/ast-grep/sgconfig.yml"
 # Get workspace root from Augment environment variable
 WORKSPACE_ROOT = Path(os.environ.get("AUGMENT_PROJECT_DIR", ".")).resolve()
 TEAM_LINTER_CONFIGS = Path.home() / "git/imprivata/ai/.github/linters/configs"
+BASIC_MEMORY_VAULT = Path.home() / "basic-memory"
 
 # Set AUTO_LINT_DEBUG=1 to see debug output
 DEBUG = os.environ.get("AUTO_LINT_DEBUG", "0") == "1"
@@ -41,18 +42,23 @@ def find_project_root(file_path: str) -> Path | None:
     return None
 
 
-def run_command(cmd: list[str], cwd: Path | None = None) -> tuple[int, str]:
+def run_command(
+    cmd: list[str], cwd: Path | None = None, timeout: int = 30
+) -> tuple[int, str]:
     """Run a command and return exit code and combined output."""
     try:
         debug(f"Running: {' '.join(cmd)} (cwd={cwd})")
         result = subprocess.run(  # noqa: S603
-            cmd, capture_output=True, text=True, check=False, cwd=cwd
+            cmd, capture_output=True, text=True, check=False, cwd=cwd, timeout=timeout
         )
         output = result.stdout + result.stderr
         debug(f"  Exit code: {result.returncode}")
         if result.returncode != 0 and output.strip():
             debug(f"  Output: {output[:200]}")
         return result.returncode, output
+    except subprocess.TimeoutExpired:
+        debug(f"  Command timed out after {timeout}s: {cmd[0]}")
+        return -2, f"Command timed out after {timeout}s: {cmd[0]}"
     except FileNotFoundError:
         debug(f"  Command not found: {cmd[0]}")
         return -1, f"Command not found: {cmd[0]}"
@@ -188,17 +194,24 @@ def format_json(files: list[str]) -> list[str]:
 # =============================================================================
 
 
+CBFMT_CONFIG = Path.home() / ".config/cbfmt.toml"
+
+
 def format_markdown(files: list[str]) -> list[str]:
-    """Format Markdown files with mdslw (line wrapping)."""
+    """Format Markdown files with mdslw (line wrapping) and cbfmt (code blocks)."""
     for f in files:
+        # First: mdslw for semantic line wrapping of prose
         code, out = run_command(["mdslw", f])
         if code == 0 and out:
             Path(f).write_text(out)
+        # Second: cbfmt for formatting code blocks based on language
+        if CBFMT_CONFIG.exists():
+            run_command(["cbfmt", "--config", str(CBFMT_CONFIG), "-w", f])
     return []
 
 
 def lint_markdown(files: list[str]) -> list[str]:
-    """Lint Markdown files with markdownlint-cli2."""
+    """Lint Markdown files with markdownlint-cli2 and lychee wiki-link checker."""
     errors: list[str] = []
     config = TEAM_LINTER_CONFIGS / ".markdownlint.json"
     config_args: list[str] = []
@@ -208,6 +221,31 @@ def lint_markdown(files: list[str]) -> list[str]:
         code, out = run_command(["markdownlint-cli2", *config_args, f])
         if code != 0 and out.strip():
             errors.append(f"markdownlint ({f}):\n{out}")
+
+    # Check wiki-links with lychee for files in Basic Memory vault
+    # Exclude crawled docs (external references) and _meta directory
+    vault_files = [
+        f
+        for f in files
+        if str(BASIC_MEMORY_VAULT) in f and "/docs/" not in f and "/_meta/" not in f
+    ]
+    if vault_files:
+        for f in vault_files:
+            code, out = run_command(
+                [
+                    "lychee",
+                    "--include-wikilinks",
+                    "--base-url",
+                    str(BASIC_MEMORY_VAULT),
+                    "--fallback-extensions",
+                    "md",
+                    "--no-progress",
+                    "--offline",
+                    f,
+                ]
+            )
+            if code != 0 and out.strip():
+                errors.append(f"lychee wiki-links ({f}):\n{out}")
     return errors
 
 
