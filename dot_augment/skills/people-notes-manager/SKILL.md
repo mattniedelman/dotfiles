@@ -5,15 +5,17 @@ description: Use when updating person notes from GitHub activity, processing mee
 
 # People Notes Manager
 
-Keeps the knowledge graph of people current through GitHub API scans, Zoom
-meeting transcripts, and ad-hoc conversational updates.
+Keeps the knowledge graph of people current through GitHub MCP server queries,
+Zoom meeting transcripts, and ad-hoc conversational updates.
 
 ## When to Use
 
 - "Update people notes from GitHub"
 - "Refresh contributor data"
-- "Process these meeting notes: [paste]"
-- "Add note about Brian: [insight]"
+- "Process these meeting notes:
+  [paste]"
+- "Add note about Brian:
+  [insight]"
 - Periodic refresh of team contributor activity
 
 ## Three Operating Modes
@@ -32,9 +34,11 @@ meeting transcripts, and ad-hoc conversational updates.
 | **Subjective** (communication style, expertise, growth areas) | Automatic | Present for approval before writing |
 | **New people** | Automatic | Auto-create minimal note, ask for team assignment |
 
-**Key principle:** Always gather all available data during a refresh. The approval gate is on
-*writing* subjective insights to notes, not on *retrieving* the data. Present a complete picture
-of what was learned, then ask which subjective updates to apply.
+**Key principle:** Always gather all available data during a refresh.
+The approval gate is on *writing* subjective insights to notes, not on
+*retrieving* the data.
+Present a complete picture of what was learned, then ask which subjective
+updates to apply.
 
 ---
 
@@ -43,20 +47,21 @@ of what was learned, then ask which subjective updates to apply.
 ### Step 1: Gather Org Data
 
 ```python
-# List all repos in org
-github-api(path="/orgs/imprivata-ai/repos", data={"per_page": 100})
+# Search for PRs by author in org
+search_pull_requests_github(
+    query=f"author:{username} org:imprivata-ai", owner="imprivata-ai"
+)
 
-# For each repo, get contributors
-github-api(path="/repos/imprivata-ai/{repo}/contributors")
+# List commits for a repo (filter by author)
+list_commits_github(owner="imprivata-ai", repo="{repo}", author=username)
 
-# Get commits per contributor
-github-api(path="/repos/imprivata-ai/{repo}/commits", data={"author": username})
-
-# Get PRs authored
-github-api(path="/search/issues", data={"q": f"repo:imprivata-ai/{repo} author:{username} is:pr"})
-
-# Get reviews given
-github-api(path="/repos/imprivata-ai/{repo}/pulls/{pr}/reviews")
+# Get PR details including reviews
+pull_request_read_github(
+    method="get", owner="imprivata-ai", repo="{repo}", pullNumber=pr_number
+)
+pull_request_read_github(
+    method="get_reviews", owner="imprivata-ai", repo="{repo}", pullNumber=pr_number
+)
 ```
 
 ### Step 2: Aggregate Per Person
@@ -73,16 +78,17 @@ For each contributor, calculate:
 
 ```python
 # List existing person notes
-list_directory_basic-memory(dir_name="/knowledge-graph/people", depth=3)
+list_directory_basic - memory(dir_name="/knowledge-graph/people", depth=3)
 
 # Match by GitHub username (from frontmatter) or name
 ```
 
-**If person exists:** Update factual fields directly, propose subjective changes.
+**If person exists:** Update factual fields directly, propose subjective
+changes.
 
 **If person is new:** Auto-create using template, prompt for team:
 
-```
+```text
 Found new contributor @username (47 commits across 3 repos).
 Which team? [ai-engineering / mle / other]
 ```
@@ -92,17 +98,21 @@ Which team? [ai-engineering / mle / other]
 **Always analyze during refresh (no explicit request needed):**
 
 ```python
-# Get recent PRs with descriptions
-github-api(path="/search/issues", data={"q": f"author:{username} org:imprivata-ai is:pr", "per_page": 10})
+# Search recent PRs by author
+search_pull_requests_github(query=f"author:{username} org:imprivata-ai", perPage=10)
 
 # Get PR details including body
-github-api(path="/repos/imprivata-ai/{repo}/pulls/{pr_number}")
+pull_request_read_github(
+    method="get", owner="imprivata-ai", repo="{repo}", pullNumber=pr_number
+)
 
-# Get reviews given by this person
-github-api(path="/search/issues", data={"q": f"reviewed-by:{username} org:imprivata-ai is:pr"})
+# Search reviews given by this person
+search_pull_requests_github(query=f"reviewed-by:{username} org:imprivata-ai")
 
-# Get review comments
-github-api(path="/repos/imprivata-ai/{repo}/pulls/{pr_number}/reviews")
+# Get review details
+pull_request_read_github(
+    method="get_reviews", owner="imprivata-ai", repo="{repo}", pullNumber=pr_number
+)
 ```
 
 **Analyze for:**
@@ -164,7 +174,8 @@ Match names to existing person notes using:
 - Aliases from frontmatter
 
 Prompt for unknown participants:
-```
+
+```text
 Found unknown participant "Sarah Chen" - create new person note? [yes + ask team / skip]
 ```
 
@@ -196,8 +207,10 @@ Found unknown participant "Sarah Chen" - create new person note? [yes + ask team
 
 ### Step 5: Apply Updates
 
-- Auto-apply: decisions, action items, topic links
-- Require approval: people insights before updating person notes
+- Auto-apply:
+  decisions, action items, topic links
+- Require approval:
+  people insights before updating person notes
 
 ---
 
@@ -207,7 +220,8 @@ Found unknown participant "Sarah Chen" - create new person note? [yes + ask team
 
 Parse the input for a name, match to existing notes.
 
-If ambiguous: "Did you mean Brian Pomerantz or Brian Smith?"
+If ambiguous:
+"Did you mean Brian Pomerantz or Brian Smith?"
 
 ### Step 2: Classify Insight
 
@@ -234,6 +248,7 @@ Apply? [yes / edit / skip]
 ### Step 4: Optionally Add Observation
 
 For significant insights, also add to Observations section:
+
 ```markdown
 - [insight] Increasingly effective at unblocking team members #leadership
 ```
@@ -267,4 +282,3 @@ github: username  # For matching during refresh
 | Team contribution shift | Flag for potential team reassignment |
 | Ambiguous name match | Prompt for clarification |
 | API rate limit | Batch requests, cache within session |
-

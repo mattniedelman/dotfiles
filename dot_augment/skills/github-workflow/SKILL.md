@@ -1,146 +1,95 @@
 ---
 name: github-workflow
-description: Use when performing GitHub API operations - PRs, issues, CI status, releases, and search via the github-api tool
+description: Use when reading GitHub data - PRs, issues, CI status, releases, and search via the read-only GitHub MCP server
 ---
 
 # GitHub Workflow
 
-Use the `github-api` tool for all GitHub operations.
+Use the GitHub MCP server tools (`*_github` suffix) for read operations.
 Never use `web-fetch` for GitHub resources.
+
+**Configuration:** Server runs in read-only mode.
+Write operations (create PR, file issues, merge) are handled by the user
+directly.
 
 ## When to Use
 
 Use this skill when:
 
-- Creating, reviewing, or merging pull requests
-- Working with GitHub issues
+- Listing or viewing pull requests
+- Reading GitHub issues
 - Checking CI/CD status
-- Managing releases
-- Searching GitHub (code, issues, PRs, commits)
-- Any interaction with github.com resources
+- Viewing releases
+- Searching GitHub (code, issues, PRs, commits, users, repos)
 
 ## Tool Selection
 
 | Operation | Tool | Notes |
 |-----------|------|-------|
-| GitHub API operations | `github-api` | Always first choice |
+| GitHub read operations | `*_github` MCP tools | Read-only mode |
 | Local git operations | `git_*` MCP tools | See git-workflow rules |
-| `gh` CLI | `launch-process` | Fallback only |
-| `web-fetch` on GitHub | ❌ Never | Bypasses auth, returns HTML |
+| Write operations | User handles directly | Not available to agent |
+| `web-fetch` on GitHub | Never | Bypasses auth, returns HTML |
 
-## Common API Operations
+## Available Read Operations
 
 ### Pull Requests
 
-```text
-# List PRs
-GET /repos/{owner}/{repo}/pulls
-  - state: open|closed|all
-  - head: user:branch (filter by branch)
-
-# Get PR details
-GET /repos/{owner}/{repo}/pulls/{number}
-
-# Create PR (REQUIRES EXPLICIT PERMISSION)
-POST /repos/{owner}/{repo}/pulls
-  - title, body, head, base required
-
-# Get PR files
-GET /repos/{owner}/{repo}/pulls/{number}/files
-
-# Merge PR (REQUIRES EXPLICIT PERMISSION)
-PUT /repos/{owner}/{repo}/pulls/{number}/merge
-```
+| Tool | Purpose |
+|------|---------|
+| `list_pull_requests_github` | List PRs with filters (state, base, head) |
+| `pull_request_read_github` | Get PR details, diff, files, reviews, comments |
+| `search_pull_requests_github` | Search PRs with query syntax |
 
 ### Issues
 
-```text
-# List issues
-GET /repos/{owner}/{repo}/issues
-  - filter: assigned|created|mentioned|subscribed|all
-  - state: open|closed|all
-  - labels: comma-separated
+| Tool | Purpose |
+|------|---------|
+| `list_issues_github` | List issues with filters |
+| `issue_read_github` | Get issue details, comments, labels, sub-issues |
+| `search_issues_github` | Search issues with query syntax |
 
-# List user's issues across repos
-GET /issues
-  - filter parameter required
+### Repository
 
-# Create/update issue
-POST /repos/{owner}/{repo}/issues
-PATCH /repos/{owner}/{repo}/issues/{number}
-```
+| Tool | Purpose |
+|------|---------|
+| `get_file_contents_github` | Get file or directory contents |
+| `list_branches_github` | List branches |
+| `list_commits_github` | List commits with filters |
+| `get_commit_github` | Get commit details with diff |
+| `search_code_github` | Search code across repos |
+| `search_repositories_github` | Find repositories |
 
-### CI/CD Status
+### Releases and Tags
 
-```text
-# Check runs (detailed)
-GET /repos/{owner}/{repo}/commits/{sha}/check-runs
+| Tool | Purpose |
+|------|---------|
+| `list_releases_github` | List releases |
+| `get_latest_release_github` | Get latest release |
+| `get_release_by_tag_github` | Get release by tag |
+| `list_tags_github` | List tags |
+| `get_tag_github` | Get tag details |
 
-# Commit status (covers more CIs)
-GET /repos/{owner}/{repo}/commits/{sha}/status
+### Users and Teams
 
-# Workflow runs
-GET /repos/{owner}/{repo}/actions/runs
-GET /repos/{owner}/{repo}/actions/runs/{run_id}
-```
+| Tool | Purpose |
+|------|---------|
+| `get_me_github` | Get authenticated user info |
+| `search_users_github` | Search users |
+| `get_teams_github` | Get user's teams |
+| `get_team_members_github` | Get team members |
 
-### Search
+## Write Operations (User-Handled)
 
-```text
-# Search issues/PRs
-GET /search/issues
-  - q: is:pr is:issue author:@me state:open repo:owner/repo
-
-# Search code
-GET /search/code
-  - q: search terms
-
-# Search commits
-GET /search/commits
-  - q: author:{username} committer:{username}
-```
-
-### Releases
-
-```text
-GET /repos/{owner}/{repo}/releases
-GET /repos/{owner}/{repo}/releases/{id}
-POST /repos/{owner}/{repo}/releases  (REQUIRES PERMISSION)
-```
-
-## When to Use gh CLI
-
-Only as fallback when:
-
-- `github-api` tool cannot accomplish the task
-- Interactive operations needed
-- User explicitly requests CLI
-
-Example fallback:
-
-```bash
-# Only if github-api insufficient
-gh pr create --title "feat: add feature" --body "Description"
-```
-
-## Benefits of github-api Tool
-
-- **Authentication**:
-  Automatic, proper GitHub auth
-- **Structured data**:
-  JSON/YAML responses (not HTML)
-- **Rate limiting**:
-  Handled appropriately
-- **Filtering**:
-  Powerful query parameters
-- **Completeness**:
-  Access to all GitHub API endpoints
-
-## Authorization
-
-See `authorization-policies.md` for operations requiring explicit permission:
+The following are **not available** in read-only mode.
+User handles directly:
 
 - Creating/merging PRs
-- Pushing to remote
+- Filing/updating issues
+- Adding comments
 - Creating releases
-- Modifying issue state
+- Pushing files
+
+If work is ready for PR creation, inform the user:
+"Changes are ready.
+Would you like to create a PR?"

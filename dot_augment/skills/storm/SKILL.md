@@ -1,6 +1,6 @@
 ---
 name: storm
-description: Deep research using STORM pattern - multi-perspective question asking, parallel subagent research, and synthesized reports with citations
+description: Use when deep research is needed from multiple expert perspectives - comprehensive analysis, architectural decisions, exploring complex topics, or synthesizing information with citations
 ---
 
 # STORM Research
@@ -18,6 +18,21 @@ Use this skill when:
 - User needs context before making architectural or design decisions
 - Complex topics requiring expert perspectives (security, performance, UX, etc.)
 - Phrases like "research this", "deep dive into", "explore options for"
+
+## Output Storage
+
+**CRITICAL:** All STORM research output MUST be saved to Basic Memory using
+`write_note_basic-memory`.
+NEVER use `save-file` or write files to the local filesystem.
+
+## Related Skills
+
+**Use `deep-dive` first if:** You need to understand existing code or systems
+before researching external options.
+STORM assumes you know what you have; deep-dive builds that understanding.
+
+**Use `deep-dive` after if:** STORM research concludes you need deeper
+understanding of a specific component before deciding.
 
 ## STORM Process Overview
 
@@ -221,11 +236,18 @@ think-strategies_think-strategies(
 
 Generate the final report by populating the outline with collected information.
 
+**CRITICAL:
+Use Basic Memory Only**
+
+MUST use `write_note_basic-memory` to save the report - NEVER use `save-file` or
+write to the local filesystem.
+The `directory` parameter is a Basic Memory path, not a filesystem path.
+
 **Report Template:**
 
 ```markdown
 ---
-title: "STORM Research: [Topic]"
+title: "[Topic]"
 type: research
 tags:
  - research
@@ -233,7 +255,7 @@ tags:
  - [topic-tags]
 ---
 
-# STORM Research: [Topic]
+# [Topic]
 
 ## Summary
 
@@ -297,7 +319,7 @@ tags:
 
 ```python
 write_note_basic-memory(
- title="STORM Research: [Topic]",
+ title="[Topic]",
  content="[Full report]",
  directory="knowledge/research",
  tags=["research", "storm", "topic-tags"]
@@ -346,7 +368,7 @@ Adjust the STORM depth based on the request:
    Security, Operations, Trade-offs)
 
 1. **Phase 4:** Generate report and save to Basic Memory via
-   `write_note_basic-memory()` in `knowledge/research/` directory
+   `write_note_basic-memory(directory="knowledge/research")`
 
 ## Completion Format
 
@@ -355,7 +377,7 @@ Always end with:
 ```markdown
 ## STORM Research Complete
 
-**Saved to:** knowledge/research/storm-research-[topic].md
+**Saved to Basic Memory:** `memory://knowledge/research/[topic]`
 
 **Perspectives Consulted:**
 - [Perspective 1]: [Key insight]
