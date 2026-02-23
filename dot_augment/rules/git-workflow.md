@@ -39,7 +39,7 @@ Always use explicit file paths.
 | `git_commit_git` | EXPLICIT | Must confirm message first |
 | `git_push_git` | EXPLICIT | Requires commit first |
 | `git_merge_git` | EXPLICIT | History-modifying |
-| `git_rebase_git` | EXPLICIT | Rewrites history |
+| `git_rebase_git` | REFUSE | Never rebase. Suggest merge instead. |
 | `git_reset_git` (hard) | EXPLICIT | Destructive |
 | `git_add_git` | SUGGEST | Suggest files, never auto-stage all |
 

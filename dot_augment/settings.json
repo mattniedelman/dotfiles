@@ -148,6 +148,11 @@
       "command": "thv proxy stdio obsidian",
       "args": []
     },
+    "github": {
+      "type": "stdio",
+      "command": "thv proxy stdio github",
+      "args": []
+    },
     "grafana": {
       "type": "stdio",
       "command": "thv proxy stdio grafana",
@@ -188,6 +193,17 @@
         }
       }
     ],
+    "PreToolUse": [
+      {
+        "matcher": "str-replace-editor",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/mattniedelman/.augment/hooks/ascii_check.sh"
+          }
+        ]
+      }
+    ],
     "PostToolUse": [
       {
         "matcher": "sub-agent-ralph-.*",
@@ -199,7 +215,7 @@
         ]
       },
       {
-        "matcher": "save-file|str-replace-editor|mcp:^(write|edit|save|replace|insert)_",
+        "matcher": "save-file|str-replace-editor|mcp:^(write|edit|save|replace|insert|canvas|move)_",
         "hooks": [
           {
             "type": "command",
@@ -208,7 +224,7 @@
         ]
       },
       {
-        "matcher": "save-file|str-replace-editor|mcp:^(write|edit|save|replace|insert)_",
+        "matcher": "save-file|str-replace-editor|mcp:^(write|edit|save|replace|insert|canvas|move)_",
         "hooks": [
           {
             "type": "command",
@@ -218,5 +234,8 @@
       }
     ]
   },
-  "shell": "bash"
+  "shell": "bash",
+  "removedTools": [
+    "github-api"
+  ]
 }

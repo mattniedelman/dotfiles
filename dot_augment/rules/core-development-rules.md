@@ -203,15 +203,20 @@ See `response-style-communication.md` for comprehensive guidelines.
 
 ### GitHub API Operations
 
-Use the `github-api` tool for all remote GitHub operations.
+Use the GitHub MCP server tools (e.g., `list_issues_github`,
+`list_pull_requests_github`, `search_code_github`) for remote GitHub operations.
 Never use `web-fetch` for GitHub URLs.
-See the `github-workflow` skill for detailed API reference and patterns.
+
+**Configuration:** GitHub MCP server runs in read-only mode
+(`GITHUB_READ_ONLY=1`).
+Write operations (PRs, issues, comments) are not available - user handles these
+directly.
 
 **Key rules:**
 
-- ALWAYS use `github-api` for PRs, issues, CI status, releases
+- Use GitHub MCP server tools (`*_github` suffix) for read operations
 - NEVER use `web-fetch` for github.com or raw.githubusercontent.com
-- Use `gh` CLI only as documented fallback
+- Write operations (create PR, file issue) are handled by user directly
 
 ## Notes Management
 

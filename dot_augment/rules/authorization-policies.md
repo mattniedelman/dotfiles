@@ -19,7 +19,9 @@ Other rule files reference this as the single source of truth.
 | **Git:
   push** | EXPLICIT | "push" | Requires commit first |
 | **Git:
-  merge/rebase** | EXPLICIT | "merge", "rebase" | History-modifying operations |
+  merge** | EXPLICIT | "merge" | History-modifying operations |
+| **Git:
+  rebase** | REFUSE | - | Never rebase. Suggest merge instead. |
 | **Git:
   staging** | SUGGEST | - | Can suggest; never use `git add -A` or `git add .` |
 | **Package:
@@ -80,8 +82,11 @@ via `launch-process` are blocked.
 See `git-mcp-required.md`.
 
 **Prohibited without explicit permission:** `git_commit_git`, `git_push_git`,
-`git_merge_git`, `git_rebase_git`, `git_reset_git` (hard), `git_clean_git`,
-`git_branch_git` (force delete), `git_cherry_pick_git`
+`git_merge_git`, `git_reset_git` (hard), `git_clean_git`, `git_branch_git`
+(force delete), `git_cherry_pick_git`
+
+**NEVER use (REFUSE):** `git_rebase_git` - rebase is prohibited.
+Suggest merge instead.
 
 **Allowed (read-only):** `git_status_git`, `git_diff_git`, `git_log_git`,
 `git_show_git`, `git_fetch_git`
