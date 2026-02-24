@@ -242,6 +242,15 @@
             "command": "/home/mattniedelman/.augment/hooks/auto_lint.sh"
           }
         ]
+      },
+      {
+        "matcher": "save-file|str-replace-editor",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/mattniedelman/.augment/hooks/validate_skill.sh"
+          }
+        ]
       }
     ]
   },
