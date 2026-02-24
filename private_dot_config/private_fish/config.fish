@@ -13,6 +13,8 @@ set -gx DIRENV_LOG_FORMAT ""
 set -gx LC_COLLATE C
 set -gx RIPGREP_CONFIG_PATH ~/.ripgreprc
 set -gx AST_GREP_CONFIG /home/mattniedelman/.config/ast-grep/sgconfig.yml
+
+# Note, this is for a local instance of obsidian
 set -gx OBSIDIAN_REST_API_KEY f5d4c30b08affc018b35b77440b57087aba42c76200ae08e3bff4608d5493311
 
 # SSH Agent - prefer 1Password, fallback to system agent
