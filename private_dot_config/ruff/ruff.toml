@@ -13,7 +13,7 @@ ignore = [
     'COM812', # trailing comma, incompatible with formatter
     'ISC001', # disallows single line string concat, incompatible with formatter
     'RET504', # makes you not assign immediately before returning
-    'SIM108', # dislike ternaries, definitely do not think they should be actively pushed
+    'SIM108', # don't need to push ternaries
     'TC001', # requires type-checking blocks
     'TC002', # requires type-checking blocks
     'TC003', # requires type-checking blocks
@@ -25,7 +25,8 @@ ignore = [
 [lint.per-file-ignores]
 "/**/tests/*" = [
     'S101', # disallows assert
-    'ANN201' # requires return type annotation for public function
+    'ANN201', # requires return type annotation for public function
+    'SLF001' # Allow accessing private members during tests
 ]
 
 [format]
