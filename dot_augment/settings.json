@@ -195,6 +195,15 @@
     ],
     "PreToolUse": [
       {
+        "matcher": "mcp:.*_git$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/mattniedelman/.augment/hooks/git_working_dir_check.sh"
+          }
+        ]
+      },
+      {
         "matcher": "str-replace-editor",
         "hooks": [
           {
