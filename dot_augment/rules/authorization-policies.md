@@ -52,6 +52,8 @@ Other rule files reference this as the single source of truth.
   model training** | EXPLICIT | "train", "fit" | Resource-intensive operations |
 | **ML:
   model deployment** | EXPLICIT | "deploy", "publish" | Production-affecting operations |
+| **Network:
+  download** | EXPLICIT | "download", "fetch", "get" | Any curl, wget, or file downloads |
 
 ## Authorization Levels
 
@@ -73,6 +75,7 @@ Other rule files reference this as the single source of truth.
 | "Finish this feature" | Complete code, inform ready to commit |
 | "Set up the project" | Ask which dependencies to install |
 | "Push this to the repo" | Inform commit needed first, ask for both |
+| "Install this" / "Get this for me" | Ask permission before downloading files |
 
 ## Git Operations Quick Reference
 

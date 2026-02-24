@@ -48,6 +48,13 @@
         "type": "ask-user"
       },
       "shellInputRegex": "(uv remove|pip uninstall|poetry remove)\\s"
+    },
+    {
+      "toolName": "launch-process",
+      "permission": {
+        "type": "ask-user"
+      },
+      "shellInputRegex": "(^|[;&|]\\s*)(curl|wget)\\s"
     }
   ],
   "vimMode": false,
@@ -142,11 +149,6 @@
       "env": {
         "AST_GREP_CONFIG": "/home/mattniedelman/.config/ast-grep/sgconfig.yml"
       }
-    },
-    "obsidian": {
-      "type": "stdio",
-      "command": "thv proxy stdio obsidian",
-      "args": []
     },
     "github": {
       "type": "stdio",
