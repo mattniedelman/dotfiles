@@ -1,16 +1,12 @@
 {
   "schema_version": "v0.1.0",
-  "image": "docker.io/grafana/mcp-grafana:0.10.0",
-  "cmd_args": [
-    "-transport",
-    "stdio"
-  ],
-  "name": "grafana",
-  "container_name": "grafana",
-  "base_name": "grafana",
+  "image": "ghcr.io/pab1it0/prometheus-mcp-server:latest",
+  "name": "prometheus-nonprod",
+  "container_name": "prometheus-nonprod",
+  "base_name": "prometheus-nonprod",
   "transport": "stdio",
   "host": "127.0.0.1",
-  "port": 23999,
+  "port": 56108,
   "target_host": "127.0.0.1",
   "permission_profile": {
     "name": "network",
@@ -22,20 +18,16 @@
     }
   },
   "env_vars": {
-    "GRAFANA_ORG_ID": "1",
-    "GRAFANA_URL": "https://g-d364abe43b.grafana-workspace.us-east-2.amazonaws.com",
-    "MCP_TRANSPORT": "stdio"
+    "MCP_TRANSPORT": "stdio",
+    "PROMETHEUS_URL": "http://240.0.0.1:9090/workspaces/ws-b25da60b-d7ee-4254-82ac-0a8210a99d8ae2"
   },
   "container_labels": {
     "toolhive": "true",
-    "toolhive-basename": "grafana",
-    "toolhive-name": "grafana",
-    "toolhive-port": "23999",
+    "toolhive-basename": "prometheus-nonprod",
+    "toolhive-name": "prometheus-nonprod",
+    "toolhive-port": "56108",
     "toolhive-transport": "stdio"
   },
-  "secrets": [
-    "GRAFANA_SERVICE_ACCOUNT_TOKEN,target=GRAFANA_SERVICE_ACCOUNT_TOKEN"
-  ],
   "proxy_mode": "streamable-http",
   "group": "default",
   "ignore_config": {
