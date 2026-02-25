@@ -1,16 +1,15 @@
 ---
 name: github-workflow
-description: Use when reading GitHub data - PRs, issues, CI status, releases, and search via the read-only GitHub MCP server
+description: Use when interacting with GitHub - PRs, issues, CI status, releases, search, and write operations via the GitHub MCP server
 ---
 
 # GitHub Workflow
 
-Use the GitHub MCP server tools (`*_github` suffix) for read operations.
+Use the GitHub MCP server tools (`*_github` suffix) for all GitHub operations.
 Never use `web-fetch` for GitHub resources.
 
-**Configuration:** Server runs in read-only mode.
-Write operations (create PR, file issues, merge) are handled by the user
-directly.
+**Configuration:** Server has read-write capabilities.
+Read operations are auto-approved; write operations prompt for user approval.
 
 ## When to Use
 
@@ -26,9 +25,9 @@ Use this skill when:
 
 | Operation | Tool | Notes |
 |-----------|------|-------|
-| GitHub read operations | `*_github` MCP tools | Read-only mode |
+| GitHub read operations | `*_github` MCP tools | Auto-approved |
+| GitHub write operations | `*_github` MCP tools | Requires user approval |
 | Local git operations | `git_*` MCP tools | See git-workflow rules |
-| Write operations | User handles directly | Not available to agent |
 | `web-fetch` on GitHub | Never | Bypasses auth, returns HTML |
 
 ## Available Read Operations
@@ -79,17 +78,16 @@ Use this skill when:
 | `get_teams_github` | Get user's teams |
 | `get_team_members_github` | Get team members |
 
-## Write Operations (User-Handled)
+## Write Operations (Approval Required)
 
-The following are **not available** in read-only mode.
-User handles directly:
+The following require user approval when invoked:
 
-- Creating/merging PRs
-- Filing/updating issues
-- Adding comments
+- Creating/merging PRs (`create_pull_request_github`,
+  `merge_pull_request_github`)
+- Filing/updating issues (`issue_write_github`)
+- Adding comments (`add_issue_comment_github`)
 - Creating releases
-- Pushing files
+- Pushing files (`push_files_github`, `create_or_update_file_github`)
 
-If work is ready for PR creation, inform the user:
-"Changes are ready.
-Would you like to create a PR?"
+When ready to perform a write operation, the tool permission system will prompt
+for approval automatically.
