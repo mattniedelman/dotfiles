@@ -39,6 +39,22 @@ Use the git MCP server tools for all git operations:
 3. **Observability** - All git operations are logged through the MCP server
 4. **Policy enforcement** - The MCP server can enforce additional safeguards
 
+## Troubleshooting MCP Server Errors
+
+**When git MCP server tools fail with errors**, check the server logs:
+
+```bash
+cat ~/.local/state/git-mcp-server/git-mcp-server.log
+```
+
+Common issues:
+
+- Schema validation errors (MCP tool output doesn't match expected schema)
+- Server crashes or restarts
+- Configuration issues
+
+**If errors persist**, restart the MCP server or check ToolHive status.
+
 ## Cross-Reference
 
 This rule is enforced by:
