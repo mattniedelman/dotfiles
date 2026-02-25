@@ -104,7 +104,6 @@ search_pull_requests_github(
 
 **Note:** GitHub PR data is typically NOT included in the presentation unless
 there's a specific reason (e.g., metrics review, team velocity discussion).
-The GitHub MCP server is read-only.
 
 ## Report Template
 
