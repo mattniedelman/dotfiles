@@ -8,6 +8,42 @@
       }
     },
     {
+      "toolName": "mcp:get_*_github",
+      "permission": {
+        "type": "allow"
+      }
+    },
+    {
+      "toolName": "mcp:list_*_github",
+      "permission": {
+        "type": "allow"
+      }
+    },
+    {
+      "toolName": "mcp:search_*_github",
+      "permission": {
+        "type": "allow"
+      }
+    },
+    {
+      "toolName": "mcp:issue_read_github",
+      "permission": {
+        "type": "allow"
+      }
+    },
+    {
+      "toolName": "mcp:pull_request_read_github",
+      "permission": {
+        "type": "allow"
+      }
+    },
+    {
+      "toolName": "mcp:*_github",
+      "permission": {
+        "type": "ask-user"
+      }
+    },
+    {
       "toolName": "launch-process",
       "permission": {
         "type": "allow"
@@ -200,6 +236,15 @@
         ]
       },
       {
+        "matcher": "mcp:git_commit_git",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/mattniedelman/.augment/hooks/worktree_commit_guard.sh"
+          }
+        ]
+      },
+      {
         "matcher": "str-replace-editor",
         "hooks": [
           {
@@ -219,6 +264,15 @@
       }
     ],
     "PostToolUse": [
+      {
+        "matcher": "mcp:.*_git$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/mattniedelman/.augment/hooks/git_session_recovery.sh"
+          }
+        ]
+      },
       {
         "matcher": "sub-agent-ralph-.*",
         "hooks": [
@@ -259,6 +313,27 @@
   },
   "shell": "bash",
   "removedTools": [
-    "github-api"
+    "github-api",
+    "list_oncall_schedules_grafana",
+    "list_oncall_teams_grafana",
+    "list_oncall_users_grafana",
+    "list_alert_groups_grafana",
+    "get_alert_group_grafana",
+    "get_current_oncall_users_grafana",
+    "get_oncall_shift_grafana",
+    "list_sift_investigations_grafana",
+    "get_sift_investigation_grafana",
+    "get_sift_analysis_grafana",
+    "find_error_pattern_logs_grafana",
+    "find_slow_requests_grafana",
+    "get_assertions_grafana",
+    "query_prometheus_grafana",
+    "query_prometheus_histogram_grafana",
+    "list_prometheus_label_names_grafana",
+    "list_pyroscope_profile_types_grafana",
+    "list_pyroscope_label_names_grafana",
+    "list_pyroscope_label_values_grafana",
+    "fetch_pyroscope_profile_grafana",
+    "query_loki_patterns_grafana"
   ]
 }
