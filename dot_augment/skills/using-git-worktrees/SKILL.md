@@ -1,20 +1,31 @@
 ---
 name: using-git-worktrees
-description: Use when starting feature work that needs isolation from current workspace or before executing implementation plans - creates isolated git worktrees with smart directory selection and safety verification
+description: DEFAULT for AI implementation work - creates isolated git worktrees to keep user's main checkout pristine
 ---
 
 # Using Git Worktrees
 
 ## Overview
 
-Git worktrees create isolated workspaces sharing the same repository, allowing
-work on multiple branches simultaneously without switching.
+Git worktrees create isolated workspaces sharing the same repository.
+**AI defaults to worktrees for all implementation work**, keeping the user's
+main checkout pristine for their own use.
 
-**Core principle:** Systematic directory selection + safety verification =
-reliable isolation.
+**Core principle:** AI works in worktrees, user keeps main checkout.
 
-**Announce at start:** "I'm using the using-git-worktrees skill to set up an
-isolated workspace."
+**Announce at start:** "I'll set up a worktree for this implementation work."
+
+## When to Use
+
+**Default (use worktree):**
+
+- Any task involving code changes (features, bugfixes, refactors)
+- Implementation work of any size
+
+**Skip worktree:**
+
+- Read-only tasks (exploration, review, questions)
+- User explicitly says to work in current checkout
 
 ## Directory Selection Process
 
@@ -32,8 +43,8 @@ Follow this priority order:
 
 ```bash
 # Check in priority order - INSIDE the repo
-ls -d "$REPO_ROOT/.worktrees" 2>/dev/null     # Preferred (hidden)
-ls -d "$REPO_ROOT/worktrees" 2>/dev/null      # Alternative
+ls -d "$REPO_ROOT/.worktrees" 2>/dev/null # Preferred (hidden)
+ls -d "$REPO_ROOT/worktrees" 2>/dev/null  # Alternative
 ```
 
 **If found:** Use that directory.
@@ -100,7 +111,7 @@ project=$(basename "$REPO_ROOT")
 
 ```bash
 # The worktree parent directory MUST start with $REPO_ROOT
-worktree_parent="$REPO_ROOT/.worktrees"  # or $REPO_ROOT/worktrees
+worktree_parent="$REPO_ROOT/.worktrees" # or $REPO_ROOT/worktrees
 
 # WRONG - this would be a sibling:
 # worktree_parent="$(dirname "$REPO_ROOT")/worktrees"  # DO NOT DO THIS
@@ -198,14 +209,20 @@ Ready to implement <feature-name>
 
 ## Integration
 
-**Called by:**
+**This is the default first step for implementation tasks.**
 
-- **brainstorming** (Phase 4) - REQUIRED when design is approved and
-  implementation follows
-- **subagent-driven-development** - REQUIRED before executing any tasks
-- **executing-plans** - REQUIRED before executing any tasks
-- Any skill needing isolated workspace
+AI should automatically set up a worktree when starting any code-changing task.
 
 **Pairs with:**
 
 - **finishing-a-development-branch** - REQUIRED for cleanup after work complete
+
+## Commit Autonomy
+
+In worktrees, AI can commit freely without asking permission:
+
+- Atomic commits (one logical change per commit)
+- Conventional commit format
+- Commit as work progresses
+
+See `authorization-policies.md` for details.

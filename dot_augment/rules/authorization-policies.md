@@ -15,7 +15,9 @@ Other rule files reference this as the single source of truth.
 | Operation Category | Authorization Level | Authorizing Keywords | Notes |
 |-------------------|---------------------|---------------------|-------|
 | **Git:
-  commit** | EXPLICIT | "commit", "git commit" | Must confirm message before executing |
+  commit (worktree)** | ALLOWED | - | In `.worktrees/` directory, commit freely with atomic commits |
+| **Git:
+  commit (main checkout)** | EXPLICIT | "commit", "git commit" | Must confirm message before executing |
 | **Git:
   push** | EXPLICIT | "push" | Requires commit first |
 | **Git:
@@ -84,9 +86,14 @@ All git operations MUST use the git MCP server tools.** Direct `git` commands
 via `launch-process` are blocked.
 See `git-mcp-required.md`.
 
-**Prohibited without explicit permission:** `git_commit_git`, `git_push_git`,
-`git_merge_git`, `git_reset_git` (hard), `git_clean_git`, `git_branch_git`
-(force delete), `git_cherry_pick_git`
+**Worktree exception:** When working in a `.worktrees/` directory,
+`git_commit_git` is allowed without permission.
+Commits should be atomic and well-structured.
+Enforced by `worktree_commit_guard.sh` hook.
+
+**Prohibited without explicit permission (main checkout):** `git_commit_git`,
+`git_push_git`, `git_merge_git`, `git_reset_git` (hard), `git_clean_git`,
+`git_branch_git` (force delete), `git_cherry_pick_git`
 
 **NEVER use (REFUSE):** `git_rebase_git` - rebase is prohibited.
 Suggest merge instead.

@@ -19,7 +19,7 @@ When referring to the CLI command, use `auggie`.
 
 | Priority | Type | Enforcement | Files |
 |----------|------|-------------|-------|
-| **CRITICAL** | `always_apply` | Violations are penalized | `response-style-communication.md`, `core-development-rules.md` (includes Notes Management), `git-mcp-required.md` |
+| **CRITICAL** | `always_apply` | Violations are penalized | `response-style-communication.md`, `core-development-rules.md` (includes Notes Management), `git-mcp-required.md`, `github-mcp-required.md` |
 | **HIGH** | `always_apply` | Always active for relevant domains | `git-workflow.md`, `linting-enforcement.md`, `environment.md`, `security.md`, `helm-kubernetes-guidelines.md`, `python-development.md`, `authorization-policies.md` |
 | **STANDARD** | `agent_requested` | Guidance for specific scenarios | (migrated to skills) |
 
@@ -80,7 +80,14 @@ These rules are enforced with the same severity as scope violations:
 - Direct `git` commands via `launch-process` are blocked by tool permissions
 - Use `git_status_git`, `git_commit_git`, `git_diff_git`, etc.
 
-### 4. Notes Management (in core-development-rules.md) -- CRITICAL
+### 4. github-mcp-required.md
+
+- **Parse GitHub URLs** and use appropriate MCP tools or gh CLI
+- **NEVER use `web-fetch`** for github.com or raw.githubusercontent.com
+- Use `pull_request_read_github`, `issue_read_github`, `get_commit_github`, etc.
+- Fallback to `gh` CLI for workflow runs and job logs
+
+### 5. Notes Management (in core-development-rules.md) -- CRITICAL
 
 - **Session Start**:
   MUST check basic-memory when user mentions a project, prior work, or decisions
@@ -94,14 +101,14 @@ These rules are enforced with the same severity as scope violations:
 
 ## HIGH Priority (Always Apply When Relevant)
 
-### 5. git-workflow.md
+### 6. git-workflow.md
 
 - Conventional Commits format
 - Branch naming conventions
 - Commit authorization workflow
 - **All git operations use MCP server tools** (see `git-mcp-required.md`)
 
-### 6. linting-enforcement.md
+### 7. linting-enforcement.md
 
 - Run linters after code changes:
   ast-grep → ruff → ty
@@ -109,38 +116,38 @@ These rules are enforced with the same severity as scope violations:
 - Fix errors rather than suppress
 - Approval required for suppressions
 
-### 7. environment.md
+### 8. environment.md
 
 - Path resolution rules
 - Workspace structure
 - Tool management (mise)
 
-### 8. security.md
+### 9. security.md
 
 - Never hardcode secrets
 - Authorization for security-related changes
 - SQL injection prevention
 
-### 9. helm-kubernetes-guidelines.md
+### 10. helm-kubernetes-guidelines.md
 
 - CRITICAL:
   Never manage namespaces in Helm charts
 - Chart structure and values organization
 
-### 10. python-development.md
+### 11. python-development.md
 
 - Package management:
   uv (default) or poetry (if poetry.lock exists)
 - Authorization required for package installation
 - Testing with pytest, type hints required
 
-### 11. authorization-policies.md
+### 12. authorization-policies.md
 
 - Unified authorization matrix for all operations
 - Defines EXPLICIT, CONFIRM, SUGGEST, ALLOWED, REFUSE levels
 - Single source of truth for permission requirements
 
-### 12. Structured Thinking (in core-development-rules.md)
+### 13. Structured Thinking (in core-development-rules.md)
 
 - Use think-strategies for complex debugging, architecture, investigations
 - Skip for simple, well-defined tasks

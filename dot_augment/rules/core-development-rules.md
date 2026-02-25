@@ -30,7 +30,10 @@ violations:
    See `git-mcp-required.md`.
 
 4. **Git Commits**:
-   NEVER commit without explicit user authorization using the word "commit"
+   NEVER commit in main checkout without explicit user authorization.
+   EXCEPTION:
+   In `.worktrees/` directories, commit freely with atomic commits.
+   See `authorization-policies.md` for details.
 
 5. **Git Staging (MANDATORY)**:
    NEVER use `git_add_git` with `all:
@@ -227,10 +230,12 @@ See `git-mcp-required.md`.
 
 **Git Authorization** (see `authorization-policies.md` for full matrix):
 
-- NEVER commit/push/merge without explicit user authorization
+- **Worktree exception:** In `.worktrees/` directories, commit freely (atomic,
+  well-structured)
+- **Main checkout:** NEVER commit/push/merge without explicit user authorization
 - "save", "finish", "complete" do NOT authorize commits
 - Must use word "commit", "push", "merge", etc.
-- Always confirm commit message before executing
+- Always confirm commit message before executing (main checkout only)
 
 **When work is complete:** Inform user changes are ready, ask if they want to
 commit.
@@ -254,16 +259,14 @@ Use the GitHub MCP server tools (e.g., `list_issues_github`,
 `list_pull_requests_github`, `search_code_github`) for remote GitHub operations.
 Never use `web-fetch` for GitHub URLs.
 
-**Configuration:** GitHub MCP server runs in read-only mode
-(`GITHUB_READ_ONLY=1`).
-Write operations (PRs, issues, comments) are not available - user handles these
-directly.
+**Configuration:** GitHub MCP server has read-write capabilities.
+Write operations require user approval via tool permissions.
 
 **Key rules:**
 
-- Use GitHub MCP server tools (`*_github` suffix) for read operations
+- Use GitHub MCP server tools (`*_github` suffix) for all GitHub operations
 - NEVER use `web-fetch` for github.com or raw.githubusercontent.com
-- Write operations (create PR, file issue) are handled by user directly
+- Read operations are auto-approved; write operations prompt for approval
 
 ## Notes Management
 
