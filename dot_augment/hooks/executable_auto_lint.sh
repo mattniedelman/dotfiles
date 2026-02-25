@@ -119,10 +119,33 @@ def lint_python(files: list[str]) -> list[str]:
 
 # --- Shell (sh/bash) ---
 
+# Directories where .sh files are actually Python scripts (uv shebang)
+PYTHON_SCRIPT_DIRS = {
+    str(Path.home() / ".augment/hooks"),
+}
+
+
+def is_python_script(filepath: str) -> bool:
+    """Check if a .sh file is actually a Python script (uv shebang)."""
+    # Check if in a known Python script directory
+    file_path = Path(filepath).resolve()
+    for dir_path in PYTHON_SCRIPT_DIRS:
+        if str(file_path).startswith(dir_path):
+            return True
+    # Also check shebang as fallback
+    try:
+        with open(filepath, "r") as f:
+            first_line = f.readline()
+            return "uv run" in first_line or "python" in first_line.lower()
+    except (OSError, UnicodeDecodeError):
+        return False
+
 
 def format_shell(files: list[str]) -> list[str]:
     """Format shell scripts with shfmt."""
     for f in files:
+        if is_python_script(f):
+            continue
         run_command(["shfmt", "-w", "-i", "2", "-ci", "-bn", f])
     return []
 
@@ -131,6 +154,8 @@ def lint_shell(files: list[str]) -> list[str]:
     """Lint shell scripts with shellcheck."""
     errors: list[str] = []
     for f in files:
+        if is_python_script(f):
+            continue
         code, out = run_command(["shellcheck", "-f", "gcc", "-x", f])
         if code != 0 and out.strip():
             errors.append(f"shellcheck ({f}):\n{out}")
