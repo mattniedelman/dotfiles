@@ -1,169 +1,97 @@
 ---
 name: finishing-a-development-branch
-description: Use when implementation is complete, all tests pass, and you need to decide how to integrate the work - guides completion of development work by presenting structured options for merge, PR, or cleanup
+description: Use when AI completes work in a worktree - walks through changes and offers to merge into user's current branch
 ---
 
 # Finishing a Development Branch
 
 ## Overview
 
-Guide completion of development work by presenting clear options and handling
-chosen workflow.
+When AI completes implementation work in a worktree, walk through the changes
+with the user and offer to merge into their current branch.
 
-**Core principle:** Verify tests → Present options → Execute choice → Clean up.
+**Core principle:** Verify tests → Present summary → Offer walk-through → Merge
+to user's branch.
 
-**Announce at start:** "I'm using the finishing-a-development-branch skill to
-complete this work."
+**AI initiates this flow when work is complete** (tests pass, task fulfilled).
 
 ## The Process
 
 ### Step 1: Verify Tests
 
-**Before presenting options, verify tests pass:**
+**Before presenting summary, verify tests pass:**
 
 ```bash
 # Run project's test suite
 npm test / cargo test / pytest / go test ./...
 ```
 
-**If tests fail:**
+**If tests fail:** Fix them.
+Don't proceed until tests pass.
+
+### Step 2: Present Summary
+
+Present a concise summary of the work:
 
 ```text
-Tests failing (<N> failures). Must fix before completing:
+Work complete on `feature/user-auth`.
 
-[Show failures]
+Changes:
+- Added OAuth2 provider (3 files)
+- Updated user model with auth fields (1 file)
+- Added tests (2 files)
 
-Cannot proceed with merge/PR until tests pass.
+6 files changed, 247 insertions, 12 deletions
+Tests: 42 passed
+
+Would you like to:
+1. Walk through changes file-by-file
+2. Merge into your current branch (`develop`)
+3. Keep the branch for later
 ```
 
-Stop.
-Don't proceed to Step 2.
+### Step 3: Handle Choice
 
-**If tests pass:** Continue to Step 2.
+**If walk-through requested:**
 
-### Step 2: Determine Base Branch
+For each changed file:
 
-```bash
-# Try common base branches
-git merge-base HEAD main 2>/dev/null || git merge-base HEAD master 2>/dev/null
-```
+1. Show the file path and change summary
+2. Explain what the changes do
+3. Ask "Continue to next file?" or "Questions?"
 
-Or ask:
-"This branch split from main - is that correct?"
+After walk-through, re-offer merge.
 
-### Step 3: Present Options
+**If merge requested:**
 
-Present exactly these 4 options:
+1. Switch to user's main checkout
+2. Identify user's current branch
+3. Merge the worktree branch into it
+4. Clean up worktree (Step 4)
 
-```text
-Implementation complete. What would you like to do?
-
-1. Merge back to <base-branch> locally
-2. Push and create a Pull Request
-3. Keep the branch as-is (I'll handle it later)
-4. Discard this work
-
-Which option?
-```
-
-**Don't add explanation** - keep options concise.
-
-### Step 4: Execute Choice
-
-#### Option 1: Merge Locally
-
-```bash
-# Switch to base branch
-git checkout <base-branch>
-
-# Pull latest
-git pull
-
-# Merge feature branch
-git merge <feature-branch>
-
-# Verify tests on merged result
-<test command>
-
-# If tests pass
-git branch -d <feature-branch>
-```
-
-Then:
-Cleanup worktree (Step 5)
-
-#### Option 2: Push and Create PR
-
-```bash
-# Push branch
-git push -u origin <feature-branch>
-
-# Create PR
-gh pr create --title "<title>" --body "..."
-```
-
-Then:
-Cleanup worktree (Step 5)
-
-#### Option 3: Keep As-Is
+**If keep for later:**
 
 Report:
-"Keeping branch <name>.
-Worktree preserved at <path>."
+"Keeping branch `<name>`.
+Worktree at `<path>`." Don't clean up.
 
-**Don't cleanup worktree.**
+### Step 4: Cleanup Worktree
 
-#### Option 4: Discard
-
-**Confirm first:**
-
-```text
-This will permanently delete:
-- Branch <name>
-- All commits: <commit-list>
-- Worktree at <path>
-
-Type 'discard' to confirm.
-```
-
-Wait for exact confirmation.
-
-If confirmed:
-
-```bash
-git checkout <base-branch>
-git branch -D <feature-branch>
-```
-
-Then:
-Cleanup worktree (Step 5)
-
-### Step 5: Cleanup Worktree
-
-**For Options 1, 2, 4:**
-
-Check if in worktree:
-
-```bash
-git worktree list | grep $(git branch --show-current)
-```
-
-If yes:
+After merge:
 
 ```bash
 git worktree remove <worktree-path>
 ```
 
-**For Option 3:** Keep worktree.
+If keeping for later, don't clean up.
 
 ## Quick Reference
 
-| Option | Merge | Push | Keep Worktree | Cleanup Branch |
-|--------|-------|------|---------------|----------------|
-| 1. Merge locally | ✓ | - | - | ✓ |
-| 2. Create PR | - | ✓ | ✓ | - |
-| 3. Keep as-is | - | - | ✓ | - |
-| 4. Discard | - | - | - | ✓ (force) |
+| Choice | Merge | Cleanup Worktree |
+|--------|-------|------------------|
+| Walk-through | After review | After merge |
+| Merge now | Yes | Yes |
+| Keep for later | No | No |
 
 ## Red Flags
 
@@ -171,22 +99,17 @@ git worktree remove <worktree-path>
 
 - Proceed with failing tests
 - Merge without verifying tests on result
-- Delete work without confirmation
-- Force-push without explicit request
 
 **Always:**
 
-- Verify tests before offering options
-- Present exactly 4 options
-- Get typed confirmation for Option 4
-- Clean up worktree for Options 1 & 4 only
+- Verify tests before presenting summary
+- Offer walk-through option
+- Clean up worktree after merge
 
 ## Integration
 
-**Called by:**
-
-- **subagent-driven-development** (Step 7) - After all tasks complete
-- **executing-plans** (Step 5) - After all batches complete
+**Initiated by AI** when implementation work is complete (tests pass, task
+fulfilled).
 
 **Pairs with:**
 
