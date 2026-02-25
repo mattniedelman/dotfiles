@@ -1,68 +1,151 @@
-#!/usr/bin/env bash
-# Validate skills when SKILL.md files are modified
-# Runs skills-ref validator from agentskills/agentskills repository
+#!/usr/bin/env -S uv run --quiet --script --directory /home/mattniedelman/.augment/hooks
+# shellcheck disable=all
+"""
+PostToolUse hook: Validate skills when SKILL.md files are modified.
 
-set -euo pipefail
+Runs skills-ref validator from agentskills/agentskills repository
+to ensure skills comply with the agentskills.io specification.
+"""
+# /// script
+# requires-python = ">=3.11"
+# dependencies = ["cchooks>=0.1.0"]
+# ///
 
-EVENT_DATA=$(cat)
+from __future__ import annotations
 
-# Extract file changes
-FILE_CHANGES=$(echo "$EVENT_DATA" | jq -r '.file_changes // []')
+import os
+import re
+import subprocess
+import sys
+from pathlib import Path
 
-# Check if any skill files were modified
-SKILL_DIRS=()
-while IFS= read -r path; do
-  # Check if path is in a skills directory and contains SKILL.md
-  if [[ "$path" =~ ^(.*/skills/[^/]+)/SKILL\.md$ ]] || [[ "$path" =~ ^(skills/[^/]+)/SKILL\.md$ ]]; then
-    SKILL_DIR="${BASH_REMATCH[1]}"
-    # Deduplicate
-    if [[ ! " ${SKILL_DIRS[*]:-} " =~ \ ${SKILL_DIR}\  ]]; then
-      SKILL_DIRS+=("$SKILL_DIR")
-    fi
-  fi
-done < <(echo "$FILE_CHANGES" | jq -r '.[].path // empty')
+from cchooks import PostToolUseContext
 
-# Exit early if no skill files were modified
-if [[ ${#SKILL_DIRS[@]} -eq 0 ]]; then
-  exit 0
-fi
+from augment_adapter import create_unified_context
 
-# Validate each modified skill
-ERRORS=""
-for skill_dir in "${SKILL_DIRS[@]}"; do
-  # Handle relative paths - check workspace roots
-  if [[ ! "$skill_dir" = /* ]]; then
-    WORKSPACE=$(echo "$EVENT_DATA" | jq -r '.workspace_roots[0] // ""')
-    if [[ -n "$WORKSPACE" ]]; then
-      skill_dir="$WORKSPACE/$skill_dir"
-    fi
-  fi
+WORKSPACE_ROOT = Path(os.environ.get("AUGMENT_PROJECT_DIR", ".")).resolve()
+DEBUG = os.environ.get("VALIDATE_SKILL_DEBUG", "0") == "1"
 
-  # Skip if directory doesn't exist
-  if [[ ! -d "$skill_dir" ]]; then
-    continue
-  fi
+# Pattern to match SKILL.md files inside skills directories
+SKILL_MD_PATTERN = re.compile(r"^(.*/skills/[^/]+|skills/[^/]+)/SKILL\.md$")
 
-  # Run validation
-  OUTPUT=$(uvx --from "git+https://github.com/agentskills/agentskills#subdirectory=skills-ref" skills-ref validate "$skill_dir" 2>&1) || {
-    ERRORS="${ERRORS}${OUTPUT}\n"
-  }
-done
 
-# Report results
-if [[ -n "$ERRORS" ]]; then
-  # Output to agent as additional context
-  cat <<EOF
-{
-  "hookSpecificOutput": {
-    "hookEventName": "PostToolUse",
-    "additionalContext": "⚠️ Skill validation failed:\n${ERRORS}\nPlease fix the SKILL.md file to comply with agentskills.io specification."
-  }
-}
-EOF
-else
-  # Success message to user
-  echo "✓ Skill validation passed for: ${SKILL_DIRS[*]}" >&2
-fi
+def debug(msg: str) -> None:
+    """Print debug message to stderr if DEBUG is enabled."""
+    if DEBUG:
+        sys.stderr.write(f"[validate_skill] {msg}\n")
 
-exit 0
+
+def _get_file_changes(ctx: PostToolUseContext) -> list[dict]:
+    """Get file changes from either tool's format."""
+    raw = ctx._input_data  # noqa: SLF001
+
+    file_changes = raw.get("file_changes", [])
+    if file_changes:
+        return file_changes
+
+    tool_response = ctx.tool_response
+    if "content" in tool_response:
+        return [tool_response]
+
+    return []
+
+
+def run_validator(skill_dir: Path) -> tuple[bool, str]:
+    """Run skills-ref validate on a skill directory."""
+    cmd = [
+        "uvx",
+        "--from",
+        "git+https://github.com/agentskills/agentskills#subdirectory=skills-ref",
+        "skills-ref",
+        "validate",
+        str(skill_dir),
+    ]
+    debug(f"Running: {' '.join(cmd)}")
+    try:
+        result = subprocess.run(  # noqa: S603
+            cmd, capture_output=True, text=True, check=False, timeout=60
+        )
+        output = result.stdout + result.stderr
+        debug(f"Exit code: {result.returncode}, Output: {output[:200]}")
+        return result.returncode == 0, output.strip()
+    except subprocess.TimeoutExpired:
+        return False, "Validation timed out after 60s"
+    except FileNotFoundError:
+        return False, "uvx not found - cannot run skills-ref validator"
+
+
+def extract_skill_dirs(file_changes: list[dict], workspace_root: Path) -> set[Path]:
+    """Extract unique skill directories from file changes."""
+    skill_dirs: set[Path] = set()
+
+    for change in file_changes:
+        path = change.get("path", "")
+        if path:
+            match = SKILL_MD_PATTERN.match(path)
+            if match:
+                skill_dir_str = match.group(1)
+                skill_path = Path(skill_dir_str)
+                if not skill_path.is_absolute():
+                    skill_path = workspace_root / skill_dir_str
+                if skill_path.is_dir():
+                    skill_dirs.add(skill_path)
+                    debug(f"Found skill dir: {skill_path}")
+
+    return skill_dirs
+
+
+def _get_workspace_root(ctx: PostToolUseContext) -> Path:
+    """Get workspace root from input data or environment."""
+    raw = ctx._input_data  # noqa: SLF001
+    workspace_roots = raw.get("workspace_roots", [])
+    if workspace_roots:
+        return Path(workspace_roots[0]).resolve()
+    return WORKSPACE_ROOT
+
+
+def main() -> None:
+    """Validate skills when SKILL.md files are modified."""
+    debug("Hook invoked")
+    ctx = create_unified_context()
+
+    if not isinstance(ctx, PostToolUseContext):
+        debug("Not a PostToolUseContext, exiting")
+        sys.exit(0)
+
+    file_changes = _get_file_changes(ctx)
+    debug(f"File changes: {file_changes}")
+
+    workspace_root = _get_workspace_root(ctx)
+    debug(f"Workspace root: {workspace_root}")
+
+    skill_dirs = extract_skill_dirs(file_changes, workspace_root)
+    if not skill_dirs:
+        debug("No skill files modified, exiting")
+        ctx.output.exit_success()  # type: ignore[union-attr]
+
+    errors: list[str] = []
+    validated: list[str] = []
+
+    for skill_dir in skill_dirs:
+        success, output = run_validator(skill_dir)
+        if success:
+            validated.append(skill_dir.name)
+        else:
+            errors.append(f"{skill_dir.name}: {output}")
+
+    if errors:
+        context = (
+            "Skill validation FAILED. Fix the SKILL.md file(s) to comply with "
+            "the agentskills.io specification:\n\n" + "\n".join(errors)
+        )
+        debug(f"Validation failed: {errors}")
+        ctx.output.add_context(context)
+    else:
+        sys.stderr.write(f"Skill validation passed for: {', '.join(validated)}\n")
+        ctx.output.exit_success()
+
+
+if __name__ == "__main__":
+    main()
+

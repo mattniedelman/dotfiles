@@ -40,7 +40,7 @@
       "permission": {
         "type": "ask-user"
       },
-      "shellInputRegex": "(uv add|uv pip install|pip install|poetry add)\\s"
+      "shellInputRegex": "(uv add|uv pip install|poetry add)\\s"
     },
     {
       "toolName": "launch-process",
@@ -131,12 +131,6 @@
         "LOGS_DIR": "/home/mattniedelman/.local/state/git-mcp-server/logs"
       }
     },
-    "docs-crawler": {
-      "type": "stdio",
-      "command": "thv proxy stdio docs-crawler",
-      "args": [],
-      "disabled": false
-    },
     "serena": {
       "type": "stdio",
       "command": "uvx --from git+https://github.com/oraios/serena serena start-mcp-server --context ide-assistant --project-from-cwd",
@@ -211,6 +205,15 @@
           {
             "type": "command",
             "command": "/home/mattniedelman/.augment/hooks/ascii_check.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "launch-process",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/mattniedelman/.augment/hooks/pip_to_uv.sh"
           }
         ]
       }

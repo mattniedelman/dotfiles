@@ -1,6 +1,6 @@
 ---
 name: people-notes-manager
-description: Use when updating person notes from GitHub activity, processing meeting transcripts to extract people insights, or adding ad-hoc observations about colleagues - manages the knowledge-graph/people/ directory
+description: Use when updating person notes from GitHub activity, processing meeting transcripts to extract people insights, or adding ad-hoc observations about colleagues - manages the knowledge/people/ directory
 ---
 
 # People Notes Manager
@@ -78,7 +78,7 @@ For each contributor, calculate:
 
 ```python
 # List existing person notes
-list_directory_basic - memory(dir_name="/knowledge-graph/people", depth=3)
+list_directory_basic - memory(dir_name="/knowledge/people", depth=3)
 
 # Match by GitHub username (from frontmatter) or name
 ```

@@ -42,6 +42,53 @@ violations:
 7. **No Continue Statements**:
    NEVER use `continue` statements in loops
 
+8. **Tool Behavior Verification (MANDATORY)**:
+   BEFORE using any CLI tool, VERIFY its expected arguments and defaults.
+   Do NOT assume tools work on the current directory by default.
+   See "Tool Behavior Verification" section below.
+
+---
+
+## Tool Behavior Verification
+
+### ⚠️ MANDATORY: Verify Before Executing ⚠️
+
+**BEFORE running any CLI tool** (especially linters, formatters, build tools),
+verify how it works:
+
+1. **Check if directory/file argument is required** vs. defaulting to current
+   directory
+2. **Verify the correct invocation syntax** using `--help` or documentation
+3. **Do NOT assume** based on other similar tools
+
+**Common tools that require explicit paths:**
+
+| Tool | Requires | Example |
+|------|----------|---------|
+| pyright | Directory argument | `pyright src/` not just `pyright` |
+| mypy | File/directory argument | `mypy src/` |
+| pytest | Usually works on cwd | `pytest` or `pytest tests/` |
+
+**Verification methods (in order of preference):**
+
+1. `tool --help` - Check argument requirements
+2. Check pyproject.toml/config for tool-specific settings
+3. Documentation lookup if unclear
+
+**Example workflow:**
+
+```bash
+# Before running pyright for the first time in a project:
+pyright --help # Check: does it need explicit path?
+
+# Then run with appropriate arguments:
+pyright src/
+```
+
+**CRITICAL**:
+When a tool invocation fails or produces unexpected results, verify the
+invocation syntax before retrying with different arguments.
+
 ---
 
 ## Code Patterns (Automated Enforcement)
@@ -118,7 +165,7 @@ Based on "A Philosophy of Software Design":
 
 ## Python Best Practices
 
-- Type hints on all public functions (enforced by pyright/zuban)
+- Type hints on all public functions (enforced by ty)
 - Docstrings on all public APIs
 - Specific exception types with context
 - Comments on their own line (not inline)
