@@ -44,6 +44,12 @@
       }
     },
     {
+      "toolName": "mcp:git_commit_git",
+      "permission": {
+        "type": "ask-user"
+      }
+    },
+    {
       "toolName": "launch-process",
       "permission": {
         "type": "allow"
