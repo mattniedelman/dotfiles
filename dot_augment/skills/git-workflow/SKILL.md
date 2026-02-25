@@ -45,7 +45,19 @@ change auth response`
 **Body:** Only when necessary.
 Most commits should be subject-line only.
 
-## Commit Confirmation Workflow
+## Commit Workflows
+
+### In Worktrees (`.worktrees/` directory)
+
+Commit freely without asking permission:
+
+- Make atomic commits (one logical change per commit)
+- Use conventional commit format
+- Commit as work progresses, not one giant commit at the end
+
+### In Main Checkout
+
+Confirmation required:
 
 1. User requests commit (explicit language required)
 2. AI generates concise Conventional Commit message
@@ -64,18 +76,15 @@ Most commits should be subject-line only.
 | `main` | - | Production-ready |
 | `develop` | - | Integration branch |
 | `feature/<desc>` | develop | New features |
-| `bugfix/<desc>` | develop | Bug fixes |
-| `hotfix/<desc>` | main | Urgent production fixes |
-| `release/<version>` | develop | Release prep |
+| `fix/<desc>` | develop or main | Bug fixes (all types) |
 
 **Examples:**
 
 ```text
 feature/user-authentication
 feature/123-oauth-integration
-bugfix/login-validation
-hotfix/security-patch
-release/v1.2.0
+fix/login-validation
+fix/security-patch
 ```
 
 ## Merge Strategy
@@ -124,24 +133,14 @@ git_merge_git({ branch: "feature/user-auth", noFastForward: true })
    true })` and create PR
 4. Address review, merge to develop, delete branch
 
-### Hotfix Process
+### Fix Process
 
-1. Branch from main:
-   `hotfix/critical-bug`
+1. Branch from main or develop:
+   `fix/critical-bug`
 2. Fix and commit
-3. Merge to main, tag release
-4. Merge to develop to sync
-5. Delete hotfix branch
-
-### Release Process
-
-1. Branch from develop:
-   `release/v1.2.0`
-2. Update versions, changelog, docs
-3. Test thoroughly
-4. Merge to main, tag
-5. Merge back to develop
-6. Delete release branch
+3. Merge to target branch
+4. If from main, also merge to develop to sync
+5. Delete fix branch
 
 ## Edge Cases
 
