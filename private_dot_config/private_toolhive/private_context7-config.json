@@ -1,16 +1,18 @@
 {
   "schema_version": "v0.1.0",
-  "image": "docker.io/grafana/mcp-grafana:0.10.0",
-  "cmd_args": [
-    "-transport",
-    "stdio"
-  ],
-  "name": "grafana",
-  "container_name": "grafana",
-  "base_name": "grafana",
+  "image": "ghcr.io/stacklok/dockyard/npx/context7:2.1.1",
+  "remote_auth_config": {
+    "callback_port": 8666,
+    "use_pkce": false,
+    "cached_token_expiry": "0001-01-01T00:00:00Z",
+    "cached_secret_expiry": "0001-01-01T00:00:00Z"
+  },
+  "name": "context7",
+  "container_name": "context7",
+  "base_name": "context7",
   "transport": "stdio",
   "host": "127.0.0.1",
-  "port": 23999,
+  "port": 18547,
   "target_host": "127.0.0.1",
   "permission_profile": {
     "name": "network",
@@ -22,26 +24,17 @@
     }
   },
   "env_vars": {
-    "GRAFANA_ORG_ID": "1",
-    "GRAFANA_URL": "https://g-d364abe43b.grafana-workspace.us-east-2.amazonaws.com",
     "MCP_TRANSPORT": "stdio"
   },
   "container_labels": {
     "toolhive": "true",
-    "toolhive-basename": "grafana",
-    "toolhive-name": "grafana",
-    "toolhive-port": "23999",
+    "toolhive-basename": "context7",
+    "toolhive-name": "context7",
+    "toolhive-port": "18547",
     "toolhive-transport": "stdio"
   },
-  "secrets": [
-    "GRAFANA_SERVICE_ACCOUNT_TOKEN,target=GRAFANA_SERVICE_ACCOUNT_TOKEN"
-  ],
   "proxy_mode": "streamable-http",
   "group": "default",
-  "ignore_config": {
-    "LoadGlobal": true,
-    "PrintOverlays": false
-  },
   "middleware_configs": [
     {
       "type": "auth",
