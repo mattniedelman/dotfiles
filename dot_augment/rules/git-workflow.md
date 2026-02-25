@@ -60,6 +60,47 @@ Always use explicit file paths.
 | "Save this" | Ask: commit, stage, or just edit? |
 | "Create a PR" | Check if committed first, get explicit authorization |
 
+## CRITICAL: Merge Conflict Resolution
+
+**NEVER resolve merge conflicts by blindly checking out entire files from one
+branch.**
+
+Each conflict region must be considered individually:
+
+1. **Understand both sides**:
+   Before resolving, understand what each branch intended
+2. **Review the PR/commit context**:
+   Check PR descriptions, commit messages, and review comments to understand the
+   intent of changes
+3. **Resolve conflict-by-conflict**:
+   Use `str-replace-editor` to fix each conflict region individually, not `git
+   checkout <branch> -- <file>`
+4. **Preserve intentional changes**:
+   Both branches may have valid changes that need to be merged together, not one
+   discarded
+5. **Ask when uncertain**:
+   If the correct resolution is unclear, ask the user rather than guessing
+
+**Prohibited approaches:**
+
+- `git checkout origin/dev -- <file>` (discards all feature branch changes)
+- `git checkout --ours <file>` or `git checkout --theirs <file>` (picks one side
+  entirely)
+- Assuming "take the newer branch" is correct
+
+**Required approach:**
+
+```text
+1. View the conflicted file to see all conflict markers
+2. For each <<<<<<< ... ======= ... >>>>>>> region:
+   a. Understand what HEAD (current branch) changed and why
+   b. Understand what the incoming branch changed and why
+   c. Determine the correct resolution (may be combination of both)
+   d. Edit to remove markers and create correct merged content
+3. After all conflicts resolved, verify no conflict markers remain
+4. Stage the resolved file
+```
+
 ## Never Commit
 
 - Secrets, API keys, sensitive data

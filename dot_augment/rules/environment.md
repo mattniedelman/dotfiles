@@ -35,6 +35,12 @@ Note:
 `/home/mattniedelman/git` symlinks to
 `/mnt/2b20906f-1847-4c8e-94e4-b841290bddc3`
 
+## Desktop Environment
+
+- **Desktop:** GNOME
+- **Primary browser:** Brave
+- **App cache refresh:** `update-desktop-database ~/.local/share/applications/`
+
 ## Tool Management
 
 **mise** manages all binary versions (Node.js, Python, Go, etc.).
@@ -62,3 +68,14 @@ Check `.mise.toml` or `.tool-versions` for versions.
 - .gitignore with sensitive patterns
 
 **Operations outside workspace:** Always confirm with user first.
+
+## System Detection
+
+**Do not assume system details when they can be trivially checked:**
+
+| Detail | Check Command |
+|--------|---------------|
+| Desktop environment | `echo $XDG_CURRENT_DESKTOP` |
+| Default browser | `xdg-settings get default-web-browser` |
+| Display server | `echo $XDG_SESSION_TYPE` |
+| App cache refresh | `update-desktop-database ~/.local/share/applications/` |

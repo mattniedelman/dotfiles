@@ -46,8 +46,14 @@ poetry add --group dev pytest
 
 # ❌ NEVER - bypasses lock files
 uv pip install requests
-pip install requests
 ```
+
+**Note:** The `pip_to_uv.sh` hook automatically rewrites `pip install` commands:
+
+- `pip install pkg` -> `uv add pkg` (updates lock files)
+- `pip install -r requirements.txt` -> `uv pip install -r` (fallback for special
+  flags)
+- `pip install -e .` -> `uv pip install -e .` (fallback for editable installs)
 
 ## Security
 

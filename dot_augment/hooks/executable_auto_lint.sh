@@ -94,7 +94,7 @@ def format_python(files: list[str]) -> list[str]:
 
 
 def lint_python(files: list[str]) -> list[str]:
-    """Lint Python files with ruff, zuban, and ast-grep."""
+    """Lint Python files with ruff, ty, and ast-grep."""
     errors: list[str] = []
     for f in files:
         project_root = find_project_root(f)
@@ -104,11 +104,11 @@ def lint_python(files: list[str]) -> list[str]:
         if code != 0 and out.strip():
             errors.append(f"ruff ({f}):\n{out}")
         code, out = run_command(
-            ["zuban", "check", "--ignore-missing-imports", "--show-error-codes", f],
+            ["ty", "check", f],
             cwd=project_root,
         )
         if code != 0 and out.strip():
-            errors.append(f"zuban ({f}):\n{out}")
+            errors.append(f"ty ({f}):\n{out}")
         code, out = run_command(
             ["sg", "scan", "--config", str(AST_GREP_CONFIG), f], cwd=project_root
         )

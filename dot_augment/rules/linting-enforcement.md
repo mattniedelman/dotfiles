@@ -28,7 +28,7 @@ current conversation.
 |------|----------|---------|
 | ast-grep | `~/.config/ast-grep/rules/` | Structural patterns (70+ rules) |
 | ruff | `~/.config/ruff/ruff.toml` | Style, imports, modern Python |
-| pyright/zuban | - | Type checking (preferred over mypy) |
+| ty | - | Type checking (preferred over mypy) |
 
 ## Fix Priority
 

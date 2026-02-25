@@ -30,14 +30,14 @@ Conduct thorough research on:
 First, see what we already know:
 
 ```python
-search_notes_basic-memory(query="$1")
+search_notes_basic - memory(query="$1")
 ```
 
 Read any relevant existing notes to avoid duplicating research.
 Build context from related notes:
 
 ```python
-build_context_basic-memory(url="memory://related-topic", depth=2)
+build_context_basic - memory(url="memory://related-topic", depth=2)
 ```
 
 ### 2. Gather Information
@@ -45,22 +45,26 @@ build_context_basic-memory(url="memory://related-topic", depth=2)
 Depending on the topic, use appropriate tools:
 
 **For codebase topics:**
+
 - Use `codebase-retrieval` to find relevant code
 - Use `view` to read specific files
 - Check tests for usage examples
 
 **For external topics:**
+
 - Use `web-search` for current information
 - Use `web-fetch` for documentation
 - Look for official sources
 
 **For Basic Memory context:**
+
 - Build context from related notes
 - Check for prior decisions or research
 
 ### 3. Analyze Findings
 
 Synthesize what you learned:
+
 - Identify key concepts
 - Note patterns and trade-offs
 - Form recommendations if applicable
@@ -73,17 +77,18 @@ Create a structured report following the template in the research skill.
 ### 5. Save Report
 
 ```python
-write_note_basic-memory(
+write_note_basic - memory(
     title="Research: $1",
     content="[report content]",
     directory="$2" or "artifacts/research",
-    tags=["research", ...]
+    tags=["research", ...],
 )
 ```
 
 ### 6. Present Summary
 
 After saving, present:
+
 - Key findings summary (3-5 bullet points)
 - Main recommendation (if applicable)
 - Where the report was saved
@@ -91,7 +96,7 @@ After saving, present:
 
 ## Examples
 
-```
+```text
 /research MCP protocol
 /research "database migration patterns"
 /research "authentication options" decisions
@@ -103,7 +108,7 @@ After saving, present:
 
 Always end with:
 
-```
+```text
 ## 📝 Research Complete
 
 **Saved to:** artifacts/research/[topic].md

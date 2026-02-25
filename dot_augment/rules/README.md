@@ -70,6 +70,9 @@ These rules are enforced with the same severity as scope violations:
   NEVER commit without explicit authorization
 - **Code Patterns**:
   No nested functions, no continue statements
+- **Tool Behavior Verification**:
+  ALWAYS verify CLI tool arguments/defaults before use (e.g., check if pyright
+  needs explicit directory)
 
 ### 3. git-mcp-required.md
 
@@ -101,8 +104,8 @@ These rules are enforced with the same severity as scope violations:
 ### 6. linting-enforcement.md
 
 - Run linters after code changes:
-  ast-grep → ruff → pyright/zuban
-- Prefer pyright or zuban over mypy for type checking
+  ast-grep → ruff → ty
+- Prefer ty over mypy for type checking
 - Fix errors rather than suppress
 - Approval required for suppressions
 
