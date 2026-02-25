@@ -4,6 +4,7 @@
 # dependencies = [
 #     "pydantic>=2.0",
 #     "pydantic-settings>=2.0",
+#     "plyvel>=1.5.0",
 # ]
 # ///
 """
@@ -24,10 +25,11 @@ from __future__ import annotations
 
 import json
 import sys
-from datetime import datetime
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any, cast
 
+import plyvel
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 from pydantic_settings import CliApp, CliSubCommand
 
@@ -374,6 +376,469 @@ def load_all(sessions_dir: Path | None = None) -> list[Session]:
 
 
 # =============================================================================
+# VSCode Session Loading Functions
+# =============================================================================
+
+
+VSCODE_STORAGE_DIR = Path.home() / ".config" / "Code" / "User" / "workspaceStorage"
+
+
+class VSCodeWorkspace(BaseModel):
+    """A VSCode workspace with Augment extension data."""
+
+    hash: str
+    path: str
+    db_path: Path
+
+    model_config = ConfigDict(arbitrary_types_allowed=True)
+
+
+def _get_workspace_path(ws_dir: Path) -> str:
+    """Extract workspace path from workspace.json, returning '(unknown)' on failure."""
+    ws_json = ws_dir / "workspace.json"
+    if not ws_json.exists():
+        return "(unknown)"
+    try:
+        data = json.loads(ws_json.read_text())
+        raw_path = data.get("folder") or data.get("configuration") or "(unknown)"
+        return raw_path.removeprefix("file://")
+    except json.JSONDecodeError:
+        return "(unknown)"
+
+
+def _try_build_workspace(ws_dir: Path) -> VSCodeWorkspace | None:
+    """Build a VSCodeWorkspace from a directory, returning None if invalid."""
+    if not ws_dir.is_dir():
+        return None
+    db_path = ws_dir / "Augment.vscode-augment" / "augment-kv-store"
+    if not db_path.exists():
+        return None
+    ws_path = _get_workspace_path(ws_dir)
+    return VSCodeWorkspace(hash=ws_dir.name, path=ws_path, db_path=db_path)
+
+
+def list_vscode_workspaces() -> list[VSCodeWorkspace]:
+    """
+    List all VSCode workspaces that have Augment extension data.
+
+    Returns:
+        List of VSCodeWorkspace objects with hash, path, and db_path
+
+    """
+    if not VSCODE_STORAGE_DIR.exists():
+        return []
+
+    return [
+        ws
+        for ws_dir in VSCODE_STORAGE_DIR.iterdir()
+        if (ws := _try_build_workspace(ws_dir)) is not None
+    ]
+
+
+class VSCodeConversationMeta(BaseModel):
+    """Metadata for a VSCode Augment conversation."""
+
+    conversation_id: str = Field(alias="conversationId")
+    last_updated: int = Field(alias="lastUpdated")
+    # Support both old format (itemCount) and new format (totalExchanges)
+    item_count: int = Field(default=0, alias="itemCount")
+    total_exchanges: int = Field(default=0, alias="totalExchanges")
+    has_exchanges: bool = Field(default=True, alias="hasExchanges")
+    workspace_hash: str = ""
+    workspace_path: str = ""
+    # Track which storage format this conversation uses
+    storage_format: str = "legacy"  # "legacy" or "exchange"
+
+    model_config = ConfigDict(populate_by_name=True)
+
+    @property
+    def exchange_count(self) -> int:
+        """Get exchange count from either format."""
+        return self.total_exchanges or self.item_count
+
+    @property
+    def last_updated_dt(self) -> datetime:
+        """Convert millisecond timestamp to datetime."""
+        return datetime.fromtimestamp(self.last_updated / 1000, tz=UTC)
+
+
+def _detect_storage_format(key_str: str) -> str | None:
+    """Detect the storage format from a LevelDB key string."""
+    if key_str.startswith("history-metadata:"):
+        return "legacy"
+    if key_str.startswith("metadata:"):
+        return "exchange"
+    return None
+
+
+def _try_parse_conversation_meta(
+    key: bytes, value: bytes, ws: VSCodeWorkspace
+) -> VSCodeConversationMeta | None:
+    """Parse a conversation metadata entry, returning None if invalid."""
+    key_str = key.decode("utf-8", errors="replace")
+    storage_format = _detect_storage_format(key_str)
+    if not storage_format:
+        return None
+    try:
+        meta = VSCodeConversationMeta.model_validate_json(value)
+    except (json.JSONDecodeError, ValueError):
+        return None
+    meta.workspace_hash = ws.hash
+    meta.workspace_path = ws.path
+    meta.storage_format = storage_format
+    return meta
+
+
+def _list_conversations_from_workspace(
+    ws: VSCodeWorkspace,
+) -> list[VSCodeConversationMeta]:
+    """List all conversations from a single workspace."""
+    try:
+        db = plyvel.DB(str(ws.db_path), create_if_missing=False)
+    except (OSError, plyvel.Error):
+        return []
+
+    conversations: list[VSCodeConversationMeta] = []
+    try:
+        for key, value in db:
+            meta = _try_parse_conversation_meta(key, value, ws)
+            if meta:
+                conversations.append(meta)
+    finally:
+        db.close()
+    return conversations
+
+
+def list_vscode_conversations(
+    workspace_hash: str | None = None,
+) -> list[VSCodeConversationMeta]:
+    """
+    List all conversations in VSCode workspaces.
+
+    Handles both legacy format (history-metadata:) and new format (metadata:).
+
+    Args:
+        workspace_hash: Optional filter by specific workspace hash
+
+    Returns:
+        List of conversation metadata objects
+
+    """
+    workspaces = list_vscode_workspaces()
+    if workspace_hash:
+        workspaces = [w for w in workspaces if w.hash == workspace_hash]
+
+    conversations: list[VSCodeConversationMeta] = []
+    for ws in workspaces:
+        conversations.extend(_list_conversations_from_workspace(ws))
+    return conversations
+
+
+def _convert_vscode_nodes_to_response_nodes(
+    structured_nodes: list[dict[str, Any]],
+) -> list[ResponseNode]:
+    """Convert VSCode structured_output_nodes to CLI ResponseNode format."""
+    result: list[ResponseNode] = []
+    for node in structured_nodes:
+        tool_use = None
+        if node.get("tool_use"):
+            tu = node["tool_use"]
+            tool_use = ToolUse(
+                tool_use_id=tu.get("tool_use_id", ""),
+                tool_name=tu.get("tool_name", ""),
+                input_json=tu.get("input_json", "{}"),
+                is_partial=tu.get("is_partial", False),
+            )
+
+        thinking = None
+        if node.get("thinking"):
+            th = node["thinking"]
+            if isinstance(th, str):
+                thinking = th
+            elif isinstance(th, dict):
+                thinking = ThinkingContent(
+                    summary=th.get("summary", ""),
+                    content=th.get("content"),
+                    encrypted_content=th.get("encrypted_content"),
+                )
+
+        result.append(
+            ResponseNode(
+                id=node.get("id", 0),
+                type=node.get("type", 0),
+                content=node.get("content", ""),
+                tool_use=tool_use,
+                thinking=thinking,
+            )
+        )
+    return result
+
+
+def _parse_timestamp(ts_raw: Any) -> datetime | None:
+    """Parse a timestamp that may be int (ms) or ISO string."""
+    if not ts_raw:
+        return None
+    if isinstance(ts_raw, str):
+        # ISO format string (e.g., "2025-10-14T16:50:18.475Z")
+        # Replace Z with +00:00 for fromisoformat compatibility
+        iso_str = ts_raw
+        if iso_str.endswith("Z"):
+            iso_str = iso_str[:-1] + "+00:00"
+        return datetime.fromisoformat(iso_str)
+    # Millisecond timestamp (int or float)
+    return datetime.fromtimestamp(ts_raw / 1000, tz=UTC)
+
+
+def _build_exchange_from_vscode_item(
+    item: dict[str, Any],
+    sequence: int,
+    request_nodes_key: str = "request_nodes",
+    response_nodes_key: str = "response_nodes",
+) -> Exchange | None:
+    """
+    Build an Exchange from a VSCode item (works for both legacy and exchange formats).
+
+    Args:
+        item: The raw item dict from LevelDB
+        sequence: Sequence number for ordering
+        request_nodes_key: Key for request nodes (differs between formats)
+        response_nodes_key: Key for response nodes (differs between formats)
+
+    Returns:
+        Exchange object or None if item should be skipped
+
+    """
+    # Skip non-exchange items (checkpoints, etc.)
+    if item.get("chatItemType") == "agentic-checkpoint-delimiter":
+        return None
+
+    # Build request nodes
+    request_nodes: list[RequestNode] = [
+        RequestNode(
+            id=node.get("id", 0),
+            type=node.get("type", 0),
+            text_node=node.get("text_node"),
+            ide_state_node=node.get("ide_state_node"),
+            tool_result_node=node.get("tool_result_node"),
+        )
+        for node in item.get(request_nodes_key, [])
+    ]
+
+    response_nodes = _convert_vscode_nodes_to_response_nodes(
+        item.get(response_nodes_key, [])
+    )
+
+    exchange_data = ExchangeData(
+        request_message=item.get("request_message", ""),
+        response_text=item.get("response_text", "") or "",
+        request_id=item.get("request_id", item.get("uuid", "")),
+        request_nodes=request_nodes,
+        response_nodes=response_nodes,
+    )
+
+    finished_at = _parse_timestamp(item.get("timestamp"))
+
+    return Exchange(
+        exchange=exchange_data,
+        completed=item.get("status") == "success",
+        sequenceId=float(sequence),
+        finishedAt=finished_at,
+        changedFiles=[],
+    )
+
+
+def _convert_vscode_item_to_exchange(
+    item: dict[str, Any], sequence: int
+) -> Exchange | None:
+    """Convert a VSCode legacy chat history item to CLI Exchange format."""
+    return _build_exchange_from_vscode_item(
+        item,
+        sequence,
+        request_nodes_key="structured_request_nodes",
+        response_nodes_key="structured_output_nodes",
+    )
+
+
+def _load_vscode_session_legacy(
+    db: Any, conversation_id: str
+) -> tuple[list[Exchange], datetime]:
+    """Load session using legacy format (history: keys with chatHistoryJson)."""
+    key = f"history:{conversation_id}".encode()
+    value = db.get(key)
+    if not value:
+        msg = f"Conversation not found: {conversation_id}"
+        raise FileNotFoundError(msg)
+
+    data = json.loads(value.decode())
+    chat_history_raw = json.loads(data.get("chatHistoryJson", "[]"))
+
+    # Get metadata for timestamps
+    meta_key = f"history-metadata:{conversation_id}".encode()
+    meta_value = db.get(meta_key)
+    last_updated = datetime.now(tz=UTC)
+    if meta_value:
+        meta = json.loads(meta_value.decode())
+        ts_ms = meta.get("lastUpdated", 0) / 1000
+        last_updated = datetime.fromtimestamp(ts_ms, tz=UTC)
+
+    # Convert items to exchanges
+    exchanges: list[Exchange] = []
+    seq = 0
+    for item in chat_history_raw:
+        exchange = _convert_vscode_item_to_exchange(item, seq)
+        if exchange:
+            exchanges.append(exchange)
+            seq += 1
+
+    return exchanges, last_updated
+
+
+def _load_vscode_session_exchange(
+    db: Any, conversation_id: str
+) -> tuple[list[Exchange], datetime]:
+    """Load session using new format (exchange: keys, one per exchange)."""
+    # Get metadata first
+    meta_key = f"metadata:{conversation_id}".encode()
+    meta_value = db.get(meta_key)
+    last_updated = datetime.now(tz=UTC)
+    if meta_value:
+        meta = json.loads(meta_value.decode())
+        ts_ms = meta.get("lastUpdated", 0) / 1000
+        last_updated = datetime.fromtimestamp(ts_ms, tz=UTC)
+
+    # Collect all exchange keys for this conversation
+    prefix = f"exchange:{conversation_id}:".encode()
+    exchange_items: list[dict[str, Any]] = []
+
+    for key, value in db.iterator(prefix=prefix):
+        key_str = key.decode()
+        # Skip temp exchanges (in-progress frontend state)
+        is_temp = "temp-fe" in key_str
+        if not is_temp:
+            try:
+                item = json.loads(value.decode())
+                exchange_items.append(item)
+            except json.JSONDecodeError:
+                pass  # Skip invalid entries
+
+    # Sort by timestamp (ISO string format works with string sorting)
+    exchange_items.sort(key=lambda x: x.get("timestamp", "") or "")
+
+    # Convert to Exchange objects
+    exchanges: list[Exchange] = []
+    for seq, item in enumerate(exchange_items):
+        exchange = _convert_vscode_exchange_item(item, seq)
+        if exchange:
+            exchanges.append(exchange)
+
+    return exchanges, last_updated
+
+
+def _convert_vscode_exchange_item(
+    item: dict[str, Any], sequence: int
+) -> Exchange | None:
+    """Convert a VSCode exchange-format item to CLI Exchange format."""
+    return _build_exchange_from_vscode_item(
+        item,
+        sequence,
+        request_nodes_key="request_nodes",
+        response_nodes_key="response_nodes",
+    )
+
+
+def load_vscode_session(workspace_hash: str, conversation_id: str) -> Session:
+    """
+    Load a VSCode conversation and convert to Session format.
+
+    Handles both legacy (history:) and new (exchange:) formats.
+
+    Args:
+        workspace_hash: The workspace hash (directory name in workspaceStorage)
+        conversation_id: The conversation UUID
+
+    Returns:
+        Session object compatible with CLI sessions
+
+    Raises:
+        FileNotFoundError: If workspace or conversation not found
+        ValueError: If conversation data is invalid
+
+    """
+    db_path = (
+        VSCODE_STORAGE_DIR
+        / workspace_hash
+        / "Augment.vscode-augment"
+        / "augment-kv-store"
+    )
+    if not db_path.exists():
+        msg = f"Workspace not found: {workspace_hash}"
+        raise FileNotFoundError(msg)
+
+    db = plyvel.DB(str(db_path), create_if_missing=False)
+    try:
+        # Try legacy format first (history: key)
+        legacy_key = f"history:{conversation_id}".encode()
+        if db.get(legacy_key):
+            exchanges, last_updated = _load_vscode_session_legacy(db, conversation_id)
+        else:
+            # Try new exchange format (metadata: + exchange: keys)
+            meta_key = f"metadata:{conversation_id}".encode()
+            if db.get(meta_key):
+                exchanges, last_updated = _load_vscode_session_exchange(
+                    db, conversation_id
+                )
+            else:
+                msg = f"Conversation not found: {conversation_id}"
+                raise FileNotFoundError(msg)
+
+        # Determine created time from first exchange
+        created = last_updated
+        if exchanges and exchanges[0].finished_at:
+            created = exchanges[0].finished_at
+
+        return Session(
+            sessionId=conversation_id,
+            created=created,
+            modified=last_updated,
+            chatHistory=exchanges,
+            agentState=None,
+            rootTaskUuid=None,
+        )
+
+    finally:
+        db.close()
+
+
+def _try_load_vscode_session(
+    conv: VSCodeConversationMeta,
+) -> Session | None:
+    """Attempt to load a VSCode session, returning None on failure."""
+    try:
+        return load_vscode_session(conv.workspace_hash, conv.conversation_id)
+    except (FileNotFoundError, ValueError, json.JSONDecodeError):
+        return None
+
+
+def load_all_vscode_sessions(workspace_hash: str | None = None) -> list[Session]:
+    """
+    Load all VSCode sessions, optionally filtered by workspace.
+
+    Args:
+        workspace_hash: Optional workspace hash to filter by
+
+    Returns:
+        List of Session objects
+
+    """
+    conversations = list_vscode_conversations(workspace_hash)
+    return [
+        session
+        for conv in conversations
+        if (session := _try_load_vscode_session(conv)) is not None
+    ]
+
+
+# =============================================================================
 # CLI Models
 # =============================================================================
 
@@ -383,6 +848,14 @@ class ListCmd(BaseModel):
 
     json_output: bool = Field(default=False, alias="json", description="Output as JSON")
     since: int = Field(default=30, description="Days to look back")
+    source: str = Field(
+        default="cli",
+        description="Source: 'cli', 'vscode', or 'all'",
+    )
+    workspace: str | None = Field(
+        default=None,
+        description="VSCode workspace hash (for source=vscode)",
+    )
 
     model_config = ConfigDict(populate_by_name=True)
 
@@ -391,6 +864,18 @@ class ShowCmd(BaseModel):
     """Show formatted session log."""
 
     session_id: str = Field(description="Session ID to display")
+    workspace: str | None = Field(
+        default=None,
+        description="VSCode workspace hash (required for VSCode sessions)",
+    )
+
+
+class WorkspacesCmd(BaseModel):
+    """List VSCode workspaces with Augment data."""
+
+    json_output: bool = Field(default=False, alias="json", description="Output as JSON")
+
+    model_config = ConfigDict(populate_by_name=True)
 
 
 class AuglogCLI(BaseModel):
@@ -398,6 +883,7 @@ class AuglogCLI(BaseModel):
 
     list: CliSubCommand[ListCmd]
     show: CliSubCommand[ShowCmd]
+    workspaces: CliSubCommand[WorkspacesCmd]
 
 
 # =============================================================================
@@ -407,7 +893,15 @@ class AuglogCLI(BaseModel):
 
 def _run_list(cmd: ListCmd) -> int:
     """Execute list command."""
-    sessions = load_all()
+    sessions: list[Session] = []
+
+    # Collect sessions from requested sources
+    if cmd.source in ("cli", "all"):
+        sessions.extend(load_all())
+
+    if cmd.source in ("vscode", "all"):
+        sessions.extend(load_all_vscode_sessions(cmd.workspace))
+
     # Filter by date using local timezone for consistency
     cutoff = datetime.now(tz=datetime.now().astimezone().tzinfo).timestamp() - (
         cmd.since * 86400
@@ -439,11 +933,26 @@ def _run_list(cmd: ListCmd) -> int:
 
 def _run_show(cmd: ShowCmd) -> int:
     """Execute show command."""
-    # Support partial session ID matching
     session_id = cmd.session_id
+
+    # If workspace is specified, load from VSCode
+    if cmd.workspace:
+        try:
+            session = load_vscode_session(cmd.workspace, session_id)
+        except FileNotFoundError:
+            # CLI error output is intentional
+            msg = f"Session not found: {session_id} in workspace {cmd.workspace}"
+            print(msg, file=sys.stderr)  # noqa: T201
+            return 1
+        else:
+            # CLI output is intentional
+            print(session.format_log())  # noqa: T201
+            return 0
+
+    # Otherwise, try CLI sessions with partial ID matching
     matches = [sid for sid in list_all() if sid.startswith(session_id)]
 
-    if len(matches) == 0:
+    if not matches:
         # CLI error output is intentional
         print(f"Session not found: {session_id}", file=sys.stderr)  # noqa: T201
         return 1
@@ -466,6 +975,28 @@ def _run_show(cmd: ShowCmd) -> int:
     return 0
 
 
+def _run_workspaces(cmd: WorkspacesCmd) -> int:
+    """Execute workspaces command."""
+    workspaces = list_vscode_workspaces()
+
+    if cmd.json_output:
+        output = [
+            {
+                "hash": ws.hash,
+                "path": ws.path,
+            }
+            for ws in workspaces
+        ]
+        # CLI output is intentional
+        print(json.dumps(output, indent=2))  # noqa: T201
+    else:
+        for ws in workspaces:
+            # CLI output is intentional
+            print(f"{ws.hash[:12]}  {ws.path}")  # noqa: T201
+
+    return 0
+
+
 def main() -> int:
     """CLI entry point."""
     cli = CliApp.run(AuglogCLI)
@@ -473,6 +1004,8 @@ def main() -> int:
         return _run_list(cli.list)
     if cli.show:
         return _run_show(cli.show)
+    if cli.workspaces:
+        return _run_workspaces(cli.workspaces)
     return 0
 
 
