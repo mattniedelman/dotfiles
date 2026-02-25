@@ -12,7 +12,7 @@ Memory.
 ## Prerequisites
 
 First, read and follow the skill at:
-`~/.augment/skills/research/SKILL.md`
+`~/.augment/skills/storm/SKILL.md`
 
 ## Arguments
 
