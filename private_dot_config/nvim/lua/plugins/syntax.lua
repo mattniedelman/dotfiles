@@ -1,6 +1,37 @@
 -- Syntax Parsing & Understanding
 -- Treesitter and code parsing configuration
 
+-- Register Quint filetype
+vim.filetype.add({
+  extension = {
+    qnt = "quint",
+  },
+})
+
+-- Register Quint parser for nvim-treesitter (new API)
+vim.api.nvim_create_autocmd("User", {
+  pattern = "TSUpdate",
+  callback = function()
+    require("nvim-treesitter.parsers").quint = {
+      install_info = {
+        url = "https://github.com/gruhn/tree-sitter-quint",
+        branch = "release",
+      },
+    }
+  end,
+})
+
+-- Register the parser with Neovim's treesitter
+vim.treesitter.language.register("quint", { "quint" })
+
+-- Enable treesitter highlighting for quint files
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "quint",
+  callback = function()
+    vim.treesitter.start()
+  end,
+})
+
 return {
   {
     "nvim-treesitter/nvim-treesitter",
