@@ -259,7 +259,7 @@
         ]
       },
       {
-        "matcher": "str-replace-editor",
+        "matcher": "save-file|str-replace-editor|mcp:^(write|edit|save|replace|insert)_",
         "hooks": [
           {
             "type": "command",
@@ -273,6 +273,44 @@
           {
             "type": "command",
             "command": "/home/mattniedelman/.augment/hooks/pip_to_uv.sh"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "mcp:.*_git$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/mattniedelman/.augment/hooks/git_session_recovery.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "sub-agent-ralph-.*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/mattniedelman/.augment/hooks/ralph_monitor.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "save-file|str-replace-editor|mcp:^(write|edit|save|replace|insert)_",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/mattniedelman/.augment/hooks/ascii_check.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "save-file|str-replace-editor|mcp:^(write|edit|save|replace|insert)_",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/mattniedelman/.augment/hooks/auto_lint.sh"
           }
         ]
       }
