@@ -46,7 +46,8 @@
     {
       "toolName": "mcp:git_commit_git",
       "permission": {
-        "type": "ask-user"
+        "type": "script-policy",
+        "script": "/home/mattniedelman/.augment/hooks/git_commit_policy.sh"
       }
     },
     {

@@ -62,6 +62,21 @@ if is_in_worktree:
     print(json.dumps(output))
     sys.exit(0)
 
-# For main checkout, exit silently - toolPermissions "ask-user" will apply
+# For main checkout, deny the commit - requires explicit user approval via Augment prompt
+tool_input = event_data.get("tool_input", {})
+commit_message = tool_input.get("message", "<no message>")
+
+output = {
+    "hookSpecificOutput": {
+        "hookEventName": "PreToolUse",
+        "permissionDecision": "deny",
+        "permissionDecisionReason": (
+            f"Committing to main checkout (not a worktree).\n"
+            f'Message: "{commit_message}"\n\n'
+            f"To commit, approve this tool call in Augment."
+        ),
+    }
+}
+print(json.dumps(output))
 sys.exit(0)
 
