@@ -1,0 +1,43 @@
+# Editors
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.netrwhist
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Node
+node_modules/
+
+# Rust
+target/
+
+# Go
+bin/
+
+# Environment
+.env.local
+.direnv/
+
+# AI/Dev tools
+.augment/
+.claude/
+.codex/
+.serena/
+
+# Misc
+*.log
+.cache/
+
+megalinter-reports/
+.worktrees/
