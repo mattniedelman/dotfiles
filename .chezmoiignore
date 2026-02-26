@@ -1,0 +1,37 @@
+# Augment - auto-generated/runtime data
+.augment/sessions/
+.augment/checkpoint-documents/
+.augment/task-storage/
+.augment/binaries/
+.augment/prompt-history.jsonl
+.augment/session.json
+.augment/settings.json.backup
+.augment/.auggie.json
+
+# Augment - caches
+.augment/.ruff_cache/
+.augment/.serena/
+.augment/.ralph/
+.augment/.augment/
+.augment/.markdownlint.jsonc
+
+# Augment - Python caches/locks
+.augment/hooks/__pycache__/
+.augment/hooks/uv.lock
+.augment/skills/*/__pycache__/
+
+# Augment - content to manage separately or skip
+.augment/artifacts/
+.augment/bundles/
+.augment/specs/
+
+# Neovim - generated/state
+.config/nvim/lazy-lock.json
+.config/nvim/.luarc.json
+
+# Fish - runtime state and logs
+.config/fish/fish_variables
+.config/fish/fish_variables.*
+.config/fish/logs/
+.config/fish/themes/
+
