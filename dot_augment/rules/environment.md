@@ -1,11 +1,27 @@
 ---
 type: always_apply
 priority: HIGH
-description: Workspace configuration, path resolution, shell (bash), and environment setup
-last_updated: 2026-02-19
+description: Workspace configuration, path resolution, and environment setup
+last_updated: 2026-02-26
 ---
 
 # Development Environment Configuration
+
+## System Information
+
+| Property | Value |
+|----------|-------|
+| **OS** | Ubuntu (not Arch) |
+| **Shell** | fish (user's interactive shell) |
+| **Desktop** | GNOME |
+| **Display server** | Wayland |
+
+**Notes:**
+
+- Scripts and hooks are written in bash for portability
+- When giving advice to the user (package installation, shell config, etc.), reference Ubuntu and fish appropriately
+- Package manager is `apt`, not `pacman`
+- Shell config is `~/.config/fish/config.fish`, not `~/.bashrc` or `~/.zshrc`
 
 ## CRITICAL: Path Verification
 

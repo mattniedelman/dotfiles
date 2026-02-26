@@ -54,9 +54,12 @@ def fix_content(content: str) -> tuple[str, list[str]]:
             fixed = fixed.replace(unicode_char, ascii_replacement)
             replacements_made.append(f"{count}x {name}")
 
-    # Clean up duplicate spaces (e.g., from " -- " replacing em dash next to existing space)
-    while "  " in fixed:
-        fixed = fixed.replace("  ", " ")
+    # Clean up extra spaces around em-dash replacement only
+    # Em-dash is replaced with " -- ", which can create "  -- " adjacent to existing spaces
+    # e.g., "word  -- more" becomes "word -- more"
+    # Do NOT use blanket double-space replacement - it destroys YAML/Python indentation!
+    fixed = fixed.replace("  -- ", " -- ")  # double space before --
+    fixed = fixed.replace(" --  ", " -- ")  # double space after --
 
     return fixed, replacements_made
 

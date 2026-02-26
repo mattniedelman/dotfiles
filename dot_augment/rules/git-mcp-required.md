@@ -2,7 +2,7 @@
 type: always_apply
 priority: CRITICAL
 description: Require all git operations to use the git MCP server, not direct process execution
-last_updated: 2026-02-13
+last_updated: 2026-02-25
 ---
 
 # Git Operations Must Use MCP Server
@@ -55,12 +55,34 @@ Common issues:
 
 **If errors persist**, restart the MCP server or check ToolHive status.
 
+## Enforcement Mechanism
+
+This rule is enforced by tool permissions in `settings.json`:
+
+```json
+{
+  "toolName": "launch-process",
+  "permission": {
+    "type": "deny"
+  },
+  "shellInputRegex": "\\bgit\\s+(add|commit|push|pull|merge|rebase|reset|checkout|branch|stash|cherry-pick|revert|tag|fetch|clone|init|remote|config|diff|log|status|show)\\b"
+}
+```
+
+The regex uses `\b` word boundaries to catch:
+
+- Direct invocations:
+  `git commit`
+- Full path invocations:
+  `/usr/bin/git commit`
+- With env vars:
+  `GIT_AUTHOR_NAME="x" git commit`
+- In subshells and command substitutions
+
+**Do not attempt workarounds.** If the MCP tool fails, report the issue rather
+than bypassing the policy.
+
 ## Cross-Reference
-
-This rule is enforced by:
-
-- **Tool permissions** in `settings.json` - blocks direct `git` commands via
-  `launch-process`
 
 Related rules:
 
