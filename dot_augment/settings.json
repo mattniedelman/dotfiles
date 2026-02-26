@@ -76,7 +76,7 @@
       "permission": {
         "type": "deny"
       },
-      "shellInputRegex": "(^|[;&|]\\s*)git\\s"
+      "shellInputRegex": "\\bgit\\s+(add|commit|push|pull|merge|rebase|reset|checkout|branch|stash|cherry-pick|revert|tag|fetch|clone|init|remote|config|diff|log|status|show)\\b"
     },
     {
       "toolName": "launch-process",
@@ -91,6 +91,13 @@
         "type": "ask-user"
       },
       "shellInputRegex": "(uv remove|pip uninstall|poetry remove)\\s"
+    },
+    {
+      "toolName": "launch-process",
+      "permission": {
+        "type": "deny"
+      },
+      "shellInputRegex": "(curl|wget)\\s+.*github\\.com|raw\\.githubusercontent\\.com"
     },
     {
       "toolName": "launch-process",
@@ -266,53 +273,6 @@
           {
             "type": "command",
             "command": "/home/mattniedelman/.augment/hooks/pip_to_uv.sh"
-          }
-        ]
-      }
-    ],
-    "PostToolUse": [
-      {
-        "matcher": "mcp:.*_git$",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "/home/mattniedelman/.augment/hooks/git_session_recovery.sh"
-          }
-        ]
-      },
-      {
-        "matcher": "sub-agent-ralph-.*",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "/home/mattniedelman/.augment/hooks/ralph_monitor.sh"
-          }
-        ]
-      },
-      {
-        "matcher": "save-file|str-replace-editor|mcp:^(write|edit|save|replace|insert|canvas|move)_",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "/home/mattniedelman/.augment/hooks/ascii_check.sh"
-          }
-        ]
-      },
-      {
-        "matcher": "save-file|str-replace-editor|mcp:^(write|edit|save|replace|insert|canvas|move)_",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "/home/mattniedelman/.augment/hooks/auto_lint.sh"
-          }
-        ]
-      },
-      {
-        "matcher": "save-file|str-replace-editor",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "/home/mattniedelman/.augment/hooks/validate_skill.sh"
           }
         ]
       }

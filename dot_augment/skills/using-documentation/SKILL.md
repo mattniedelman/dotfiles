@@ -1,6 +1,6 @@
 ---
 name: using-documentation
-description: Use when accessing library documentation - check crawled docs, trigger crawls when needed, and search for information
+description: Use when accessing library documentation, asking about software capabilities, or checking what a tool can do - starts with llms.txt, falls back to crwl if web-fetch fails
 ---
 
 # Using Documentation
@@ -15,6 +15,8 @@ Use this skill when:
 - Working with a new library or framework
 - Need API reference or examples for a library
 - User asks "how do I use X?", "what's the API for Y?"
+- **User asks about the capabilities of software** ("can X do Y?", "does X
+  support Y?", "what can X do?")
 - Designing a feature using external libraries
 - Implementing code that depends on library behavior
 - User mentions a library/framework and needs guidance
@@ -141,6 +143,21 @@ mcp__basic-memory__build_context(
 2. Search memory pillar for "AsyncClient.get"
 3. Return exact signature and parameters
 
+## Capability Questions Workflow
+
+When asked about software capabilities ("can X do Y?", "does X support Y?",
+"what features does X have?"):
+
+1. **Try llms.txt first** - Fetch `https://docs.example.com/llms.txt` or
+   `https://example.com/llms.txt`
+2. **Use web-fetch for specific pages** - If llms.txt lists relevant pages
+3. **Fall back to crwl** - If web-fetch fails (403, rate-limited, bot-blocked),
+   use the `crwl` tool:
+   ```bash
+   crwl <url>
+   ```
+4. **Search crawled docs** - If docs are already stored in Basic Memory
+
 ## llms.txt Discovery
 
 When asked to review documentation for any tool, library, framework, or service:
@@ -157,9 +174,16 @@ When asked to review documentation for any tool, library, framework, or service:
    - Navigate directly to authoritative sources
 
 3. **Fetch relevant pages from the index** - Based on the user's request, fetch
-   specific documentation pages listed in llms.txt
+   specific documentation pages listed in llms.txt using `web-fetch`
 
-4. **Fall back to web search** - If no llms.txt exists, use web-fetch or search
+4. **Fall back to crwl if web-fetch fails** - Some sites block automated
+   fetching. Use `crwl` as an alternative:
+   ```bash
+   crwl <url>
+   ```
+
+5. **Fall back to web search** - If no llms.txt exists and direct fetching
+   fails, use web-search
 
 ## Best Practices
 
