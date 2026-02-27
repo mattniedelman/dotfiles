@@ -42,6 +42,48 @@ def find_project_root(file_path: str) -> Path | None:
     return None
 
 
+def get_package_manager(project_root: Path | None) -> str | None:
+    """Detect the package manager used by a Python project.
+
+    Returns 'poetry' if poetry.lock exists, 'uv' if uv.lock exists,
+    or None if no lock file found.
+    """
+    if project_root is None:
+        return None
+    if (project_root / "poetry.lock").exists():
+        return "poetry"
+    if (project_root / "uv.lock").exists():
+        return "uv"
+    # Check if pyproject.toml uses poetry build system
+    pyproject = project_root / "pyproject.toml"
+    if pyproject.exists():
+        try:
+            content = pyproject.read_text()
+            if "poetry" in content.lower():
+                return "poetry"
+        except OSError:
+            pass
+    return None
+
+
+def run_in_project_venv(
+    cmd: list[str], project_root: Path | None, timeout: int = 30
+) -> tuple[int, str]:
+    """Run a command in the project's virtual environment.
+
+    Uses poetry run or uv run if a package manager is detected,
+    otherwise runs the command directly.
+    """
+    pkg_manager = get_package_manager(project_root)
+    if pkg_manager == "poetry":
+        full_cmd = ["poetry", "run", *cmd]
+    elif pkg_manager == "uv":
+        full_cmd = ["uv", "run", *cmd]
+    else:
+        full_cmd = cmd
+    return run_command(full_cmd, cwd=project_root, timeout=timeout)
+
+
 def run_command(
     cmd: list[str], cwd: Path | None = None, timeout: int = 30
 ) -> tuple[int, str]:
@@ -103,9 +145,10 @@ def lint_python(files: list[str]) -> list[str]:
         )
         if code != 0 and out.strip():
             errors.append(f"ruff ({f}):\n{out}")
-        code, out = run_command(
+        # Run ty in the project's venv to resolve imports correctly
+        code, out = run_in_project_venv(
             ["ty", "check", f],
-            cwd=project_root,
+            project_root,
         )
         if code != 0 and out.strip():
             errors.append(f"ty ({f}):\n{out}")
