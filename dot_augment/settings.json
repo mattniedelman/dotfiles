@@ -288,6 +288,15 @@
         ]
       },
       {
+        "matcher": "mcp:.*_git$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/mattniedelman/.augment/hooks/git_mcp_error_context.sh"
+          }
+        ]
+      },
+      {
         "matcher": "sub-agent-ralph-.*",
         "hooks": [
           {
