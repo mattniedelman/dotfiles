@@ -41,17 +41,25 @@ Use the git MCP server tools for all git operations:
 
 ## Troubleshooting MCP Server Errors
 
-**When git MCP server tools fail with errors**, check the server logs:
+**When git MCP server tools fail with schema validation errors** (like `-32602:
+Structured content does not match...`), the actual error is in the server logs.
+
+The `git_mcp_error_context.sh` hook automatically extracts recent errors from
+the logs and injects them as context.
+If the hook doesn't provide context, check manually:
 
 ```bash
-cat ~/.local/state/git-mcp-server/git-mcp-server.log
+tail -20 ~/.local/state/git-mcp-server/logs/combined.log | jq -r 'select(.level >= 50) | .errorData.originalMessage // .msg'
 ```
 
-Common issues:
+Common error causes:
 
-- Schema validation errors (MCP tool output doesn't match expected schema)
-- Server crashes or restarts
-- Configuration issues
+- **Incorrect tool invocation** - wrong parameters, missing required fields
+- **Session working directory not set** - use `git_set_working_dir_git` first
+- **Server crashes or restarts** - check ToolHive status
+
+**Schema errors almost always indicate incorrect usage**, not server bugs.
+Review the parameters passed to the tool before assuming server issues.
 
 **If errors persist**, restart the MCP server or check ToolHive status.
 
