@@ -282,12 +282,18 @@ See the `knowledge-capture` skill for detailed notes guidance including:
 **Automatically capture design decisions, architectural choices, and technical
 trade-offs to Basic Memory immediately when they occur during conversation.**
 
-| Capture When | Directory | Example |
-|--------------|-----------|---------|
+**CRITICAL:** These are Basic Memory directories, NOT local filesystem paths.
+Always use `write_note_basic-memory` - NEVER use `save-file` or write to local
+`artifacts/` or `knowledge/` folders in the project.
+
+| Capture When | Basic Memory Directory | Example |
+|--------------|------------------------|---------|
 | Architecture decisions made | `artifacts/architecture/` | Framework choice, component structure |
 | Design decisions made | `artifacts/specs/` | API design, data models |
 | Patterns established | `knowledge/patterns/` | Implementation conventions |
 | Trade-offs chosen | `artifacts/architecture/` | Option A over B with rationale |
+| Implementation plans | `artifacts/plans/` | Step-by-step implementation guides |
+| Research findings | `knowledge/research/` | STORM or deep-dive output |
 
 **Behavior**:
 
