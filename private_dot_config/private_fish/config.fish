@@ -14,6 +14,10 @@ set -gx LC_COLLATE C
 set -gx RIPGREP_CONFIG_PATH ~/.ripgreprc
 set -gx AST_GREP_CONFIG /home/mattniedelman/.config/ast-grep/sgconfig.yml
 
+# AWS SSO defaults for aws-sso-util
+set -gx AWS_DEFAULT_SSO_START_URL https://fairwarning.awsapps.com/start
+set -gx AWS_DEFAULT_SSO_REGION us-east-2
+
 # Note, this is for a local instance of obsidian
 set -gx OBSIDIAN_REST_API_KEY f5d4c30b08affc018b35b77440b57087aba42c76200ae08e3bff4608d5493311
 
