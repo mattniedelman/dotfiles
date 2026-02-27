@@ -44,14 +44,17 @@ Once you understand what you're building, present the design in small sections
 
 ## After the Design
 
-**Documentation:** Save the validated design to Basic Memory:
+**Documentation:** Save the validated design to Basic Memory.
+
+**CRITICAL:** Always use `write_note_basic-memory` - NEVER use `save-file` or
+write design documents to local filesystem folders.
 
 ```python
-write_note_basic-memory(
+write_note_basic - memory(
     title="Design: <topic>",
     content="[design content]",
-    directory="artifacts/specs",
-    tags=["design", "spec", "<topic-tags>"]
+    directory="artifacts/specs",  # Basic Memory directory, not local path
+    tags=["design", "spec", "<topic-tags>"],
 )
 ```
 
