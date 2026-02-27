@@ -24,7 +24,22 @@ implementation plan."
 **Context:** This should be run in a dedicated worktree (created by
 brainstorming skill).
 
-**Save plans to:** `docs/plans/YYYY-MM-DD-<feature-name>.md`
+## Output Storage
+
+**CRITICAL:** All implementation plans MUST be saved to Basic Memory using
+`write_note_basic-memory`.
+NEVER use `save-file` or write files to the local filesystem.
+
+**Save plans to:** Basic Memory `artifacts/plans/` directory
+
+```python
+write_note_basic - memory(
+    title="Plan: <feature-name>",
+    content="[plan content]",
+    directory="artifacts/plans",
+    tags=["plan", "implementation", "<feature-tags>"],
+)
+```
 
 ## Bite-Sized Task Granularity
 
@@ -100,9 +115,9 @@ git commit -m "feat: add specific feature"
 
 ## Execution Handoff
 
-After saving the plan, offer execution choice:
+After saving the plan to Basic Memory, offer execution choice:
 
-**"Plan complete and saved to `docs/plans/<filename>.md`. Two execution options:**
+**"Plan complete and saved to Basic Memory (`artifacts/plans/<feature-name>`). Two execution options:**
 
 **1. Subagent-Driven (this session)** - I dispatch fresh subagent per task, review between tasks, fast iteration
 

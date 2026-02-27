@@ -64,13 +64,19 @@ Implications, trade-offs, and constraints this creates
 - implements \[[parent-spec]]
 ```
 
-**Directory mapping**:
+**Directory mapping** (these are Basic Memory directories, NOT local filesystem
+paths):
 
-| Decision Type | Directory |
-|---------------|-----------|
+| Decision Type | Basic Memory Directory |
+|---------------|------------------------|
 | Architecture decisions | `artifacts/architecture/` |
 | Design specifications | `artifacts/specs/` |
 | Reusable patterns | `knowledge/patterns/` |
+
+**CRITICAL:** Always use `write_note_basic-memory` with the `directory`
+parameter.
+NEVER use `save-file` to create notes in local `artifacts/` or `knowledge/`
+folders.
 
 ### Session Start (MUST check basic-memory)
 
@@ -290,25 +296,19 @@ kebab-case).
 
 ```python
 # Write a new note
-mcp__basic-memory__write_note(
+mcp__basic - memory__write_note(
     title="Your Note Title",
     content="Full markdown content...",
     folder="appropriate/folder",
     tags=["tag1", "tag2"],
-    project="main"  # or appropriate project
+    project="main",  # or appropriate project
 )
 
 # Search for related notes to link
-mcp__basic-memory__search_notes(
-    query="relevant terms",
-    project="main"
-)
+mcp__basic - memory__search_notes(query="relevant terms", project="main")
 
 # Read existing notes for context
-mcp__basic-memory__read_note(
-    identifier="note-title-or-permalink",
-    project="main"
-)
+mcp__basic - memory__read_note(identifier="note-title-or-permalink", project="main")
 ```
 
 ## Folder Organization
