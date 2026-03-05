@@ -14,8 +14,8 @@
 
 # eza: additional listing variants
 if command -q eza
-    alias lt='eza -T --group-directories-first'  # tree view
-    alias l='eza -lah --group-directories-first --git'  # detailed all
+    alias lt='eza -T --group-directories-first' # tree view
+    alias l='eza -lah --group-directories-first --git' # detailed all
 end
 
 # bat: plain mode for when you need it interactively
@@ -53,7 +53,8 @@ alias sg='sg --config $AST_GREP_CONFIG'
 # ============================================================================
 # Kubernetes
 # ============================================================================
-alias k='kubectl'
+# Note: k is defined as a function in functions/k.fish
+# It wraps kubectl with auto-sshuttle for EKS clusters
 
 # ============================================================================
 # Terraform
@@ -64,4 +65,3 @@ alias tf='terraform'
 # Kitty Terminal
 # ============================================================================
 alias icat="kitty +kitten icat"
-

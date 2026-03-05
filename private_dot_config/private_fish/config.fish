@@ -8,6 +8,7 @@
 # Environment Variables (applies to all shells)
 # ============================================================================
 set -gx EDITOR nvim
+set -gx SUDO_EDITOR ~/.local/bin/sudoedit-nvim
 set -gx TERM xterm
 set -gx DIRENV_LOG_FORMAT ""
 set -gx LC_COLLATE C
@@ -101,3 +102,25 @@ end
 # Added by ToolHive UI - do not modify this block
 fish_add_path -g $HOME/.toolhive/bin
 # End ToolHive UI
+
+# Vikunja task management aliases
+function todo
+    switch $argv[1]
+        case check done
+            vja toggle $argv[2..-1]
+        case add new
+            vja add $argv[2..-1]
+        case ls list
+            vja ls $argv[2..-1]
+        case show
+            vja show $argv[2..-1]
+        case edit modify
+            vja edit $argv[2..-1]
+        case delete rm
+            vja delete $argv[2..-1]
+        case open
+            vja open $argv[2..-1]
+        case '*'
+            vja $argv
+    end
+end
