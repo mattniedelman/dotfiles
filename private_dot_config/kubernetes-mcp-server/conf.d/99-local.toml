@@ -1,0 +1,12 @@
+# Local overrides for kubernetes-mcp-server
+# This file is loaded last and overrides all other settings
+#
+# Uncomment to enable read-only mode for maximum safety:
+# read_only = true
+#
+# Uncomment to increase logging verbosity for debugging:
+# log_level = 5
+#
+# Uncomment to disable destructive operations (delete, etc.):
+# disable_destructive = true
+
