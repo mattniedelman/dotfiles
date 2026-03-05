@@ -95,7 +95,7 @@ After saving the spec file, update the knowledge graph:
 Save spec to Basic Memory:**
 
 ```python
-write_note_basic-memory(
+write_note_basic - memory(
     title="Spec: <Topic Name>",
     directory="artifacts/specs",
     tags=["spec", "ralph", "<project-tag>"],
@@ -129,7 +129,7 @@ write_note_basic-memory(
 - implements [[Project: <Project Name>]]
 - relates_to [[Spec: <Related Spec>]]
 - depends_on [[<Dependency>]]
-"""
+""",
 )
 ```
 
@@ -141,7 +141,7 @@ Create or update:
 
 ```python
 # If project note doesn't exist, create it:
-write_note_basic-memory(
+write_note_basic - memory(
     title="Project: <Project Name>",
     directory="projects",
     tags=["project", "ralph", "active"],
@@ -167,15 +167,15 @@ write_note_basic-memory(
 ## Relations
 - contains [[Spec: <Topic>]]
 - relates_to [[<Related Project or System>]]
-"""
+""",
 )
 
 # If project note exists, use edit_note_basic-memory to append:
-edit_note_basic-memory(
+edit_note_basic - memory(
     identifier="projects/<project-name>",
     operation="append",
     section="Active Specs",
-    content="| [[Spec: <New Topic>]] | drafting | <date> |"
+    content="| [[Spec: <New Topic>]] | drafting | <date> |",
 )
 ```
 
@@ -240,7 +240,14 @@ Loop until both reviewers approve, then next task.
 
 ### Phase 5: Completion
 
-Use superpowers:finishing-a-development-branch for final steps.
+Use superpowers:finishing-a-development-branch for final steps:
+
+1. **Tests** - Verify all tests pass
+2. **Linting** - If lint workflow configured, use superpowers:lint-workflow to
+   verify.
+   If not, offer to set up GitHub Actions linting
+3. **Summary** - Present changes to user
+4. **Merge** - Merge to user's branch and cleanup worktree
 
 ## Autonomous Loop Protocol
 
@@ -344,6 +351,8 @@ When user runs `/ralph <goal>`:
 6. **Phase 5:
    Finish**
    - Run superpowers:finishing-a-development-branch
+   - Includes:
+     tests → linting (with setup offer if missing) → summary → merge
 
 ## User Checkpoints
 
@@ -362,3 +371,4 @@ Pause for user approval at:
 - `superpowers:subagent-driven-development` - Task execution pattern
 - `superpowers:writing-plans` - Plan creation details
 - `superpowers:finishing-a-development-branch` - Branch completion
+- `superpowers:lint-workflow` - Linting verification (used in Phase 5)
