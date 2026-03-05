@@ -72,30 +72,6 @@ Which would you prefer?
 
 **Note:** Option 1 creates `$REPO_ROOT/.worktrees/`, not a sibling directory.
 
-## Safety Verification
-
-### For Project-Local Directories (.worktrees or worktrees)
-
-**MUST verify directory is ignored before creating worktree:**
-
-```bash
-# Check if directory is ignored (respects local, global, and system gitignore)
-git check-ignore -q .worktrees 2>/dev/null || git check-ignore -q worktrees 2>/dev/null
-```
-
-**If NOT ignored:**
-
-1. Add appropriate line to .gitignore
-2. Commit the change
-3. Proceed with worktree creation
-
-**Why critical:** Prevents accidentally committing worktree contents to
-repository.
-
-### For Global Directory (~/.config/superpowers/worktrees)
-
-No .gitignore verification needed - outside project entirely.
-
 ## Creation Steps
 
 ### 1. Detect Project Root and Name
@@ -164,11 +140,10 @@ Ready to implement <feature-name>
 
 | Situation | Action |
 |-----------|--------|
-| `.worktrees/` exists | Use it (verify ignored) |
-| `worktrees/` exists | Use it (verify ignored) |
+| `.worktrees/` exists | Use it |
+| `worktrees/` exists | Use it |
 | Both exist | Use `.worktrees/` |
 | Neither exists | Check config → Ask user |
-| Directory not ignored | Add to .gitignore + commit |
 | Tests fail during baseline | Report failures + ask |
 
 ## Red Flags
@@ -176,7 +151,6 @@ Ready to implement <feature-name>
 **Never:**
 
 - Create worktree directory as a SIBLING to the repo (e.g., `../worktrees/`)
-- Create worktree without verifying it's ignored (project-local)
 - Skip baseline test verification
 - Proceed with failing tests without asking
 - Assume directory location when ambiguous
@@ -203,7 +177,6 @@ Ready to implement <feature-name>
 
 - Follow directory priority:
   existing > config > ask
-- Verify directory is ignored for project-local
 - Auto-detect and run project setup
 - Verify clean test baseline
 
