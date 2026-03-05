@@ -262,30 +262,49 @@ def format_json(files: list[str]) -> list[str]:
 # =============================================================================
 
 
-CBFMT_CONFIG = Path.home() / ".config/cbfmt.toml"
+MDSF_CONFIG = Path.home() / ".config/mdsf/mdsf.json"
 
 
 def format_markdown(files: list[str]) -> list[str]:
-    """Format Markdown files with mdslw (line wrapping) and cbfmt (code blocks)."""
+    """Format Markdown files with mdsf (code blocks) and mdslw (line wrapping).
+
+    mdsf formats code blocks using language-specific tools configured in
+    ~/.config/mdsf/mdsf.json (e.g., ruff for Python, shfmt for bash, prettier
+    for JS/TS). mdslw handles semantic line wrapping of prose content.
+
+    Note: mdsf only runs FORMATTERS, not linters. Linters that return non-zero
+    on errors (like shellcheck, ruff:check) would prevent mdsf from writing
+    changes. Actual linting happens in lint_markdown via markdownlint.
+    """
     for f in files:
-        # First: mdslw for semantic line wrapping of prose
+        # First: mdsf for formatting code blocks
+        # Uses config from ~/.config/mdsf/mdsf.json if present
+        if MDSF_CONFIG.exists():
+            run_command(["mdsf", "format", "--config", str(MDSF_CONFIG), f])
+        else:
+            run_command(["mdsf", "format", f])
+        # Second: mdslw for semantic line wrapping of prose
         code, out = run_command(["mdslw", f])
         if code == 0 and out:
             Path(f).write_text(out)
-        # Second: cbfmt for formatting code blocks based on language
-        if CBFMT_CONFIG.exists():
-            run_command(["cbfmt", "--config", str(CBFMT_CONFIG), "-w", f])
     return []
 
 
 def lint_markdown(files: list[str]) -> list[str]:
-    """Lint Markdown files with markdownlint-cli2 and lychee wiki-link checker."""
+    """Lint Markdown files with markdownlint-cli2 and lychee wiki-link checker.
+
+    Runs with --fix first to auto-correct formatting issues (blank lines,
+    list spacing, etc.), then reports any remaining unfixable errors.
+    """
     errors: list[str] = []
     config = TEAM_LINTER_CONFIGS / ".markdownlint.json"
     config_args: list[str] = []
     if config.exists():
         config_args = ["--config", str(config)]
     for f in files:
+        # Auto-fix first - handles ~90% of formatting issues automatically
+        run_command(["markdownlint-cli2", "--fix", *config_args, f])
+        # Then check for remaining unfixable errors
         code, out = run_command(["markdownlint-cli2", *config_args, f])
         if code != 0 and out.strip():
             errors.append(f"markdownlint ({f}):\n{out}")
@@ -392,12 +411,20 @@ def lint_dockerfile(files: list[str]) -> list[str]:
 
 
 def lint_github_actions(files: list[str]) -> list[str]:
-    """Lint GitHub Actions workflows with actionlint."""
+    """Lint GitHub Actions workflows with actionlint and zizmor.
+
+    actionlint: Checks workflow syntax, expressions, and common mistakes.
+    zizmor: Security linter that flags unpinned actions, injection risks, etc.
+    """
     errors: list[str] = []
     for f in files:
         code, out = run_command(["actionlint", f])
         if code != 0 and out.strip():
             errors.append(f"actionlint ({f}):\n{out}")
+        # zizmor checks for security issues (unpinned actions, injections, etc.)
+        code, out = run_command(["zizmor", "--persona", "pedantic", "--format", "plain", f])
+        if code != 0 and out.strip():
+            errors.append(f"zizmor ({f}):\n{out}")
     return errors
 
 
