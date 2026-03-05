@@ -102,6 +102,10 @@ yamlfmt = "latest"
 aws-sigv4-proxy = "1.11.1"
 "cargo:lychee" = "latest"
 "cargo:cbfmt" = "latest"
+"go:github.com/StacklokLabs/mkp/cmd/server" = "latest"
+"ubi:ByteNess/aws-vault" = "latest"
+syft = "latest"
+zizmor = "latest"
 
 
 
