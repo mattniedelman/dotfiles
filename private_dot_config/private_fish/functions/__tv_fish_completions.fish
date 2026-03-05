@@ -50,7 +50,7 @@ function __tv_should_add_space
         set -l cmd $tokens[1]
         # For kubectl, docker, and similar commands, most completions should have spaces
         # unless they're clearly paths
-        if string match -q "kubectl" "$cmd" || string match -q "docker" "$cmd"
+        if string match -q kubectl "$cmd" || string match -q docker "$cmd"
             # These are usually discrete arguments that should have spaces
             return 0
         end
@@ -58,6 +58,19 @@ function __tv_should_add_space
 
     # Add space for most other cases (commands, complete arguments, namespaces, etc.)
     return 0
+end
+
+# Escape a value for safe insertion into the command line
+# Only escapes if the value contains characters that need it
+function __tv_escape_value
+    set -l value $argv[1]
+
+    # Only escape if value contains spaces or shell metacharacters
+    if string match -qr '[ \t\'"$`!#<>|;&(){}*?\\[\\]]' -- "$value"
+        string escape --no-quoted -- "$value"
+    else
+        printf '%s' "$value"
+    end
 end
 
 # Drive tv with fish's own completions
@@ -100,11 +113,14 @@ function __tv_fish_completions
         set -l comp $comps[1]
         set -l value (string split -m1 \t -- "$comp")[1]
 
+        # Escape the value for safe insertion
+        set -l escaped (__tv_escape_value "$value")
+
         # Determine if we should add a space
         if __tv_should_add_space "$value" "$line"
-            commandline -rt -- "$value "
+            commandline -rt -- "$escaped "
         else
-            commandline -rt -- "$value"
+            commandline -rt -- "$escaped"
         end
         commandline -f repaint
         return
@@ -143,15 +159,16 @@ function __tv_fish_completions
         # Trim whitespace to get the actual value
         set -l value (string trim -- (string split -m1 '  ' -- "$picked")[1])
 
+        # Escape the value for safe insertion
+        set -l escaped (__tv_escape_value "$value")
+
         # Determine if we should add a space
         if __tv_should_add_space "$value" "$line"
-            commandline -rt -- "$value "
+            commandline -rt -- "$escaped "
         else
-            commandline -rt -- "$value"
+            commandline -rt -- "$escaped"
         end
         commandline -f repaint
     end
     # If nothing was picked (Ctrl+C), just return to prompt without fallback
 end
-
-
