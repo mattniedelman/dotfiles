@@ -4,7 +4,8 @@
     {
       "toolName": "remove-files",
       "permission": {
-        "type": "ask-user"
+        "type": "script-policy",
+        "script": "/home/mattniedelman/.augment/hooks/worktree_policy.sh"
       }
     },
     {
@@ -81,14 +82,16 @@
     {
       "toolName": "launch-process",
       "permission": {
-        "type": "ask-user"
+        "type": "script-policy",
+        "script": "/home/mattniedelman/.augment/hooks/worktree_policy.sh"
       },
       "shellInputRegex": "(uv add|uv pip install|poetry add)\\s"
     },
     {
       "toolName": "launch-process",
       "permission": {
-        "type": "ask-user"
+        "type": "script-policy",
+        "script": "/home/mattniedelman/.augment/hooks/worktree_policy.sh"
       },
       "shellInputRegex": "(uv remove|pip uninstall|poetry remove)\\s"
     },
@@ -145,7 +148,8 @@
     "/home/mattniedelman/basic-memory",
     "/home/mattniedelman/data/confluence",
     "/home/mattniedelman/data/kb/redacted-salesforce-data",
-    "/home/mattniedelman/Downloads/augment_usage"
+    "/home/mattniedelman/Downloads/augment_usage",
+    "/home/mattniedelman/Downloads/tools"
   ],
   "verbose": true,
   "mcpServers": {
@@ -213,12 +217,25 @@
       "type": "stdio",
       "command": "thv proxy stdio prometheus-prod",
       "args": []
+    },
+    "kubernetes": {
+      "type": "http",
+      "url": "http://localhost:8090/mcp"
+    },
+    "vikunja": {
+      "type": "stdio",
+      "command": "thv proxy stdio vikunja",
+      "args": []
     }
   },
   "hooks": {
     "SessionStart": [
       {
         "hooks": [
+          {
+            "type": "command",
+            "command": "/home/mattniedelman/.augment/hooks/start_kubernetes_mcp.sh"
+          },
           {
             "type": "command",
             "command": "/home/mattniedelman/.augment/hooks/session_start.sh"

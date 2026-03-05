@@ -1,0 +1,45 @@
+# Kubernetes MCP Server Configuration
+# https://github.com/containers/kubernetes-mcp-server/blob/main/docs/configuration.md
+
+# Server settings
+log_level = 2
+list_output = "table"
+
+# Multi-cluster support enabled by default
+# Each tool accepts a 'context' argument to specify which cluster to use
+cluster_provider_strategy = "kubeconfig"
+
+# Safety: Disable destructive operations (delete, etc.) by default
+# Write operations (create, update) are still allowed
+disable_destructive = true
+
+# Toolsets to enable
+# - core: pods, resources, events, namespaces
+# - config: kubeconfig context management (list, switch)
+# - helm: helm chart operations
+toolsets = ["core", "config", "helm"]
+
+# Server instructions for MCP Tool Search
+server_instructions = """
+Use this server for Kubernetes cluster management tasks including:
+- Pods: list, get details, logs, exec commands
+- Resources: get, list, create, update any Kubernetes resource
+- Namespaces: list, switch context
+- Events: view cluster events for debugging
+- Helm: install, upgrade charts and releases
+- Cluster config: view and switch kubeconfig contexts
+
+IMPORTANT: This server has multi-cluster support. Each tool accepts a 'context'
+argument to specify which Kubernetes context (cluster) to use. Always confirm
+which context/cluster before performing operations.
+
+Available contexts can be listed with configuration_contexts_list.
+"""
+
+# Deny access to sensitive resources
+# Secrets are blocked to prevent accidental exposure
+[[denied_resources]]
+group = ""
+version = "v1"
+kind = "Secret"
+
