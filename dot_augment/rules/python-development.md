@@ -13,6 +13,10 @@ For patterns and best practices, see the `python-development` skill.
 
 **NEVER install/update/remove packages without EXPLICIT authorization.**
 
+**Worktree exception:** In `.worktrees/` directories, install/remove packages
+freely (still explain WHY before installing).
+See `authorization-policies.md`.
+
 **Explicit authorization requires** words like "install", "add", "update",
 "remove", or "upgrade" with package names.
 
@@ -23,11 +27,18 @@ For patterns and best practices, see the `python-development` skill.
 - "Resolve the dependency issue" → Explain the issue
 - "Set up the project" → Ask which dependencies to install
 
-**Before ANY package operation:**
+**Before ANY package operation (main checkout):**
 
 1. Confirm explicit authorization
-2. Inform user which packages will be affected
-3. Show the command that will be executed
+2. **Explain WHY the package is needed** (what problem it solves, what
+   functionality it provides)
+3. Inform user which packages will be affected
+4. Show the command that will be executed
+
+**Before ANY package operation (worktree):**
+
+1. **Explain WHY the package is needed**
+2. Proceed with installation
 
 ## Package Manager Detection
 
