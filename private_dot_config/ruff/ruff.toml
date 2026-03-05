@@ -31,3 +31,49 @@ ignore = [
 
 [format]
 docstring-code-format = true
+
+# =============================================================================
+# Universal Import Bans (TID251)
+# =============================================================================
+# These apply globally across all projects
+# Enable TID251 in select (it's part of "ALL")
+
+[lint.flake8-tidy-imports.banned-api]
+# --- Deprecated modules (Python 3.11+) ---
+"cgi".msg = "Deprecated in Python 3.11 (PEP 594). Use email.message or http.server"
+"cgitb".msg = "Deprecated in Python 3.11 (PEP 594)"
+"imghdr".msg = "Deprecated in Python 3.11 (PEP 594). Use python-magic or filetype"
+"mailcap".msg = "Deprecated in Python 3.11 (PEP 594)"
+"msilib".msg = "Deprecated in Python 3.11 (PEP 594)"
+"nis".msg = "Deprecated in Python 3.11 (PEP 594)"
+"nntplib".msg = "Deprecated in Python 3.11 (PEP 594)"
+"optparse".msg = "Deprecated. Use argparse or typer"
+"ossaudiodev".msg = "Deprecated in Python 3.11 (PEP 594)"
+"pipes".msg = "Deprecated in Python 3.11 (PEP 594). Use subprocess"
+"sndhdr".msg = "Deprecated in Python 3.11 (PEP 594)"
+"spwd".msg = "Deprecated in Python 3.11 (PEP 594)"
+"sunau".msg = "Deprecated in Python 3.11 (PEP 594)"
+"telnetlib".msg = "Deprecated in Python 3.11 (PEP 594). Use asyncio or third-party"
+"uu".msg = "Deprecated in Python 3.11 (PEP 594). Use base64"
+"xdrlib".msg = "Deprecated in Python 3.11 (PEP 594)"
+
+# --- Security risks ---
+"pickle".msg = "Security risk: arbitrary code execution. Use json, msgpack, or pydantic"
+"shelve".msg = "Uses pickle internally - security risk. Use json or sqlite"
+"marshal".msg = "Security risk and not portable. Use json or msgpack"
+
+# --- Outdated patterns ---
+"imp".msg = "Deprecated since Python 3.4. Use importlib"
+"typing.List".msg = "Use list instead (PEP 585)"
+"typing.Dict".msg = "Use dict instead (PEP 585)"
+"typing.Set".msg = "Use set instead (PEP 585)"
+"typing.Tuple".msg = "Use tuple instead (PEP 585)"
+"typing.FrozenSet".msg = "Use frozenset instead (PEP 585)"
+"typing.Type".msg = "Use type instead (PEP 585)"
+"typing.Optional".msg = "Use X | None instead (PEP 604)"
+
+# --- Anti-patterns (caught by ast-grep but redundant here for fast feedback) ---
+"unittest.mock".msg = "Mocking is prohibited. Use real implementations or fakes"
+"unittest.mock.Mock".msg = "Mocking is prohibited. Use real implementations or fakes"
+"unittest.mock.MagicMock".msg = "Mocking is prohibited. Use real implementations or fakes"
+"unittest.mock.patch".msg = "Mocking is prohibited. Use real implementations or fakes"
