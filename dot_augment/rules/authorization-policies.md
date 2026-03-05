@@ -27,11 +27,15 @@ Other rule files reference this as the single source of truth.
 | **Git:
   staging** | SUGGEST | - | Can suggest; never use `git add -A` or `git add .` |
 | **Package:
-  install** | EXPLICIT | "install", "add" + package name | Inform which packages before executing |
+  install (worktree)** | ALLOWED | - | In `.worktrees/` directory, install freely after explaining why |
+| **Package:
+  install (main checkout)** | EXPLICIT | "install", "add" + package name | Explain WHY needed, then inform which packages |
 | **Package:
   update** | EXPLICIT | "update", "upgrade" + package name | Show version changes |
 | **Package:
-  remove** | EXPLICIT | "remove", "uninstall" + package name | Confirm before removing |
+  remove (worktree)** | ALLOWED | - | In `.worktrees/` directory, remove freely |
+| **Package:
+  remove (main checkout)** | EXPLICIT | "remove", "uninstall" + package name | Confirm before removing |
 | **Refactoring:
   small** | ALLOWED | - | <10 lines, within scope of user's request |
 | **Refactoring:
@@ -49,7 +53,9 @@ Other rule files reference this as the single source of truth.
 | **File:
   create** | ALLOWED | - | Only when necessary for task |
 | **File:
-  delete** | EXPLICIT | "delete", "remove" + file | Confirm before deleting |
+  delete (worktree)** | ALLOWED | - | In `.worktrees/` directory, delete freely |
+| **File:
+  delete (main checkout)** | EXPLICIT | "delete", "remove" + file | Confirm before deleting |
 | **ML:
   model training** | EXPLICIT | "train", "fit" | Resource-intensive operations |
 | **ML:
@@ -86,10 +92,14 @@ All git operations MUST use the git MCP server tools.** Direct `git` commands
 via `launch-process` are blocked.
 See `git-mcp-required.md`.
 
-**Worktree exception:** When working in a `.worktrees/` directory,
-`git_commit_git` is allowed without permission.
-Commits should be atomic and well-structured.
-Enforced by `worktree_commit_guard.sh` hook.
+**Worktree exception:** When working in a `.worktrees/` directory, the following
+operations are allowed without explicit permission:
+
+- `git_commit_git` - commits should be atomic and well-structured
+- Package install/remove - still explain WHY before installing
+- File deletion - delete files as needed for the task
+
+Enforced by `worktree_commit_guard.sh` hook (for git operations).
 
 **Prohibited without explicit permission (main checkout):** `git_commit_git`,
 `git_push_git`, `git_merge_git`, `git_reset_git` (hard), `git_clean_git`,
