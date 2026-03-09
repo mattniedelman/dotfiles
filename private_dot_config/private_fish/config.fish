@@ -124,3 +124,12 @@ function todo
             vja $argv
     end
 end
+
+# --- Gas Town Integration ---
+set -gx GT_TOWN_ROOT ~/gt
+
+# Generate completions if not present
+if not test -f ~/.config/fish/completions/gt.fish
+    gt completion fish > ~/.config/fish/completions/gt.fish 2>/dev/null
+end
+# --- End Gas Town ---
