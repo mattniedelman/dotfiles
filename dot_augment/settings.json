@@ -175,11 +175,8 @@
     },
     "git": {
       "type": "stdio",
-      "command": "npx",
-      "args": [
-        "-y",
-        "@cyanheads/git-mcp-server"
-      ],
+      "command": "git-mcp-server",
+      "args": [],
       "env": {
         "MCP_LOG_LEVEL": "error",
         "LOGS_DIR": "/home/mattniedelman/.local/state/git-mcp-server/logs"
@@ -225,6 +222,11 @@
     "vikunja": {
       "type": "stdio",
       "command": "thv proxy stdio vikunja",
+      "args": []
+    },
+    "beads": {
+      "type": "stdio",
+      "command": "beads-mcp",
       "args": []
     }
   },
