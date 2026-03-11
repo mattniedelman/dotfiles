@@ -1,8 +1,11 @@
 #!/usr/bin/env -S uv run --quiet --script --directory /home/mattniedelman/.augment/hooks
 """
-PreToolUse hook: Allow free commits in .worktrees/, defer to toolPermissions elsewhere.
+PreToolUse hook: Allow free commits in worktree directories, defer to toolPermissions elsewhere.
 
-AI can commit freely when working in an isolated worktree (.worktrees/ directory).
+AI can commit freely when working in an isolated worktree:
+- .worktrees/ directory (standard Augment worktrees)
+- polecats/ directory (Gas Town polecat workers)
+
 In the main checkout, the default toolPermission (ask-user) applies.
 
 This hook only outputs "allow" for worktrees. For all other cases, it exits
@@ -40,13 +43,16 @@ if state_file.exists():
 if not working_dir:
     sys.exit(0)
 
-# Check if the working directory is inside a .worktrees/ directory
+# Check if the working directory is inside an allowed worktree directory
 working_path = Path(working_dir).resolve()
 
-# Look for .worktrees in any parent of the working directory
+# Allowed worktree directory names
+WORKTREE_DIRS = {".worktrees", "polecats"}
+
+# Look for worktree directories in any parent of the working directory
 is_in_worktree = False
 for parent in [working_path, *working_path.parents]:
-    if parent.name == ".worktrees":
+    if parent.name in WORKTREE_DIRS:
         is_in_worktree = True
         break
 
