@@ -9,42 +9,6 @@
       }
     },
     {
-      "toolName": "mcp:get_*_github",
-      "permission": {
-        "type": "allow"
-      }
-    },
-    {
-      "toolName": "mcp:list_*_github",
-      "permission": {
-        "type": "allow"
-      }
-    },
-    {
-      "toolName": "mcp:search_*_github",
-      "permission": {
-        "type": "allow"
-      }
-    },
-    {
-      "toolName": "mcp:issue_read_github",
-      "permission": {
-        "type": "allow"
-      }
-    },
-    {
-      "toolName": "mcp:pull_request_read_github",
-      "permission": {
-        "type": "allow"
-      }
-    },
-    {
-      "toolName": "mcp:*_github",
-      "permission": {
-        "type": "ask-user"
-      }
-    },
-    {
       "toolName": "mcp:git_commit_git",
       "permission": {
         "type": "script-policy",
@@ -112,61 +76,43 @@
   ],
   "vimMode": false,
   "indexingAllowDirs": [
-    "/mnt/2b20906f-1847-4c8e-94e4-b841290bddc3/imprivata/workstation-clustering",
-    "/home/mattniedelman/.local/share/mise/installs/node/25.1.0/lib/node_modules/@augmentcode/auggie",
-    "/home/mattniedelman/.config/nvim",
-    "/mnt/2b20906f-1847-4c8e-94e4-b841290bddc3/imprivata/pytest-report-plugin",
-    "/mnt/2b20906f-1847-4c8e-94e4-b841290bddc3/astra-iac",
-    "/home/mattniedelman/.config/television",
-    "/home/mattniedelman/.config/fish",
     "/home/mattniedelman/.augment",
-    "/home/mattniedelman/tmp/icebergtest",
-    "/mnt/2b20906f-1847-4c8e-94e4-b841290bddc3/imprivata/alert-summarizer",
-    "/mnt/2b20906f-1847-4c8e-94e4-b841290bddc3/imprivata/ai-drug-diversion",
-    "/home/mattniedelman/.local/share/chezmoi",
-    "/mnt/2b20906f-1847-4c8e-94e4-b841290bddc3/imprivata/gitops-apps",
-    "/mnt/2b20906f-1847-4c8e-94e4-b841290bddc3/imprivata/data-layer",
-    "/mnt/2b20906f-1847-4c8e-94e4-b841290bddc3/imprivata/gitops-data",
-    "/mnt/2b20906f-1847-4c8e-94e4-b841290bddc3/litellm",
-    "/home/mattniedelman/.local/state/nvim",
-    "/home/mattniedelman/.config/mise",
-    "/mnt/2b20906f-1847-4c8e-94e4-b841290bddc3/imprivata/docs",
-    "/home/mattniedelman/tmp/tenant/*",
-    "/home/mattniedelman/Documents",
-    "/mnt/2b20906f-1847-4c8e-94e4-b841290bddc3/imprivata/imprivata-ai/.github",
-    "/home/mattniedelman/tmp/csvdiff",
-    "/mnt/2b20906f-1847-4c8e-94e4-b841290bddc3/imprivata/icp-iac-envs",
     "/home/mattniedelman/.aws",
-    "/mnt/2b20906f-1847-4c8e-94e4-b841290bddc3/tensorzero",
-    "/home/mattniedelman/tmp/a",
-    "/mnt/2b20906f-1847-4c8e-94e4-b841290bddc3/imprivata/fw",
-    "/home/mattniedelman/git",
-    "/mnt/2b20906f-1847-4c8e-94e4-b841290bddc3/imprivata",
-    "/home/mattniedelman/tmp/kb",
     "/home/mattniedelman/.config",
-    "/mnt/2b20906f-1847-4c8e-94e4-b841290bddc3/niri",
+    "/home/mattniedelman/.config/fish",
+    "/home/mattniedelman/.config/mise",
+    "/home/mattniedelman/.config/nvim",
+    "/home/mattniedelman/.config/television",
+    "/home/mattniedelman/.local/share/chezmoi",
+    "/home/mattniedelman/.local/share/mise/installs/node/25.1.0/lib/node_modules/@augmentcode/auggie",
+    "/home/mattniedelman/.local/state/nvim",
+    "/home/mattniedelman/Documents",
+    "/home/mattniedelman/Downloads/augment_usage",
+    "/home/mattniedelman/Downloads/tools",
     "/home/mattniedelman/basic-memory",
     "/home/mattniedelman/data/confluence",
     "/home/mattniedelman/data/kb/redacted-salesforce-data",
-    "/home/mattniedelman/Downloads/augment_usage",
-    "/home/mattniedelman/Downloads/tools"
+    "/home/mattniedelman/git",
+    "/home/mattniedelman/gt",
+    "/mnt/2b20906f-1847-4c8e-94e4-b841290bddc3/astra-iac",
+    "/mnt/2b20906f-1847-4c8e-94e4-b841290bddc3/imprivata",
+    "/mnt/2b20906f-1847-4c8e-94e4-b841290bddc3/imprivata/ai-drug-diversion",
+    "/mnt/2b20906f-1847-4c8e-94e4-b841290bddc3/imprivata/alert-summarizer",
+    "/mnt/2b20906f-1847-4c8e-94e4-b841290bddc3/imprivata/data-layer",
+    "/mnt/2b20906f-1847-4c8e-94e4-b841290bddc3/imprivata/docs",
+    "/mnt/2b20906f-1847-4c8e-94e4-b841290bddc3/imprivata/fw",
+    "/mnt/2b20906f-1847-4c8e-94e4-b841290bddc3/imprivata/gitops-apps",
+    "/mnt/2b20906f-1847-4c8e-94e4-b841290bddc3/imprivata/gitops-data",
+    "/mnt/2b20906f-1847-4c8e-94e4-b841290bddc3/imprivata/icp-iac-envs",
+    "/mnt/2b20906f-1847-4c8e-94e4-b841290bddc3/imprivata/imprivata-ai/.github",
+    "/mnt/2b20906f-1847-4c8e-94e4-b841290bddc3/imprivata/pytest-report-plugin",
+    "/mnt/2b20906f-1847-4c8e-94e4-b841290bddc3/imprivata/workstation-clustering"
   ],
   "verbose": true,
   "mcpServers": {
-    "context7": {
+    "optimizer": {
       "type": "stdio",
-      "command": "thv proxy stdio context7",
-      "args": []
-    },
-    "filesystem": {
-      "type": "stdio",
-      "command": "npx -y @modelcontextprotocol/server-filesystem /home/mattniedelman /mnt/2b20906f-1847-4c8e-94e4-b841290bddc3/imprivata",
-      "args": [],
-      "disabled": true
-    },
-    "think-strategies": {
-      "type": "stdio",
-      "command": "thv proxy stdio think-strategies",
+      "command": "thv proxy stdio toolhive-mcp-optimizer",
       "args": []
     },
     "basic-memory": {
@@ -184,45 +130,12 @@
     },
     "serena": {
       "type": "stdio",
-      "command": "uvx --from git+https://github.com/oraios/serena serena start-mcp-server --context ide-assistant --project-from-cwd",
-      "args": []
-    },
-    "ast-grep": {
-      "type": "stdio",
-      "command": "uvx --from git+https://github.com/ast-grep/ast-grep-mcp ast-grep-server",
-      "args": [],
-      "env": {
-        "AST_GREP_CONFIG": "/home/mattniedelman/.config/ast-grep/sgconfig.yml"
-      }
-    },
-    "github": {
-      "type": "stdio",
-      "command": "thv proxy stdio github",
-      "args": []
-    },
-    "grafana": {
-      "type": "stdio",
-      "command": "thv proxy stdio grafana",
-      "args": []
-    },
-    "prometheus-nonprod": {
-      "type": "stdio",
-      "command": "thv proxy stdio prometheus-nonprod",
-      "args": []
-    },
-    "prometheus-prod": {
-      "type": "stdio",
-      "command": "thv proxy stdio prometheus-prod",
-      "args": []
-    },
-    "kubernetes": {
-      "type": "http",
-      "url": "http://localhost:8090/mcp"
-    },
-    "vikunja": {
-      "type": "stdio",
-      "command": "thv proxy stdio vikunja",
-      "args": []
+      "command": "serena-mcp-server",
+      "args": [
+        "--context",
+        "ide",
+        "--project-from-cwd"
+      ]
     },
     "beads": {
       "type": "stdio",
@@ -236,11 +149,12 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/home/mattniedelman/.augment/hooks/start_kubernetes_mcp.sh"
+            "command": "/home/mattniedelman/.augment/hooks/session_start.sh"
           },
           {
             "type": "command",
-            "command": "/home/mattniedelman/.augment/hooks/session_start.sh"
+            "command": "/home/mattniedelman/.augment/hooks/zellaude_bridge.sh",
+            "timeout": 5000
           }
         ]
       }
@@ -251,6 +165,11 @@
           {
             "type": "command",
             "command": "/home/mattniedelman/.augment/hooks/stop_notes_reminder.sh"
+          },
+          {
+            "type": "command",
+            "command": "/home/mattniedelman/.augment/hooks/zellaude_bridge.sh",
+            "timeout": 5000
           }
         ],
         "metadata": {
@@ -278,6 +197,15 @@
         ]
       },
       {
+        "matcher": "mcp:write_note_basic-memory",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/mattniedelman/.augment/hooks/basic_memory_directory_check.sh"
+          }
+        ]
+      },
+      {
         "matcher": "save-file|str-replace-editor|mcp:^(write|edit|save|replace|insert)_",
         "hooks": [
           {
@@ -292,6 +220,16 @@
           {
             "type": "command",
             "command": "/home/mattniedelman/.augment/hooks/pip_to_uv.sh"
+          }
+        ]
+      },
+      {
+        "matcher": ".*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/mattniedelman/.augment/hooks/zellaude_bridge.sh",
+            "timeout": 5000
           }
         ]
       }
@@ -341,32 +279,29 @@
             "command": "/home/mattniedelman/.augment/hooks/auto_lint.sh"
           }
         ]
+      },
+      {
+        "matcher": ".*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/mattniedelman/.augment/hooks/zellaude_bridge.sh",
+            "timeout": 5000
+          }
+        ]
       }
     ]
   },
   "shell": "bash",
   "removedTools": [
-    "github-api",
-    "list_oncall_schedules_grafana",
-    "list_oncall_teams_grafana",
-    "list_oncall_users_grafana",
-    "list_alert_groups_grafana",
-    "get_alert_group_grafana",
-    "get_current_oncall_users_grafana",
-    "get_oncall_shift_grafana",
-    "list_sift_investigations_grafana",
-    "get_sift_investigation_grafana",
-    "get_sift_analysis_grafana",
-    "find_error_pattern_logs_grafana",
-    "find_slow_requests_grafana",
-    "get_assertions_grafana",
-    "query_prometheus_grafana",
-    "query_prometheus_histogram_grafana",
-    "list_prometheus_label_names_grafana",
-    "list_pyroscope_profile_types_grafana",
-    "list_pyroscope_label_names_grafana",
-    "list_pyroscope_label_values_grafana",
-    "fetch_pyroscope_profile_grafana",
-    "query_loki_patterns_grafana"
+    "git_wrapup_instructions_git",
+    "git_rebase_git",
+    "git_init_git",
+    "git_clone_git",
+    "git_changelog_analyze_git",
+    "cloud_info_basic-memory",
+    "create_memory_project_basic-memory",
+    "delete_project_basic-memory",
+    "canvas_basic-memory"
   ]
 }
