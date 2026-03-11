@@ -20,7 +20,7 @@ When referring to the CLI command, use `auggie`.
 | Priority | Type | Enforcement | Files |
 |----------|------|-------------|-------|
 | **CRITICAL** | `always_apply` | Violations are penalized | `response-style-communication.md`, `core-development-rules.md` (includes Notes Management), `git-mcp-required.md`, `github-mcp-required.md` |
-| **HIGH** | `always_apply` | Always active for relevant domains | `git-workflow.md`, `linting-enforcement.md`, `environment.md`, `security.md`, `helm-kubernetes-guidelines.md`, `python-development.md`, `authorization-policies.md` |
+| **HIGH** | `always_apply` | Always active for relevant domains | `git-workflow.md`, `linting-enforcement.md`, `environment.md`, `security.md`, `helm-kubernetes-guidelines.md`, `python-development.md`, `authorization-policies.md`, `shell-commands.md` |
 | **STANDARD** | `agent_requested` | Guidance for specific scenarios | (migrated to skills) |
 
 ---
@@ -159,7 +159,6 @@ These rules are enforced with the same severity as scope violations:
 All rule files should include this frontmatter:
 
 ```yaml
----
 type: always_apply | agent_requested
 priority: CRITICAL | HIGH | STANDARD
 description: Brief description of the rule's purpose
