@@ -5,16 +5,15 @@ message: |
   Nested functions are prohibited.
   Extract inner function to module level with appropriate naming (e.g., _helper_name).
 
+# Match: function defined inside another function
+# This catches both:
+#   - def outer(): def inner(): ...  (module level)
+#   - class Foo: def method(self): def inner(): ...  (inside class methods)
 rule:
   kind: function_definition
-  all:
-    - inside:
-        stopBy: end
-        kind: function_definition
-    - not:
-        inside:
-          stopBy: end
-          kind: class_definition
+  inside:
+    stopBy: end
+    kind: function_definition
 
 note: |
   From core-development-rules.md:
