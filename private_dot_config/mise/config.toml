@@ -111,6 +111,8 @@ zizmor = "latest"
 "npm:@beads/bd" = "latest"
 "go:github.com/steveyegge/gastown/cmd/gt" = "latest"
 "npm:@cyanheads/git-mcp-server" = "latest"
+pulumi = "latest"
+"github:stacklok/toolhive" = "latest"
 
 
 
