@@ -1,4 +1,4 @@
-# ruff: noqa: INP001
+#!/usr/bin/env python3
 """
 Adapter layer to use cchooks with both Augment CLI and Claude Code.
 
@@ -13,6 +13,10 @@ Usage:
     if isinstance(ctx, SessionStartContext):
         # Use cchooks API - works with both Augment and Claude Code
         ctx.output.exit_success()
+
+CLI usage:
+    # Output transformed JSON for piping to other tools (e.g., zellaude)
+    echo '{"hook_event_name":"PostToolUse",...}' | python3 augment_adapter.py --json
 """
 
 from __future__ import annotations
@@ -20,12 +24,9 @@ from __future__ import annotations
 import json
 import sys
 from io import StringIO
-from typing import TYPE_CHECKING, Any
+from typing import Any, TextIO
 
 from cchooks import HookContext, create_context
-
-if TYPE_CHECKING:
-    from typing import TextIO
 
 # Placeholder path when Augment doesn't provide equivalent
 _PLACEHOLDER_PATH = "/var/tmp/augment-hook"  # noqa: S108
@@ -165,3 +166,40 @@ def create_unified_context(stdin: TextIO = sys.stdin) -> HookContext:
     # Augment format - transform first
     cchooks_data = transform_augment_to_cchooks(data)
     return create_context(StringIO(json.dumps(cchooks_data)))
+
+
+def output_transformed_json(stdin: TextIO = sys.stdin) -> None:
+    """
+    Transform Augment input to cchooks format and output as JSON.
+
+    Useful for piping to tools that expect Claude Code format (e.g., zellaude).
+    """
+    raw_input = stdin.read()
+    data = json.loads(raw_input)
+
+    if _is_claude_code_schema(data):
+        # Already in cchooks format, pass through unchanged
+        print(raw_input)  # noqa: T201 - CLI output
+    else:
+        # Transform Augment → cchooks
+        transformed = transform_augment_to_cchooks(data)
+        print(json.dumps(transformed))  # noqa: T201 - CLI output
+
+
+if __name__ == "__main__":
+    import argparse
+
+    parser = argparse.ArgumentParser(description="Augment ↔ Claude Code adapter")
+    parser.add_argument(
+        "--json",
+        action="store_true",
+        help="Output transformed JSON instead of creating context",
+    )
+    args = parser.parse_args()
+
+    if args.json:
+        output_transformed_json()
+    else:
+        # Default: create context (for testing/debugging)
+        ctx = create_unified_context()
+        print(f"Context type: {type(ctx).__name__}")  # noqa: T201 - CLI output
