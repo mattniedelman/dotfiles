@@ -133,3 +133,8 @@ if not test -f ~/.config/fish/completions/gt.fish
     gt completion fish > ~/.config/fish/completions/gt.fish 2>/dev/null
 end
 # --- End Gas Town ---
+
+# Auggie Swarm shortcuts
+alias sn='swarm-new'
+alias sr='swarm-resume'
+set -gx GITHUB_TOKEN (gh auth token)
