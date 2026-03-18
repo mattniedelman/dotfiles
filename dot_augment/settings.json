@@ -177,6 +177,10 @@
           {
             "type": "command",
             "command": "/home/mattniedelman/.augment/hooks/verification_gate.sh"
+          },
+          {
+            "type": "command",
+            "command": "/home/mattniedelman/.augment/hooks/instinct_reflection.sh"
           }
         ],
         "metadata": {
@@ -393,6 +397,15 @@
             "command": "/home/mattniedelman/.augment/hooks/plan_approval_tracker.sh"
           }
         ]
+      },
+      {
+        "matcher": "str-replace-editor|save-file",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/mattniedelman/.augment/hooks/instinct_extractor.sh"
+          }
+        ]
       }
     ]
   },
@@ -409,6 +422,7 @@
     "canvas_basic-memory"
   ],
   "enabledPlugins": {
-    "revealjs@revealjs-skill": true
+    "revealjs@revealjs-skill": true,
+    "core@matt-niedelman-imprivata": false
   }
 }
