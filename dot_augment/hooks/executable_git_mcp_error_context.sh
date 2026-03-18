@@ -6,15 +6,15 @@ When Augment receives MCP schema validation errors (-32602), it doesn't see the 
 error message from the git MCP server. This hook reads recent log entries and extracts
 the real error message to inject as additionalContext.
 """
-# /// script
-# requires-python = ">=3.11"
-# ///
 
 from __future__ import annotations
 
 import json
-import sys
+import time
 from pathlib import Path
+
+from augment_adapter import create_unified_context
+from cchooks import PostToolUseContext
 
 # Constants
 LOG_FILE = Path.home() / ".local/state/git-mcp-server/logs/combined.log"
@@ -51,7 +51,6 @@ def extract_recent_errors(tool_name: str, max_age_seconds: float = 30.0) -> list
             except OSError:
                 lines = []
 
-        import time
         now = time.time()
 
         for line in reversed(lines):
@@ -100,19 +99,27 @@ def extract_recent_errors(tool_name: str, max_age_seconds: float = 30.0) -> list
     return errors
 
 
-def main():
-    # Read event data from stdin
-    event_data = json.load(sys.stdin)
+def main() -> None:
+    ctx = create_unified_context()
 
-    tool_name = event_data.get("tool_name", "")
-    tool_error = event_data.get("tool_error", "")
+    if not isinstance(ctx, PostToolUseContext):
+        ctx.output.exit_success()
+        return
+
+    tool_name = ctx.tool_name
 
     # Only handle git MCP tools that have errors
     if not tool_name.endswith("_git"):
-        sys.exit(0)
+        ctx.output.exit_success()
+        return
+
+    # Check for errors in tool response
+    tool_response = ctx.tool_response or {}
+    tool_error = tool_response.get("error", "")
 
     if not tool_error:
-        sys.exit(0)
+        ctx.output.exit_success()
+        return
 
     # Check if this looks like a schema validation error (the symptom we're fixing)
     schema_error_indicators = [
@@ -123,11 +130,12 @@ def main():
         "must NOT have additional properties",
     ]
 
-    is_schema_error = any(indicator in tool_error for indicator in schema_error_indicators)
+    is_schema_error = any(indicator in str(tool_error) for indicator in schema_error_indicators)
 
     if not is_schema_error:
         # Not a schema error, the error message is probably already clear
-        sys.exit(0)
+        ctx.output.exit_success()
+        return
 
     # Extract recent errors from the log
     errors = extract_recent_errors(tool_name)
@@ -142,19 +150,13 @@ def main():
         # Provide the actual error(s)
         unique_errors = list(dict.fromkeys(errors))  # Dedupe while preserving order
         context = (
-            f"Git MCP server actual error(s):\n"
+            "Git MCP server actual error(s):\n"
             + "\n".join(f"- {e}" for e in unique_errors)
             + "\n\nThese errors indicate incorrect tool invocation, NOT a server bug. "
             "Review the parameters being passed to the git MCP tool."
         )
 
-    output = {
-        "hookSpecificOutput": {
-            "hookEventName": "PostToolUse",
-            "additionalContext": context,
-        }
-    }
-    print(json.dumps(output))
+    ctx.output.add_context(context)
 
 
 if __name__ == "__main__":

@@ -1,4 +1,4 @@
-#!/usr/bin/env -S uv run --quiet --script
+#!/usr/bin/env -S uv run --quiet --script --directory /home/mattniedelman/.augment/hooks
 # /// script
 # requires-python = ">=3.11"
 # dependencies = ["cchooks"]
@@ -18,7 +18,8 @@ import re
 import sys
 from pathlib import Path
 
-from cchooks import safe_create_context, exit_success, output_json
+from augment_adapter import create_unified_context
+from cchooks import exit_success, output_json, PreToolUseContext
 
 RULES_PATH = Path.home() / ".augment" / "skills" / "skill-rules.json"
 STATE_DIR = Path("/tmp/augment-skill-state")
@@ -49,8 +50,8 @@ def save_session_state(session_id: str, state: dict) -> None:
 
 def main():
     """Main hook logic."""
-    ctx = safe_create_context()
-    if ctx is None:
+    ctx = create_unified_context()
+    if not isinstance(ctx, PreToolUseContext):
         exit_success()
         return
 

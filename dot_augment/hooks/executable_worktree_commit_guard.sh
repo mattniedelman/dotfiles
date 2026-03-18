@@ -15,74 +15,75 @@ silently and lets the toolPermissions default of "ask-user" handle it.
 from __future__ import annotations
 
 import json
-import sys
+import os
 from pathlib import Path
 
-# Read event data from stdin
-event_data = json.load(sys.stdin)
-
-tool_name = event_data.get("tool_name", "")
-
-# Only handle git_commit_git
-if tool_name != "git_commit_git":
-    sys.exit(0)
-
-# Get the working directory from conversation state
-conversation_id = event_data.get("conversation_id", "unknown")
-state_file = Path(f"/tmp/augment-git-state/{conversation_id}.json")
-
-working_dir = None
-if state_file.exists():
-    try:
-        state = json.loads(state_file.read_text())
-        working_dir = state.get("working_dir")
-    except (json.JSONDecodeError, OSError):
-        pass
-
-# If we can't determine the working directory, let toolPermissions handle it (ask-user)
-if not working_dir:
-    sys.exit(0)
-
-# Check if the working directory is inside an allowed worktree directory
-working_path = Path(working_dir).resolve()
+from augment_adapter import create_unified_context
+from cchooks import PreToolUseContext
 
 # Allowed worktree directory names
 WORKTREE_DIRS = {".worktrees", "polecats"}
 
-# Look for worktree directories in any parent of the working directory
-is_in_worktree = False
-for parent in [working_path, *working_path.parents]:
-    if parent.name in WORKTREE_DIRS:
-        is_in_worktree = True
-        break
 
-if is_in_worktree:
-    # In a worktree - explicitly allow commit without asking
-    output = {
-        "hookSpecificOutput": {
-            "hookEventName": "PreToolUse",
-            "permissionDecision": "allow",
-            "permissionDecisionReason": "Committing in worktree - allowed without confirmation.",
-        }
-    }
-    print(json.dumps(output))
-    sys.exit(0)
+def main() -> None:
+    ctx = create_unified_context()
 
-# For main checkout, deny the commit - requires explicit user approval via Augment prompt
-tool_input = event_data.get("tool_input", {})
-commit_message = tool_input.get("message", "<no message>")
+    if not isinstance(ctx, PreToolUseContext):
+        ctx.output.exit_success()
+        return
 
-output = {
-    "hookSpecificOutput": {
-        "hookEventName": "PreToolUse",
-        "permissionDecision": "deny",
-        "permissionDecisionReason": (
+    tool_name = ctx.tool_name
+
+    # Only handle git_commit_git
+    if tool_name != "git_commit_git":
+        ctx.output.allow()
+        return
+
+    # Get the working directory from conversation state
+    conversation_id = ctx.session_id or os.environ.get("AUGMENT_CONVERSATION_ID", "unknown")
+    state_file = Path(f"/tmp/augment-git-state/{conversation_id}.json")
+
+    working_dir = None
+    if state_file.exists():
+        try:
+            state = json.loads(state_file.read_text())
+            working_dir = state.get("working_dir")
+        except (json.JSONDecodeError, OSError):
+            pass
+
+    # If we can't determine the working directory, let toolPermissions handle it (ask-user)
+    if not working_dir:
+        ctx.output.allow()
+        return
+
+    # Check if the working directory is inside an allowed worktree directory
+    working_path = Path(working_dir).resolve()
+
+    # Look for worktree directories in any parent of the working directory
+    is_in_worktree = False
+    for parent in [working_path, *working_path.parents]:
+        if parent.name in WORKTREE_DIRS:
+            is_in_worktree = True
+            break
+
+    if is_in_worktree:
+        # In a worktree - explicitly allow commit without asking
+        ctx.output.allow(reason="Committing in worktree - allowed without confirmation.")
+        return
+
+    # For main checkout, deny the commit - requires explicit user approval via Augment prompt
+    tool_input = ctx.tool_input or {}
+    commit_message = tool_input.get("message", "<no message>")
+
+    ctx.output.deny(
+        reason=(
             f"Committing to main checkout (not a worktree).\n"
             f'Message: "{commit_message}"\n\n'
             f"To commit, approve this tool call in Augment."
-        ),
-    }
-}
-print(json.dumps(output))
-sys.exit(0)
+        )
+    )
+
+
+if __name__ == "__main__":
+    main()
 

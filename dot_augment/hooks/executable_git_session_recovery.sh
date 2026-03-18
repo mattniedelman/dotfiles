@@ -9,20 +9,11 @@ state file so the PreToolUse hook will prompt for re-initialization.
 
 from __future__ import annotations
 
-import json
-import sys
+import os
 from pathlib import Path
 
-# Read event data from stdin
-event_data = json.load(sys.stdin)
-
-tool_name = event_data.get("tool_name", "")
-conversation_id = event_data.get("conversation_id", "unknown")
-tool_output = event_data.get("tool_output", "")
-
-# Only handle git MCP tools (except git_set_working_dir_git which sets state)
-if not tool_name.endswith("_git") or tool_name == "git_set_working_dir_git":
-    sys.exit(0)
+from augment_adapter import create_unified_context
+from cchooks import PostToolUseContext
 
 # Check if the output indicates session loss
 SESSION_LOST_INDICATORS = [
@@ -30,26 +21,47 @@ SESSION_LOST_INDICATORS = [
     "Please specify a 'path' or use 'git_set_working_dir' first",
 ]
 
-session_lost = any(indicator in str(tool_output) for indicator in SESSION_LOST_INDICATORS)
 
-if session_lost:
-    # Clear the state file so PreToolUse hook will block next git call
-    state_dir = Path("/tmp/augment-git-state")
-    state_file = state_dir / f"{conversation_id}.json"
-    
-    if state_file.exists():
-        state_file.unlink()
-    
-    # Output a message to inform the agent
-    output = {
-        "hookSpecificOutput": {
-            "message": (
-                "Git MCP server session was lost (server restarted). "
-                "State cleared - next git operation will prompt for re-initialization."
-            )
-        }
-    }
-    print(json.dumps(output))
+def main() -> None:
+    ctx = create_unified_context()
 
-sys.exit(0)
+    if not isinstance(ctx, PostToolUseContext):
+        ctx.output.exit_success()
+        return
+
+    tool_name = ctx.tool_name
+
+    # Only handle git MCP tools (except git_set_working_dir_git which sets state)
+    if not tool_name.endswith("_git") or tool_name == "git_set_working_dir_git":
+        ctx.output.exit_success()
+        return
+
+    # Check tool response for session loss indicators
+    tool_response = ctx.tool_response or {}
+    tool_output = str(tool_response.get("output", ""))
+
+    session_lost = any(indicator in tool_output for indicator in SESSION_LOST_INDICATORS)
+
+    if session_lost:
+        # Get conversation ID from session or environment
+        conversation_id = ctx.session_id or os.environ.get("AUGMENT_CONVERSATION_ID", "unknown")
+
+        # Clear the state file so PreToolUse hook will block next git call
+        state_dir = Path("/tmp/augment-git-state")
+        state_file = state_dir / f"{conversation_id}.json"
+
+        if state_file.exists():
+            state_file.unlink()
+
+        # Output a message to inform the agent
+        ctx.output.add_context(
+            "Git MCP server session was lost (server restarted). "
+            "State cleared - next git operation will prompt for re-initialization."
+        )
+    else:
+        ctx.output.exit_success()
+
+
+if __name__ == "__main__":
+    main()
 

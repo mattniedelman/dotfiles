@@ -11,11 +11,12 @@ import re
 from pathlib import Path
 
 import yaml
-
 from augment_adapter import create_unified_context
 from cchooks import SessionStartContext
 
 AGENTS_DIR = Path.home() / ".augment" / "agents"
+MAX_DESC_LENGTH = 120
+TRUNCATED_DESC_LENGTH = 117
 
 
 def discover_agents() -> list[dict[str, str]]:
@@ -52,10 +53,12 @@ def format_agents_section(agents: list[dict[str, str]]) -> str:
     for agent in agents:
         desc = agent["description"]
         # Truncate long descriptions
-        if len(desc) > 120:
-            desc = desc[:117] + "..."
+        if len(desc) > MAX_DESC_LENGTH:
+            desc = desc[:TRUNCATED_DESC_LENGTH] + "..."
         lines.append(f"- `{agent['name']}`: {desc}")
-    lines.append("\nSubagents run in parallel with independent context. Use proactively.")
+    lines.append(
+        "\nSubagents run in parallel with independent context. Use proactively."
+    )
     return "\n".join(lines)
 
 
@@ -85,15 +88,34 @@ def main() -> None:
     agents = discover_agents()
     agents_section = format_agents_section(agents)
 
+    # Detect if this is a testable project
+    project_path = Path(workspace)
+    has_tests = any([
+        (project_path / "pyproject.toml").exists(),
+        (project_path / "package.json").exists(),
+        (project_path / "Cargo.toml").exists(),
+        (project_path / "go.mod").exists(),
+        (project_path / "tests").is_dir(),
+        (project_path / "test").is_dir(),
+    ])
+
+    test_tip = ""
+    if has_tests:
+        test_tip = (
+            '\n\n💡 TIP: Consider starting with "First run the tests" '
+            "to orient yourself to the codebase."
+        )
+
     context_message = f"""Project: {project}
 
-IMPORTANT: Review available_skills list and invoke any relevant skills before responding.
+IMPORTANT: Review available_skills list and invoke any relevant skills \
+before responding.
 {agents_section}
 
 Check basic-memory for prior context on this project:
 - Use build_context or recent_activity to see what's been worked on
 - Search for related notes before starting new work
-- Continue from previous decisions and learnings"""
+- Continue from previous decisions and learnings{test_tip}"""
 
     # Use cchooks API - works for both tools
     ctx.output.add_context(context_message)
