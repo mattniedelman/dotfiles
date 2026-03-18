@@ -57,7 +57,7 @@ def _transform_session_start(data: dict[str, Any]) -> dict[str, Any]:
         "transcript_path": _get_workspace_path(data),
         "source": "startup",  # Augment doesn't provide this; default to startup
         # Preserve original data for access via ctx.raw
-        **{k: v for k, v in data.items() if k not in ["conversation_id"]},
+        **{k: v for k, v in data.items() if k != "conversation_id"},
     }
 
 
@@ -75,10 +75,13 @@ def _transform_stop(data: dict[str, Any]) -> dict[str, Any]:
 
 
 def _transform_post_tool_use(data: dict[str, Any]) -> dict[str, Any]:
-    """Transform Augment PostToolUse to cchooks format."""
-    # Build tool_response from Augment's fields
-    tool_response: dict[str, Any] = {}
-    if "tool_output" in data:
+    """
+    Transform Augment PostToolUse to cchooks format.
+
+    Prioritizes tool_response (direct) over tool_output (wrapped).
+    """
+    tool_response: dict[str, Any] = data.get("tool_response", {})
+    if not tool_response and "tool_output" in data:
         tool_response["output"] = data["tool_output"]
     if "tool_error" in data:
         tool_response["error"] = data["tool_error"]
