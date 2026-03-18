@@ -9,6 +9,7 @@ Works with both Augment CLI and Claude Code via the unified adapter.
 from __future__ import annotations
 
 import os
+import hashlib
 import subprocess
 import sys
 from collections.abc import Callable
@@ -31,6 +32,15 @@ def debug(msg: str) -> None:
     """Print debug message to stderr if DEBUG is enabled."""
     if DEBUG:
         print(f"[auto_lint] {msg}", file=sys.stderr)
+
+
+def _file_hash(filepath: str) -> str:
+    """Return MD5 hash of file contents for change detection."""
+    try:
+        return hashlib.md5(Path(filepath).read_bytes()).hexdigest()
+    except OSError:
+        return ""
+
 
 
 def find_project_root(file_path: str) -> Path | None:
@@ -278,15 +288,12 @@ def format_markdown(files: list[str]) -> list[str]:
     """
     for f in files:
         # First: mdsf for formatting code blocks
-        # Uses config from ~/.config/mdsf/mdsf.json if present
         if MDSF_CONFIG.exists():
             run_command(["mdsf", "format", "--config", str(MDSF_CONFIG), f])
         else:
             run_command(["mdsf", "format", f])
         # Second: mdslw for semantic line wrapping of prose
-        code, out = run_command(["mdslw", f])
-        if code == 0 and out:
-            Path(f).write_text(out)
+        run_command(["mdslw", f])
     return []
 
 
@@ -540,10 +547,17 @@ def main() -> None:
 
     debug(f"Format groups: {len(format_groups)}, Lint groups: {len(lint_groups)}")
 
-    # Run formatters first (they modify files)
+    # Run formatters first (they modify files) and track what changed globally
+    reformatted_files: list[str] = []
     for formatter, files in format_groups.items():
         debug(f"Running formatter {formatter.__name__} on {files}")
+        # Track file hashes before/after to detect changes (works for ALL formatters)
+        before_hashes = {f: _file_hash(f) for f in files}
         formatter(files)
+        for f in files:
+            if _file_hash(f) != before_hashes.get(f):
+                reformatted_files.append(f)
+                debug(f"Formatter modified: {f}")
 
     # Run linters and collect errors
     lint_output: list[str] = []
@@ -551,20 +565,37 @@ def main() -> None:
         debug(f"Running linter {linter.__name__} on {files}")
         lint_output.extend(linter(files))
 
+    # Build context message
+    context_parts: list[str] = []
+
+    # Notify about reformatted files so Augment knows to re-read them
+    if reformatted_files:
+        reformat_notice = (
+            "FILES REFORMATTED by auto-formatter (line wrapping, code block formatting).\n"
+            "If you need to make further edits to these files, re-read them first:\n"
+        )
+        reformat_notice += "\n".join(f"  - {f}" for f in reformatted_files)
+        context_parts.append(reformat_notice)
+        debug(f"Reformatted {len(reformatted_files)} files")
+
+    # Add lint errors if any
     debug(f"Lint output count: {len(lint_output)}")
     if lint_output:
-        context = (
+        lint_notice = (
             "LINT ERRORS detected in modified files. "
             "You MUST fix ALL of these before proceeding.\n\n"
             "IMPORTANT: Pre-existing errors are NOT exempt. "
             "Do NOT skip errors because they were 'already there' or 'out of scope'. "
             "All errors must be fixed unless the user has explicitly said to ignore them.\n\n"
         )
-        context += "\n".join(lint_output)
-        debug("Adding context with lint errors")
-        ctx.output.add_context(context)
+        lint_notice += "\n".join(lint_output)
+        context_parts.append(lint_notice)
+
+    if context_parts:
+        debug("Adding context")
+        ctx.output.add_context("\n\n".join(context_parts))
     else:
-        debug("No lint errors, exiting success")
+        debug("No changes or errors, exiting success")
         ctx.output.exit_success()
 
 
