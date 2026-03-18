@@ -31,24 +31,17 @@ async-backend = io_uring
 resize-overlay-position = bottom-right
 
 # -----------------------------------------------------------------------------
-# Keybindings (matching kitty)
+# Keybindings
 # -----------------------------------------------------------------------------
+# Split/pane keybindings removed - using zellij for multiplexing
+# (Ctrl+h/j/k/l, Ctrl+\, Ctrl+-, Ctrl+Shift+w, Ctrl+Alt+z now handled by zellij)
 
-# Split creation (matching kitty's ctrl+\ and ctrl+-)
-keybind = ctrl+\=new_split:right
-keybind = ctrl+-=new_split:down
-
-# Split navigation (matching kitty's ctrl+j/k/h/l)
-keybind = ctrl+h=goto_split:left
-keybind = ctrl+j=goto_split:down
-keybind = ctrl+k=goto_split:up
-keybind = ctrl+l=goto_split:right
-
-# Close single pane/split (not the whole tab)
-keybind = ctrl+shift+w=close_surface
-
-# Toggle zoom (like kitty's ctrl+alt+z toggle_layout stack)
-keybind = ctrl+alt+z=toggle_split_zoom
-
-# Reset window size (like kitty's ctrl+home resize_window reset)
+# Reset window size
 keybind = ctrl+home=reset_window_size
+
+# Disable Ctrl+Shift+t to avoid collision with zellij
+# (zellij now uses Ctrl+Shift+t to open a new tab)
+keybind = ctrl+shift+t=unbind
+
+# Disable Ctrl+- to allow zellij to use it for horizontal splits
+keybind = ctrl+minus=unbind

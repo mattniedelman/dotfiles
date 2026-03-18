@@ -41,3 +41,5 @@ bin/
 
 megalinter-reports/
 .worktrees/
+
+.beads/
