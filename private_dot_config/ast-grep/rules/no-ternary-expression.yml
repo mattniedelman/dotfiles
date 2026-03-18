@@ -1,19 +1,27 @@
 id: no-ternary-expression
 language: python
-severity: warning
+severity: error
 message: |
-  Ternary expressions reduce readability. Use explicit if/else blocks instead.
+  ABSOLUTE PROHIBITION: Ternary expressions are NEVER allowed.
+  NO EXCEPTIONS. Use explicit if/else blocks.
 
 rule:
   kind: conditional_expression
 
 note: |
-  From python-development.md:
-  "Avoid ternary expressions (conditional expressions) entirely"
+  ⛔ THIS RULE IS NON-NEGOTIABLE ⛔
+
+  There are ZERO valid use cases for ternary expressions in this codebase.
+  Do NOT:
+  - Argue that "it's more concise"
+  - Claim "it's just a simple assignment"
+  - Suggest "Python supports it so it's fine"
+
+  The answer is always NO. Use if/else blocks.
 
   Instead of:
-    status = "active" if user.is_active else "inactive"
-    result = value if condition else default
+    status = "active" if user.is_active else "inactive"  # ❌ NEVER DO THIS
+    result = value if condition else default  # ❌ NEVER DO THIS
 
   Use:
     if user.is_active:

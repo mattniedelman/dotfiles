@@ -2,32 +2,34 @@ id: no-global-statement
 language: python
 severity: error
 message: |
-  The 'global' keyword is prohibited.
-  Pass required values as function parameters and return modified values instead.
+  ABSOLUTE PROHIBITION: The 'global' keyword is NEVER allowed.
+  NO EXCEPTIONS. NO SPECIAL CASES. Do not attempt to justify or rationalize.
+  Refactor to pass values as parameters and return modified values.
 
 rule:
   kind: global_statement
-  inside:
-    stopBy: end
-    kind: function_definition
 
 note: |
-  Rationale:
-  - Global state makes code harder to test and reason about
-  - Functions should be pure when possible: inputs via parameters, outputs via return
-  - Global mutations create hidden dependencies and side effects
-  - Makes parallelization and caching difficult
-  
+  ⛔ THIS RULE IS NON-NEGOTIABLE ⛔
+
+  There are ZERO valid use cases for 'global' in this codebase.
+  Do NOT:
+  - Argue that "this case is different"
+  - Claim it's "necessary for this pattern"
+  - Suggest it's "okay just this once"
+  - Add a suppression comment
+
+  The answer is always NO. Refactor the code instead.
+
   Instead of:
     counter = 0
-    
+
     def increment():
-        global counter
+        global counter  # ❌ NEVER DO THIS
         counter += 1
-  
+
   Use:
     def increment(counter: int) -> int:
         return counter + 1
-    
-    counter = increment(counter)
 
+    counter = increment(counter)

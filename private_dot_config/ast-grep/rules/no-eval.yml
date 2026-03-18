@@ -2,25 +2,29 @@ id: no-eval
 language: python
 severity: error
 message: |
-  eval() is a security risk. Avoid executing arbitrary code.
+  ABSOLUTE PROHIBITION: eval() is NEVER allowed.
+  NO EXCEPTIONS. This is a critical security vulnerability.
 
 rule:
   pattern: "eval($$$ARGS)"
 
 note: |
-  eval() executes arbitrary Python code and is a major security risk,
-  especially with user input.
-  
-  Instead of:
-    result = eval(user_input)
-  
-  Consider:
+  ⛔ THIS RULE IS NON-NEGOTIABLE ⛔
+
+  There are ZERO valid use cases for eval() in this codebase.
+  Do NOT:
+  - Argue that "the input is trusted"
+  - Claim "it's not user-facing"
+  - Suggest "I sanitize the input first"
+
+  The answer is always NO. Use safe alternatives.
+
+  Mandatory alternatives:
   - ast.literal_eval() for safe evaluation of literals
   - JSON parsing for data interchange
   - A proper expression parser for math expressions
   - Explicit mapping of allowed operations
-  
+
   Example with literal_eval:
     import ast
     data = ast.literal_eval("{'key': 'value'}")
-

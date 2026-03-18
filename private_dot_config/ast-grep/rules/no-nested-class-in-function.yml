@@ -2,8 +2,8 @@ id: no-nested-class-in-function
 language: python
 severity: error
 message: |
-  Classes defined inside functions are prohibited.
-  Extract the class to module level.
+  ABSOLUTE PROHIBITION: Classes inside functions are NEVER allowed.
+  NO EXCEPTIONS. Extract the class to module level.
 
 rule:
   kind: class_definition
@@ -12,21 +12,27 @@ rule:
     kind: function_definition
 
 note: |
-  From core-development-rules.md:
-  "NEVER define classes inside functions"
-  
+  ⛔ THIS RULE IS NON-NEGOTIABLE ⛔
+
+  There are ZERO valid use cases for classes inside functions.
+  Do NOT:
+  - Argue that "it's a factory pattern"
+  - Claim "I need a closure over function variables"
+  - Suggest "it's more encapsulated this way"
+
+  The answer is always NO. Extract to module level.
+
   Instead of:
     def create_handler():
-        class Handler:
+        class Handler:  # ❌ NEVER DO THIS
             def handle(self):
                 pass
         return Handler()
-  
+
   Use:
     class Handler:
         def handle(self):
             pass
-    
+
     def create_handler():
         return Handler()
-
