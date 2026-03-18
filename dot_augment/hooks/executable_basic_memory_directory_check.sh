@@ -8,44 +8,49 @@ All notes must specify a directory parameter that is not empty or "/".
 
 from __future__ import annotations
 
-import json
-import sys
+from augment_adapter import create_unified_context
+from cchooks import PreToolUseContext
 
-# Read event data from stdin
-event_data = json.load(sys.stdin)
 
-tool_name = event_data.get("tool_name", "")
+def main() -> None:
+    ctx = create_unified_context()
 
-# Only handle write_note_basic-memory
-if tool_name != "write_note_basic-memory":
-    sys.exit(0)
+    if not isinstance(ctx, PreToolUseContext):
+        ctx.output.exit_success()
+        return
 
-tool_input = event_data.get("tool_input", {})
-directory = tool_input.get("directory", "")
+    tool_name = ctx.tool_name
 
-# Normalize: strip whitespace and trailing slashes
-directory = directory.strip().rstrip("/")
+    # Only handle write_note_basic-memory
+    if tool_name != "write_note_basic-memory":
+        ctx.output.allow()
+        return
 
-# Check if directory is empty or root-level
-if not directory or directory == "":
-    # Block the tool and tell agent to specify a directory
-    output = {
-        "hookSpecificOutput": {
-            "hookEventName": "PreToolUse",
-            "permissionDecision": "deny",
-            "permissionDecisionReason": (
+    tool_input = ctx.tool_input or {}
+    directory = tool_input.get("directory", "")
+
+    # Normalize: strip whitespace and trailing slashes
+    directory = directory.strip().rstrip("/")
+
+    # Check if directory is empty or root-level
+    if not directory or directory == "":
+        # Block the tool and tell agent to specify a directory
+        ctx.output.deny(
+            reason=(
                 "Basic Memory write blocked: missing 'directory' parameter. "
                 "Notes MUST be organized in subdirectories, not at root level. "
                 "Use directories like: "
                 "'knowledge/research/', 'artifacts/architecture/', 'artifacts/specs/', "
                 "'knowledge/patterns/', 'journal/sessions/YYYY/MM/'. "
                 "Retry write_note_basic-memory with a proper directory parameter."
-            ),
-        }
-    }
-    print(json.dumps(output))
-    sys.exit(0)
+            )
+        )
+        return
 
-# Directory is provided, allow the tool
-sys.exit(0)
+    # Directory is provided, allow the tool
+    ctx.output.allow()
+
+
+if __name__ == "__main__":
+    main()
 

@@ -9,9 +9,10 @@ Particularly important for Sonnet which tends to claim success without verificat
 from __future__ import annotations
 
 import json
-import os
-import sys
 from pathlib import Path
+
+from augment_adapter import create_unified_context
+from cchooks import PostToolUseContext
 
 STATE_FILE = Path("/tmp/augment-edit-state.json")
 EDIT_COUNT_THRESHOLD = 3
@@ -28,20 +29,25 @@ def save_state(state: dict) -> None:
 
 
 def main() -> None:
-    hook_input = json.load(sys.stdin)
-    tool_name = hook_input.get("toolName", "")
+    ctx = create_unified_context()
 
+    if not isinstance(ctx, PostToolUseContext):
+        ctx.output.exit_success()
+        return
+
+    tool_name = ctx.tool_name
     edit_tools = {"str-replace-editor", "save-file"}
 
     if tool_name not in edit_tools:
-        print(json.dumps({}))
+        ctx.output.exit_success()
         return
 
-    tool_result = hook_input.get("toolResult", {})
-    success = tool_result.get("isError") is not True
+    # Check if the tool execution was successful
+    tool_response = ctx.tool_response or {}
+    is_error = tool_response.get("error") is not None
 
-    if not success:
-        print(json.dumps({}))
+    if is_error:
+        ctx.output.exit_success()
         return
 
     state = load_state()
@@ -51,22 +57,14 @@ def main() -> None:
     if state["edit_count"] >= EDIT_COUNT_THRESHOLD and not state.get("reminded"):
         state["reminded"] = True
         save_state(state)
-        print(
-            json.dumps(
-                {
-                    "hookSpecificOutput": {
-                        "additionalContext": (
-                            "📋 Multiple files modified. Before claiming done:\n"
-                            "1. Run tests\n"
-                            "2. Run linters\n"
-                            "3. Show output in your response"
-                        )
-                    }
-                }
-            )
+        ctx.output.add_context(
+            "📋 Multiple files modified. Before claiming done:\n"
+            "1. Run tests\n"
+            "2. Run linters\n"
+            "3. Show output in your response"
         )
     else:
-        print(json.dumps({}))
+        ctx.output.exit_success()
 
 
 if __name__ == "__main__":
