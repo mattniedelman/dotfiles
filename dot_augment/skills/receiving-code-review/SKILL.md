@@ -169,6 +169,32 @@ The code itself shows you heard the feedback.
 | "I'll lose credibility if I push back" | Wrong implementation loses more credibility |
 | "It's faster to just do it" | Fixing wrong implementations is slower |
 
+## Rationalizations to Reject
+
+When evaluating feedback, watch for these invalid justifications (yours OR
+theirs):
+
+| Rationalization | Why It's Invalid | Correct Response |
+|-----------------|------------------|------------------|
+| "The reviewer is more senior" | Authority ≠ correctness | Evaluate technical merit independently |
+| "It's just a style preference" | May mask real issues | Ask for specific technical concerns |
+| "We don't have time" | Tech debt compounds | Negotiate scope, not quality |
+| "It works on my machine" | Not reproducible | Verify in CI/clean environment |
+| "The tests pass" | Tests may be incomplete | Verify test coverage of the change |
+| "Everyone does it this way" | Popularity ≠ correctness | Evaluate for THIS codebase |
+| "It's industry standard" | Standards vary by context | Check if standard applies here |
+| "The original code was worse" | Relative improvement isn't enough | Meet absolute quality bar |
+| "I'll fix it later" | Later never comes | Fix now or don't merge |
+| "It's just a small change" | Small changes compound | Apply same rigor to all changes |
+
+**When you catch yourself rationalizing:**
+
+1. Stop
+2. Name the rationalization
+3. Ask:
+   "What is the actual technical concern?"
+4. Address the technical concern, not the rationalization
+
 ## Red Flags
 
 Stop and reconsider if you catch yourself thinking:

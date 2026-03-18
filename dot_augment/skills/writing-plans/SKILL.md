@@ -133,3 +133,31 @@ After saving the plan to Basic Memory, offer execution choice:
 **If Parallel Session chosen:**
 - Guide them to open new session in worktree
 - **REQUIRED SUB-SKILL:** New session uses superpowers:executing-plans
+
+## Workflow Integration
+
+**Phase:** PLAN
+
+**Inputs:**
+- Spec from `artifacts/specs/{feature}` in Basic Memory
+- OR exploration notes from `artifacts/explorations/{topic}`
+
+**Outputs:**
+- Implementation plan saved to `artifacts/plans/{feature}.md`
+
+**Pre-check:**
+Before planning, verify input exists:
+- Check Basic Memory for spec or exploration
+- If none found: "No spec found. Run EXPLORE phase with `brainstorming` first?"
+
+**Handoff:**
+When plan is complete:
+1. Save plan to Basic Memory with `write_note_basic-memory`
+2. Declare: "**Phase Complete: PLAN -> EXECUTE**"
+3. Suggest: "Ready for `executing-plans` or `subagent-driven-development`"
+
+**Related Skills:**
+- `brainstorming` - Previous phase (EXPLORE)
+- `spec-driven-development` - Alternative if spec well-defined
+- `executing-plans` - Next phase (EXECUTE)
+- `subagent-driven-development` - Alternative for parallel execution

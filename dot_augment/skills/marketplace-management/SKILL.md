@@ -1,3 +1,8 @@
+---
+name: marketplace-management
+description: Use when creating, updating, or syncing plugins to the Augment Plugin Marketplace from personal ~/.augment/ configuration
+---
+
 # Marketplace Management
 
 Manage the Augment Plugin Marketplace - create, update, and sync plugins from
@@ -185,14 +190,14 @@ self-contained.
 
 ```bash
 for hook in plugins/{name}/hooks/*.sh; do
-  if grep -q "from augment_adapter" "$hook"; then
-    sed -i '/^from augment_adapter/i\
+ if grep -q "from augment_adapter" "$hook"; then
+  sed -i '/^from augment_adapter/i\
 # Self-locate for portable imports\
 import sys\
 from pathlib import Path\
 sys.path.insert(0, str(Path(__file__).parent))\
 ' "$hook"
-  fi
+ fi
 done
 ```
 
@@ -222,20 +227,20 @@ Add to `.augment-plugin/marketplace.json`:
 ```bash
 # Check what's not in plugins
 for item in ~/.augment/{skills,rules,hooks,commands,agents}/*; do
-  name=$(basename "$item")
-  if ! find plugins -name "$name" | grep -q .; then
-    echo "Missing: $item"
-  fi
+ name=$(basename "$item")
+ if ! find plugins -name "$name" | grep -q .; then
+  echo "Missing: $item"
+ fi
 done
 
 # Validate all plugins have plugin.json
 for p in plugins/*/; do
-  [ -f "$p/.augment-plugin/plugin.json" ] || echo "Missing: $p"
+ [ -f "$p/.augment-plugin/plugin.json" ] || echo "Missing: $p"
 done
 
 # Validate hooks have hooks.json
 for p in plugins/*/hooks; do
-  [ -d "$p" ] && [ ! -f "$p/hooks.json" ] && echo "Missing hooks.json: $p"
+ [ -d "$p" ] && [ ! -f "$p/hooks.json" ] && echo "Missing hooks.json: $p"
 done
 
 # Check for hardcoded paths

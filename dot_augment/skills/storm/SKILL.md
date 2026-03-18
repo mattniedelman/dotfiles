@@ -64,15 +64,15 @@ knowledge.
 1. **Check Basic Memory** for existing context:
 
 ```python
-search_notes_basic-memory(query="topic keywords")
-build_context_basic-memory(url="memory://related-topic", depth=2)
+search_notes_basic - memory(query="topic keywords")
+build_context_basic - memory(url="memory://related-topic", depth=2)
 ```
 
 1. **Survey similar topics** via web search:
 
 ```python
-web-search(query="[topic] best practices expert perspectives")
-web-search(query="[topic] considerations trade-offs")
+web - search(query="[topic] best practices expert perspectives")
+web - search(query="[topic] considerations trade-offs")
 ```
 
 1. **Extract perspectives** from search results.
@@ -122,9 +122,12 @@ For each perspective, conduct a simulated conversation between a "writer" and
 
 ```python
 # Security perspective
-sub-agent-explore(
- name="storm-security",
- instruction="""
+(
+    sub
+    - agent
+    - explore(
+        name="storm-security",
+        instruction="""
  Research "[TOPIC]" from a Security Engineer perspective.
 
  SIMULATED CONVERSATION PROCESS:
@@ -152,14 +155,15 @@ sub-agent-explore(
 
  ### Recommendations
  - [Recommendation from this perspective]
- """
+ """,
+    )
 )
 
 # Developer perspective (runs in parallel)
-sub-agent-explore(name="storm-developer", instruction="...")
+sub - agent - explore(name="storm-developer", instruction="...")
 
 # Platform perspective (runs in parallel)
-sub-agent-explore(name="storm-platform", instruction="...")
+sub - agent - explore(name="storm-platform", instruction="...")
 ```
 
 ### Conversation Depth
@@ -183,9 +187,12 @@ unified outline organized by **theme** (not by perspective).
 **Use think-strategies for outline generation:**
 
 ```python
-think-strategies_think-strategies(
- strategy="tree_of_thoughts",
- thought="""
+(
+    think
+    - strategies_think
+    - strategies(
+        strategy="tree_of_thoughts",
+        thought="""
  I have research findings from 4 perspectives on [TOPIC]:
  - Security: [key points]
  - Developer: [key points]
@@ -197,9 +204,10 @@ think-strategies_think-strategies(
  - Where do they conflict? (trade-offs)
  - What unique insights did each reveal?
  """,
- thoughtNumber=1,
- totalThoughts=3,
- nextThoughtNeeded=True
+        thoughtNumber=1,
+        totalThoughts=3,
+        nextThoughtNeeded=True,
+    )
 )
 ```
 
@@ -287,6 +295,24 @@ tags:
 ### Finding 2: [Theme]
 [Same structure]
 
+## Common Pitfalls
+
+| Pitfall | Why It Happens | How to Avoid |
+|---------|----------------|--------------|
+| [Pattern 1] | [Root cause] | [Prevention strategy] |
+| [Pattern 2] | [Root cause] | [Prevention strategy] |
+| [Pattern 3] | [Root cause] | [Prevention strategy] |
+
+## Best Practices
+
+Synthesized from [N] sources with confidence scores:
+
+| Practice | Confidence | Sources | One-Line Description |
+|----------|------------|---------|---------------------|
+| [Practice 1] | HIGH | [N] | [Description] |
+| [Practice 2] | MEDIUM | [N] | [Description] |
+| [Practice 3] | LOW | [N] | [Description] |
+
 ## Analysis
 
 [Synthesis across findings - patterns, implications, recommendations]
@@ -296,11 +322,14 @@ tags:
 - [Questions that emerged but weren't fully answered]
 - [Areas needing deeper investigation]
 
-## Sources
+## Sources (Quality-Ranked)
 
-- [URL 1] - [Description]
-- [URL 2] - [Description]
-- [[Related Note]] - [How it relates]
+| Source | Quality | Key Insight |
+|--------|---------|-------------|
+| [URL 1] | 0.9 | [Main takeaway] |
+| [URL 2] | 0.8 | [Main takeaway] |
+| [URL 3] | 0.7 | [Main takeaway] |
+| [[Related Note]] | - | [How it relates] |
 
 ## Observations
 
@@ -318,11 +347,11 @@ tags:
 **Save to Basic Memory:**
 
 ```python
-write_note_basic-memory(
- title="[Topic]",
- content="[Full report]",
- directory="knowledge/research",
- tags=["research", "storm", "topic-tags"]
+write_note_basic - memory(
+    title="[Topic]",
+    content="[Full report]",
+    directory="knowledge/research",
+    tags=["research", "storm", "topic-tags"],
 )
 ```
 

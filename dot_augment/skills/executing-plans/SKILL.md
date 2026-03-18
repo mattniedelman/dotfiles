@@ -104,3 +104,32 @@ After all tasks complete and verified:
 - **superpowers:writing-plans** - Creates the plan this skill executes
 - **superpowers:finishing-a-development-branch** - Complete development after
   all tasks
+
+## Workflow Integration
+
+**Phase:** EXECUTE
+
+**Inputs:**
+- Implementation plan from `artifacts/plans/{feature}` in Basic Memory
+
+**Outputs:**
+- Code changes (tracked by version control)
+- Updated plan with completed tasks
+
+**Pre-check:**
+Before executing, verify plan exists:
+- Check Basic Memory for plan artifact
+- If none found: "No plan found. Run PLAN phase with `writing-plans` first?"
+- Review plan critically before starting
+
+**Handoff:**
+When execution is complete:
+1. Ensure all changes are staged/committed
+2. Declare: "**Phase Complete: EXECUTE -> VERIFY**"
+3. Suggest: "Ready for `verification-before-completion`"
+
+**Related Skills:**
+- `writing-plans` - Previous phase (PLAN)
+- `test-driven-development` - Use within EXECUTE for each task
+- `subagent-driven-development` - Alternative for parallel execution
+- `verification-before-completion` - Next phase (VERIFY)

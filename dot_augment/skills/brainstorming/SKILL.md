@@ -20,10 +20,11 @@ Once you understand what you're building, present the design in small sections
 **Understanding the idea:**
 
 - Check out the current project state first (files, docs, recent commits)
-- Ask questions one at a time to refine the idea
+- Ask exactly ONE question per message - never bundle multiple questions
+  together
 - Prefer multiple choice questions when possible, but open-ended is fine too
-- Only one question per message - if a topic needs more exploration, break it
-  into multiple questions
+- If a topic needs more exploration, break it into separate messages with one
+  question each
 - Focus on understanding:
   purpose, constraints, success criteria
 
@@ -107,11 +108,91 @@ The note should follow this structure:
 - Use superpowers:using-git-worktrees to create isolated workspace
 - Use superpowers:writing-plans to create detailed implementation plan
 
+## Ambiguity Detection (MANDATORY)
+
+Before proceeding to design, check for ambiguity:
+
+| Ambiguity Type | Detection | Resolution |
+|----------------|-----------|------------|
+| **Scope ambiguity** | "What exactly should this do?" | List concrete behaviors |
+| **Technical ambiguity** | "How should this integrate?" | Identify touchpoints |
+| **Priority ambiguity** | "What's most important?" | Rank requirements |
+| **Constraint ambiguity** | "What can't change?" | List hard constraints |
+| **Success ambiguity** | "How do we know it works?" | Define acceptance criteria |
+
+**Ambiguity threshold:** If >2 ambiguous items, STOP and clarify before
+proceeding.
+
+## Discussion-First Gate (DAIC Pattern)
+
+Before ANY implementation:
+
+```text
+┌─────────────────────────────────────────┐
+│ Implementation Plan                     │
+│                                         │
+│ Goal: [plain English description]       │
+│                                         │
+│ Steps:                                  │
+│   1. [Step]                             │
+│   2. [Step]                             │
+│   3. [Step]                             │
+│                                         │
+│ Files to modify: [list]                 │
+│ Tests to add: [list]                    │
+│                                         │
+│ Does this match your intentions?        │
+└─────────────────────────────────────────┘
+
+⏸️ STOP AND WAIT FOR USER CONFIRMATION
+
+Only proceed to implementation after explicit approval.
+```
+
 ## Key Principles
 
-- **One question at a time** - Don't overwhelm with multiple questions
+- **CRITICAL:
+  One question at a time** - Never ask multiple questions in a single message.
+  If you need to explore multiple topics, send separate messages for each
+  question.
+  This is non-negotiable.
 - **Multiple choice preferred** - Easier to answer than open-ended when possible
 - **YAGNI ruthlessly** - Remove unnecessary features from all designs
 - **Explore alternatives** - Always propose 2-3 approaches before settling
 - **Incremental validation** - Present design in sections, validate each
 - **Be flexible** - Go back and clarify when something doesn't make sense
+- **Ambiguity gating** - Don't proceed with >2 unresolved ambiguities
+
+## Workflow Integration
+
+**Phase:** EXPLORE
+
+**Inputs:**
+
+- User request or idea
+- Existing context from `continue-conversation` if resuming
+
+**Outputs:**
+
+- Spec saved to `artifacts/specs/{feature}.md` in Basic Memory
+
+**Pre-check:**
+
+- Is there existing work on this topic?
+  Check Basic Memory first.
+
+**Handoff:** When brainstorming is complete:
+
+1. Save spec to Basic Memory with `write_note_basic-memory`
+2. Declare:
+   "**Phase Complete:
+   EXPLORE -> PLAN**"
+3. Suggest:
+   "Ready for `writing-plans` to create implementation plan"
+
+**Related Skills:**
+
+- `deep-dive` - For more intensive exploration
+- `storm` - For research with multiple perspectives
+- `writing-plans` - Next phase (PLAN)
+- `spec-driven-development` - If spec already exists
