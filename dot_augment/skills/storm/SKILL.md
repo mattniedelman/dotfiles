@@ -406,7 +406,7 @@ Always end with:
 ```markdown
 ## STORM Research Complete
 
-**Saved to Basic Memory:** `memory://knowledge/research/[topic]`
+**Saved to Basic Memory:** `memory://artifacts/research/[topic]`
 
 **Perspectives Consulted:**
 - [Perspective 1]: [Key insight]

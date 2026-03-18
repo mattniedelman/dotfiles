@@ -64,7 +64,7 @@ What are we looking at?
 
 ```python
 # Find the entry points
-codebase-retrieval(information_request="entry points for [topic]")
+codebase - retrieval(information_request="entry points for [topic]")
 
 # Get file/directory overview
 view(path="relevant/directory", type="directory")
@@ -77,10 +77,10 @@ find_symbol(name_path_pattern="MainClass", include_body=False, include_info=True
 
 ```python
 # Search existing knowledge
-search_notes_basic-memory(query="topic keywords")
+search_notes_basic - memory(query="topic keywords")
 
 # External search
-web-search(query="[topic] overview introduction")
+web - search(query="[topic] overview introduction")
 ```
 
 **Output:** List the key artifacts, entry points, or concepts discovered.
@@ -129,12 +129,16 @@ find_referencing_symbols(name_path="called_function", relative_path="file.py")
 **Use structured thinking for complex logic:**
 
 ```python
-think-strategies_think-strategies(
-  strategy="chain_of_thought",
-  thought="Tracing how [X] processes [Y]: Step 1...",
-  thoughtNumber=1,
-  totalThoughts=5,
-  nextThoughtNeeded=True
+(
+    think
+    - strategies_think
+    - strategies(
+        strategy="chain_of_thought",
+        thought="Tracing how [X] processes [Y]: Step 1...",
+        thoughtNumber=1,
+        totalThoughts=5,
+        nextThoughtNeeded=True,
+    )
 )
 ```
 
@@ -185,11 +189,11 @@ filesystem.
 The `directory` parameter is a Basic Memory path, not a filesystem path.
 
 ```python
-write_note_basic-memory(
-  title="[Topic]",
-  content="[synthesis content]",
-  directory="knowledge/research",
-  tags=["deep-dive", "understanding", "<topic-tags>"]
+write_note_basic - memory(
+    title="[Topic]",
+    content="[synthesis content]",
+    directory="knowledge/research",
+    tags=["deep-dive", "understanding", "<topic-tags>"],
 )
 ```
 
@@ -200,7 +204,7 @@ Present findings progressively during exploration, then provide final synthesis:
 ```markdown
 ## Deep Dive Complete: [Topic]
 
-**Saved to Basic Memory:** `memory://knowledge/research/[topic]`
+**Saved to Basic Memory:** `memory://artifacts/research/[topic]`
 
 ### Mental Model
 
