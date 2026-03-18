@@ -112,7 +112,10 @@ zizmor = "latest"
 "go:github.com/steveyegge/gastown/cmd/gt" = "latest"
 "npm:@cyanheads/git-mcp-server" = "latest"
 pulumi = "latest"
-"github:stacklok/toolhive" = "latest"
+"npm:puppeteer" = "latest"
+"pipx:deply" = "latest"
+"github:dlvhdr/diffnav" = "latest"
+"cargo:workmux" = "latest"
 
 
 
