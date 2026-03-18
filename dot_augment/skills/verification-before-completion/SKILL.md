@@ -5,6 +5,35 @@ description: Use when about to claim work is complete, fixed, or passing, before
 
 # Verification Before Completion
 
+<!-- QUICK REFERENCE - Follow This -->
+
+## Quick Verification (Always Do This)
+
+1. **Run test command** → See output
+2. **Confirm:** "X/X passed" or "0 failures"
+3. **Run lint command** → See output
+4. **Confirm:** "0 errors"
+5. **ONLY THEN** claim success
+
+### Checklist Before Saying "Done"
+
+- [ ] Tests pass (saw output)
+- [ ] Lint passes (saw output)
+- [ ] Build succeeds (saw exit 0)
+- [ ] All requirements addressed
+
+### Prohibited Claims Without Evidence
+
+| Say This | Not This |
+|----------|----------|
+| "pytest: 34/34 passed" | "should work now" |
+| "ruff: 0 errors" | "looks correct" |
+| "exit code 0" | "I believe it's fixed" |
+
+<!-- END QUICK REFERENCE -->
+
+---
+
 ## Overview
 
 Claiming work is complete without verification is dishonesty, not efficiency.
@@ -43,6 +72,68 @@ Before claiming completion, verify at ALL three levels:
   Substantive** | Is it real code, not a stub? | Placeholder/TODO |
 | **3.
   Wired** | Is it connected to the system? | Orphaned code |
+
+## Evaluation Tiers
+
+Verification operates at multiple tiers.
+Lower tiers are prerequisites for higher tiers.
+
+### Tier 1: Functional (Does it work?)
+
+| Check | Method |
+|-------|--------|
+| Code compiles/parses | Build command exits 0 |
+| Tests pass | Test command shows 0 failures |
+| No runtime errors | App starts without crashing |
+| Feature behaves correctly | Manual or automated verification |
+
+### Tier 2: Completeness (Is it done?)
+
+| Check | Method |
+|-------|--------|
+| All requirements addressed | Line-by-line checklist against spec |
+| Edge cases handled | Tests exist for boundary conditions |
+| Error states handled | Invalid input produces useful errors |
+| All three levels verified | Exists + Substantive + Wired |
+
+### Tier 3: Quality (Is it good?)
+
+| Check | Method |
+|-------|--------|
+| Lint clean | Linter output shows 0 errors |
+| Type safe | Type checker passes |
+| No code smells | ast-grep rules pass |
+| Follows project patterns | Matches existing conventions |
+| Readable and maintainable | Self-review against style guide |
+
+### Tier 4: Learning (What did we learn?)
+
+| Check | Method |
+|-------|--------|
+| Decisions documented | Basic Memory notes updated |
+| Patterns captured | Reusable insights recorded |
+| Gotchas noted | Future-self warnings added |
+| Related work identified | Links to affected areas documented |
+
+### Tier Application
+
+| Claim | Minimum Tier Required |
+|-------|----------------------|
+| "It compiles" | Tier 1 |
+| "Tests pass" | Tier 1 |
+| "Feature complete" | Tier 2 |
+| "Ready for review" | Tier 3 |
+| "Work complete" | Tier 4 |
+
+### Quick Tier Checklist
+
+```text
+Before claiming DONE:
+[ ] Tier 1: Build passes, tests pass, no runtime errors
+[ ] Tier 2: All requirements met, edge cases covered, 3 levels verified
+[ ] Tier 3: Lint clean, types pass, follows patterns
+[ ] Tier 4: Decisions captured, patterns documented, learnings recorded
+```
 
 ### Observable Truths
 
@@ -245,6 +336,59 @@ Skip any step = lying, not verifying
 - Moving to next task
 - Delegating to agents
 
+## Fix-Revalidate Loop (MANDATORY)
+
+When verification fails and you fix an issue, you MUST re-run the FULL
+verification suite, not just the specific failing check.
+
+```text
+┌─────────────────────────────────────────────────────────────┐
+│ FIX-REVALIDATE LOOP                                         │
+│                                                             │
+│ 1. Run FULL verification suite                              │
+│ 2. IF failure → Fix the specific issue                      │
+│ 3. Run FULL verification suite AGAIN (not just that test)   │
+│ 4. IF new failure → Go to step 2                            │
+│ 5. IF all pass → Proceed                                    │
+│                                                             │
+│ ⚠️  NEVER assume "fixing X can't break Y"                   │
+│ ⚠️  NEVER run only the previously-failing test              │
+│ ⚠️  NEVER skip re-running because "it's unrelated"          │
+└─────────────────────────────────────────────────────────────┘
+```
+
+**Why full re-verification?**
+
+| Assumption | Reality |
+|------------|---------|
+| "This fix only affects X" | Fixes often have side effects |
+| "Y was passing before" | Your fix may have broken Y |
+| "It's just a typo fix" | Typo fixes can change behavior |
+| "I only changed one line" | One line can cascade |
+
+**Counter-example (WRONG):**
+
+```text
+1. Run tests → 3 fail
+2. Fix test A → Run test A → Passes
+3. Fix test B → Run test B → Passes
+4. Fix test C → Run test C → Passes
+5. Claim "all tests pass" ← WRONG: Never ran full suite after fixes
+```
+
+**Correct approach:**
+
+```text
+1. Run ALL tests → 3 fail
+2. Fix test A
+3. Run ALL tests → 2 fail, test A passes
+4. Fix test B
+5. Run ALL tests → 1 fail, tests A & B pass
+6. Fix test C
+7. Run ALL tests → 0 fail
+8. Claim "all tests pass" ← CORRECT: Full suite verified
+```
+
 ## The Bottom Line
 
 **No shortcuts for verification.**
@@ -254,3 +398,47 @@ Read the output.
 THEN claim the result.
 
 This is non-negotiable.
+
+## Workflow Integration
+
+**Phase:** VERIFY
+
+**Inputs:**
+
+- Completed code changes from EXECUTE phase
+- Spec from `artifacts/specs/{feature}` (for requirements check)
+- Plan from `artifacts/plans/{feature}` (for completeness check)
+
+**Outputs:**
+
+- Verification report (inline, not persisted)
+- Updated task states
+
+**Pre-check:** Before verifying:
+
+- Are there changes to verify?
+  Check version control status.
+- Was EXECUTE phase completed?
+  Check plan task states.
+
+**Handoff:** When verification passes:
+
+1. Summarize verification results
+2. Declare:
+   "**Phase Complete:
+   VERIFY -> LEARN**"
+3. Suggest:
+   "Ready for `knowledge-capture` to document insights"
+
+When verification fails:
+
+1. Identify specific failures
+2. Declare:
+   "**Returning to EXECUTE phase**"
+3. Fix issues, then re-verify
+
+**Related Skills:**
+
+- `executing-plans` - Previous phase (EXECUTE)
+- `test-driven-development` - For writing regression tests
+- `knowledge-capture` - Next phase (LEARN)

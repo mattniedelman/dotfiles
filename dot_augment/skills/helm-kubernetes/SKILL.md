@@ -37,8 +37,8 @@ apiVersion: v2
 name: myapp
 description: A Helm chart for MyApp
 type: application
-version: 1.0.0           # Chart version (SemVer)
-appVersion: "2.3.1"      # Application version
+version: 1.0.0  # Chart version (SemVer)
+appVersion: "2.3.1"  # Application version
 kubeVersion: ">=1.25.0"  # Kubernetes version constraint
 keywords:
   - myapp
@@ -270,3 +270,30 @@ helm install my-release ./my-chart --dry-run --debug --validate
 | `latest` tag | Non-reproducible | Use `{{ .Chart.AppVersion }}` |
 | No PDB | Downtime during upgrades | Enable for production |
 | Root user | Security vulnerability | Set `runAsNonRoot: true` |
+
+## Related Skills (Auto-Invoke)
+
+After generating or modifying Helm charts, invoke these:
+
+| After This Step | Invoke Skill | Why |
+|-----------------|--------------|-----|
+| Generate chart | `verification-before-completion` | Run `helm lint` and `helm template` |
+| Modify templates | `lint-workflow` | Check for YAML errors |
+| Add new values | `test-driven-development` | Write helm test first |
+| Complete changes | `knowledge-capture` | Document chart decisions |
+
+**Validation checklist (REQUIRED before done):**
+
+```bash
+# Lint the chart
+helm lint ./my-chart
+
+# Template render (catches most errors)
+helm template my-release ./my-chart --debug
+
+# Dry-run install (requires cluster access)
+helm install my-release ./my-chart --dry-run --debug
+
+# Schema validation (if values.schema.json exists)
+helm lint ./my-chart --strict
+```

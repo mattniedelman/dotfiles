@@ -1,6 +1,6 @@
 ---
 name: using-git-worktrees
-description: DEFAULT for AI implementation work - creates isolated git worktrees to keep user's main checkout pristine
+description: Use when doing AI implementation work - DEFAULT creates isolated git worktrees to keep user's main checkout pristine
 ---
 
 # Using Git Worktrees

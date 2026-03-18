@@ -419,3 +419,117 @@ Avoid storing information that:
 6. **Prefer facts over opinions** - Observations should be verifiable
 7. **Keep notes atomic** - One concept per note when possible
 8. **Keep notes current** - Update when decisions change or info becomes stale
+
+## Workflow Integration
+
+**Phase:** LEARN
+
+**Inputs:**
+- Verified work from VERIFY phase
+- Decisions made during the workflow
+- Patterns discovered during implementation
+
+**Outputs:**
+- Decision records in `artifacts/decisions/{topic}.md`
+- Knowledge notes in `knowledge/{category}/{topic}.md`
+- Updated existing notes with new observations
+
+**Pre-check:**
+Before capturing:
+- Was work verified? Prompt if skipping VERIFY phase.
+- What decisions were made that should be captured?
+- What patterns emerged that could help future work?
+
+**Handoff:**
+When capture is complete:
+1. List artifacts created/updated
+2. Declare: "**Phase Complete: LEARN**"
+3. Workflow cycle complete, or: "Ready to start new EXPLORE phase"
+
+**Related Skills:**
+- `verification-before-completion` - Previous phase (VERIFY)
+- `brainstorming` - Start of next cycle (EXPLORE)
+- `continue-conversation` - For resuming with captured context
+
+## Provenance Tracking
+
+**All notes MUST include provenance metadata in frontmatter.**
+
+### Required Fields
+
+| Field | Required | Values | Purpose |
+|-------|----------|--------|---------|
+| `source` | Yes | See below | Where the information came from |
+| `confidence` | Yes | `high`, `medium`, `low` | How reliable is this |
+| `observed` | Yes | `YYYY-MM-DD` | When captured |
+
+### Optional Fields
+
+| Field | When to Use | Values |
+|-------|-------------|--------|
+| `expires` | Time-sensitive info | `YYYY-MM-DD` or `never` |
+| `source_ref` | Traceable origin | URL, file path, session ID |
+| `verified_by` | Reviewed info | `user`, `documentation`, `testing` |
+
+### Source Values
+
+| Source | Use When |
+|--------|----------|
+| `user-stated` | User explicitly said this |
+| `conversation` | Emerged from discussion |
+| `documentation` | From official docs |
+| `code-analysis` | Discovered by reading code |
+| `inferred` | Logical conclusion from context |
+| `observed` | Witnessed behavior |
+| `external` | From external source (with `source_ref`) |
+
+### Confidence Levels
+
+| Level | Meaning |
+|-------|---------|
+| `high` | Verified, user-confirmed, or from authoritative source |
+| `medium` | Reasonable inference, likely accurate |
+| `low` | Uncertain, needs verification |
+
+### Example Frontmatter
+
+```yaml
+---
+title: Database Choice PostgreSQL
+type: decision
+tags:
+  - architecture
+  - database
+source: user-stated
+confidence: high
+observed: 2026-03-13
+source_ref: session/conv-abc123
+---
+```
+
+### Example with Expiration
+
+```yaml
+---
+title: API Rate Limits
+type: note
+tags:
+  - api
+  - constraints
+source: documentation
+confidence: high
+observed: 2026-03-13
+expires: 2026-06-13
+source_ref: https://docs.example.com/rate-limits
+---
+```
+
+### When Updating Notes
+
+When updating existing notes with new information:
+1. Keep original provenance if still valid
+2. Add new observations with their own inline provenance if different:
+   ```markdown
+   - [update] Rate limit increased to 200/min (source: docs, 2026-03-15)
+   ```
+3. Update `observed` date in frontmatter to most recent edit

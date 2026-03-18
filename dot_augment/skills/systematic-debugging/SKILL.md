@@ -5,6 +5,38 @@ description: Use when encountering any bug, test failure, or unexpected behavior
 
 # Systematic Debugging
 
+<!-- QUICK REFERENCE - Follow This -->
+
+## Quick Debugging Checklist
+
+**BEFORE proposing ANY fix, complete these steps:**
+
+1. [ ] **Read error message completely** - Copy exact text
+2. [ ] **Identify file and line number** - Go to that location
+3. [ ] **Read the code** - Understand what it does
+4. [ ] **State hypothesis:** "I believe X causes Y because Z"
+5. [ ] **ONLY THEN** propose a single fix
+
+### Loop Prevention
+
+| Failed Attempts | Action |
+|-----------------|--------|
+| 1 | Try your hypothesis |
+| 2 | Re-read error, reconsider assumptions |
+| 3+ | STOP. Ask user for help or try completely different approach |
+
+### Red Flags - Return to Step 1
+
+If you think any of these, STOP:
+
+- "Let me just try this"
+- "This should fix it"
+- "One more attempt"
+
+<!-- END QUICK REFERENCE -->
+
+---
+
 ## Overview
 
 Random fixes waste time and create new bugs.
@@ -13,9 +45,10 @@ Quick patches mask underlying issues.
 **Core principle:** ALWAYS find root cause before attempting fixes.
 Symptom fixes are failure.
 
-**Violating the letter of this process is violating the spirit of debugging.**
+**Follow ALL steps.
+No shortcuts.**
 
-## The Iron Law
+## The Mandatory Process
 
 ```text
 NO FIXES WITHOUT ROOT CAUSE INVESTIGATION FIRST

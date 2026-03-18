@@ -130,3 +130,96 @@ Create `findings.json` with this exact schema:
    Imported N findings across M dimensions."
 4. Show:
    Score summary and top 3 priority findings
+
+---
+
+## Deep Review Mode (Parallel Subagents)
+
+For `/deslop deep`, use parallel subagents to review dimensions in batches.
+
+## Subagent Dispatch Pattern
+
+Dispatch 4-5 subagents in parallel, each handling a group of dimensions:
+
+```python
+# Group 1: Architecture dimensions
+(
+    sub
+    - agent
+    - explore(
+        name="deep-review-arch",
+        instruction="""
+You are a blind code reviewer for desloppify. Review the <lang> codebase at
+<repo_path> for these dimensions:
+
+1. **cross_module_architecture** - Dependency direction, cycles, hub modules
+2. **high_level_elegance** - Clear decomposition, domain-aligned structure
+3. **convention_outlier** - Naming drift, style islands
+4. **error_consistency** - Consistent strategies, preserved context
+5. **naming_quality** - Intent-communicating names
+
+Key files to examine: <list files with known issues>
+
+For each dimension, provide:
+1. Score (0-100)
+2. 2-3 specific code evidence observations
+3. List of issues found (dimension, identifier, summary, related_files, evidence, suggestion)
+""",
+    )
+)
+```
+
+## Issue Requirements
+
+**CRITICAL**:
+Every dimension scored below 85 MUST have at least one issue.
+
+Issues must include ALL required fields:
+
+```json
+{
+  "dimension": "<dimension>",
+  "identifier": "snake_case_short_id",
+  "summary": "one-line defect summary",
+  "related_files": ["relative/path.py"],
+  "evidence": ["specific code observation"],
+  "suggestion": "concrete fix recommendation",
+  "confidence": "high|medium|low",
+  "impact_scope": "local|module|subsystem|codebase",
+  "fix_scope": "single_edit|multi_file_refactor|architectural_change"
+}
+```
+
+## Compiling Results
+
+After all subagents complete:
+
+1. Extract assessments (scores) from each subagent
+2. Extract dimension_notes from each subagent
+3. Collect all issues into single array
+4. Verify session.id and session.token from template
+5. Write to review_result.json
+6. Submit:
+   `uvx desloppify --lang <lang> review --import <file> --scan-after-import`
+
+## Example Subagent Groups
+
+| Group | Dimensions | Focus |
+|-------|------------|-------|
+| arch | cross_module, high_level, convention, error, naming | Structure |
+| design | abstraction, dependency, low_level, mid_level, auth | Quality |
+| impl | package_org, init_coupling, design_coherence, contract, logic | Design |
+| quality | type_safety, ai_debt, test_strategy, api_surface, incomplete | Debt |
+
+## Multi-Language Support
+
+For projects with multiple languages (Python + Rust):
+
+```bash
+# Run in parallel
+uvx desloppify --lang python review --external-start ...
+uvx desloppify --lang rust review --external-start ...
+
+# Each generates its own session
+# Submit separately after reviews complete
+```

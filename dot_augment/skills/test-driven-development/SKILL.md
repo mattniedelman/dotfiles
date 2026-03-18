@@ -87,6 +87,53 @@ Fix test.
 Write simplest code to pass the test.
 Don't add features beyond the test.
 
+**Incremental Development (CRITICAL):**
+
+Each step addresses ONE specific failure:
+
+| Test Failure | Allowed Response |
+|--------------|------------------|
+| `NameError: X not defined` | Create empty stub ONLY |
+| `TypeError: X is not callable` | Add function/method signature ONLY |
+| `TypeError: takes N args` | Fix signature parameters ONLY |
+| `AttributeError: no attr Y` | Add attribute/property ONLY |
+| Assertion failure | Implement minimal logic to pass THIS assertion |
+
+**Prohibited responses:**
+
+- Adding "obvious" related functionality
+- Implementing the "complete" solution
+- Adding error handling "while we're here"
+- Refactoring before the test passes
+
+**Example (correct):**
+
+```python
+# Test: assert Calculator().add(2, 3) == 5
+
+# Step 1: "Calculator not defined" → class Calculator: pass
+# Step 2: "has no attribute add" → def add(self): pass
+# Step 3: "takes 1 arg, 3 given" → def add(self, a, b): pass
+# Step 4: "None != 5" → return a + b
+```
+
+**Example (WRONG - over-implementation):**
+
+```python
+# Test: assert Calculator().add(2, 3) == 5
+
+# WRONG: Implementing subtract, multiply, divide "while we're here"
+class Calculator:
+    def add(self, a, b):
+        return a + b
+
+    def subtract(self, a, b):
+        return a - b  # NO TEST!
+
+    def multiply(self, a, b):
+        return a * b  # NO TEST!
+```
+
 ### Verify GREEN - Watch It Pass
 
 **MANDATORY.**
