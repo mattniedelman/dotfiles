@@ -2,7 +2,6 @@
 type: always_apply
 priority: CRITICAL
 description: Require all git operations to use the git MCP server, not direct process execution
-last_updated: 2026-02-25
 ---
 
 # Git Operations Must Use MCP Server
@@ -22,12 +21,13 @@ Use the git MCP server tools for all git operations:
 | Operation | MCP Tool |
 |-----------|----------|
 | Check status | `git_status_git` |
-| View diff | `git_diff_unstaged_git`, `git_diff_staged_git` |
+| View diff (unstaged) | `git_diff_git` |
+| View diff (staged) | `git_diff_git` with `staged: true` |
 | View log | `git_log_git` |
 | Stage files | `git_add_git` |
 | Commit changes | `git_commit_git` |
-| Create branch | `git_checkout_git` |
-| List branches | `git_list_branches_git` |
+| Create/switch branch | `git_checkout_git` |
+| List branches | `git_branch_git` with `operation: "list"` |
 | Push changes | `git_push_git` |
 | Pull changes | `git_pull_git` |
 | Stash changes | `git_stash_git` |

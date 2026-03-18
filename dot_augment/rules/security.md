@@ -2,7 +2,6 @@
 type: always_apply
 priority: HIGH
 description: Security best practices, secrets management, and authorization policies
-last_updated: 2025-01-26
 ---
 
 # Security Best Practices

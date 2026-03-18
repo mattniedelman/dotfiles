@@ -2,7 +2,6 @@
 type: always_apply
 priority: HIGH
 description: Critical git constraints - MCP tools, staging rules, authorization
-last_updated: 2026-02-19
 ---
 
 # Git Workflow - Critical Constraints

@@ -2,7 +2,6 @@
 type: always_apply
 priority: CRITICAL
 description: Critical rules for AI assistant response style, communication standards, and prohibited language patterns
-last_updated: 2025-01-26
 ---
 
 # Response Style and Communication Standards

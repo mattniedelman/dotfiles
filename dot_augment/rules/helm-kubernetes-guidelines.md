@@ -2,7 +2,6 @@
 type: always_apply
 priority: HIGH
 description: Helm chart and Kubernetes manifest guidelines with namespace policy enforcement
-last_updated: 2025-01-27
 ---
 
 # Helm and Kubernetes Guidelines

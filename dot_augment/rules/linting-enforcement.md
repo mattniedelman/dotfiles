@@ -2,7 +2,6 @@
 type: always_apply
 priority: HIGH
 description: Linting suppression policies and approval workflow
-last_updated: 2026-02-20
 ---
 
 # Linting Enforcement

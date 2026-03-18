@@ -2,7 +2,6 @@
 type: always_apply
 priority: HIGH
 description: Critical Python constraints - package authorization, tool detection
-last_updated: 2026-02-19
 ---
 
 # Python Development - Critical Constraints

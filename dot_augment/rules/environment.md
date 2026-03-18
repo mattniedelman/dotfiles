@@ -2,7 +2,6 @@
 type: always_apply
 priority: HIGH
 description: Workspace configuration, path resolution, and environment setup
-last_updated: 2026-02-26
 ---
 
 # Development Environment Configuration
