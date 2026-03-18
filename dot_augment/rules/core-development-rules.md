@@ -417,7 +417,7 @@ Always use `write_note_basic-memory` - NEVER use `save-file` or write to local
 | Patterns established | `knowledge/patterns/` | Implementation conventions |
 | Trade-offs chosen | `artifacts/architecture/` | Option A over B with rationale |
 | Implementation plans | `artifacts/plans/` | Step-by-step implementation guides |
-| Research findings | `knowledge/research/` | STORM or deep-dive output |
+| Research findings | `artifacts/research/` | STORM or deep-dive output |
 
 **Behavior**:
 
@@ -437,3 +437,35 @@ Always use `write_note_basic-memory` - NEVER use `save-file` or write to local
 - MUST evaluate notes update after completing significant work
 
 **Failure to capture decisions when triggers are met is a CRITICAL violation.**
+
+## Cognitive Debt Prevention
+
+**Definition:** Cognitive debt accumulates when you lose understanding of how
+code works - making reasoning, planning, and debugging harder.
+
+### Triggers to Address
+
+| Trigger | Action |
+|---------|--------|
+| Vibe-coded something that works but don't understand | Request `linear-walkthrough` skill |
+| Modified complex AI-generated code | Create walkthrough of changes |
+| Can't explain why something works | Deep-dive or walkthrough |
+| Joining unfamiliar codebase area | Linear walkthrough before changes |
+
+### Prevention Actions
+
+1. **Linear Walkthroughs** - Use `linear-walkthrough` skill to document how code
+   works
+2. **Code Recipes** - Extract reusable patterns with `code-recipes` skill
+3. **Interactive Explanations** - Build visualizations for complex algorithms
+4. **Knowledge Capture** - Save understanding to Basic Memory
+
+### Warning Signs
+
+- "It works but I'm not sure why"
+- "The AI wrote this and tests pass"
+- "I'll figure out how it works later"
+- Avoiding areas of the codebase
+
+**Rule:** If you can't explain code you own, you don't own it - pay down the
+debt.
