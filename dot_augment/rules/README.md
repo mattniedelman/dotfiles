@@ -19,9 +19,27 @@ When referring to the CLI command, use `auggie`.
 
 | Priority | Type | Enforcement | Files |
 |----------|------|-------------|-------|
-| **CRITICAL** | `always_apply` | Violations are penalized | `response-style-communication.md`, `core-development-rules.md` (includes Notes Management), `git-mcp-required.md`, `github-mcp-required.md` |
+| **CRITICAL** | `always_apply` | Violations are penalized | `sonnet-essentials.md`, `response-style-communication.md`, `core-development-rules.md` (includes Notes Management), `git-mcp-required.md`, `github-mcp-required.md`, `documentation-first.md` |
 | **HIGH** | `always_apply` | Always active for relevant domains | `git-workflow.md`, `linting-enforcement.md`, `environment.md`, `security.md`, `helm-kubernetes-guidelines.md`, `python-development.md`, `authorization-policies.md`, `shell-commands.md` |
 | **STANDARD** | `agent_requested` | Guidance for specific scenarios | (migrated to skills) |
+
+### Sonnet Optimization
+
+The `sonnet-essentials.md` rule provides compressed critical constraints
+optimized for Sonnet models.
+It contains:
+
+- Pre-action checklist
+- Tool selection quick reference
+- Loop detection thresholds
+- Verification requirements
+- Response style constraints
+
+Skills with "Quick Reference" sections at the top are also Sonnet-optimized:
+
+- `verification-before-completion`
+- `systematic-debugging`
+- `using-superpowers`
 
 ---
 
@@ -84,7 +102,7 @@ These rules are enforced with the same severity as scope violations:
 
 - **Parse GitHub URLs** and use appropriate MCP tools or gh CLI
 - **NEVER use `web-fetch`** for github.com or raw.githubusercontent.com
-- Use `pull_request_read_github`, `issue_read_github`, `get_commit_github`, etc.
+- Use `pull_request_read`, `issue_read`, `get_commit`, etc.
 - Fallback to `gh` CLI for workflow runs and job logs
 
 ### 5. Notes Management (in core-development-rules.md) -- CRITICAL
@@ -97,18 +115,27 @@ These rules are enforced with the same severity as scope violations:
   MUST review if new knowledge, changed decisions, or stale notes exist
 - **Failure to update notes when triggers are met is a violation**
 
+### 6. documentation-first.md -- CRITICAL
+
+- **NEVER guess** at syntax, API behavior, or library functionality
+- **ALWAYS fetch documentation** before writing code using external dependencies
+- **llms.txt first** - Check for llms.txt at docs root before other methods
+- **Fallback chain** - llms.txt -> web-fetch -> crwl -> crawled docs ->
+  web-search
+- **Cite sources** - Show evidence of documentation lookup when using libraries
+
 ---
 
 ## HIGH Priority (Always Apply When Relevant)
 
-### 6. git-workflow.md
+### 7. git-workflow.md
 
 - Conventional Commits format
 - Branch naming conventions
 - Commit authorization workflow
 - **All git operations use MCP server tools** (see `git-mcp-required.md`)
 
-### 7. linting-enforcement.md
+### 8. linting-enforcement.md
 
 - Run linters after code changes:
   ast-grep → ruff → ty
@@ -116,41 +143,46 @@ These rules are enforced with the same severity as scope violations:
 - Fix errors rather than suppress
 - Approval required for suppressions
 
-### 8. environment.md
+### 9. environment.md
 
 - Path resolution rules
 - Workspace structure
 - Tool management (mise)
 
-### 9. security.md
+### 10. security.md
 
 - Never hardcode secrets
 - Authorization for security-related changes
 - SQL injection prevention
 
-### 10. helm-kubernetes-guidelines.md
+### 11. helm-kubernetes-guidelines.md
 
 - CRITICAL:
   Never manage namespaces in Helm charts
 - Chart structure and values organization
 
-### 11. python-development.md
+### 12. python-development.md
 
 - Package management:
   uv (default) or poetry (if poetry.lock exists)
 - Authorization required for package installation
 - Testing with pytest, type hints required
 
-### 12. authorization-policies.md
+### 13. authorization-policies.md
 
 - Unified authorization matrix for all operations
 - Defines EXPLICIT, CONFIRM, SUGGEST, ALLOWED, REFUSE levels
 - Single source of truth for permission requirements
 
-### 13. Structured Thinking (in core-development-rules.md)
+### 14. Structured Thinking (in core-development-rules.md)
 
 - Use think-strategies for complex debugging, architecture, investigations
 - Skip for simple, well-defined tasks
+
+### 15. shell-commands.md
+
+- Multi-line commands with backslash continuations must use heredoc syntax
+- Direct line continuations execute as separate commands in launch-process
 
 ---
 
@@ -162,7 +194,6 @@ All rule files should include this frontmatter:
 type: always_apply | agent_requested
 priority: CRITICAL | HIGH | STANDARD
 description: Brief description of the rule's purpose
-last_updated: YYYY-MM-DD
 ---
 ```
 

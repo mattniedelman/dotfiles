@@ -2,9 +2,21 @@
 type: always_apply
 priority: CRITICAL
 description: Core development rules and coding standards for Matt's workflow
-last_updated: 2025-02-13
 ---
+
 # Core Development Rules
+
+## ⚠️ COMPLETE BEFORE EVERY ACTION ⚠️
+
+- [ ] Checked skill list for applicable skills?
+- [ ] Using semantic tools for code symbols (not grep)?
+- [ ] Using git MCP tools (not launch-process)?
+- [ ] Not in a loop (2+ similar failed attempts)?
+- [ ] Will run verification before claiming success?
+
+**Any unchecked → STOP and address first.**
+
+---
 
 ## ⚠️ CRITICAL RULES SUMMARY ⚠️
 
@@ -49,6 +61,67 @@ violations:
    BEFORE using any CLI tool, VERIFY its expected arguments and defaults.
    Do NOT assume tools work on the current directory by default.
    See "Tool Behavior Verification" section below.
+
+9. **Loop Detection (MANDATORY)**:
+   Self-monitor for repeated failing patterns.
+   If same tool called 3+ times with similar args, same error 3+ times, or
+   circling the same reasoning - STOP and reassess.
+   See "Loop Detection" section below.
+
+---
+
+## Loop Detection
+
+### ⚠️ MANDATORY: Recognize and Break Loops ⚠️
+
+**Self-monitor for these patterns:**
+
+| Pattern | Threshold | Action |
+|---------|-----------|--------|
+| Same tool, similar arguments | 3 calls | STOP. Reassess approach. |
+| Same error message appearing | 3 occurrences | STOP. Ask user for help. |
+| Circling same reasoning points | Noticed | STOP. State what's blocking. |
+| Same file edit failing | 3 attempts | STOP. Verify file state and assumptions. |
+| Test failing same way | 3 runs | STOP. Debug root cause, don't retry. |
+
+**When loop detected:**
+
+1. **Acknowledge**:
+   "I notice I'm repeating [X].
+   This approach isn't working."
+2. **Diagnose**:
+   What assumption am I making that might be wrong?
+3. **Pivot**:
+   Try a fundamentally different approach OR ask user for guidance.
+
+**Root cause categories:**
+
+- **Wrong tool**:
+  Am I using grep when I need find_symbol?
+- **Wrong target**:
+  Am I editing the wrong file or symbol?
+- **Missing context**:
+  Do I need to read more code first?
+- **Stale state**:
+  Did the file change?
+  Do I need to re-read?
+- **Misunderstood requirement**:
+  Should I clarify with user?
+
+**Anti-patterns (NEVER do):**
+
+- ❌ Retry the same command hoping for different results
+- ❌ Make tiny variations to failing approach without diagnosing why
+- ❌ Blame the tools or environment without verifying
+- ❌ Continue silently when stuck
+
+**Example recovery:**
+
+```text
+❌ BAD: str-replace fails → try again → fails → try again → fails
+✅ GOOD: str-replace fails → re-read file → discover content changed →
+         get fresh content → succeed
+```
 
 ---
 
@@ -139,6 +212,57 @@ Is the target a code symbol (class, function, variable, method)?
 - **YES** → MUST use semantic tools.
   No exceptions.
 - **NO** → May use text search.
+
+### Search Strategy Decision Tree
+
+**Step 1:
+What are you looking for?**
+
+| Looking For | Go To |
+|-------------|-------|
+| A specific symbol (class, function, method, variable) | Step 2 |
+| A concept, pattern, or "how does X work" | Step 3 |
+| Text in a specific file | Step 4 |
+| Text across non-code files | Step 5 |
+
+**Step 2:
+Symbol Search (Semantic Tools)**
+
+| You Have | Use Tool |
+|----------|----------|
+| Exact name | `find_symbol` with `name_path_pattern` |
+| Partial name | `find_symbol` with `substring_matching: true` |
+| Need usages | `find_referencing_symbols` |
+| Need implementations | `find_implementations` |
+| Need file overview | `get_symbols_overview` |
+
+**Step 3:
+Conceptual Search**
+
+Use `codebase-retrieval` with a natural language query:
+
+- "How does authentication work in this project?"
+- "Where is database connection configured?"
+- "What tests exist for the payment module?"
+
+**Step 4:
+In-File Search**
+
+Use `view` with `search_query_regex`:
+
+- Find specific text patterns in a known file
+- Search for comments, TODOs, or string literals
+- Locate imports or configuration values
+
+**Step 5:
+Cross-File Text Search**
+
+Use `grep`/`ripgrep` ONLY for:
+
+- Config files (YAML, JSON, TOML)
+- Documentation (Markdown, RST)
+- String literals, log messages
+- Non-code content
 
 ### Prohibited Patterns
 
@@ -255,8 +379,8 @@ See `response-style-communication.md` for comprehensive guidelines.
 
 ### GitHub API Operations
 
-Use the GitHub MCP server tools (e.g., `list_issues_github`,
-`list_pull_requests_github`, `search_code_github`) for remote GitHub operations.
+Use the GitHub MCP server tools (e.g., `issue_read`, `pull_request_read`,
+`search_code`) for remote GitHub operations.
 Never use `web-fetch` for GitHub URLs.
 
 **Configuration:** GitHub MCP server has read-write capabilities.
@@ -264,7 +388,7 @@ Write operations require user approval via tool permissions.
 
 **Key rules:**
 
-- Use GitHub MCP server tools (`*_github` suffix) for all GitHub operations
+- Use GitHub MCP server tools for all GitHub operations
 - NEVER use `web-fetch` for github.com or raw.githubusercontent.com
 - Read operations are auto-approved; write operations prompt for approval
 

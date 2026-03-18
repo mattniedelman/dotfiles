@@ -2,7 +2,6 @@
 type: always_apply
 priority: HIGH
 description: Shell command formatting for launch-process tool
-last_updated: 2026-03-11
 ---
 
 # Shell Command Formatting

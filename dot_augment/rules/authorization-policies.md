@@ -2,7 +2,6 @@
 type: always_apply
 priority: HIGH
 description: Unified authorization policies for all operations requiring explicit user permission
-last_updated: 2026-02-13
 ---
 
 # Authorization Policies
