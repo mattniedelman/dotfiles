@@ -80,7 +80,22 @@ function __tv_fish_completions
 
     # For commands with tv channel triggers, use tv's smart autocomplete instead
     # This enables channels like git-diff which provide richer completions
+    # But first check if there's only one completion - if so, use it directly
     if string match -qr '^git (add|restore)\b' "$line"
+        set -l git_comps (complete -C "$line")
+        if test (count $git_comps) -eq 1
+            # Only one completion - auto-complete it directly
+            set -l comp $git_comps[1]
+            set -l value (string split -m1 \t -- "$comp")[1]
+            set -l escaped (__tv_escape_value "$value")
+            if __tv_should_add_space "$value" "$line"
+                commandline -rt -- "$escaped "
+            else
+                commandline -rt -- "$escaped"
+            end
+            commandline -f repaint
+            return
+        end
         tv_smart_autocomplete
         return
     end
