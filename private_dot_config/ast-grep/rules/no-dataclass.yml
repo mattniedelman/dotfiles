@@ -1,8 +1,9 @@
 id: no-dataclass
 language: python
-severity: warning
+severity: error
 message: |
-  Use Pydantic BaseModel instead of dataclass.
+  ABSOLUTE PROHIBITION: dataclass is NEVER allowed.
+  NO EXCEPTIONS. Use Pydantic BaseModel instead.
 
 rule:
   any:
@@ -11,26 +12,29 @@ rule:
     - pattern: "from dataclasses import dataclass"
 
 note: |
-  Pydantic provides validation, serialization, and better tooling.
-  
+  ⛔ THIS RULE IS NON-NEGOTIABLE ⛔
+
+  There are ZERO valid use cases for dataclass in this codebase.
+  Do NOT:
+  - Argue that "dataclass is lighter weight"
+  - Claim "I don't need validation"
+  - Suggest "it's just a simple data container"
+
+  The answer is always NO. Use Pydantic BaseModel.
+
   Instead of:
-    from dataclasses import dataclass
-    
+    from dataclasses import dataclass  # ❌ NEVER DO THIS
+
     @dataclass
     class User:
         name: str
         age: int
-  
+
   Use:
     from pydantic import BaseModel
-    
+
     class User(BaseModel):
         name: str
         age: int
-  
-  Benefits of Pydantic:
-  - Built-in validation
-  - JSON serialization with model_dump()
-  - Schema generation
-  - Better IDE support
 
+  Pydantic provides: validation, JSON serialization, schema generation, better IDE support.

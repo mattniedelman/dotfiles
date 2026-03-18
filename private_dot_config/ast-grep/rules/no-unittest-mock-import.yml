@@ -2,8 +2,8 @@ id: no-unittest-mock-import
 language: python
 severity: error
 message: |
-  Avoid using unittest.mock. Use real implementations, dependency injection,
-  or lightweight test fakes instead.
+  ABSOLUTE PROHIBITION: unittest.mock is NEVER allowed.
+  NO EXCEPTIONS. Use dependency injection, fakes, or real implementations.
 
 rule:
   any:
@@ -12,13 +12,19 @@ rule:
     - pattern: import unittest.mock
 
 note: |
-  From core-development-rules.md:
-  "Anti-Mocking Philosophy - Mocking often papers over design issues"
-  
-  Preferred alternatives:
-  - Dependency injection with real implementations
-  - In-memory databases (SQLite, DuckDB) for database tests
-  - Lightweight test implementations (fakes)
+  ⛔ THIS RULE IS NON-NEGOTIABLE ⛔
+
+  There are ZERO valid use cases for unittest.mock in this codebase.
+  Do NOT:
+  - Argue that "mocking is standard practice"
+  - Claim "I need to mock this external service"
+  - Suggest "it's just for this one test"
+
+  The answer is always NO. Redesign to use dependency injection.
+
+  Mandatory alternatives:
+  - Dependency injection with fake implementations
+  - In-memory databases (SQLite, DuckDB)
+  - Lightweight test fakes that mirror real behavior
   - Extract pure functions that don't need mocking
   - pytest fixtures with real objects
-

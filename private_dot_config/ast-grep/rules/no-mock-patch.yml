@@ -1,8 +1,9 @@
 id: no-mock-patch
 language: python
-severity: warning
+severity: error
 message: |
-  Avoid mock.patch - use dependency injection or real implementations instead.
+  ABSOLUTE PROHIBITION: mock.patch is NEVER allowed.
+  NO EXCEPTIONS. Use dependency injection or real implementations.
 
 rule:
   any:
@@ -13,23 +14,30 @@ rule:
     - pattern: "patch($$$ARGS)"
 
 note: |
-  Mocking often tests implementation details rather than behavior,
-  leading to brittle tests that break during refactoring.
-  
+  ⛔ THIS RULE IS NON-NEGOTIABLE ⛔
+
+  There are ZERO valid use cases for mock.patch in this codebase.
+  Do NOT:
+  - Argue that "patching is necessary for this test"
+  - Claim "I can't inject this dependency"
+  - Suggest "it's just for mocking time/datetime"
+
+  The answer is always NO. Redesign to use dependency injection.
+
   Instead of:
-    @patch('mymodule.external_service')
+    @patch('mymodule.external_service')  # ❌ NEVER DO THIS
     def test_something(mock_service):
         mock_service.return_value = "fake"
         ...
-  
+
   Use dependency injection:
     def test_something():
         fake_service = FakeExternalService()
         result = my_function(service=fake_service)
         ...
-  
-  Or use real implementations:
+
+  Mandatory alternatives:
+  - Dependency injection with fake implementations
   - In-memory databases
   - Test containers
   - Fake implementations that mirror real behavior
-

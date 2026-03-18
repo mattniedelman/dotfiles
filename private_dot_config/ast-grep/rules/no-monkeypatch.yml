@@ -1,8 +1,9 @@
 id: no-monkeypatch
 language: python
-severity: warning
+severity: error
 message: |
-  Avoid pytest monkeypatch - use dependency injection instead.
+  ABSOLUTE PROHIBITION: monkeypatch is NEVER allowed.
+  NO EXCEPTIONS. Use dependency injection or settings objects.
 
 rule:
   any:
@@ -14,21 +15,27 @@ rule:
     - pattern: "monkeypatch.delitem($$$ARGS)"
 
 note: |
-  monkeypatch, like mock.patch, modifies global state and tests
-  implementation details rather than behavior.
-  
+  ⛔ THIS RULE IS NON-NEGOTIABLE ⛔
+
+  There are ZERO valid use cases for monkeypatch in this codebase.
+  Do NOT:
+  - Argue that "monkeypatch is a pytest feature"
+  - Claim "I need to set environment variables"
+  - Suggest "it's cleaner than mock.patch"
+
+  The answer is always NO. Redesign to use dependency injection.
+
   Instead of:
-    def test_something(monkeypatch):
+    def test_something(monkeypatch):  # ❌ NEVER DO THIS
         monkeypatch.setattr(module, 'function', fake_function)
         ...
-  
+
   Use dependency injection:
     def test_something():
         obj = MyClass(dependency=FakeDependency())
         ...
-  
-  For environment variables, consider:
-  - Passing config as parameters
-  - Using a settings object that can be overridden
-  - pytest-env for test-specific environment
 
+  For environment variables:
+  - Pass config as parameters
+  - Use a settings object that can be overridden in tests
+  - Use pydantic-settings with test overrides

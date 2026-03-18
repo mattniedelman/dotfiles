@@ -2,33 +2,35 @@ id: no-continue-statement
 language: python
 severity: error
 message: |
-  Continue statements are prohibited.
-  
-  Alternatives:
-  - Filter the collection before iterating
-  - Use if/else to wrap the loop body
-  - Extract to a comprehension with filtering
+  ABSOLUTE PROHIBITION: 'continue' statements are NEVER allowed.
+  NO EXCEPTIONS. Refactor using filtering or if/else blocks.
 
 rule:
   kind: continue_statement
 
 note: |
-  From core-development-rules.md:
-  "Continue statements create hidden control flow that makes code harder to follow and debug"
-  
+  ⛔ THIS RULE IS NON-NEGOTIABLE ⛔
+
+  There are ZERO valid use cases for 'continue' in this codebase.
+  Do NOT:
+  - Argue that "this case is different"
+  - Claim "continue is more readable here"
+  - Suggest "it's just one continue"
+
+  The answer is always NO. Refactor the code.
+
   Instead of:
     for item in items:
         if not item.valid:
-            continue
+            continue  # ❌ NEVER DO THIS
         process(item)
-  
-  Use:
+
+  Use filtering:
     valid_items = [item for item in items if item.valid]
     for item in valid_items:
         process(item)
-  
-  Or:
+
+  Or if/else:
     for item in items:
         if item.valid:
             process(item)
-
