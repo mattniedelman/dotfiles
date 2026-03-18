@@ -15,10 +15,14 @@
 .augment/.augment/
 .augment/.markdownlint.jsonc
 
-# Augment - Python caches/locks
-.augment/hooks/__pycache__/
-.augment/hooks/uv.lock
-.augment/skills/*/__pycache__/
+**/__pycache__
+**/.ruff_cache
+**/.venv
+**/uv.lock
+
+.augment/plugins
+.augment/augmentignore
+
 
 # Augment - content to manage separately or skip
 .augment/artifacts/
@@ -34,4 +38,3 @@
 .config/fish/fish_variables.*
 .config/fish/logs/
 .config/fish/themes/
-

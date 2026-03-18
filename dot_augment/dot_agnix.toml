@@ -1,0 +1,29 @@
+# Agnix configuration for Augment CLI config validation
+# This config suppresses false positives when validating Augment CLI config
+# (agnix defaults to Claude Code conventions)
+
+# Exclude patterns - reference directory contains annotated documentation, not actual agents
+exclude = [
+  "plugins/marketplaces/*/reference/**",
+  ".serena/**",
+  # Document-generation skill has escaped backticks that trigger false positives
+  "skills/document-generation/**",
+]
+
+[rules]
+# Augment CLI uses .augment-plugin/, not .claude-plugin/
+plugins = false
+
+# Disable XML balance checking - Augment uses <placeholder> syntax in argument-hint
+xml_balance = false
+
+# Disable agent model validation - Augment supports versioned models like sonnet4.5, opus4.5
+# which agnix doesn't recognize (it only knows generic sonnet, opus, haiku)
+agents = false
+
+# Disable cross-platform checks - this is personal config with intentional user-specific paths
+cross_platform = false
+
+# Disable hook timeout warnings - Augment defaults to 60s timeout, explicit not required
+hooks = false
+
