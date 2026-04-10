@@ -1,0 +1,82 @@
+// Default session layout: single shell pane
+// Swap layouts (Alt+[ / Alt+]): default → equal → focus
+//
+// Usage:
+//   zellij -l ~/.config/zellij/layouts/default.kdl
+
+layout {
+    // Focus: current pane fills the tab
+    swap_tiled_layout name="focus" {
+        tab {
+            pane
+        }
+    }
+
+    // Equal split: 50/50
+    swap_tiled_layout name="equal" {
+        tab {
+            pane split_direction="vertical" {
+                pane
+                pane { children; }
+            }
+        }
+    }
+
+    // Trio: shell | auggie | nvim
+    swap_tiled_layout name="trio" {
+        tab {
+            pane split_direction="vertical" {
+                pane
+                pane { children; }
+                pane
+            }
+        }
+    }
+
+    default_tab_template {
+        children
+        pane size=1 borderless=true {
+            plugin location="file:~/.config/zellij/plugins/zjstatus.wasm" {
+                format_left   "{mode} #[fg=#81A1C1,bg=#2E3440,bold]{session} {tabs}"
+                format_right  "{command_git_branch}{pipe_zjstatus_hints}{datetime}"
+                format_space  "#[bg=#2E3440]"
+
+                border_enabled "false"
+
+                mode_normal        "#[bg=#A3BE8C,fg=#2E3440,bold] N "
+                mode_locked        "#[bg=#4C566A,fg=#D8DEE9,bold] L "
+                mode_resize        "#[bg=#EBCB8B,fg=#2E3440,bold] R "
+                mode_pane          "#[bg=#B48EAD,fg=#2E3440,bold] P "
+                mode_tab           "#[bg=#88C0D0,fg=#2E3440,bold] T "
+                mode_scroll        "#[bg=#D08770,fg=#2E3440,bold] S "
+                mode_enter_search  "#[bg=#D08770,fg=#2E3440,bold] / "
+                mode_search        "#[bg=#D08770,fg=#2E3440,bold] / "
+                mode_rename_tab    "#[bg=#88C0D0,fg=#2E3440,bold] r "
+                mode_rename_pane   "#[bg=#B48EAD,fg=#2E3440,bold] r "
+                mode_session       "#[bg=#81A1C1,fg=#2E3440,bold] W "
+                mode_move          "#[bg=#BF616A,fg=#2E3440,bold] M "
+
+                tab_normal    "#[fg=#4C566A,bg=#2E3440] {index}:{name} "
+                tab_active    "#[fg=#88C0D0,bg=#2E3440,bold] {index}:{name} "
+                tab_separator "#[fg=#3B4252,bg=#2E3440]│"
+
+                command_git_branch_command    "git rev-parse --abbrev-ref HEAD"
+                command_git_branch_format     "#[fg=#A3BE8C,bg=#2E3440] {stdout} "
+                command_git_branch_interval   "10"
+                command_git_branch_rendermode "static"
+
+                pipe_zjstatus_hints_format "{output} "
+
+                datetime          "#[fg=#4C566A,bg=#2E3440] {format} "
+                datetime_format   "%H:%M"
+                datetime_timezone "America/Chicago"
+            }
+        }
+    }
+
+    // Main tab: single shell pane
+    tab focus=true {
+        pane name="shell" focus=true
+    }
+}
+
