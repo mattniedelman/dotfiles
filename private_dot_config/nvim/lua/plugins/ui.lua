@@ -15,6 +15,16 @@ return {
       colorscheme = "kanagawa-paper",
     },
   },
+  {
+    "nvim-lualine/lualine.nvim",
+    event = "VeryLazy",
+    opts = function(_, opts)
+      local util = require("lazyvim.util")
+      opts.sections.lualine_c[#opts.sections.lualine_c] = {
+        util.lualine.pretty_path({ relative = "root", length = 0 }),
+      }
+    end,
+  },
 
   -- Picker UI
   {

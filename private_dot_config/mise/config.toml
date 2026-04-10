@@ -55,10 +55,9 @@ patat = "latest"
 pre-commit = "latest"
 ripgrep = "latest"
 ripgrep-all = "latest"
-rust = "latest"
+rust = { version = "latest", targets = "wasm32-wasip1" }
 
 shellcheck = "latest"
-shfmt = "latest"
 skaffold = "latest"
 sqlite = "latest"
 trivy = "latest"
@@ -108,14 +107,39 @@ syft = "latest"
 zizmor = "latest"
 "aqua:mikefarah/yq" = "4.47.2"
 "go:github.com/davetashner/stringer/cmd/stringer" = "latest"
-"npm:@beads/bd" = "latest"
 "go:github.com/steveyegge/gastown/cmd/gt" = "latest"
 "npm:@cyanheads/git-mcp-server" = "latest"
 pulumi = "latest"
 "npm:puppeteer" = "latest"
 "pipx:deply" = "latest"
 "github:dlvhdr/diffnav" = "latest"
-"cargo:workmux" = "latest"
+rclone = "latest"
+# Build zellij from git main (0.44.0-dev) - requires workmux Zellij backend.
+# Switch back to `zellij = "latest"` once 0.44 ships a stable release.
+"cargo:https://github.com/zellij-org/zellij" = { version = "branch:main", crate = "zellij", locked = false }
+bun = "latest"
+maven = "latest"
+"npm:rulesync" = "latest"
+"ubi:zippoxer/recall" = "latest"
+"github:rtk-ai/rtk" = "latest"
+"github:mvdan/sh" = "latest"
+"npm:ccstatusline" = "latest"
+"npm:@owloops/claude-powerline" = "latest"
+terraform = "latest"
+dotnet = "latest"
+swift = "latest"
+"npm:lat.md" = "latest"
+"npm:opencode-ai" = "latest"
+"github:joshmedeski/sesh" = "latest"
+tmux = "latest"
+"npm:think-strategies" = "latest"
+semgrep = "latest"
+"pipx:desloppify" = "latest"
+"npm:@fission-ai/openspec" = "latest"
+"github:dolthub/dolt" = "latest"
+"pipx:basic-memory" = "latest"
+"npm:lean-ctx-bin" = "latest"
+"github:betterleaks/betterleaks" = "latest"
 
 
 
@@ -133,7 +157,7 @@ plugin_autoupdate_last_check_duration = '1 week' # set to 0 to disable updates
 
 verbose = false      # set to true to see full installation output, see `MISE_VERBOSE`
 http_timeout = "30s" # set the timeout for http requests as duration string, see `MISE_HTTP_TIMEOUT`
-jobs = 8             # number of plugins or runtimes to install in parallel
+jobs = 2             # number of plugins or runtimes to install in parallel
 raw = false          # set to true to directly pipe plugins to stdin/stdout/stderr
 yes = false          # set to true to automatically answer yes to all prompts
 

@@ -1,7 +1,7 @@
 ---
 name: ralph-plan
 description: Create implementation plans from gap analysis for Ralph autonomous loop
-model: inherit
+model: sonnet4.6
 ---
 
 You are a planning agent for the Ralph autonomous development loop.
@@ -53,4 +53,3 @@ Every plan must have:
 - **YAGNI** - Don't build what's not needed
 - **Small commits** - One logical change per commit
 - **Testable** - Every feature has a test
-

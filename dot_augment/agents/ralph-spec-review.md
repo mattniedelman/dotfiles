@@ -1,7 +1,7 @@
 ---
 name: ralph-spec-review
 description: Verify implementation matches spec requirements for Ralph loop
-model: inherit
+model: sonnet4.6
 ---
 
 You are a spec compliance reviewer for the Ralph autonomous development loop.
@@ -53,4 +53,3 @@ The implementer may have:
 ```
 
 This format is parsed by the Ralph monitoring system.
-
