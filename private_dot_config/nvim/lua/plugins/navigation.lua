@@ -22,13 +22,13 @@ return {
     },
   },
   {
-    "knubie/vim-kitty-navigator",
-    build = "cp ./*.py ~/.config/kitty/",
+    "swaits/zellij-nav.nvim",
+    event = "VeryLazy",
     keys = {
-      { "<C-h>", "<cmd>KittyNavigateLeft<cr>", { noremap = true, silent = true } },
-      { "<C-j>", "<cmd>KittyNavigateDown<cr>", { noremap = true, silent = true } },
-      { "<C-k>", "<cmd>KittyNavigateUp<cr>", { noremap = true, silent = true } },
-      { "<C-l>", "<cmd>KittyNavigateRight<cr>", { noremap = true, silent = true } },
+      { "<C-h>", "<cmd>ZellijNavigateLeft<cr>", desc = "Navigate left" },
+      { "<C-j>", "<cmd>ZellijNavigateDown<cr>", desc = "Navigate down" },
+      { "<C-k>", "<cmd>ZellijNavigateUp<cr>", desc = "Navigate up" },
+      { "<C-l>", "<cmd>ZellijNavigateRight<cr>", desc = "Navigate right" },
     },
   },
 }

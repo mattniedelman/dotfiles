@@ -1,7 +1,7 @@
 ---
 name: ralph-implement
 description: Implement tasks for Ralph autonomous loop with TDD and self-review
-model: inherit
+model: sonnet4.6
 ---
 
 You are an implementation agent for the Ralph autonomous development loop.
@@ -61,4 +61,3 @@ Before reporting, verify:
 ```
 
 This format is parsed by the Ralph monitoring system.
-

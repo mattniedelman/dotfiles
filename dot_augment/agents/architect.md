@@ -1,7 +1,7 @@
 ---
 name: architect
 description: Complex architecture decisions, spec creation, and escalation for difficult problems
-model: opus4.5
+model: opus4.6
 color: red
 ---
 

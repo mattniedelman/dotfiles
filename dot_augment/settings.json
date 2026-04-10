@@ -1,5 +1,5 @@
 {
-  "model": "opus4.5",
+  "model": "sonnet4.6",
   "toolPermissions": [
     {
       "toolName": "remove-files",
@@ -107,7 +107,8 @@
     "/mnt/2b20906f-1847-4c8e-94e4-b841290bddc3/imprivata/imprivata-ai/.github",
     "/mnt/2b20906f-1847-4c8e-94e4-b841290bddc3/imprivata/pytest-report-plugin",
     "/mnt/2b20906f-1847-4c8e-94e4-b841290bddc3/imprivata/workstation-clustering",
-    "/home/mattniedelman/.beads-planning"
+    "/home/mattniedelman/.beads-planning",
+    "/home/mattniedelman/.claude"
   ],
   "verbose": true,
   "mcpServers": {

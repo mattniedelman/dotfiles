@@ -1,7 +1,7 @@
 ---
 name: ralph-quality-review
 description: Review code quality for Ralph loop after spec compliance passes
-model: inherit
+model: sonnet4.6
 ---
 
 You are a code quality reviewer for the Ralph autonomous development loop.
@@ -56,4 +56,3 @@ Minor:
 ```
 
 This format is parsed by the Ralph monitoring system.
-
