@@ -1,0 +1,92 @@
+{
+  "mcpServers": {
+    "basic-memory": {
+      "type": "url",
+      "url": "http://127.0.0.1:8000/mcp"
+    },
+    "serena": {
+      "command": "serena-mcp-server",
+      "args": [
+        "--context",
+        "ide",
+        "--project-from-cwd"
+      ]
+    },
+    "beads": {
+      "command": "beads-mcp",
+      "args": []
+    },
+    "github": {
+      "command": "thv",
+      "args": [
+        "proxy",
+        "stdio",
+        "github"
+      ]
+    },
+    "grafana": {
+      "command": "thv",
+      "args": [
+        "proxy",
+        "stdio",
+        "grafana"
+      ]
+    },
+    "prometheus-nonprod": {
+      "command": "thv",
+      "args": [
+        "proxy",
+        "stdio",
+        "prometheus-nonprod"
+      ]
+    },
+    "prometheus-prod": {
+      "command": "thv",
+      "args": [
+        "proxy",
+        "stdio",
+        "prometheus-prod"
+      ]
+    },
+    "context7": {
+      "command": "thv",
+      "args": [
+        "proxy",
+        "stdio",
+        "context7"
+      ]
+    },
+    "think-strategies": {
+      "command": "thv",
+      "args": [
+        "proxy",
+        "stdio",
+        "think-strategies"
+      ]
+    },
+    "atlassian": {
+      "command": "thv",
+      "args": [
+        "proxy",
+        "stdio",
+        "atlassian"
+      ]
+    },
+    "aws-documentation": {
+      "command": "thv",
+      "args": [
+        "proxy",
+        "stdio",
+        "aws-documentation"
+      ]
+    },
+    "vikunja": {
+      "command": "thv",
+      "args": [
+        "proxy",
+        "stdio",
+        "vikunja"
+      ]
+    }
+  }
+}

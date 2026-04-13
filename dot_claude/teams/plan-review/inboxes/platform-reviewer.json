@@ -1,0 +1,15 @@
+[
+  {
+    "from": "platform-reviewer",
+    "text": "{\"type\":\"task_assignment\",\"taskId\":\"4\",\"subject\":\"Platform engineering review of implementation plan\",\"description\":\"Review the gh-aw agent platform plan from a platform/infrastructure perspective: CI/CD patterns, CentralRepoOps viability, concurrency, cost, scalability, operational concerns.\",\"assignedBy\":\"platform-reviewer\",\"timestamp\":\"2026-03-31T21:00:54.318Z\"}",
+    "timestamp": "2026-03-31T21:00:54.318Z",
+    "color": "blue",
+    "read": true
+  },
+  {
+    "from": "team-lead",
+    "text": "{\"type\":\"shutdown_request\",\"requestId\":\"shutdown-1774990979285@platform-reviewer\",\"from\":\"team-lead\",\"reason\":\"Review complete, thank you\",\"timestamp\":\"2026-03-31T21:02:59.285Z\"}",
+    "timestamp": "2026-03-31T21:02:59.285Z",
+    "read": true
+  }
+]
