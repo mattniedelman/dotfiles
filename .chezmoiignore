@@ -62,6 +62,9 @@
 .claude/telemetry/
 .claude/usage-data/
 
+# Claude Code - runtime state (project history, session data)
+.claude.json
+
 # Claude Code - plugin runtime (regenerated from manifests)
 .claude/plugins/cache/
 .claude/plugins/data/
