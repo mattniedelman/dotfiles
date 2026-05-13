@@ -1,0 +1,11 @@
+dot_claude/agents/code-reviewer.md
+  ai_agent 3,6-266
+dot_claude/CLAUDE.md
+  ai_agent 1-187
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.4",
+  "base_commit_sha": "e1755b191b679578605a44d7eafe0b3e228072fe",
+  "prompts": {}
+}
