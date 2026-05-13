@@ -1,0 +1,47 @@
+dot_claude/hooks/executable_prompt_context.py.tmpl
+  s_a4d740e7406199::t_2eaa509e28eeed 1-278
+dot_claude/hooks/executable_session_reflect.py.tmpl
+  s_a4d740e7406199::t_673d788a214d61 29
+  s_a4d740e7406199::t_2eaa509e28eeed 1-28,30-237
+private_dot_config/ast-grep/sgconfig.yml.tmpl
+  s_a4d740e7406199::t_a0e3348b54145b 5
+private_dot_config/private_fish/config.fish.tmpl
+  s_a4d740e7406199::t_9e19db0c92d956 16-23
+  s_a4d740e7406199::t_60ca91185d0e31 124-131
+dot_claude/hooks/executable_session_start.py.tmpl
+  s_a4d740e7406199::t_2eaa509e28eeed 1-272
+dot_claude/settings.json.tmpl
+  s_a4d740e7406199::t_33180f639237f9 15-430
+dot_claude/hooks/executable_block_pip.py.tmpl
+  s_a4d740e7406199::t_2eaa509e28eeed 1-98
+dot_claude/hooks/executable_auto_lint.py.tmpl
+  s_a4d740e7406199::t_2eaa509e28eeed 1-213
+dot_claude/hooks/executable_basic_memory_directory_check.sh.tmpl
+  s_a4d740e7406199::t_2eaa509e28eeed 1-55
+dot_claude/hooks/executable_reflect_backfill.py.tmpl
+  s_a4d740e7406199::t_673d788a214d61 1-320
+dot_claude/hooks/executable_ascii_check.py.tmpl
+  s_a4d740e7406199::t_2eaa509e28eeed 1-176
+dot_claude/hooks/executable_ralph_monitor.sh.tmpl
+  s_a4d740e7406199::t_2eaa509e28eeed 1-251
+.chezmoi.toml.tmpl
+  s_a4d740e7406199::t_cf83aec6b6a98b 1-4
+private_dot_config/cbfmt.toml.tmpl
+  s_a4d740e7406199::t_a61941d510cdfe 2-5
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.8",
+  "base_commit_sha": "db853a1c719cd6a451bc07d8f332d78b9353cd16",
+  "prompts": {},
+  "sessions": {
+    "s_a4d740e7406199": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "6e59b0b2-0025-4dfa-b5e2-d8273c712ac2",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "Matt Niedelman <mattniedelman@gmail.com>"
+    }
+  }
+}
