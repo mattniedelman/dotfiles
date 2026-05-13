@@ -1,0 +1,61 @@
+# Clear direnv state immediately to prevent mise warnings in subshells
+# (inherited from parent fish/direnv environment)
+unset DIRENV_DIFF DIRENV_WATCHES 2>/dev/null
+
+# ToolHive CLI - must be before any interactive checks for non-interactive shell compatibility
+export PATH="$HOME/.toolhive/bin:$PATH"
+
+# Import environment from Fish (AWS creds, mise tools, etc.)
+# This runs Fish as login shell to get the full environment, then imports it
+# NOTE: PATH is excluded to prevent accumulation feedback loop
+if command -v fish &>/dev/null; then
+    while IFS='=' read -r key value; do
+        # Skip problematic variables that shouldnt be overridden
+        case "$key" in
+            BASH*|SHELLOPTS|BASHOPTS|EUID|PPID|UID|FUNCNAME|GROUPS|DIRSTACK|_|PATH|DIRENV_DIFF|DIRENV_WATCHES)
+                continue
+                ;;
+            *)
+                if [[ "$key" =~ ^[A-Za-z_][A-Za-z0-9_]*$ ]]; then
+                    export "$key=$value"
+                fi
+                ;;
+        esac
+    done < <(fish -l -c 'env' 2>/dev/null)
+fi
+
+source ~/.local/share/omakub/defaults/bash/rc
+
+# Editor used by CLI
+export EDITOR="nvim"
+export SUDO_EDITOR="$EDITOR"
+
+# Clear direnv state inherited from Fish to avoid mise warnings in subshells
+unset DIRENV_DIFF DIRENV_WATCHES 2>/dev/null
+
+# Activate mise for bash (tools, environment variables, hooks)
+# Shims provide a baseline PATH so all tools are available immediately;
+# mise activate overrides with exact versions via its prompt hook.
+export PATH="$HOME/.local/share/mise/shims:$PATH"
+eval "$(~/.local/bin/mise activate bash)"
+
+# Prevent bash chpwd_functions array from leaking to subprocesses (fixes fish prompt corruption)
+unset chpwd_functions 2>/dev/null
+
+# Note: Do NOT export COLUMNS - fish manages it automatically based on terminal width
+# Hardcoding it causes mise to track it, then unset it on directory change, breaking Tide prompt
+
+# Added by ToolHive UI - do not modify this block
+# (moved to top of file for non-interactive shell compatibility)
+# End ToolHive UI
+
+alias claude-mem='bun "/home/mattniedelman/.claude/plugins/cache/thedotmack/claude-mem/12.0.1/scripts/worker-service.cjs"'
+
+# Added by git-ai installer on Fri Apr 10 11:33:12 AM CDT 2026
+export PATH="/home/mattniedelman/.git-ai/bin:$PATH"
+
+# Added by LM Studio CLI (lms)
+export PATH="$PATH:/home/mattniedelman/.lmstudio/bin"
+# End of LM Studio CLI section
+
+eval "$(mise activate bash)"
