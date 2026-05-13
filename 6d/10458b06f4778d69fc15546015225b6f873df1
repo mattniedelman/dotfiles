@@ -1,0 +1,20 @@
+private_dot_gitconfig.tmpl
+  s_a4d740e7406199::t_d20c84bcb36137 5
+  s_a4d740e7406199::t_e6266386225db7 13,33,35,58,62,64,68
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.8",
+  "base_commit_sha": "6d10458b06f4778d69fc15546015225b6f873df1",
+  "prompts": {},
+  "sessions": {
+    "s_a4d740e7406199": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "6e59b0b2-0025-4dfa-b5e2-d8273c712ac2",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "Matt Niedelman <mattniedelman@gmail.com>"
+    }
+  }
+}
