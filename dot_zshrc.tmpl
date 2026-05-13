@@ -1,6 +1,6 @@
 # OPENSPEC:START
 # OpenSpec shell completions configuration
-fpath=("/home/mattniedelman/.zsh/completions" $fpath)
+fpath=("{{ .chezmoi.homeDir }}/.zsh/completions" $fpath)
 autoload -Uz compinit
 compinit
 # OPENSPEC:END
@@ -42,16 +42,16 @@ export PATH="$HOME/.toolhive/bin:$PATH"
 # End ToolHive UI
 
 # --- Gas Town Integration (managed by gt) ---
-[[ -f "/home/mattniedelman/.config/gastown/shell-hook.sh" ]] && source "/home/mattniedelman/.config/gastown/shell-hook.sh"
+[[ -f "{{ .chezmoi.homeDir }}/.config/gastown/shell-hook.sh" ]] && source "{{ .chezmoi.homeDir }}/.config/gastown/shell-hook.sh"
 # --- End Gas Town ---
 
-alias claude-mem='bun "/home/mattniedelman/.claude/plugins/cache/thedotmack/claude-mem/12.0.1/scripts/worker-service.cjs"'
+alias claude-mem='bun "{{ .chezmoi.homeDir }}/.claude/plugins/cache/thedotmack/claude-mem/12.0.1/scripts/worker-service.cjs"'
 
 # Added by git-ai installer on Fri Apr 10 11:33:12 AM CDT 2026
-export PATH="/home/mattniedelman/.git-ai/bin:$PATH"
+export PATH="{{ .chezmoi.homeDir }}/.git-ai/bin:$PATH"
 
 # Added by LM Studio CLI (lms)
-export PATH="$PATH:/home/mattniedelman/.lmstudio/bin"
+export PATH="$PATH:{{ .chezmoi.homeDir }}/.lmstudio/bin"
 # End of LM Studio CLI section
 
 

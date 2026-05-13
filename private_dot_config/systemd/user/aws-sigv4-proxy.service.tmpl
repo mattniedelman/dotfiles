@@ -1,10 +1,11 @@
+{{ if .work -}}
 [Unit]
 Description=AWS SigV4 Signing Proxy for AMP
 After=network.target
 
 [Service]
 Type=simple
-ExecStart=/home/mattniedelman/.local/share/mise/installs/aws-sigv4-proxy/1.11.1/bin/aws-sigv4-proxy \
+ExecStart={{ .chezmoi.homeDir }}/.local/share/mise/shims/aws-sigv4-proxy \
     --name aps \
     --region us-east-2 \
     --host aps-workspaces.us-east-2.amazonaws.com \
@@ -16,4 +17,4 @@ Environment="AWS_PROFILE=default"
 
 [Install]
 WantedBy=default.target
-
+{{ end -}}
