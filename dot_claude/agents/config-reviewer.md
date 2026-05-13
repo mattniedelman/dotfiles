@@ -64,8 +64,7 @@ cross-reference inconsistencies across the ~/.claude configuration.
 ## Hook Checklist
 
 - [ ] Correct uv shebang:
-  `#!/usr/bin/env -S uv run --quiet --script --directory
-  /home/mattniedelman/.claude/hooks`
+  `#!/usr/bin/env -S uv run --quiet --script --directory ~/.claude/hooks`
 - [ ] Has `from cchooks import create_context`
 - [ ] Has isinstance guard before any logic:
   `if not isinstance(ctx, Target):
@@ -90,7 +89,7 @@ cross-reference inconsistencies across the ~/.claude configuration.
 ### BLOCKERs (must fix)
 - `path/to/file:line` -- description of issue
 
-### WARNINGs (should fix)
+### WARNINGGs (should fix)
 - `path/to/file` -- description of issue
 
 ### INFO (consider)
@@ -119,4 +118,4 @@ Do not send piecemeal -- the producing agent needs the complete picture.
 - If unsure about a standard:
   cite the relevant CLAUDE.md section before flagging
 - If reviewing a large set (10+ files):
-  prioritize BLOCKERs, summarize WARNINGs
+  prioritize BLOCKERs, summarize WARNINGGs
