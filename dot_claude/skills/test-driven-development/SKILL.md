@@ -1,159 +1,257 @@
 ---
 name: test-driven-development
-description: Use when implementing any feature or bugfix, before writing implementation code
+description: Write the test first, watch it fail, write minimal code to pass; use when implementing any feature or bugfix before writing implementation code
+metadata:
+  author: imprivata-shared-tools
+  version: "1.2.0"
 ---
 
 # Test-Driven Development (TDD)
 
+**Scope: greenfield development.** Use this skill when writing new features or fixing bugs — write the test before the code. For adding tests to existing untested code, use the `test-generation` skill instead.
+
 ## Overview
 
-Write the test first.
-Watch it fail.
-Write minimal code to pass.
+Write the test first. Watch it fail. Write minimal code to pass.
 
-**Core principle:** If you didn't watch the test fail, you don't know if it
-tests the right thing.
+**Core principle:** If you didn't watch the test fail, you don't know if it tests the right thing.
+
+**Announce at start:** "I'm using the Test-Driven Development skill to implement this feature."
 
 **Violating the letter of the rules is violating the spirit of the rules.**
+
+**Note:** Examples shown in Go and Java. Apply the same principles to any language.
 
 ## When to Use
 
 **Always:**
-
 - New features
 - Bug fixes
 - Refactoring
 - Behavior changes
 
-**Exceptions (ask first):**
-
+**Exceptions (ask your human partner):**
 - Throwaway prototypes
 - Generated code
 - Configuration files
 
-Thinking "skip TDD just this once"?
-Stop.
-That's rationalization.
+Thinking "skip TDD just this once"? Stop. That's rationalization.
 
 ## The Iron Law
 
-```text
+```
 NO PRODUCTION CODE WITHOUT A FAILING TEST FIRST
 ```
 
-Write code before the test?
-Delete it.
-Start over.
+Write code before the test? Delete it. Start over.
 
 **No exceptions:**
-
 - Don't keep it as "reference"
 - Don't "adapt" it while writing tests
 - Don't look at it
 - Delete means delete
 
+Implement fresh from tests. Period.
+
 ## Red-Green-Refactor
+
+```dot
+digraph tdd_cycle {
+    rankdir=LR;
+    red [label="RED\nWrite failing test", shape=box, style=filled, fillcolor="#ffcccc"];
+    verify_red [label="Verify fails\ncorrectly", shape=diamond];
+    green [label="GREEN\nMinimal code", shape=box, style=filled, fillcolor="#ccffcc"];
+    verify_green [label="Verify passes\nAll green", shape=diamond];
+    refactor [label="REFACTOR\nClean up", shape=box, style=filled, fillcolor="#ccccff"];
+    next [label="Next", shape=ellipse];
+
+    red -> verify_red;
+    verify_red -> green [label="yes"];
+    verify_red -> red [label="wrong\nfailure"];
+    green -> verify_green;
+    verify_green -> refactor [label="yes"];
+    verify_green -> green [label="no"];
+    refactor -> verify_green [label="stay\ngreen"];
+    verify_green -> next;
+    next -> red;
+}
+```
 
 ### RED - Write Failing Test
 
 Write one minimal test showing what should happen.
 
-**Requirements:**
+<Good>
+```go
+// Go example
+func TestRetryOperation_RetriesThreeTimes(t *testing.T) {
+    attempts := 0
+    operation := func() (string, error) {
+        attempts++
+        if attempts < 3 {
+            return "", errors.New("fail")
+        }
+        return "success", nil
+    }
 
+    result, err := RetryOperation(operation)
+
+    assert.NoError(t, err)
+    assert.Equal(t, "success", result)
+    assert.Equal(t, 3, attempts)
+}
+```
+
+```java
+// Java example
+@Test
+void retriesFailedOperationsThreeTimes() {
+    AtomicInteger attempts = new AtomicInteger(0);
+    Supplier<String> operation = () -> {
+        attempts.incrementAndGet();
+        if (attempts.get() < 3) {
+            throw new RuntimeException("fail");
+        }
+        return "success";
+    };
+
+    String result = retryOperation(operation);
+
+    assertEquals("success", result);
+    assertEquals(3, attempts.get());
+}
+```
+Clear name, tests real behavior, one thing
+</Good>
+
+<Bad>
+```go
+// Go example
+func TestRetry(t *testing.T) {
+    mock := &MockOperation{}
+    mock.On("Execute").Return("", errors.New("fail")).Times(2)
+    mock.On("Execute").Return("success", nil).Once()
+
+    RetryOperation(mock.Execute)
+
+    mock.AssertNumberOfCalls(t, "Execute", 3)
+}
+```
+Vague name, tests mock not code
+</Bad>
+
+**Requirements:**
 - One behavior
 - Clear name
 - Real code (no mocks unless unavoidable)
 
 ### Verify RED - Watch It Fail
 
-**MANDATORY.
-Never skip.**
+**MANDATORY. Never skip.**
 
 ```bash
-npm test path/to/test.test.ts
+# Go
+go test ./... -v -run TestRetryOperation_RetriesThreeTimes
+
+# Java
+mvn test -Dtest=RetryOperationTest#retriesThreeTimes
 ```
 
 Confirm:
-
 - Test fails (not errors)
 - Failure message is expected
 - Fails because feature missing (not typos)
 
-**Test passes?** You're testing existing behavior.
-Fix test.
+**Test passes?** You're testing existing behavior. Fix test.
+
+**Test errors?** Fix error, re-run until it fails correctly.
 
 ### GREEN - Minimal Code
 
 Write simplest code to pass the test.
-Don't add features beyond the test.
 
-**Incremental Development (CRITICAL):**
-
-Each step addresses ONE specific failure:
-
-| Test Failure | Allowed Response |
-|--------------|------------------|
-| `NameError: X not defined` | Create empty stub ONLY |
-| `TypeError: X is not callable` | Add function/method signature ONLY |
-| `TypeError: takes N args` | Fix signature parameters ONLY |
-| `AttributeError: no attr Y` | Add attribute/property ONLY |
-| Assertion failure | Implement minimal logic to pass THIS assertion |
-
-**Prohibited responses:**
-
-- Adding "obvious" related functionality
-- Implementing the "complete" solution
-- Adding error handling "while we're here"
-- Refactoring before the test passes
-
-**Example (correct):**
-
-```python
-# Test: assert Calculator().add(2, 3) == 5
-
-# Step 1: "Calculator not defined" → class Calculator: pass
-# Step 2: "has no attribute add" → def add(self): pass
-# Step 3: "takes 1 arg, 3 given" → def add(self, a, b): pass
-# Step 4: "None != 5" → return a + b
+<Good>
+```go
+// Go example
+func RetryOperation(fn func() (string, error)) (string, error) {
+    for i := 0; i < 3; i++ {
+        result, err := fn()
+        if err == nil {
+            return result, nil
+        }
+        if i == 2 {
+            return "", err
+        }
+    }
+    return "", errors.New("unreachable")
+}
 ```
 
-**Example (WRONG - over-implementation):**
-
-```python
-# Test: assert Calculator().add(2, 3) == 5
-
-# WRONG: Implementing subtract, multiply, divide "while we're here"
-class Calculator:
-    def add(self, a, b):
-        return a + b
-
-    def subtract(self, a, b):
-        return a - b  # NO TEST!
-
-    def multiply(self, a, b):
-        return a * b  # NO TEST!
+```java
+// Java example
+public <T> T retryOperation(Supplier<T> fn) {
+    for (int i = 0; i < 3; i++) {
+        try {
+            return fn.get();
+        } catch (Exception e) {
+            if (i == 2) {
+                throw e;
+            }
+        }
+    }
+    throw new IllegalStateException("unreachable");
+}
 ```
+Just enough to pass
+</Good>
+
+<Bad>
+```go
+// Go example
+type RetryOptions struct {
+    MaxRetries int
+    Backoff    string // "linear" or "exponential"
+    OnRetry    func(attempt int)
+}
+
+func RetryOperation(fn func() (string, error), opts *RetryOptions) (string, error) {
+    // YAGNI - over-engineered for the test
+}
+```
+Over-engineered
+</Bad>
+
+Don't add features, refactor other code, or "improve" beyond the test.
 
 ### Verify GREEN - Watch It Pass
 
 **MANDATORY.**
 
-Confirm:
+```bash
+# Go
+go test ./... -v
 
+# Java
+mvn test
+```
+
+Confirm:
 - Test passes
 - Other tests still pass
 - Output pristine (no errors, warnings)
 
+**Test fails?** Fix code, not test.
+
+**Other tests fail?** Fix now.
+
 ### REFACTOR - Clean Up
 
 After green only:
-
 - Remove duplication
 - Improve names
 - Extract helpers
 
-Keep tests green.
-Don't add behavior.
+Keep tests green. Don't add behavior.
 
 ### Repeat
 
@@ -169,15 +267,53 @@ Next failing test for next feature.
 
 ## Why Order Matters
 
-**"I'll write tests after to verify it works"** - Tests written after code pass
-immediately.
-Passing immediately proves nothing.
+**"I'll write tests after to verify it works"**
 
-**"I already manually tested all the edge cases"** - Manual testing is ad-hoc.
-Automated tests are systematic.
+Tests written after code pass immediately. Passing immediately proves nothing:
+- Might test wrong thing
+- Might test implementation, not behavior
+- Might miss edge cases you forgot
+- You never saw it catch the bug
 
-**"Deleting X hours of work is wasteful"** - Sunk cost fallacy.
-Working code without real tests is technical debt.
+Test-first forces you to see the test fail, proving it actually tests something.
+
+**"I already manually tested all the edge cases"**
+
+Manual testing is ad-hoc. You think you tested everything but:
+- No record of what you tested
+- Can't re-run when code changes
+- Easy to forget cases under pressure
+- "It worked when I tried it" ≠ comprehensive
+
+Automated tests are systematic. They run the same way every time.
+
+**"Deleting X hours of work is wasteful"**
+
+Sunk cost fallacy. The time is already gone. Your choice now:
+- Delete and rewrite with TDD (X more hours, high confidence)
+- Keep it and add tests after (30 min, low confidence, likely bugs)
+
+The "waste" is keeping code you can't trust. Working code without real tests is technical debt.
+
+**"TDD is dogmatic, being pragmatic means adapting"**
+
+TDD IS pragmatic:
+- Finds bugs before commit (faster than debugging after)
+- Prevents regressions (tests catch breaks immediately)
+- Documents behavior (tests show how to use code)
+- Enables refactoring (change freely, tests catch breaks)
+
+"Pragmatic" shortcuts = debugging in production = slower.
+
+**"Tests after achieve the same goals - it's spirit not ritual"**
+
+No. Tests-after answer "What does this do?" Tests-first answer "What should this do?"
+
+Tests-after are biased by your implementation. You test what you built, not what's required. You verify remembered edge cases, not discovered ones.
+
+Tests-first force edge case discovery before implementing. Tests-after verify you remembered everything (you didn't).
+
+30 minutes of tests after ≠ TDD. You get coverage, lose proof tests work.
 
 ## Common Rationalizations
 
@@ -186,22 +322,121 @@ Working code without real tests is technical debt.
 | "Too simple to test" | Simple code breaks. Test takes 30 seconds. |
 | "I'll test after" | Tests passing immediately prove nothing. |
 | "Tests after achieve same goals" | Tests-after = "what does this do?" Tests-first = "what should this do?" |
+| "Already manually tested" | Ad-hoc ≠ systematic. No record, can't re-run. |
+| "Deleting X hours is wasteful" | Sunk cost fallacy. Keeping unverified code is technical debt. |
+| "Keep as reference, write tests first" | You'll adapt it. That's testing after. Delete means delete. |
 | "Need to explore first" | Fine. Throw away exploration, start with TDD. |
 | "Test hard = design unclear" | Listen to test. Hard to test = hard to use. |
+| "TDD will slow me down" | TDD faster than debugging. Pragmatic = test-first. |
+| "Manual test faster" | Manual doesn't prove edge cases. You'll re-test every change. |
+| "Existing code has no tests" | You're improving it. Add tests for existing code. |
 
 ## Red Flags - STOP and Start Over
 
 - Code before test
 - Test after implementation
 - Test passes immediately
+- Can't explain why test failed
+- Tests added "later"
+- Rationalizing "just this once"
 - "I already manually tested it"
 - "Tests after achieve the same purpose"
-- "I'm being pragmatic"
+- "It's about spirit not ritual"
+- "Keep as reference" or "adapt existing code"
+- "Already spent X hours, deleting is wasteful"
+- "TDD is dogmatic, I'm being pragmatic"
 - "This is different because..."
 
-**All of these mean:
-Delete code.
-Start over with TDD.**
+**All of these mean: Delete code. Start over with TDD.**
+
+## Example: Bug Fix
+
+**Bug:** Empty email accepted
+
+**RED**
+```go
+// Go example
+func TestSubmitForm_RejectsEmptyEmail(t *testing.T) {
+    result := SubmitForm(FormData{Email: ""})
+
+    assert.Error(t, result.Error)
+    assert.Equal(t, "Email required", result.Error.Error())
+}
+```
+
+```java
+// Java example
+@Test
+void rejectsEmptyEmail() {
+    Result result = submitForm(new FormData(""));
+
+    assertTrue(result.hasError());
+    assertEquals("Email required", result.getError());
+}
+```
+
+**Verify RED**
+```bash
+# Go
+$ go test ./... -v -run TestSubmitForm_RejectsEmptyEmail
+FAIL: expected "Email required", got <nil>
+
+# Java
+$ mvn test -Dtest=FormTest#rejectsEmptyEmail
+FAIL: expected "Email required", got null
+```
+
+**GREEN**
+```go
+// Go example
+func SubmitForm(data FormData) Result {
+    if strings.TrimSpace(data.Email) == "" {
+        return Result{Error: errors.New("Email required")}
+    }
+    // ...
+}
+```
+
+```java
+// Java example
+public Result submitForm(FormData data) {
+    if (data.getEmail().trim().isEmpty()) {
+        return new Result("Email required");
+    }
+    // ...
+}
+```
+
+**Verify GREEN**
+```bash
+# Go
+$ go test ./... -v
+PASS
+
+# Java
+$ mvn test
+PASS
+```
+
+**REFACTOR**
+Extract validation for multiple fields if needed.
+
+## FIRST Properties
+
+Tests should satisfy these properties:
+
+- **Fast** — tests run in milliseconds, not seconds. Slow tests get skipped.
+- **Independent** — no test depends on another test's state or execution order.
+- **Repeatable** — same result every time, in any environment, without external dependencies.
+- **Self-validating** — tests produce a boolean result (pass/fail), not output that requires human interpretation.
+- **Timely** — tests written before or alongside production code, not after.
+
+## Boundary Isolation
+
+- Test public behavior and domain rules, not internal implementation details.
+- Keep unit tests independent from live databases and external APIs.
+- Use test doubles at architectural boundaries unless executing intentional integration tests.
+- If changing internals doesn't change behavior, tests should still pass.
 
 ## Verification Checklist
 
@@ -216,94 +451,28 @@ Before marking work complete:
 - [ ] Tests use real code (mocks only if unavoidable)
 - [ ] Edge cases and errors covered
 
-Can't check all boxes?
-You skipped TDD.
-Start over.
+Can't check all boxes? You skipped TDD. Start over.
 
 ## When Stuck
 
 | Problem | Solution |
 |---------|----------|
-| Don't know how to test | Write wished-for API. Write assertion first. Ask for help. |
+| Don't know how to test | Write wished-for API. Write assertion first. Ask your human partner. |
 | Test too complicated | Design too complicated. Simplify interface. |
 | Must mock everything | Code too coupled. Use dependency injection. |
 | Test setup huge | Extract helpers. Still complex? Simplify design. |
 
+## Debugging Integration
+
+Bug found? Write failing test reproducing it. Follow TDD cycle. Test proves fix and prevents regression.
+
+Never fix bugs without a test.
+
 ## Final Rule
 
-```text
+```
 Production code → test exists and failed first
 Otherwise → not TDD
 ```
 
-No exceptions without explicit permission.
-
----
-
-## Test Quality Guidelines
-
-### Test Structure (AAA Pattern)
-
-All tests must follow "Arrange, Act, Assert":
-
-```python
-def test_user_authentication():
-    # Arrange
-    user = User(username="test_user")
-    auth_service = AuthenticationService()
-
-    # Act
-    result = auth_service.authenticate(user.username, "password")
-
-    # Assert
-    assert result.is_authenticated is True
-```
-
-### Test Documentation
-
-- Remove docstrings that restate the test name
-- Keep docstrings that explain non-obvious behavior or edge cases
-- Keep AAA section comments for structure
-
-### Avoid Mocks
-
-Strongly discourage mocks, stubs, and test doubles:
-
-**Preferred alternatives:**
-
-- Dependency injection with real implementations
-- In-memory databases (SQLite, DuckDB)
-- Lightweight fake implementations
-- Real instances with test data
-
-**When mocks are acceptable:**
-
-- Truly external systems (payment APIs, SMS gateways)
-- Prohibitively expensive cloud services
-- Even then, prefer fake implementations over mock frameworks
-
-### Assert Booleans Directly
-
-```python
-# ✅ Correct
-assert condition
-assert not condition
-
-# ❌ Wrong
-assert condition == True
-assert condition == False
-```
-
-### Fuzzing and Property-Based Testing
-
-Use automated test data generation:
-
-- **Polyfactory** for Pydantic models
-- **Hypothesis** for property-based testing
-- **Faker** for realistic sample data
-Keep tests green.
-Don't add behavior.
-
-### Repeat
-
-Next failing test for next feature.
+No exceptions without your human partner's permission.

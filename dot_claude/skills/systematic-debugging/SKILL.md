@@ -1,56 +1,26 @@
 ---
 name: systematic-debugging
-description: Use when encountering any bug, test failure, or unexpected behavior, before proposing fixes
+description: Four-phase debugging framework ensuring root cause investigation before fixes; use when encountering any bug, test failure, or unexpected behavior before proposing solutions
+metadata:
+  author: imprivata-shared-tools
+  version: "1.1.0"
 ---
 
 # Systematic Debugging
 
-<!-- QUICK REFERENCE - Follow This -->
-
-## Quick Debugging Checklist
-
-**BEFORE proposing ANY fix, complete these steps:**
-
-1. [ ] **Read error message completely** - Copy exact text
-2. [ ] **Identify file and line number** - Go to that location
-3. [ ] **Read the code** - Understand what it does
-4. [ ] **State hypothesis:** "I believe X causes Y because Z"
-5. [ ] **ONLY THEN** propose a single fix
-
-### Loop Prevention
-
-| Failed Attempts | Action                                              |
-| --------------- | --------------------------------------------------- |
-| 1               | Try your hypothesis                                 |
-| 2               | Re-read error, reconsider assumptions               |
-| 3+              | STOP. Ask user for help or try different approach   |
-
-### Red Flags - Return to Step 1
-
-If you think any of these, STOP:
-
-- "Let me just try this"
-- "This should fix it"
-- "One more attempt"
-
-<!-- END QUICK REFERENCE -->
-
----
-
 ## Overview
 
-Random fixes waste time and create new bugs.
-Quick patches mask underlying issues.
+Random fixes waste time and create new bugs. Quick patches mask underlying issues.
 
-**Core principle:** ALWAYS find root cause before attempting fixes.
-Symptom fixes are failure.
+**Core principle:** ALWAYS find root cause before attempting fixes. Symptom fixes are failure.
 
-**Follow ALL steps.
-No shortcuts.**
+**Announce at start:** "I'm using the Systematic Debugging skill to investigate this issue."
 
-## The Mandatory Process
+**Violating the letter of this process is violating the spirit of debugging.**
 
-```text
+## The Iron Law
+
+```
 NO FIXES WITHOUT ROOT CAUSE INVESTIGATION FIRST
 ```
 
@@ -59,7 +29,6 @@ If you haven't completed Phase 1, you cannot propose fixes.
 ## When to Use
 
 Use for ANY technical issue:
-
 - Test failures
 - Bugs in production
 - Unexpected behavior
@@ -68,12 +37,16 @@ Use for ANY technical issue:
 - Integration issues
 
 **Use this ESPECIALLY when:**
-
 - Under time pressure (emergencies make guessing tempting)
 - "Just one quick fix" seems obvious
 - You've already tried multiple fixes
 - Previous fix didn't work
 - You don't fully understand the issue
+
+**Don't skip when:**
+- Issue seems simple (simple bugs have root causes too)
+- You're in a hurry (rushing guarantees rework)
+- Manager wants it fixed NOW (systematic is faster than thrashing)
 
 ## The Four Phases
 
@@ -102,12 +75,50 @@ You MUST complete each phase before proceeding to the next.
    - Environmental differences
 
 4. **Gather Evidence in Multi-Component Systems**
-   - For each component boundary:
-     log what enters and exits
-   - Run once to gather evidence showing WHERE it breaks
-   - THEN analyze evidence to identify failing component
+
+   **WHEN system has multiple components (CI → build → signing, API → service → database):**
+
+   **BEFORE proposing fixes, add diagnostic instrumentation:**
+   ```
+   For EACH component boundary:
+     - Log what data enters component
+     - Log what data exits component
+     - Verify environment/config propagation
+     - Check state at each layer
+
+   Run once to gather evidence showing WHERE it breaks
+   THEN analyze evidence to identify failing component
+   THEN investigate that specific component
+   ```
+
+   **Example (multi-layer system):**
+   ```bash
+   # Layer 1: Workflow
+   echo "=== Secrets available in workflow: ==="
+   echo "IDENTITY: ${IDENTITY:+SET}${IDENTITY:-UNSET}"
+
+   # Layer 2: Build script
+   echo "=== Env vars in build script: ==="
+   env | grep IDENTITY || echo "IDENTITY not in environment"
+
+   # Layer 3: Signing script
+   echo "=== Keychain state: ==="
+   security list-keychains
+   security find-identity -v
+
+   # Layer 4: Actual signing
+   codesign --sign "$IDENTITY" --verbose=4 "$APP"
+   ```
+
+   **This reveals:** Which layer fails (secrets → workflow ✓, workflow → build ✗)
 
 5. **Trace Data Flow**
+
+   **WHEN error is deep in call stack:**
+
+   See `root-cause-tracing` for backward tracing technique
+
+   **Quick version:**
    - Where does bad value originate?
    - What called this with bad value?
    - Keep tracing up until you find the source
@@ -115,185 +126,172 @@ You MUST complete each phase before proceeding to the next.
 
 ### Phase 2: Pattern Analysis
 
-1. **Find Working Examples** - Locate similar working code in same codebase
-2. **Compare Against References** - Read reference implementation COMPLETELY
-3. **Identify Differences** - List every difference, however small
-4. **Understand Dependencies** - What other components does this need?
+**Find the pattern before fixing:**
+
+1. **Find Working Examples**
+   - Locate similar working code in same codebase
+   - What works that's similar to what's broken?
+
+2. **Compare Against References**
+   - If implementing pattern, read reference implementation COMPLETELY
+   - Don't skim - read every line
+   - Understand the pattern fully before applying
+
+3. **Identify Differences**
+   - What's different between working and broken?
+   - List every difference, however small
+   - Don't assume "that can't matter"
+
+4. **Understand Dependencies**
+   - What other components does this need?
+   - What settings, config, environment?
+   - What assumptions does it make?
 
 ### Phase 3: Hypothesis and Testing
 
-1. **Form Single Hypothesis** - State clearly:
-   "I think X is the root cause because Y"
-2. **Test Minimally** - Make the SMALLEST possible change to test hypothesis
-3. **Verify Before Continuing** - Did it work?
-   Yes → Phase 4.
-   No → new hypothesis.
-4. **When You Don't Know** - Say so.
-   Ask for help.
-   Research more.
+**Scientific method:**
+
+1. **Form Single Hypothesis**
+   - State clearly: "I think X is the root cause because Y"
+   - Write it down
+   - Be specific, not vague
+
+2. **Test Minimally**
+   - Make the SMALLEST possible change to test hypothesis
+   - One variable at a time
+   - Don't fix multiple things at once
+
+3. **Verify Before Continuing**
+   - Did it work? Yes → Phase 4
+   - Didn't work? Form NEW hypothesis
+   - DON'T add more fixes on top
+
+4. **When You Don't Know**
+   - Say "I don't understand X"
+   - Don't pretend to know
+   - Ask for help
+   - Research more
 
 ### Phase 4: Implementation
 
-1. **Create Failing Test Case** - Use test-driven-development skill
-2. **Implement Single Fix** - ONE change at a time
-3. **Verify Fix** - Test passes now?
-   No other tests broken?
-4. **If Fix Doesn't Work** - STOP.
-   If ≥ 3 fixes failed, question the architecture
-5. **If 3+ Fixes Failed** - STOP and question fundamentals.
-   Discuss before more fixes.
+**Fix the root cause, not the symptom:**
+
+1. **Create Failing Test Case**
+   - Simplest possible reproduction
+   - Automated test if possible
+   - One-off test script if no framework
+   - MUST have before fixing
+   - See `test-driven-development` for writing proper failing tests
+
+2. **Implement Single Fix**
+   - Address the root cause identified
+   - ONE change at a time
+   - No "while I'm here" improvements
+   - No bundled refactoring
+
+3. **Verify Fix**
+   - Test passes now?
+   - No other tests broken?
+   - Issue actually resolved?
+
+4. **If Fix Doesn't Work**
+   - STOP
+   - Count: How many fixes have you tried?
+   - If < 3: Return to Phase 1, re-analyze with new information
+   - **If ≥ 3: STOP and question the architecture (step 5 below)**
+   - DON'T attempt Fix #4 without architectural discussion
+
+5. **If 3+ Fixes Failed: Question Architecture**
+
+   **Pattern indicating architectural problem:**
+   - Each fix reveals new shared state/coupling/problem in different place
+   - Fixes require "massive refactoring" to implement
+   - Each fix creates new symptoms elsewhere
+
+   **STOP and question fundamentals:**
+   - Is this pattern fundamentally sound?
+   - Are we "sticking with it through sheer inertia"?
+   - Should we refactor architecture vs. continue fixing symptoms?
+
+   **Discuss with your human partner before attempting more fixes**
+
+   This is NOT a failed hypothesis - this is a wrong architecture.
 
 ## Red Flags - STOP and Follow Process
 
 If you catch yourself thinking:
-
 - "Quick fix for now, investigate later"
+- "Just try changing X and see if it works"
+- "Add multiple changes, run tests"
+- "Skip the test, I'll manually verify"
+- "It's probably X, let me fix that"
+- "I don't fully understand but this might work"
+- "Pattern says X but I'll adapt it differently"
+- "Here are the main problems: [lists fixes without investigation]"
+- Proposing solutions before tracing data flow
+- **"One more fix attempt" (when already tried 2+)**
+- **Each fix reveals new problem in different place**
+
+**ALL of these mean: STOP. Return to Phase 1.**
+
+**If 3+ fixes failed:** Question the architecture (see Phase 4.5)
+
+## your human partner's Signals You're Doing It Wrong
+
+**Watch for these redirections:**
+- "Is that not happening?" - You assumed without verifying
+- "Will it show us...?" - You should have added evidence gathering
+- "Stop guessing" - You're proposing fixes without understanding
+- "Ultrathink this" - Question fundamentals, not just symptoms
+- "We're stuck?" (frustrated) - Your approach isn't working
+
+**When you see these:** STOP. Return to Phase 1.
 
 ## Common Rationalizations
 
-| Excuse                                      | Reality                                                                 |
-| ------------------------------------------- | ----------------------------------------------------------------------- |
-| "Issue is simple, don't need process"       | Simple issues have root causes too. Process is fast for simple bugs.    |
-| "Emergency, no time for process"            | Systematic debugging is FASTER than guess-and-check thrashing.          |
-| "Just try this first, then investigate"     | First fix sets the pattern. Do it right from the start.                 |
-| "I see the problem, let me fix it"          | Seeing symptoms != understanding root cause.                            |
-| "One more fix attempt" (after 2+ failures)  | 3+ failures = architectural problem. Question pattern, don't fix again. |
+| Excuse | Reality |
+|--------|---------|
+| "Issue is simple, don't need process" | Simple issues have root causes too. Process is fast for simple bugs. |
+| "Emergency, no time for process" | Systematic debugging is FASTER than guess-and-check thrashing. |
+| "Just try this first, then investigate" | First fix sets the pattern. Do it right from the start. |
+| "I'll write test after confirming fix works" | Untested fixes don't stick. Test first proves it. |
+| "Multiple fixes at once saves time" | Can't isolate what worked. Causes new bugs. |
+| "Reference too long, I'll adapt the pattern" | Partial understanding guarantees bugs. Read it completely. |
+| "I see the problem, let me fix it" | Seeing symptoms ≠ understanding root cause. |
+| "One more fix attempt" (after 2+ failures) | 3+ failures = architectural problem. Question pattern, don't fix again. |
 
 ## Quick Reference
 
-| Phase                | Key Activities                                         | Success Criteria            |
-| -------------------- | ------------------------------------------------------ | --------------------------- |
-| **1.
-  Root Cause**    | Read errors, reproduce, check changes, gather evidence | Understand WHAT and WHY     |
-| **2.
-  Pattern**       | Find working examples, compare                         | Identify differences        |
-| **3.
-  Hypothesis**    | Form theory, test minimally                            | Confirmed or new hypothesis |
-| **4.
-  Implementation** | Create test, fix, verify                               | Bug resolved, tests pass    |
+| Phase | Key Activities | Success Criteria |
+|-------|---------------|------------------|
+| **1. Root Cause** | Read errors, reproduce, check changes, gather evidence | Understand WHAT and WHY |
+| **2. Pattern** | Find working examples, compare | Identify differences |
+| **3. Hypothesis** | Form theory, test minimally | Confirmed or new hypothesis |
+| **4. Implementation** | Create test, fix, verify | Bug resolved, tests pass |
 
-## Supporting Techniques
+## When Process Reveals "No Root Cause"
 
-These techniques are part of systematic debugging:
+If systematic investigation reveals issue is truly environmental, timing-dependent, or external:
 
-- **`root-cause-tracing.md`** - Trace bugs backward through call stack
-- **`defense-in-depth.md`** - Add validation at multiple layers after finding
-  root cause
-- **`condition-based-waiting.md`** - Replace arbitrary timeouts with condition
-  polling
+1. You've completed the process
+2. Document what you investigated
+3. Implement appropriate handling (retry, timeout, error message)
+4. Add monitoring/logging for future investigation
 
-**Related skills:**
+**But:** 95% of "no root cause" cases are incomplete investigation.
 
-- **test-driven-development** - For creating failing test case (Phase 4, Step 1)
-- **verification-before-completion** - Verify fix worked before claiming success
+## Integration with Other Skills
 
-## Agent Team Mode: Competing Hypotheses
+This skill works with:
+- `root-cause-tracing` - How to trace back through call stack
+- `defense-in-depth` - Add validation after finding root cause
+- `condition-based-waiting` - Replace timeouts identified in Phase 2
+- `verification-before-completion` - Verify fix worked before claiming success
 
-When the root cause is unclear and multiple plausible theories exist, use an
-agent team to investigate hypotheses in parallel.
-Teammates actively try to disprove each other's theories, converging on the
-actual root cause faster than sequential investigation.
+## Real-World Impact
 
-### When to Use Competing Hypotheses
-
-- 3+ plausible hypotheses for the same bug
-- Sequential debugging hit Phase 3 twice without confirming a hypothesis
-- Bug spans multiple subsystems and no single theory explains all symptoms
-- Time-sensitive investigation where parallel exploration justifies token cost
-
-### When NOT to Use
-
-- Single clear hypothesis (standard debugging is faster and cheaper)
-- Bug is reproducible and localized to one file/function
-- First attempt at debugging (try standard process first)
-
-### The Process
-
-**Step 1:
-Form hypotheses (before spawning team)**
-
-Complete Phase 1 (Root Cause Investigation) and Phase 2 (Pattern Analysis)
-yourself.
-Identify 3-5 distinct hypotheses.
-Each must be:
-
-- Falsifiable (there exists evidence that could disprove it)
-- Independent (disproving one does not automatically disprove another)
-- Specific ("race condition in connection pool" not "timing issue")
-
-**Step 2:
-Spawn investigator team**
-
-```text
-Create an agent team to debug [SYMPTOM]. Spawn [N] investigators,
-each assigned a different hypothesis:
-
-- Investigator 1: [Hypothesis A] - look for evidence in [scope]
-- Investigator 2: [Hypothesis B] - look for evidence in [scope]
-- Investigator 3: [Hypothesis C] - look for evidence in [scope]
-
-Rules:
-1. Each investigator gathers evidence FOR and AGAINST their hypothesis
-2. After initial investigation, read other investigators' findings
-3. Actively try to disprove other hypotheses with counter-evidence
-4. Message other investigators directly when you find contradicting evidence
-5. Update your confidence level: CONFIRMED, LIKELY, UNLIKELY, DISPROVED
-
-Do NOT propose fixes until the team reaches consensus on root cause.
-```
-
-**Step 3:
-Teammate spawn prompt template**
-
-```text
-You are debugging [SYMPTOM].
-
-Your hypothesis: [HYPOTHESIS]
-Scope: [FILES/SUBSYSTEMS TO INVESTIGATE]
-
-PHASE A - Gather Evidence:
-1. Search for evidence supporting your hypothesis
-2. Search for evidence contradicting your hypothesis
-3. Document both with file paths and line numbers
-
-PHASE B - Cross-Investigation:
-1. Read other investigators' findings
-2. If their evidence contradicts your hypothesis, acknowledge it
-3. If your evidence contradicts their hypothesis, message them directly
-4. Respond to challenges with additional evidence or concede
-
-OUTPUT FORMAT:
-## Hypothesis: [YOUR HYPOTHESIS]
-### Evidence For
-- [evidence with file:line citations]
-### Evidence Against
-- [evidence with file:line citations]
-### Confidence: [CONFIRMED/LIKELY/UNLIKELY/DISPROVED]
-### Reasoning: [why this confidence level]
-```
-
-**Step 4:
-Convergence**
-
-Tell the lead:
-"Wait for all investigators to complete their cross-investigation phase.
-Synthesize into a single root cause determination.
-Only then proceed to Phase 4 (Implementation)."
-
-The team should produce one of:
-
-- **Consensus**:
-  all investigators agree on root cause
-- **Narrowed**:
-  eliminated N hypotheses, 1-2 remain for focused investigation
-- **Compound**:
-  bug has multiple contributing causes (each investigator found a real issue)
-
-### Why This Works
-
-Sequential debugging suffers from anchoring bias:
-once you explore one theory, subsequent investigation skews toward confirming
-it.
-Parallel investigators with adversarial cross-examination break this pattern.
-The hypothesis that survives active attempts at disproval is more likely to be
-the actual root cause.
+From debugging sessions:
+- Systematic approach: 15-30 minutes to fix
+- Random fixes approach: 2-3 hours of thrashing
+- First-time fix rate: 95% vs 40%
+- New bugs introduced: Near zero vs common

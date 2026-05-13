@@ -251,26 +251,12 @@ next round of questions.
 After all perspective subagents complete, synthesize their findings into a
 unified outline organized by **theme** (not by perspective).
 
-**Use think-strategies for outline generation (think-strategies MCP):**
+**For outline generation, escalate to the `think-tree` skill** -- explore multiple thematic structures, evaluate, and pick the strongest. Frame the prompt around the research findings:
 
-```javascript
-think-strategies_think-strategies({
-  strategy: "tree_of_thoughts",
-  thought: `I have research findings from 4 perspectives on [TOPIC]:
-- Security: [key points]
-- Developer: [key points]
-- Platform: [key points]
-- Product: [key points]
-
-Generate a hierarchical outline that organizes these by THEME:
-- Where do perspectives agree? (high confidence)
-- Where do they conflict? (trade-offs)
-- What unique insights did each reveal?`,
-  thoughtNumber: 1,
-  totalThoughts: 3,
-  nextThoughtNeeded: true,
-})
-```
+> I have research findings from 4 perspectives on [TOPIC]. Generate a hierarchical outline organized by THEME:
+> - Where do perspectives agree? (high confidence)
+> - Where do they conflict? (trade-offs)
+> - What unique insights did each reveal?
 
 **Outline structure should be thematic:**
 
@@ -493,9 +479,9 @@ Would you like me to:
 
 ## References
 
-- [Stanford STORM](https://github.com/stanford-oval/storm) - Original
+- [Stanford STORM](https://github.com/stanford-oval/storm) - Original
   implementation
-- [STORM Paper (NAACL 2024)](https://aclanthology.org/2024.naacl-long.347/) -
+- [STORM Paper (NAACL 2024)](https://aclanthology.org/2024.naacl-long.347/) -
   Academic paper
 - [[Research:
   Agentic AI Patterns]] - Pattern evaluation

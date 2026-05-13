@@ -127,17 +127,7 @@ find_symbol(name_path="critical_function", include_body=True)
 find_referencing_symbols(name_path="called_function", relative_path="file.py")
 ```
 
-**Use structured thinking for complex logic (think-strategies MCP):**
-
-```javascript
-think-strategies_think-strategies({
-  strategy: "chain_of_thought",
-  thought: "Tracing how [X] processes [Y]: Step 1...",
-  thoughtNumber: 1,
-  totalThoughts: 5,
-  nextThoughtNeeded: true,
-})
-```
+**For complex logic, escalate to a structured reasoning strategy** (see the `think` skill -- e.g., `think-react` for investigation, `think-tree` for comparing alternatives).
 
 **Output:** Explain the critical logic, algorithms, or mechanisms.
 

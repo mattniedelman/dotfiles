@@ -59,8 +59,10 @@ For each task:
 
 Loop until both reviewers approve, then next task.
 
-**Circuit breaker**:
-No progress for 3 iterations -> pause and ask user.
+**Circuit breaker** (trips only on real stalls):
+- No new commits (git HEAD unchanged) for 3 iterations
+- Same task reported 3 iterations in a row
+- Absolute safety net at 20 iterations
 
 ### Phase 5: Completion
 

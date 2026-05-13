@@ -1,149 +1,109 @@
 ---
 name: api-design
-description: Use when designing APIs - RESTful endpoints, client interfaces, service integration, and FastAPI-specific patterns
+description: Review API design for consistency, versioning, error contracts, and resource modeling; use when designing or reviewing APIs, adding new endpoints, or evaluating third-party API integrations
+metadata:
+  author: imprivata-shared-tools
+  version: "2.0.0"
 ---
 
-# API Design
+# API Design Review
 
-Guide for building maintainable API services and client interfaces.
+## What to look for
 
-## When to Use
+APIs that are inconsistent, hard to version, or leak implementation details. An API is a contract — inconsistency in that contract forces every consumer to handle special cases.
 
-Use this skill when:
+## Signals
 
-- Designing new API endpoints
-- Building client libraries for services
-- Integrating with external services
-- Working with FastAPI applications
-- Defining data transfer objects (DTOs)
+1. Inconsistent naming across endpoints (camelCase mixed with snake_case, plural and singular nouns for the same concept)
+2. Missing or inconsistent error response format — some endpoints return `{error: "msg"}`, others return `{message: "msg"}`, others return plain text
+3. Version-breaking changes to existing endpoints without a versioning strategy
+4. Resource URIs that expose implementation details (`/getUser`, `/fetchOrderById`) instead of resource-oriented paths (`/users/{id}`, `/orders/{id}`)
+5. Collection endpoints that return unbounded results — no pagination, no limit
+6. Overly broad responses returning entire objects when the caller needs a subset of fields
+7. Inconsistent authentication or authorization patterns across endpoints
+8. No idempotency guarantees on unsafe operations (POST, PUT, DELETE)
 
-## RESTful API Design
+## Consistency checklist
 
-### Endpoint Structure
+| Aspect | What to check |
+|--------|--------------|
+| Naming | Consistent case convention, plural nouns for collections, no verbs in resource URIs |
+| Errors | Standard error envelope on all endpoints — at minimum: code, message, details |
+| Versioning | Explicit strategy (URL path, header, or query param) applied consistently |
+| Pagination | Cursor-based or offset pagination on every collection endpoint |
+| Idempotency | Unsafe operations are idempotent or document when they are not |
+| Auth | Consistent authentication mechanism across all endpoints |
+| Content type | Consistent request/response media types; explicit `Content-Type` headers |
+| Status codes | Correct HTTP status codes — 201 for creation, 204 for no content, 404 for missing resources |
 
-- Use **nouns** for resource names, not verbs
-- Use HTTP methods appropriately (GET, POST, PUT, DELETE)
-- Consistent query parameter patterns
-- Clear, hierarchical URL structures
+## Investigation workflow
 
-### Response Consistency
+1. **Inventory the surface area.** List all public endpoints from route definitions, controller files, or `openapi.yaml`. Record the HTTP method, path, request body shape, and response shape for each.
 
-- Standard HTTP status codes
-- Consistent error response structures
-- Meaningful error messages with context
-- Consistent serialization formats
+2. **Audit naming consistency.** Check every endpoint path against the naming convention. Flag mixed casing (`/getUserProfile` next to `/user-settings`), inconsistent pluralization (`/user/{id}` vs `/orders/{id}`), and verbs in resource URIs. Cross-reference with `requirements.md` or the domain glossary for correct resource names.
 
-### Versioning
+3. **Check error contracts.** Call or inspect each endpoint's error paths. Verify every endpoint returns the same error envelope structure. Flag endpoints that return plain strings, HTML error pages, or inconsistent JSON shapes on failure.
 
-- Include version in API design from start
-- Maintain backward compatibility when possible
-- Clear migration paths for breaking changes
-- Document changes and deprecation timelines
+4. **Verify versioning strategy.** Check whether a versioning scheme exists (URL path `/v1/`, header `Accept-Version`, query param `?version=`). If it exists, verify every endpoint uses it. If it does not exist, flag this as a gap — any API with external consumers needs a versioning strategy before the first breaking change.
 
-## Client Interface Design
+5. **Test pagination boundaries.** For every collection endpoint, verify pagination is implemented. Request without pagination parameters — the response must include pagination metadata (`next_cursor`, `total_count`, or equivalent). Flag unbounded responses.
 
-### Simple Client APIs
+6. **Validate idempotency.** For POST, PUT, and DELETE operations, check whether repeated calls produce the same result. Look for idempotency keys on creation endpoints. Flag operations where a retry could create duplicates or cause unintended side effects.
 
-- Single client class per service with logical method grouping
-- Sensible defaults to minimize required parameters
-- Clear separation between configuration and operation
-- Consistent error handling across methods
+## Concrete example
 
-### Data Transfer Objects (DTOs)
+**Before** — inconsistent error contract across endpoints:
 
-- Use Pydantic models for validation and serialization
-- Clear field documentation and examples
-- Proper type hints for all fields
-- Conversion methods between internal/external representations
+```
+GET /api/v1/users/999
+  Response: 404  {"error": "User not found"}
 
-### Configuration Management
+POST /api/v1/orders
+  Response: 400  {"message": "Invalid order", "code": "VALIDATION_ERROR"}
 
-- Environment variables for deployment-specific settings
-- Configuration validation at startup
-- Document all configuration options
-- Configuration classes over scattered constants
-
-## Service Integration
-
-### Database Integration
-
-- Connection pooling and proper resource management
-- Consistent query patterns and error handling
-- Separate business logic from data access
-- Modern libraries (DuckDB, SQLAlchemy)
-
-### External Service Integration
-
-- Proper timeout and retry logic
-- Circuit breaker patterns for unreliable services
-- Fallback mechanisms where appropriate
-- Log failures with debugging context
-
-### Authentication and Authorization
-
-- Standard mechanisms (JWT, OAuth)
-- Proper session management
-- Validate permissions at service boundaries
-- Log security events for audit
-
-## FastAPI Patterns
-
-### Dependency Injection
-
-```python
-from fastapi import Depends
-
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
-
-@app.get("/users/{user_id}")
-def read_user(user_id: int, db: Session = Depends(get_db)):
-    return db.query(User).filter(User.id == user_id).first()
+DELETE /api/v1/products/5
+  Response: 500  "Internal Server Error"
 ```
 
-- Reusable dependencies for common functionality
-- DI for database connections, auth, etc.
-- Proper dependency lifecycle management
-- Test dependencies independently
+Three endpoints, three different error shapes. Every consumer must handle each format separately.
 
-### Request/Response Models
+**After** — unified error envelope following RFC 7807:
 
-```python
-from pydantic import BaseModel, Field
+```
+GET /api/v1/users/999
+  Response: 404  {"type": "not_found", "title": "User not found",
+                  "detail": "No user with id 999", "status": 404}
 
-class UserCreate(BaseModel):
-    """User creation request."""
-    email: str = Field(..., description="User's email address")
-    name: str = Field(..., min_length=1, max_length=100)
+POST /api/v1/orders
+  Response: 400  {"type": "validation_error", "title": "Invalid order",
+                  "detail": "Field 'items' must not be empty", "status": 400}
 
-class UserResponse(BaseModel):
-    """User response model."""
-    id: int
-    email: str
-    name: str
+DELETE /api/v1/products/5
+  Response: 500  {"type": "internal_error", "title": "Internal server error",
+                  "detail": "Request id: abc-123", "status": 500}
 ```
 
-- Descriptive model names indicating purpose
-- Field validation and documentation
-- Proper error handling for validation failures
-- Model inheritance to reduce duplication
+One envelope, one parsing path for all consumers. Machine-readable `type` field enables programmatic error handling.
 
-### Middleware and Error Handling
+## Decision guidance
 
-- Middleware for logging, auth, error handling
-- Global exception handlers for consistent responses
-- Request/response logging for debugging
-- Correlation IDs for request tracing
+| Decision | Guidance |
+|----------|---------|
+| REST vs RPC style | Use REST (resource-oriented) for CRUD-heavy domains with clear entities. Use RPC style (`/actions/send-invoice`) for operations that do not map to resource lifecycle. Most APIs are a mix — keep resources RESTful and use a dedicated `/actions` or `/commands` namespace for non-CRUD operations. |
+| When to version | Version before the first external consumer. Internal-only APIs can defer versioning but must plan for it. Once a consumer exists, any field removal, type change, or semantic change requires a new version. |
+| URL path vs header versioning | URL path (`/v1/`) is simpler to route, cache, and debug. Header versioning (`Accept-Version`) is cleaner semantically but harder to test in a browser. Default to URL path unless you have a specific reason not to. |
+| When to paginate | Always paginate collection endpoints. There is no dataset that stays small forever. Default page size of 20-100, maximum of 1000. Cursor-based pagination is more stable than offset-based for datasets that change between requests. |
+| Idempotency keys | Require idempotency keys on any creation endpoint (POST) that could be retried. Use a client-supplied `Idempotency-Key` header. Store the key and response for the deduplication window (typically 24 hours). |
+| Additive changes only | Adding new fields, new endpoints, and new optional parameters are safe. Removing fields, renaming fields, and changing types are breaking. When in doubt, it is breaking. |
 
-```python
-@app.exception_handler(ValidationError)
-async def validation_exception_handler(request, exc):
-    return JSONResponse(
-        status_code=422,
-        content={"detail": exc.errors(), "correlation_id": request.state.correlation_id}
-    )
-```
+## Agent-friendly API design
+
+APIs consumed by agents benefit from predictable patterns:
+- Explicit, machine-readable error codes (not just human-readable messages)
+- Stable field names across versions (agents break on renames)
+- Schema documentation (OpenAPI / Protocol Buffers) that agents can read before making calls
+- Consistent null handling — never mix `null`, empty string, and absent field for the same concept
+
+## Output format
+
+Report findings referencing the specific file and line range. For each finding, state: what the inconsistency or gap is, which endpoints are affected, and what the consistent pattern should be.
