@@ -1,0 +1,27 @@
+private_dot_config/mise/config.toml
+  ai_agent 5,8-56,62,65,68-70,74,78,81-83,86,88,91-92,94,102,106-107,112-114,116-117,120,122,124,127-133,135-136,139,142-146,148-149,173
+private_dot_config/private_fish/config.fish
+  ai_agent 25-27,43,59-60,73-77,123-125,127,129-131
+private_dot_config/git/ignore
+  ai_agent 46-47
+private_dot_config/private_fish/abbreviations.fish
+  ai_agent 11
+private_dot_config/zellij/config.kdl
+  ai_agent 248,250,261
+private_dot_config/ast-grep/rules/no-json-loads-untyped.yml
+  ai_agent 4-5
+private_dot_config/private_fish/aliases.fish
+  ai_agent 34,55,57-60
+private_dot_config/ast-grep/rules/no-bare-except.yml
+  ai_agent 29,35,41
+private_dot_config/ruff/ruff.toml
+  ai_agent 29-30
+private_dot_config/ast-grep/rules/no-os-getenv.yml
+  ai_agent 4-5
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.4",
+  "base_commit_sha": "588f09aa198b2643f23bfbcb3d3a89ea044e33b8",
+  "prompts": {}
+}
