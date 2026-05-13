@@ -1,0 +1,4 @@
+{{- $work := promptBoolOnce . "work" "Is this a work machine (enables work-specific config)?" -}}
+
+[data]
+  work = {{ $work }}
