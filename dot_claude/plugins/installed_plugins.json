@@ -1,206 +1,23 @@
 {
   "version": 2,
   "plugins": {
-    "claude-powerline@claude-powerline": [
-      {
-        "scope": "user",
-        "installPath": "/home/mattniedelman/.claude/plugins/cache/claude-powerline/claude-powerline/1.0.0",
-        "version": "1.0.0",
-        "installedAt": "2026-04-06T20:17:41.376Z",
-        "lastUpdated": "2026-04-06T20:17:41.376Z",
-        "gitCommitSha": "1e4ebc97cfbb4ae8a9126898c589ec63fc3990b3"
-      }
-    ],
-    "typescript-lsp@claude-plugins-official": [
-      {
-        "scope": "user",
-        "installPath": "/home/mattniedelman/.claude/plugins/cache/claude-plugins-official/typescript-lsp/1.0.0",
-        "version": "1.0.0",
-        "installedAt": "2026-04-08T00:21:39.702Z",
-        "lastUpdated": "2026-04-08T00:21:39.702Z"
-      }
-    ],
-    "pyright-lsp@claude-plugins-official": [
-      {
-        "scope": "user",
-        "installPath": "/home/mattniedelman/.claude/plugins/cache/claude-plugins-official/pyright-lsp/1.0.0",
-        "version": "1.0.0",
-        "installedAt": "2026-04-08T01:28:16.348Z",
-        "lastUpdated": "2026-04-08T01:28:16.348Z"
-      }
-    ],
-    "context-mode@context-mode": [
-      {
-        "scope": "user",
-        "installPath": "/home/mattniedelman/.claude/plugins/cache/context-mode/context-mode/1.0.75",
-        "version": "1.0.75",
-        "installedAt": "2026-04-08T01:32:05.485Z",
-        "lastUpdated": "2026-04-09T00:37:27.145Z",
-        "gitCommitSha": "0ac3318725a22c3a583c508d6620632afe5cc2a5"
-      }
-    ],
-    "frontend-design@claude-plugins-official": [
-      {
-        "scope": "user",
-        "installPath": "/home/mattniedelman/.claude/plugins/cache/claude-plugins-official/frontend-design/unknown",
-        "version": "unknown",
-        "installedAt": "2026-04-08T02:46:42.023Z",
-        "lastUpdated": "2026-04-08T02:46:42.023Z"
-      }
-    ],
-    "context7@claude-plugins-official": [
-      {
-        "scope": "user",
-        "installPath": "/home/mattniedelman/.claude/plugins/cache/claude-plugins-official/context7/unknown",
-        "version": "unknown",
-        "installedAt": "2026-04-08T02:46:42.419Z",
-        "lastUpdated": "2026-04-08T02:46:42.419Z"
-      }
-    ],
-    "code-review@claude-plugins-official": [
-      {
-        "scope": "user",
-        "installPath": "/home/mattniedelman/.claude/plugins/cache/claude-plugins-official/code-review/unknown",
-        "version": "unknown",
-        "installedAt": "2026-04-08T02:46:42.778Z",
-        "lastUpdated": "2026-04-08T02:46:42.778Z"
-      }
-    ],
-    "security-guidance@claude-plugins-official": [
-      {
-        "scope": "user",
-        "installPath": "/home/mattniedelman/.claude/plugins/cache/claude-plugins-official/security-guidance/unknown",
-        "version": "unknown",
-        "installedAt": "2026-04-08T02:59:25.451Z",
-        "lastUpdated": "2026-04-08T02:59:25.451Z"
-      }
-    ],
-    "claude-md-management@claude-plugins-official": [
-      {
-        "scope": "user",
-        "installPath": "/home/mattniedelman/.claude/plugins/cache/claude-plugins-official/claude-md-management/1.0.0",
-        "version": "1.0.0",
-        "installedAt": "2026-04-08T03:36:52.462Z",
-        "lastUpdated": "2026-04-08T03:36:52.462Z"
-      }
-    ],
-    "claude-code-setup@claude-plugins-official": [
-      {
-        "scope": "user",
-        "installPath": "/home/mattniedelman/.claude/plugins/cache/claude-plugins-official/claude-code-setup/1.0.0",
-        "version": "1.0.0",
-        "installedAt": "2026-04-08T03:36:52.521Z",
-        "lastUpdated": "2026-04-08T03:36:52.521Z"
-      }
-    ],
-    "pr-review-toolkit@claude-plugins-official": [
-      {
-        "scope": "user",
-        "installPath": "/home/mattniedelman/.claude/plugins/cache/claude-plugins-official/pr-review-toolkit/unknown",
-        "version": "unknown",
-        "installedAt": "2026-04-08T03:36:52.556Z",
-        "lastUpdated": "2026-04-08T03:36:52.556Z"
-      }
-    ],
-    "agent-sdk-dev@claude-plugins-official": [
-      {
-        "scope": "user",
-        "installPath": "/home/mattniedelman/.claude/plugins/cache/claude-plugins-official/agent-sdk-dev/unknown",
-        "version": "unknown",
-        "installedAt": "2026-04-08T03:36:52.578Z",
-        "lastUpdated": "2026-04-08T03:36:52.578Z"
-      }
-    ],
-    "plugin-dev@claude-plugins-official": [
-      {
-        "scope": "user",
-        "installPath": "/home/mattniedelman/.claude/plugins/cache/claude-plugins-official/plugin-dev/unknown",
-        "version": "unknown",
-        "installedAt": "2026-04-08T03:36:52.617Z",
-        "lastUpdated": "2026-04-08T03:36:52.617Z"
-      }
-    ],
-    "hookify@claude-plugins-official": [
-      {
-        "scope": "user",
-        "installPath": "/home/mattniedelman/.claude/plugins/cache/claude-plugins-official/hookify/unknown",
-        "version": "unknown",
-        "installedAt": "2026-04-08T03:36:52.645Z",
-        "lastUpdated": "2026-04-08T03:36:52.645Z"
-      }
-    ],
-    "playground@claude-plugins-official": [
-      {
-        "scope": "user",
-        "installPath": "/home/mattniedelman/.claude/plugins/cache/claude-plugins-official/playground/unknown",
-        "version": "unknown",
-        "installedAt": "2026-04-08T03:36:52.666Z",
-        "lastUpdated": "2026-04-08T03:36:52.666Z"
-      }
-    ],
-    "gopls-lsp@claude-plugins-official": [
-      {
-        "scope": "user",
-        "installPath": "/home/mattniedelman/.claude/plugins/cache/claude-plugins-official/gopls-lsp/1.0.0",
-        "version": "1.0.0",
-        "installedAt": "2026-04-08T03:36:52.682Z",
-        "lastUpdated": "2026-04-08T03:36:52.682Z"
-      }
-    ],
-    "rust-analyzer-lsp@claude-plugins-official": [
-      {
-        "scope": "user",
-        "installPath": "/home/mattniedelman/.claude/plugins/cache/claude-plugins-official/rust-analyzer-lsp/1.0.0",
-        "version": "1.0.0",
-        "installedAt": "2026-04-08T03:36:52.704Z",
-        "lastUpdated": "2026-04-08T03:36:52.704Z"
-      }
-    ],
-    "jdtls-lsp@claude-plugins-official": [
-      {
-        "scope": "user",
-        "installPath": "/home/mattniedelman/.claude/plugins/cache/claude-plugins-official/jdtls-lsp/1.0.0",
-        "version": "1.0.0",
-        "installedAt": "2026-04-08T03:36:52.721Z",
-        "lastUpdated": "2026-04-08T03:36:52.721Z"
-      }
-    ],
-    "huggingface-skills@claude-plugins-official": [
-      {
-        "scope": "user",
-        "installPath": "/home/mattniedelman/.claude/plugins/cache/claude-plugins-official/huggingface-skills/1.0.1",
-        "version": "1.0.1",
-        "installedAt": "2026-04-08T03:36:53.192Z",
-        "lastUpdated": "2026-04-08T04:09:54.556Z",
-        "gitCommitSha": "bbac5e904d2e2abbf2ce65ba25cfb173cfaaf9c1"
-      }
-    ],
-    "mcp-server-dev@claude-plugins-official": [
-      {
-        "scope": "user",
-        "installPath": "/home/mattniedelman/.claude/plugins/cache/claude-plugins-official/mcp-server-dev/unknown",
-        "version": "unknown",
-        "installedAt": "2026-04-08T03:36:53.888Z",
-        "lastUpdated": "2026-04-08T03:36:53.888Z"
-      }
-    ],
     "agentic-actions-auditor@trailofbits": [
       {
         "scope": "user",
         "installPath": "/home/mattniedelman/.claude/plugins/cache/trailofbits/agentic-actions-auditor/1.2.0",
         "version": "1.2.0",
         "installedAt": "2026-04-08T04:40:42.739Z",
-        "lastUpdated": "2026-04-08T04:40:42.739Z",
+        "lastUpdated": "2026-05-05T17:33:29.054Z",
         "gitCommitSha": "d7f76b532d1e4c6e7757e04d25c99ab60dd5e32c"
       }
     ],
     "differential-review@trailofbits": [
       {
         "scope": "user",
-        "installPath": "/home/mattniedelman/.claude/plugins/cache/trailofbits/differential-review/1.0.0",
-        "version": "1.0.0",
+        "installPath": "/home/mattniedelman/.claude/plugins/cache/trailofbits/differential-review/1.1.0",
+        "version": "1.1.0",
         "installedAt": "2026-04-08T04:40:42.790Z",
-        "lastUpdated": "2026-04-08T04:40:42.790Z",
+        "lastUpdated": "2026-05-05T17:33:29.054Z",
         "gitCommitSha": "d7f76b532d1e4c6e7757e04d25c99ab60dd5e32c"
       }
     ],
@@ -210,7 +27,7 @@
         "installPath": "/home/mattniedelman/.claude/plugins/cache/trailofbits/git-cleanup/1.0.0",
         "version": "1.0.0",
         "installedAt": "2026-04-08T04:40:42.867Z",
-        "lastUpdated": "2026-04-08T04:40:42.867Z",
+        "lastUpdated": "2026-05-05T17:33:29.054Z",
         "gitCommitSha": "d7f76b532d1e4c6e7757e04d25c99ab60dd5e32c"
       }
     ],
@@ -220,27 +37,17 @@
         "installPath": "/home/mattniedelman/.claude/plugins/cache/trailofbits/insecure-defaults/1.0.0",
         "version": "1.0.0",
         "installedAt": "2026-04-08T04:40:42.889Z",
-        "lastUpdated": "2026-04-08T04:40:42.889Z",
-        "gitCommitSha": "d7f76b532d1e4c6e7757e04d25c99ab60dd5e32c"
-      }
-    ],
-    "semgrep-rule-creator@trailofbits": [
-      {
-        "scope": "user",
-        "installPath": "/home/mattniedelman/.claude/plugins/cache/trailofbits/semgrep-rule-creator/1.2.0",
-        "version": "1.2.0",
-        "installedAt": "2026-04-08T04:40:42.918Z",
-        "lastUpdated": "2026-04-08T04:40:42.918Z",
+        "lastUpdated": "2026-05-05T17:33:29.054Z",
         "gitCommitSha": "d7f76b532d1e4c6e7757e04d25c99ab60dd5e32c"
       }
     ],
     "sharp-edges@trailofbits": [
       {
         "scope": "user",
-        "installPath": "/home/mattniedelman/.claude/plugins/cache/trailofbits/sharp-edges/1.0.0",
-        "version": "1.0.0",
+        "installPath": "/home/mattniedelman/.claude/plugins/cache/trailofbits/sharp-edges/1.1.0",
+        "version": "1.1.0",
         "installedAt": "2026-04-08T04:40:42.945Z",
-        "lastUpdated": "2026-04-08T04:40:42.945Z",
+        "lastUpdated": "2026-05-05T17:33:29.054Z",
         "gitCommitSha": "d7f76b532d1e4c6e7757e04d25c99ab60dd5e32c"
       }
     ],
@@ -250,17 +57,7 @@
         "installPath": "/home/mattniedelman/.claude/plugins/cache/trailofbits/skill-improver/1.0.1",
         "version": "1.0.1",
         "installedAt": "2026-04-08T04:40:42.967Z",
-        "lastUpdated": "2026-04-08T04:40:42.967Z",
-        "gitCommitSha": "d7f76b532d1e4c6e7757e04d25c99ab60dd5e32c"
-      }
-    ],
-    "spec-to-code-compliance@trailofbits": [
-      {
-        "scope": "user",
-        "installPath": "/home/mattniedelman/.claude/plugins/cache/trailofbits/spec-to-code-compliance/1.1.0",
-        "version": "1.1.0",
-        "installedAt": "2026-04-08T04:40:42.992Z",
-        "lastUpdated": "2026-04-08T04:40:42.992Z",
+        "lastUpdated": "2026-05-05T17:33:29.054Z",
         "gitCommitSha": "d7f76b532d1e4c6e7757e04d25c99ab60dd5e32c"
       }
     ],
@@ -270,27 +67,7 @@
         "installPath": "/home/mattniedelman/.claude/plugins/cache/trailofbits/supply-chain-risk-auditor/1.0.0",
         "version": "1.0.0",
         "installedAt": "2026-04-08T04:40:43.023Z",
-        "lastUpdated": "2026-04-08T04:40:43.023Z",
-        "gitCommitSha": "d7f76b532d1e4c6e7757e04d25c99ab60dd5e32c"
-      }
-    ],
-    "trailmark@trailofbits": [
-      {
-        "scope": "user",
-        "installPath": "/home/mattniedelman/.claude/plugins/cache/trailofbits/trailmark/0.8.0",
-        "version": "0.8.0",
-        "installedAt": "2026-04-08T04:40:43.073Z",
-        "lastUpdated": "2026-04-08T04:40:43.073Z",
-        "gitCommitSha": "d7f76b532d1e4c6e7757e04d25c99ab60dd5e32c"
-      }
-    ],
-    "variant-analysis@trailofbits": [
-      {
-        "scope": "user",
-        "installPath": "/home/mattniedelman/.claude/plugins/cache/trailofbits/variant-analysis/1.0.0",
-        "version": "1.0.0",
-        "installedAt": "2026-04-08T04:40:43.110Z",
-        "lastUpdated": "2026-04-08T04:40:43.110Z",
+        "lastUpdated": "2026-05-05T17:33:29.054Z",
         "gitCommitSha": "d7f76b532d1e4c6e7757e04d25c99ab60dd5e32c"
       }
     ],
@@ -300,17 +77,17 @@
         "installPath": "/home/mattniedelman/.claude/plugins/cache/trailofbits/workflow-skill-design/1.0.1",
         "version": "1.0.1",
         "installedAt": "2026-04-08T04:40:43.140Z",
-        "lastUpdated": "2026-04-08T04:40:43.140Z",
+        "lastUpdated": "2026-05-05T17:33:29.054Z",
         "gitCommitSha": "d7f76b532d1e4c6e7757e04d25c99ab60dd5e32c"
       }
     ],
     "agnix@agentsys": [
       {
         "scope": "user",
-        "installPath": "/home/mattniedelman/.claude/plugins/cache/agentsys/agnix/1.0.0",
-        "version": "1.0.0",
+        "installPath": "/home/mattniedelman/.claude/plugins/cache/agentsys/agnix/0.22.1",
+        "version": "0.22.1",
         "installedAt": "2026-04-08T04:55:33.789Z",
-        "lastUpdated": "2026-04-08T04:55:33.789Z",
+        "lastUpdated": "2026-05-05T17:33:29.054Z",
         "gitCommitSha": "0089efa6778de15116cc45b6a678141cb2b6435b"
       }
     ],
@@ -320,7 +97,7 @@
         "installPath": "/home/mattniedelman/.claude/plugins/cache/agentsys/enhance/5.1.0",
         "version": "5.1.0",
         "installedAt": "2026-04-08T04:55:35.109Z",
-        "lastUpdated": "2026-04-09T21:11:35.391Z",
+        "lastUpdated": "2026-05-05T17:33:29.054Z",
         "gitCommitSha": "a836689a08544d9744a043c14c7586cec2ba55df"
       }
     ],
@@ -330,48 +107,8 @@
         "installPath": "/home/mattniedelman/.claude/plugins/cache/agentsys/perf/5.1.0",
         "version": "5.1.0",
         "installedAt": "2026-04-08T04:55:36.451Z",
-        "lastUpdated": "2026-04-09T21:11:35.405Z",
+        "lastUpdated": "2026-05-05T17:33:29.054Z",
         "gitCommitSha": "3ca215c709244b27de038039758cf290a5709b3d"
-      }
-    ],
-    "starship-claude@starship-claude": [
-      {
-        "scope": "user",
-        "installPath": "/home/mattniedelman/.claude/plugins/cache/starship-claude/starship-claude/1.0.0",
-        "version": "1.0.0",
-        "installedAt": "2026-04-08T13:36:41.906Z",
-        "lastUpdated": "2026-04-08T13:36:41.906Z",
-        "gitCommitSha": "b98dd31320efd65f7cfbb5d194fecc238c95e8bc"
-      }
-    ],
-    "cq@cq": [
-      {
-        "scope": "user",
-        "installPath": "/home/mattniedelman/.claude/plugins/cache/cq/cq/0.6.0",
-        "version": "0.6.0",
-        "installedAt": "2026-04-09T06:12:54.285Z",
-        "lastUpdated": "2026-04-09T06:12:54.285Z",
-        "gitCommitSha": "2b9926e5e671cf9101192b9dc04c335dc13d4fe3"
-      }
-    ],
-    "docker-skills@clouddrove-claude-skills": [
-      {
-        "scope": "user",
-        "installPath": "/home/mattniedelman/.claude/plugins/cache/clouddrove-claude-skills/docker-skills/0.1.0",
-        "version": "0.1.0",
-        "installedAt": "2026-04-09T22:20:05.501Z",
-        "lastUpdated": "2026-04-09T22:20:05.501Z",
-        "gitCommitSha": "bff2cb97380e5aa357faa7bd8193bcbf02c82595"
-      }
-    ],
-    "k8s-skills@clouddrove-claude-skills": [
-      {
-        "scope": "user",
-        "installPath": "/home/mattniedelman/.claude/plugins/cache/clouddrove-claude-skills/k8s-skills/0.1.0",
-        "version": "0.1.0",
-        "installedAt": "2026-04-09T22:20:06.667Z",
-        "lastUpdated": "2026-04-09T22:20:06.667Z",
-        "gitCommitSha": "bff2cb97380e5aa357faa7bd8193bcbf02c82595"
       }
     ],
     "ai@pydantic-skills": [
@@ -380,29 +117,158 @@
         "installPath": "/home/mattniedelman/.claude/plugins/cache/pydantic-skills/ai/0.1.0",
         "version": "0.1.0",
         "installedAt": "2026-04-10T16:53:07.776Z",
-        "lastUpdated": "2026-04-10T16:53:07.776Z",
+        "lastUpdated": "2026-05-05T17:33:29.054Z",
         "gitCommitSha": "608b3c157715c5cbc7205de2999f3a5aba8ac130"
       }
     ],
     "beads@beads-marketplace": [
       {
         "scope": "user",
-        "installPath": "/home/mattniedelman/.claude/plugins/cache/beads-marketplace/beads/1.0.0",
-        "version": "1.0.0",
+        "installPath": "/home/mattniedelman/.claude/plugins/cache/beads-marketplace/beads/1.0.3",
+        "version": "1.0.3",
         "installedAt": "2026-04-10T20:52:26.675Z",
-        "lastUpdated": "2026-04-10T20:52:26.675Z",
+        "lastUpdated": "2026-05-05T17:33:29.054Z",
         "gitCommitSha": "2450c83b4c8326d4ed7faf45250e3c4a504ccfa3"
       }
     ],
-    "spec@imprivata": [
+    "skypilot@skypilot": [
       {
-        "scope": "local",
-        "projectPath": "/mnt/2b20906f-1847-4c8e-94e4-b841290bddc3/imprivata/ai/marketplace",
-        "installPath": "/home/mattniedelman/.claude/plugins/cache/imprivata/spec/0.2.0",
+        "scope": "user",
+        "installPath": "/home/mattniedelman/.claude/plugins/cache/skypilot/skypilot/1.0.0",
+        "version": "1.0.0",
+        "installedAt": "2026-04-28T14:32:30.142Z",
+        "lastUpdated": "2026-05-05T17:33:29.054Z",
+        "gitCommitSha": "02c2d0d70daf92d2d49d961c0ac761caa23c7989"
+      }
+    ],
+    "audit-project@agentsys": [
+      {
+        "scope": "user",
+        "installPath": "/home/mattniedelman/.claude/plugins/cache/agentsys/audit-project/5.1.0",
+        "version": "5.1.0",
+        "installedAt": "2026-04-28T17:31:53.551Z",
+        "lastUpdated": "2026-05-05T17:33:29.054Z",
+        "gitCommitSha": "f703facec38765b6fd8cb5a2076c98bf14e5998e"
+      }
+    ],
+    "can-i-help@agentsys": [
+      {
+        "scope": "user",
+        "installPath": "/home/mattniedelman/.claude/plugins/cache/agentsys/can-i-help/0.1.1",
+        "version": "0.1.1",
+        "installedAt": "2026-04-28T17:31:54.385Z",
+        "lastUpdated": "2026-05-05T17:33:29.054Z",
+        "gitCommitSha": "f1364158deb359b581d7113a54e8a6aa7a6d8679"
+      }
+    ],
+    "drift-detect@agentsys": [
+      {
+        "scope": "user",
+        "installPath": "/home/mattniedelman/.claude/plugins/cache/agentsys/drift-detect/5.1.0",
+        "version": "5.1.0",
+        "installedAt": "2026-04-28T17:31:56.935Z",
+        "lastUpdated": "2026-05-05T17:33:29.054Z",
+        "gitCommitSha": "576aca37402068aef175c8a6002584e19cb6ea74"
+      }
+    ],
+    "learn@agentsys": [
+      {
+        "scope": "user",
+        "installPath": "/home/mattniedelman/.claude/plugins/cache/agentsys/learn/5.1.0",
+        "version": "5.1.0",
+        "installedAt": "2026-04-28T17:31:59.838Z",
+        "lastUpdated": "2026-05-06T17:44:38.246Z",
+        "gitCommitSha": "b3025d376a83841078f3ab5cf53b62c6960e46c3"
+      }
+    ],
+    "onboard@agentsys": [
+      {
+        "scope": "user",
+        "installPath": "/home/mattniedelman/.claude/plugins/cache/agentsys/onboard/0.1.1",
+        "version": "0.1.1",
+        "installedAt": "2026-04-28T17:32:00.661Z",
+        "lastUpdated": "2026-05-05T17:33:29.054Z",
+        "gitCommitSha": "6c2e47e567aac6249a0df6d15491cbcd42ce7717"
+      }
+    ],
+    "repo-intel@agentsys": [
+      {
+        "scope": "user",
+        "installPath": "/home/mattniedelman/.claude/plugins/cache/agentsys/repo-intel/0.2.0",
         "version": "0.2.0",
-        "installedAt": "2026-04-10T21:35:05.361Z",
-        "lastUpdated": "2026-04-10T21:35:05.361Z",
-        "gitCommitSha": "ca2b48ee22960caa3ae7a1d1b6eccb257398c927"
+        "installedAt": "2026-04-28T17:32:01.578Z",
+        "lastUpdated": "2026-05-05T17:33:29.054Z",
+        "gitCommitSha": "100dbff1969097af5e6a2ede7a2a79400aa0e60f"
+      }
+    ],
+    "skillers@agentsys": [
+      {
+        "scope": "user",
+        "installPath": "/home/mattniedelman/.claude/plugins/cache/agentsys/skillers/0.1.0",
+        "version": "0.1.0",
+        "installedAt": "2026-04-28T17:32:02.696Z",
+        "lastUpdated": "2026-05-05T17:33:29.054Z",
+        "gitCommitSha": "e1c1a9b752c0d20a0a1f83747c26e5dea195b5ae"
+      }
+    ],
+    "hindsight-memory@hindsight": [
+      {
+        "scope": "user",
+        "installPath": "/home/mattniedelman/.claude/plugins/cache/hindsight/hindsight-memory/0.4.0",
+        "version": "0.4.0",
+        "installedAt": "2026-04-29T15:27:45.866Z",
+        "lastUpdated": "2026-05-05T17:33:29.054Z",
+        "gitCommitSha": "89c34c31357ecd80e2ab2ed3244d9e37515cb5f8"
+      }
+    ],
+    "sync-docs@agentsys": [
+      {
+        "scope": "user",
+        "installPath": "/home/mattniedelman/.claude/plugins/cache/agentsys/sync-docs/5.1.0",
+        "version": "5.1.0",
+        "installedAt": "2026-05-06T13:57:39.369Z",
+        "lastUpdated": "2026-05-06T13:57:39.369Z",
+        "gitCommitSha": "410e06739da101583b7238669f4acad7f5aea7ab"
+      }
+    ],
+    "variant-analysis@trailofbits": [
+      {
+        "scope": "user",
+        "installPath": "/home/mattniedelman/.claude/plugins/cache/trailofbits/variant-analysis/1.0.0",
+        "version": "1.0.0",
+        "installedAt": "2026-05-08T15:02:28.188Z",
+        "lastUpdated": "2026-05-08T15:02:28.188Z",
+        "gitCommitSha": "a56045e9ae00b3506cacefea0f672aab0a1a6e3c"
+      }
+    ],
+    "ask-questions-if-underspecified@trailofbits": [
+      {
+        "scope": "user",
+        "installPath": "/home/mattniedelman/.claude/plugins/cache/trailofbits/ask-questions-if-underspecified/1.0.1",
+        "version": "1.0.1",
+        "installedAt": "2026-05-08T15:30:50.801Z",
+        "lastUpdated": "2026-05-08T15:30:50.801Z",
+        "gitCommitSha": "a56045e9ae00b3506cacefea0f672aab0a1a6e3c"
+      }
+    ],
+    "audit-context-building@trailofbits": [
+      {
+        "scope": "user",
+        "installPath": "/home/mattniedelman/.claude/plugins/cache/trailofbits/audit-context-building/1.1.0",
+        "version": "1.1.0",
+        "installedAt": "2026-05-08T15:30:50.846Z",
+        "lastUpdated": "2026-05-08T15:30:50.846Z",
+        "gitCommitSha": "a56045e9ae00b3506cacefea0f672aab0a1a6e3c"
+      }
+    ],
+    "trailmark@trailofbits": [
+      {
+        "scope": "user",
+        "installPath": "/home/mattniedelman/.claude/plugins/cache/trailofbits/trailmark/0.8.1",
+        "version": "0.8.1",
+        "installedAt": "2026-05-08T15:30:50.912Z",
+        "lastUpdated": "2026-05-08T15:30:50.912Z",
+        "gitCommitSha": "a56045e9ae00b3506cacefea0f672aab0a1a6e3c"
       }
     ]
   }

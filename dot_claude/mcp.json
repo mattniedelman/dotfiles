@@ -56,14 +56,6 @@
         "context7"
       ]
     },
-    "think-strategies": {
-      "command": "thv",
-      "args": [
-        "proxy",
-        "stdio",
-        "think-strategies"
-      ]
-    },
     "atlassian": {
       "command": "thv",
       "args": [

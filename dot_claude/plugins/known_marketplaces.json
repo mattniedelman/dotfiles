@@ -1,35 +1,12 @@
 {
-  "claude-plugins-official": {
-    "source": {
-      "source": "github",
-      "repo": "anthropics/claude-plugins-official"
-    },
-    "installLocation": "/home/mattniedelman/.claude/plugins/marketplaces/claude-plugins-official",
-    "lastUpdated": "2026-04-09T21:52:35.820Z"
-  },
-  "claude-powerline": {
-    "source": {
-      "source": "github",
-      "repo": "Owloops/claude-powerline"
-    },
-    "installLocation": "/home/mattniedelman/.claude/plugins/marketplaces/claude-powerline",
-    "lastUpdated": "2026-04-13T15:12:06.380Z"
-  },
-  "context-mode": {
-    "source": {
-      "source": "github",
-      "repo": "mksglu/context-mode"
-    },
-    "installLocation": "/home/mattniedelman/.claude/plugins/marketplaces/context-mode",
-    "lastUpdated": "2026-04-11T04:00:29.440Z"
-  },
   "trailofbits": {
     "source": {
       "source": "github",
       "repo": "trailofbits/skills"
     },
     "installLocation": "/home/mattniedelman/.claude/plugins/marketplaces/trailofbits",
-    "lastUpdated": "2026-04-13T15:18:22.910Z"
+    "lastUpdated": "2026-05-13T15:48:00.665Z",
+    "autoUpdate": true
   },
   "agentsys": {
     "source": {
@@ -37,31 +14,8 @@
       "repo": "agent-sh/agentsys"
     },
     "installLocation": "/home/mattniedelman/.claude/plugins/marketplaces/agentsys",
-    "lastUpdated": "2026-04-13T15:18:24.333Z"
-  },
-  "starship-claude": {
-    "source": {
-      "source": "github",
-      "repo": "martinemde/starship-claude"
-    },
-    "installLocation": "/home/mattniedelman/.claude/plugins/marketplaces/starship-claude",
-    "lastUpdated": "2026-04-09T20:00:46.425Z"
-  },
-  "cq": {
-    "source": {
-      "source": "github",
-      "repo": "mozilla-ai/cq"
-    },
-    "installLocation": "/home/mattniedelman/.claude/plugins/marketplaces/cq",
-    "lastUpdated": "2026-04-09T06:12:47.914Z"
-  },
-  "clouddrove-claude-skills": {
-    "source": {
-      "source": "github",
-      "repo": "clouddrove/claude-skills"
-    },
-    "installLocation": "/home/mattniedelman/.claude/plugins/marketplaces/clouddrove-claude-skills",
-    "lastUpdated": "2026-04-09T22:19:49.235Z"
+    "lastUpdated": "2026-05-13T15:48:01.479Z",
+    "autoUpdate": true
   },
   "pydantic-skills": {
     "source": {
@@ -69,7 +23,7 @@
       "repo": "pydantic/skills"
     },
     "installLocation": "/home/mattniedelman/.claude/plugins/marketplaces/pydantic-skills",
-    "lastUpdated": "2026-04-10T16:52:55.694Z"
+    "lastUpdated": "2026-04-28T18:02:02.703Z"
   },
   "beads-marketplace": {
     "source": {
@@ -77,14 +31,30 @@
       "repo": "gastownhall/beads"
     },
     "installLocation": "/home/mattniedelman/.claude/plugins/marketplaces/beads-marketplace",
-    "lastUpdated": "2026-04-10T19:49:27.377Z"
+    "lastUpdated": "2026-05-06T13:53:59.853Z"
   },
-  "imprivata": {
+  "skypilot": {
     "source": {
-      "source": "directory",
-      "path": "/mnt/2b20906f-1847-4c8e-94e4-b841290bddc3/imprivata/ai/marketplace/plugins"
+      "source": "github",
+      "repo": "skypilot-org/skypilot"
     },
-    "installLocation": "/mnt/2b20906f-1847-4c8e-94e4-b841290bddc3/imprivata/ai/marketplace/plugins",
-    "lastUpdated": "2026-04-10T21:34:58.510Z"
+    "installLocation": "/home/mattniedelman/.claude/plugins/marketplaces/skypilot",
+    "lastUpdated": "2026-04-28T18:02:05.576Z"
+  },
+  "hindsight": {
+    "source": {
+      "source": "github",
+      "repo": "vectorize-io/hindsight"
+    },
+    "installLocation": "/home/mattniedelman/.claude/plugins/marketplaces/hindsight",
+    "lastUpdated": "2026-04-29T15:27:45.323Z"
+  },
+  "knowledge-work-plugins": {
+    "source": {
+      "source": "github",
+      "repo": "anthropics/knowledge-work-plugins"
+    },
+    "installLocation": "/home/mattniedelman/.claude/plugins/marketplaces/knowledge-work-plugins",
+    "lastUpdated": "2026-05-04T19:57:00.135Z"
   }
 }
