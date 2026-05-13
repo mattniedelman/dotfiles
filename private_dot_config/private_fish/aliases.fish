@@ -31,17 +31,7 @@ end
 # ============================================================================
 # Git Aliases
 # ============================================================================
-# cdr: cd to git root, preserving symlink paths in PWD
-# git rev-parse --show-toplevel returns the real path, so we substitute
-# the resolved portion of PWD with the original PWD prefix to keep symlinks
-function cdr
-    set -l toplevel (git rev-parse --show-toplevel 2>/dev/null)
-    or return 1
-    set -l real_pwd (realpath $PWD)
-    # If PWD contains a symlink, substitute the real path portion with the symlink path
-    set -l target (string replace $real_pwd $PWD $toplevel)
-    cd $target
-end
+# cdr: cd to git root (see functions/cdr.fish)
 
 # delta: better git diffs (configured via .gitconfig, not aliased)
 
@@ -62,6 +52,9 @@ alias sg='sg --config $AST_GREP_CONFIG'
 alias tf='terraform'
 
 # ============================================================================
-# Kitty Terminal
+# beads_rust (br): replaces legacy bd (steveyegge/beads)
 # ============================================================================
-alias icat="kitty +kitten icat"
+# `bd` is a symlink at ~/.local/bin/bd -> br (works from every shell including
+# non-interactive ones and Claude Code's bash). Legacy bd binary preserved at
+# ~/.local/bin/bd-legacy-v1.0.3. Commands that existed only in the old bd
+# (`dolt`, `prime`, `remember`, `memories`) error loudly -- intentional.

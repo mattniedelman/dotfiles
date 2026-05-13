@@ -29,6 +29,45 @@
 .augment/bundles/
 .augment/specs/
 
+# Claude Code - auto-generated/runtime data
+.claude/.git/
+.claude/.gitignore
+.claude/.beads/
+.claude/.ralph/
+.claude/.serena/
+.claude/.claude/
+.claude/backups/
+.claude/cache/
+.claude/context-mode/
+.claude/debug/
+.claude/downloads/
+.claude/file-history/
+.claude/headroom_memory.db
+.claude/headroom_memory_vectors.db
+.claude/history.jsonl
+.claude/hook-approvals.log
+.claude/hooks/logs/
+.claude/openspec/
+.claude/paste-cache/
+.claude/plans/
+.claude/powerline/
+.claude/projects/
+.claude/security_warnings_state_*
+.claude/session-env/
+.claude/sessions/
+.claude/settings.json.bak
+.claude/shell-snapshots/
+.claude/stats-cache.json
+.claude/tasks/
+.claude/telemetry/
+.claude/usage-data/
+
+# Claude Code - plugin runtime (regenerated from manifests)
+.claude/plugins/cache/
+.claude/plugins/data/
+.claude/plugins/marketplaces/
+.claude/plugins/install-counts-cache.json
+
 # Neovim - generated/state
 .config/nvim/lazy-lock.json
 .config/nvim/.luarc.json

@@ -2,40 +2,96 @@
 min_version = "2024.11.0"
 
 [tools]
-python = { version = '3.13', install_env = { MISE_PYTHON_COMPILE = "0", MISE_PYTHON_PRECOMPILED_FLAVOR = "freethreaded+pgo-full" } }
+python = { version = '3.13'}
 
-# Modern CLI tool replacements (prebuilt binaries - faster than cargo compile)
-bottom = "latest"          # Modern top/htop replacement
-dust = "latest"            # Modern du replacement
-duf = "latest"             # Modern df replacement (Go-based)
-eza = "latest"             # Modern ls replacement (fork of exa)
-"aqua:dalance/procs" = "latest"  # Modern ps replacement
+
 "aqua:BurntSushi/xsv" = "latest"  # CSV toolkit
-
+"aqua:dalance/procs" = "latest"  # Modern ps replacement
+"aqua:mikefarah/yq" = "4.47.2"
+"cargo:agnix-cli" = "latest"
+"cargo:cbfmt" = "latest"
+"cargo:https://github.com/razziel89/mdslw" = "branch:main"
+"cargo:https://github.com/zellij-org/zellij" = { version = "branch:main", crate = "zellij", locked = false }
+"cargo:https://github.com/Dicklesworthstone/aadc" = "branch:main"
+"cargo:lychee" = "latest"
+"cargo:workmux" = "latest"
+"github:aaronsb/agent-ways" = "latest"
+"github:betterleaks/betterleaks" = "latest"
+"github:dlvhdr/diffnav" = "latest"
+"github:dolthub/dolt" = "latest"
+"github:joshmedeski/sesh" = "latest"
+"github:rtk-ai/rtk" = "latest"
+"go:github.com/mattn/efm-langserver" = "latest"  # General-purpose language server
+"npm:@arizeai/phoenix-cli" = "latest"
+"npm:@augmentcode/auggie" = "latest"
+"npm:@contextlint/cli" = "latest"
+"npm:@cyanheads/git-mcp-server" = "latest"
+"npm:@devcontainers/cli" = "latest"
+"npm:@doist/todoist-cli" = "latest"
+"npm:@fission-ai/openspec" = "latest"
+"npm:@modelcontextprotocol/server-filesystem" = "latest"
+"npm:@modelcontextprotocol/server-sequential-thinking" = "latest"
+"npm:@openai/codex" = "latest"
+"npm:actions-up" = "latest"
+"npm:agentsys" = "latest"
+"npm:jscpd" = "latest"  # Copy-paste detection
+"npm:opencode-ai" = "latest"
+"npm:promptfoo" = "latest"
+"npm:rulesync" = "latest"
+"npm:think-strategies" = "latest"
+"pipx:aws-sso-util" = "latest"
+"pipx:basedpyright" = "latest"  # Enhanced fork of pyright with additional features
+"pipx:basic-memory" = "latest"
+"pipx:crawl4ai" = "latest"
+"pipx:deply" = "latest"
+"pipx:desloppify" = "latest"
+"pipx:hindsight-embed" = "latest"
+"pipx:openshell" = "latest"
+"pipx:ruff" = "latest"
+"pipx:sshuttle" = "latest"
+"pipx:ty" = "latest"
+"pipx:yamllint" = "latest"      # YAML linter
+"pipx:zuban" = "latest"
+"ubi:ByteNess/aws-vault" = "latest"
+"ubi:zippoxer/recall" = "latest"
 1password = "latest"
 act = "latest"
 action-validator = "latest"
 actionlint = "latest"
 amazon-ecr-credential-helper = "latest"
+ast-grep = "latest"
 atuin = "latest"
 aws-cli = "2"              # Pinned to major version for stability
+aws-sigv4-proxy = "1.11.1"
 bat = "latest"
 bat-extras = "latest"
+bottom = "latest"          # Modern top/htop replacement
+bun = "latest"
+checkov = "latest"              # IaC security scanner
 chezmoi = "latest"
 cue = "latest"
 dagger = "latest"
+delta = "latest"
 difftastic = "latest"
 direnv = "latest"
 docker-compose = "latest"
+dotnet = "latest"
 dua = "latest"
 duckdb = "latest"
+duf = "latest"             # Modern df replacement (Go-based)
+dust = "latest"            # Modern du replacement
+eza = "latest"             # Modern ls replacement (fork of exa)
 fd = "latest"
 fzf = "latest"
-television = "latest"      # Modern fuzzy finder (tv)
+ghalint = "latest"
 github-cli = "latest"
+gitleaks = "latest"
 glow = "latest"
 go = 'latest'
+grype = "latest"
+hadolint = "latest"             # Dockerfile linter
 helm = "3"                 # Pinned to major version for stability
+hk = "latest"
 java = "17.0.2"
 jq = "latest"
 k3d = "latest"
@@ -43,105 +99,54 @@ kube-capacity = "latest"
 kube-linter = "latest"
 kube-score = "latest"
 kubectl = "1.31"           # Pinned - should match cluster version
+kubectx = "latest"
 kubesec = "latest"
-loki-logcli = "latest"
 lua = "latest"
 make = "latest"
+markdownlint-cli2 = "latest"
+maven = "latest"
 neovim = "latest"
 node = "latest"
 pandoc = "latest"
 patat = "latest"
-
+pinact = "latest"
+pkl = "latest"
+podman = "latest"
 pre-commit = "latest"
+pulumi = "latest"
+rclone = "latest"
 ripgrep = "latest"
 ripgrep-all = "latest"
+rumdl = "latest"
 rust = { version = "latest", targets = "wasm32-wasip1" }
-
+semgrep = "latest"
 shellcheck = "latest"
+shfmt = "latest"
 skaffold = "latest"
 sqlite = "latest"
+swift = "latest"
+syft = "latest"
+television = "latest"      # Modern fuzzy finder (tv)
+terraform = "latest"
+terrascan = "latest"            # Terraform security (deprecated upstream)
+tflint = "latest"               # Terraform linter
+tmux = "latest"
 trivy = "latest"
+trufflehog = "latest"
+typos = "latest"
 usage = "latest"
 uv = "latest"
-zoxide = "latest"
-
-"npm:@augmentcode/auggie" = "latest"
-"npm:aicommits" = "develop"
-"npm:@modelcontextprotocol/server-filesystem" = "latest"
-"npm:@modelcontextprotocol/server-sequential-thinking" = "latest"
-"npm:jscpd" = "latest"  # Copy-paste detection
-grype = "latest"
-trufflehog = "latest"
-
-# Linters for efm-langserver (with team configs)
-checkov = "latest"              # IaC security scanner
-tflint = "latest"               # Terraform linter
-terrascan = "latest"            # Terraform security (deprecated upstream)
-hadolint = "latest"             # Dockerfile linter
-"pipx:yamllint" = "latest"      # YAML linter
-"npm:markdownlint-cli2" = "latest"  # Markdown linter (markdownlint-cli2 preferred)
-"go:github.com/mattn/efm-langserver" = "latest"  # General-purpose language server
-
-# Python tools via pipx
-"pipx:zuban" = "latest"
-"pipx:basedpyright" = "latest"  # Enhanced fork of pyright with additional features
-"pipx:aws-sso-util" = "latest"
-"pipx:ruff" = "latest"
-"pipx:sshuttle" = "latest"
-# Removed duplicate pyright - basedpyright provides superset functionality
-delta = "latest"
-podman = "latest"
-kubectx = "latest"
-ast-grep = "latest"
+vale = "latest"
 yamlfmt = "latest"
-"npm:doctoc" = "latest"
-"pipx:crawl4ai" = "latest"
-"cargo:https://github.com/razziel89/mdslw" = "branch:main"
-"pipx:ty" = "latest"
-aws-sigv4-proxy = "1.11.1"
-"cargo:lychee" = "latest"
-"cargo:cbfmt" = "latest"
-"go:github.com/StacklokLabs/mkp/cmd/server" = "latest"
-"ubi:ByteNess/aws-vault" = "latest"
-syft = "latest"
 zizmor = "latest"
-"aqua:mikefarah/yq" = "4.47.2"
-"go:github.com/davetashner/stringer/cmd/stringer" = "latest"
-"go:github.com/steveyegge/gastown/cmd/gt" = "latest"
-"npm:@cyanheads/git-mcp-server" = "latest"
-pulumi = "latest"
-"npm:puppeteer" = "latest"
-"pipx:deply" = "latest"
-"github:dlvhdr/diffnav" = "latest"
-rclone = "latest"
-# Build zellij from git main (0.44.0-dev) - requires workmux Zellij backend.
-# Switch back to `zellij = "latest"` once 0.44 ships a stable release.
-"cargo:https://github.com/zellij-org/zellij" = { version = "branch:main", crate = "zellij", locked = false }
-bun = "latest"
-maven = "latest"
-"npm:rulesync" = "latest"
-"ubi:zippoxer/recall" = "latest"
-"github:rtk-ai/rtk" = "latest"
-"github:mvdan/sh" = "latest"
-"npm:ccstatusline" = "latest"
-"npm:@owloops/claude-powerline" = "latest"
-terraform = "latest"
-dotnet = "latest"
-swift = "latest"
-"npm:lat.md" = "latest"
-"npm:opencode-ai" = "latest"
-"github:joshmedeski/sesh" = "latest"
-tmux = "latest"
-"npm:think-strategies" = "latest"
-semgrep = "latest"
-"pipx:desloppify" = "latest"
-"npm:@fission-ai/openspec" = "latest"
-"github:dolthub/dolt" = "latest"
-"pipx:basic-memory" = "latest"
-"npm:lean-ctx-bin" = "latest"
-"github:betterleaks/betterleaks" = "latest"
+zoxide = "latest"
+"npm:gsd-pi" = "latest"
+"npm:confluence-cli" = "latest"
+"pipx:cocoindex-code" = {version = "latest", extras = "full", uvx_args = "--with boto3"}
+"github:agavra/tuicr" = "latest"
 
-
+[env]
+HK_MISE = "1"
 
 [settings]
 # plugins can read the versions files used by other version managers (if enabled by the plugin)
@@ -165,7 +170,7 @@ not_found_auto_install = true # automatically install missing tools when command
 task_output = "prefix"        # see Tasks Runner for more information
 paranoid = false              # see MISE_PARANOID
 
-disable_default_shorthands = false # disable the default shorthands, see `MISE_DISABLE_DEFAULT_SHORTHANDS`
+# disable_default_shorthands = false # disable the default shorthands, see `MISE_DISABLE_DEFAULT_SHORTHANDS`
 
 env_file = '.env' # load env vars from a dotenv file, see `MISE_ENV_FILE`
 
@@ -177,7 +182,7 @@ status = { missing_tools = "if_other_versions_installed", show_env = false, show
 # Enable reading native version files for these tools (.nvmrc, .python-version, etc.)
 idiomatic_version_file_enable_tools = ["python", "node", "go", "java"]
 
-# Common tasks for mise management
+
 [tasks.upgrade]
 description = "Upgrade all tools to latest versions"
 run = "mise upgrade --bump"

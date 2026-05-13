@@ -1,0 +1,69 @@
+[init]
+	defaultBranch = main
+[user]
+	name = "Matt Niedelman"
+	email = matt.niedelman@imprivata.com
+	signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC5paKHoAWPxcczpD0Y4i62rK6aGuNlkJ+MSlfiMG7rS
+[commit]
+	gpgsign = true
+[gpg]
+	format = ssh
+[gpg "ssh"]
+	program = /opt/1Password/op-ssh-sign
+	allowedSignersFile = /home/mattniedelman/.ssh/allowed_signers
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+
+[merge]
+	tool = "nvim"
+	conflictStyle = zdiff3
+
+[mergetool]
+	keepBackup = false
+	prompt = false
+
+[mergetool "nvim"]
+	cmd = "nvim -d -c \"wincmd l\" -c \"norm ]c\" \"$LOCAL\" \"$MERGED\" \"$REMOTE\""
+[core]
+	editor = nvim
+	autocrlf = input
+	excludesfile = /home/mattniedelman/.config/git/ignore
+	pager = delta
+	hooksPath = /home/mattniedelman/.config/git/hooks
+[interactive]
+	diffFilter = delta --color-only
+[diff]
+	colorMoved = default
+	algorithm = histogram
+[delta]
+	navigate = true
+	side-by-side = true
+	line-numbers = true
+	syntax-theme = Dracula
+[alias]
+	dft = "!GIT_EXTERNAL_DIFF=difft git diff"
+	co = checkout
+	br = branch
+	ci = commit
+	st = status
+[pull]
+	rebase = true
+
+[diff "python"]
+	xfuncname = ^[ \t]*((class|(async[ \t]+)?def)[ \t].*)$
+[credential]
+	helper = !/home/mattniedelman/.local/share/mise/shims/gh auth git-credential
+[beads]
+	role = contributor
+[credential "https://github.com"]
+	helper = !/home/mattniedelman/.local/share/mise/shims/gh auth git-credential
+[credential "https://gist.github.com"]
+	helper = !/home/mattniedelman/.local/share/mise/shims/gh auth git-credential
+[push]
+	useForceIfIncludes = true
+[trace2]
+	eventTarget = af_unix:stream:/home/mattniedelman/.git-ai/internal/daemon/trace2.sock
+	eventNesting = 10

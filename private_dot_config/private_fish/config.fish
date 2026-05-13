@@ -22,6 +22,9 @@ set -gx AWS_DEFAULT_SSO_REGION us-east-2
 # Note, this is for a local instance of obsidian
 set -gx OBSIDIAN_REST_API_KEY f5d4c30b08affc018b35b77440b57087aba42c76200ae08e3bff4608d5493311
 
+# Gas Town
+set -gx GT_TOWN_ROOT ~/gt
+
 # SSH Agent - prefer 1Password, fallback to system agent
 if test -S ~/.1password/agent.sock
     set -gx SSH_AUTH_SOCK ~/.1password/agent.sock
@@ -37,7 +40,7 @@ set -l valid_paths
 
 # Standard user paths
 # Note: ~/.cargo/bin is omitted here -- mise manages rust and adds it via RUSTUP_TOOLCHAIN
-for p in $HOME/bin $HOME/.krew/bin $HOME/.local/bin $HOME/.kubescape/bin
+for p in $HOME/bin $HOME/.krew/bin $HOME/.local/bin $HOME/.kubescape/bin $HOME/.toolhive/bin $HOME/.git-ai/bin
     test -d $p; and set -a valid_paths $p
 end
 
@@ -53,14 +56,8 @@ test (count $valid_paths) -gt 0; and fish_add_path --path $valid_paths
 # Interactive Session Setup
 # ============================================================================
 if status is-interactive
-    # Fetch secrets before exec zellij so they're inherited by all panes/splits
-    if not set -q AWS_BEARER_TOKEN_BEDROCK
-        set -gx AWS_BEARER_TOKEN_BEDROCK (op read "op://imprivata/bedrock-dev/credential")
-    end
-
-    # Auto-start zellij in Ghostty only
-    if set -q GHOSTTY_RESOURCES_DIR; and not set -q ZELLIJ; and command -q zellij
-        exec zellij
+    if not set -q GH_TOKEN
+        set -gx GH_TOKEN (gh auth token 2>/dev/null)
     end
 
     # Suppress greeting
@@ -72,6 +69,11 @@ if status is-interactive
 
     # Mise (development environment manager)
     command -q mise; and mise activate fish | source
+
+    # Auto-start zellij in Ghostty only (after mise so the correct version is used)
+    if set -q GHOSTTY_RESOURCES_DIR; and not set -q ZELLIJ; and command -q zellij
+        exec zellij
+    end
 
     # Oh My Posh prompt
     command -q oh-my-posh; and oh-my-posh init fish --config ~/.config/ohmyposh/claude.json | source
@@ -118,103 +120,12 @@ if status is-interactive
     test -f ~/.config/fish/local.fish; and source ~/.config/fish/local.fish
 end
 
-# Added by ToolHive UI - do not modify this block
-fish_add_path -g $HOME/.toolhive/bin
-# End ToolHive UI
+# Added by LM Studio CLI (lms)
+set -gx PATH $PATH /home/mattniedelman/.lmstudio/bin
+# End of LM Studio CLI section
 
-# Vikunja task management aliases
-function todo
-    switch $argv[1]
-        case check done
-            vja toggle $argv[2..-1]
-        case add new
-            vja add $argv[2..-1]
-        case ls list
-            vja ls $argv[2..-1]
-        case show
-            vja show $argv[2..-1]
-        case edit modify
-            vja edit $argv[2..-1]
-        case delete rm
-            vja delete $argv[2..-1]
-        case open
-            vja open $argv[2..-1]
-        case '*'
-            vja $argv
-    end
-end
-
-# Beads - use systemd-managed shared Dolt server, never auto-start
-set -gx BEADS_DOLT_AUTO_START 0
-
-# --- Gas Town Integration ---
-set -gx GT_TOWN_ROOT ~/gt
-
-# Generate completions if not present
-if not test -f ~/.config/fish/completions/gt.fish
-    gt completion fish >~/.config/fish/completions/gt.fish 2>/dev/null
-end
-# --- End Gas Town ---
-#
-
-# lean-ctx shell hook -- transparent CLI compression (90+ patterns)
-set -g _lean_ctx_cmds git npm pnpm yarn cargo docker docker-compose kubectl gh pip pip3 ruff go golangci-lint eslint prettier tsc ls find grep curl wget
-
-function _lc
-    if set -q LEAN_CTX_DISABLED; or not isatty stdout
-        command $argv
-        return
-    end
-    '/home/mattniedelman/.local/share/mise/shims/lean-ctx' -c $argv
-    set -l _lc_rc $status
-    if test $_lc_rc -eq 127 -o $_lc_rc -eq 126
-        command $argv
-    else
-        return $_lc_rc
-    end
-end
-
-function lean-ctx-on
-    for _lc_cmd in $_lean_ctx_cmds
-        alias $_lc_cmd '_lc '$_lc_cmd
-    end
-    alias k '_lc kubectl'
-    set -gx LEAN_CTX_ENABLED 1
-    echo 'lean-ctx: ON'
-end
-
-function lean-ctx-off
-    for _lc_cmd in $_lean_ctx_cmds
-        functions --erase $_lc_cmd 2>/dev/null
-        true
-    end
-    functions --erase k 2>/dev/null
-    true
-    set -e LEAN_CTX_ENABLED
-    echo 'lean-ctx: OFF'
-end
-
-function lean-ctx-raw
-    set -lx LEAN_CTX_RAW 1
-    command $argv
-end
-
-function lean-ctx-status
-    if set -q LEAN_CTX_DISABLED
-        echo 'lean-ctx: DISABLED (LEAN_CTX_DISABLED is set)'
-    else if set -q LEAN_CTX_ENABLED
-        echo 'lean-ctx: ON'
-    else
-        echo 'lean-ctx: OFF'
-    end
-end
-
-if not set -q LEAN_CTX_ACTIVE; and not set -q LEAN_CTX_DISABLED; and test (set -q LEAN_CTX_ENABLED; and echo $LEAN_CTX_ENABLED; or echo 1) != 0
-    if command -q lean-ctx
-        lean-ctx-on
-    end
-end
-# lean-ctx shell hook -- end
-
-# Added by git-ai installer on Fri Apr 10 11:33:12 AM CDT 2026
+# Added by git-ai installer on Thu Apr 16 10:50:29 AM CDT 2026
 fish_add_path -g "/home/mattniedelman/.git-ai/bin"
+
+# strix
+fish_add_path /home/mattniedelman/.strix/bin

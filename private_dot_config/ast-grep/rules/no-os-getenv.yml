@@ -1,6 +1,8 @@
 id: no-os-getenv
 language: python
 severity: warning
+files:
+  - "!**/pii_lambda/**"
 message: |
   Avoid reading environment variables directly. Use pydantic-settings instead.
 

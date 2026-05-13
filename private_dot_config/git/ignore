@@ -43,3 +43,5 @@ megalinter-reports/
 .worktrees/
 
 .beads/
+issues.jsonl
+.desloppify/

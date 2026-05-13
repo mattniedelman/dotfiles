@@ -147,16 +147,6 @@ keybinds clear-defaults=true {
         bind "Ctrl Shift right" { GoToNextTab; }
         bind "Alt n" { NewPane; }
         bind "Alt f" { ToggleFloatingPanes; }
-        bind "Alt s" {
-            LaunchOrFocusPlugin "file:~/.config/zellij/plugins/zellij-sessionizer.wasm" {
-                floating true
-                move_to_focused_tab true
-                cwd "/"
-                root_dirs "/home/mattniedelman/git/imprivata/ai;/home/mattniedelman/.config"
-                individual_dirs "/home/mattniedelman/basic-memory;/home/mattniedelman/.augment"
-                session_layout "~/.config/zellij/layouts/project-sidebar.kdl"
-            }
-        }
         bind "Alt l" {
             LaunchOrFocusPlugin "zellij:layout-manager" {
                 floating true
@@ -242,10 +232,6 @@ keybinds clear-defaults=true {
 }
 
 plugins {
-    pane-tracker location="file:~/.config/zellij/plugins/zellij-pane-tracker.wasm"
-    zellij-attention location="file:~/.config/zellij/plugins/zellij-attention.wasm" {
-        completed_icon "⭐"
-    }
     zjstatus location="file:~/.config/zellij/plugins/zjstatus.wasm"
     zjstatus-hints location="https://github.com/b0o/zjstatus-hints/releases/download/v0.1.4/zjstatus-hints.wasm" {
         max_length 0
@@ -259,9 +245,9 @@ plugins {
 }
 
 load_plugins {
-    pane-tracker
-    zellij-attention
+    "zellij:link"
     zjstatus-hints
+    "file:~/.config/zellij/plugins/zellij-attention.wasm"
 }
 
 // Core settings
@@ -272,5 +258,6 @@ default_shell "fish"
 on_force_close "quit"
 show_startup_tips false
 pane_frames false
+advanced_mouse_actions true
 copy_on_select true
 scroll_buffer_size 100000

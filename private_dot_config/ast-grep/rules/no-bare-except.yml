@@ -26,22 +26,21 @@ note: |
   Bare except and except Exception catch too much, including
   KeyboardInterrupt and SystemExit, hiding bugs and making
   debugging difficult.
-  
+
   Instead of:
     try:
         do_something()
     except:
         handle_error()
-  
+
   Or:
     try:
         do_something()
     except Exception as e:
         handle_error(e)
-  
+
   Use specific exceptions:
     try:
         do_something()
     except (ValueError, KeyError) as e:
         handle_error(e)
-

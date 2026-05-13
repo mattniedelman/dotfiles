@@ -1,0 +1,213 @@
+#!/usr/bin/env -S uv run --quiet --script --directory /home/mattniedelman/.claude/hooks
+# /// script
+# dependencies = ["cchooks"]
+# ///
+"""
+PostToolUse hook: Auto-run formatters and linters via hk on modified files.
+
+Delegates formatting + linting to hk fix (slow-profile steps like secret
+scanners and type checkers are skipped here -- those run on pre-commit).
+Only special cases that hk can't handle are run directly.
+"""
+
+from __future__ import annotations
+
+import hashlib
+import os
+import subprocess
+import sys
+from pathlib import Path
+
+from cchooks import PostToolUseContext, create_context
+
+BASIC_MEMORY_VAULT = Path.home() / "basic-memory"
+DEBUG = os.environ.get("AUTO_LINT_DEBUG", "0") == "1"
+
+
+def debug(msg: str) -> None:
+    """Emit debug message to stderr when AUTO_LINT_DEBUG=1."""
+    if DEBUG:
+        print(f"[auto_lint] {msg}", file=sys.stderr)  # noqa: T201
+
+
+def _file_hash(filepath: str) -> str:
+    try:
+        return hashlib.md5(Path(filepath).read_bytes()).hexdigest()  # noqa: S324
+    except OSError:
+        return ""
+
+
+def run_command(
+    cmd: list[str], cwd: Path | None = None, timeout: int = 30
+) -> tuple[int, str]:
+    """Run a subprocess command, returning (exit_code, combined_output)."""
+    try:
+        debug(f"Running: {' '.join(cmd)} (cwd={cwd})")
+        result = subprocess.run(  # noqa: S603
+            cmd, capture_output=True, text=True, check=False, cwd=cwd, timeout=timeout
+        )
+    except subprocess.TimeoutExpired:
+        return -2, f"Command timed out after {timeout}s"
+    except FileNotFoundError:
+        return -1, f"Command not found: {cmd[0]}"
+    else:
+        output = result.stdout + result.stderr
+        debug(f"  Exit code: {result.returncode}")
+        if result.returncode != 0 and output.strip():
+            debug(f"  Output: {output[:200]}")
+        return result.returncode, output
+
+
+def _is_in_git_repo(file_path: str) -> bool:
+    try:
+        result = subprocess.run(
+            ["git", "rev-parse", "--git-dir"],  # noqa: S607
+            capture_output=True,
+            text=True,
+            check=False,
+            cwd=Path(file_path).parent,
+            timeout=5,
+        )
+    except (subprocess.TimeoutExpired, FileNotFoundError):
+        return False
+    else:
+        return result.returncode == 0
+
+
+def _collect_modified_files(ctx: PostToolUseContext) -> list[str]:
+    file_path = ctx.tool_input.get("file_path", "")
+    if not file_path:
+        return []
+    path = Path(file_path)
+    if path.is_file():
+        return [str(path)]
+    return []
+
+
+# --- Special cases outside hk ---
+
+
+def fix_ascii_diagrams(files: list[str]) -> None:
+    """Run aadc in-place on markdown files to align ASCII diagram borders."""
+    md_files = [f for f in files if f.endswith((".md", ".mdx"))]
+    if not md_files:
+        return
+    code, out = run_command(["aadc", "-i", "--color", "never", *md_files], timeout=30)
+    if code in (-1, -2):
+        debug(f"aadc skipped (code={code}): {out}")
+    elif code != 0:
+        debug(f"aadc error (code={code}): {out}")
+
+
+def lint_wiki_links(files: list[str]) -> list[str]:
+    """Check wiki-links with lychee for markdown files in Basic Memory vault."""
+    vault_files = [
+        f
+        for f in files
+        if str(BASIC_MEMORY_VAULT) in f and "/docs/" not in f and "/_meta/" not in f
+    ]
+    errors: list[str] = []
+    for f in vault_files:
+        code, out = run_command(
+            [
+                "lychee",
+                "--include-wikilinks",
+                "--base-url",
+                str(BASIC_MEMORY_VAULT),
+                "--fallback-extensions",
+                "md",
+                "--no-progress",
+                "--offline",
+                f,
+            ]
+        )
+        if code in (-1, -2):
+            debug(f"lychee skipped for {f} (code={code}): {out}")
+        elif code != 0 and out.strip():
+            errors.append(f"lychee wiki-links ({f}):\n{out}")
+    return errors
+
+
+# --- Main ---
+
+
+def main() -> None:
+    """Run linters and formatters on files modified by Edit/Write tools."""
+    debug("Hook invoked")
+    ctx = create_context()
+
+    if not isinstance(ctx, PostToolUseContext):
+        ctx.output.exit_success()
+        return
+
+    modified_files = _collect_modified_files(ctx)
+    if not modified_files:
+        debug("No modified files, exiting")
+        ctx.output.exit_success()
+        return
+
+    debug(f"Modified files: {modified_files}")
+    context_parts: list[str] = []
+    before_hashes = {f: _file_hash(f) for f in modified_files}
+
+    # --- aadc: align ASCII diagram borders in markdown (no git repo required) ---
+    fix_ascii_diagrams(modified_files)
+
+    # --- hk: formatting + linting (requires git repo) ---
+    if _is_in_git_repo(modified_files[0]):
+        # hk fix: fast formatters + linters (slow-profile steps skipped)
+        code, out = run_command(
+            ["hk", "fix", "--no-progress", *modified_files], timeout=60
+        )
+        debug(f"hk fix exit={code}")
+
+        if code in (-1, -2):
+            # Tool missing or timed out -- non-fatal, don't surface as lint error
+            debug(f"hk fix skipped (code={code}): {out}")
+        elif code != 0 and out.strip():
+            lint_notice = (
+                "LINT ERRORS detected in modified files. Fix ALL of these.\n\n"
+                "Pre-existing errors are NOT exempt -- do NOT skip errors because "
+                "they were 'already there' or 'out of scope'. "
+                "All errors must be fixed unless the user has explicitly said "
+                "to ignore them.\n\n"
+            )
+            lint_notice += out
+            context_parts.append(lint_notice)
+    else:
+        debug("Not in a git repo, skipping hk")
+
+    # Detect reformatted files via hash comparison (covers aadc + hk)
+    reformatted = [f for f in modified_files if _file_hash(f) != before_hashes.get(f)]
+    if reformatted:
+        notice = (
+            "FILES REFORMATTED by auto-formatter.\n"
+            "Re-read these files before making further edits:\n"
+        )
+        notice += "\n".join(f"  - {f}" for f in reformatted)
+        context_parts.insert(0, notice)
+
+    # --- Special cases outside hk ---
+    md_files = [f for f in modified_files if f.endswith((".md", ".mdx"))]
+    if md_files:
+        wiki_errors = lint_wiki_links(md_files)
+        if wiki_errors:
+            context_parts.append("WIKI-LINK ERRORS:\n" + "\n".join(wiki_errors))
+
+    if context_parts:
+        context_parts.append(
+            "AFTER handling the above: resume your original task exactly where "
+            "you left off. These lint/format issues are a side-effect, not the goal."
+            "\n\nDo NOT say 'Acknowledged', 'Noted', or any acknowledgment. "
+            "Take the required action silently and continue."
+        )
+        ctx.output.add_context("\n\n".join(context_parts))
+    else:
+        debug("No changes or errors")
+        ctx.output.exit_success()
+
+
+if __name__ == "__main__":
+    main()
+
+# vim: set ft=python:
