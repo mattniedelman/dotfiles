@@ -1,6 +1,8 @@
 id: no-json-loads-untyped
 language: python
 severity: warning
+files:
+  - "!**/pii_lambda/**"
 message: |
   json.loads() returns untyped data. Consider using Pydantic for validation and typing.
 
