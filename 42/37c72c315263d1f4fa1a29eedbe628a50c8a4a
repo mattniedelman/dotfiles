@@ -1,0 +1,21 @@
+private_dot_config/private_fish/config.fish.tmpl
+  s_a4d740e7406199::t_fdd9a92b197b54 18,22
+  s_a4d740e7406199::t_60ca91185d0e31 126,129-130,133
+  s_a4d740e7406199::t_9e19db0c92d956 16,25
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.8",
+  "base_commit_sha": "4237c72c315263d1f4fa1a29eedbe628a50c8a4a",
+  "prompts": {},
+  "sessions": {
+    "s_a4d740e7406199": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "6e59b0b2-0025-4dfa-b5e2-d8273c712ac2",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "Matt Niedelman <mattniedelman@gmail.com>"
+    }
+  }
+}
