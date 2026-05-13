@@ -2,7 +2,7 @@
 	defaultBranch = main
 [user]
 	name = "Matt Niedelman"
-	email = {{ if .work }}matt.niedelman@imprivata.com{{ else }}mattniedelman@gmail.com{{ end }}
+	email = {{ .email }}
 {{- if .work }}
 	signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC5paKHoAWPxcczpD0Y4i62rK6aGuNlkJ+MSlfiMG7rS
 [commit]

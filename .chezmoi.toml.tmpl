@@ -1,4 +1,6 @@
 {{- $work := promptBoolOnce . "work" "Is this a work machine (enables work-specific config)?" -}}
+{{- $email := promptStringOnce . "email" "Primary email address for git commits" -}}
 
 [data]
   work = {{ $work }}
+  email = {{ $email | quote }}
