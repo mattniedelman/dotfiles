@@ -72,7 +72,7 @@ ctx.session_id  # session identifier
 # PreToolUseContext outputs
 ctx.output.allow()  # allow silently
 ctx.output.allow(reason="msg")  # allow + show message
-ctx.output.block(reason="msg")  # block tool
+ctx.output.deny(reason="msg")  # block tool
 
 # PostToolUseContext outputs
 ctx.output.exit_success()  # no-op
