@@ -13,14 +13,16 @@ set -gx DIRENV_LOG_FORMAT ""
 set -gx VIRTUAL_ENV_DISABLE_PROMPT true
 set -gx LC_COLLATE C
 set -gx RIPGREP_CONFIG_PATH ~/.ripgreprc
-set -gx AST_GREP_CONFIG /home/mattniedelman/.config/ast-grep/sgconfig.yml
+set -gx AST_GREP_CONFIG {{ .chezmoi.homeDir }}/.config/ast-grep/sgconfig.yml
 
+{{ if .work -}}
 # AWS SSO defaults for aws-sso-util
 set -gx AWS_DEFAULT_SSO_START_URL https://fairwarning.awsapps.com/start
 set -gx AWS_DEFAULT_SSO_REGION us-east-2
+{{ end -}}
 
 # Note, this is for a local instance of obsidian
-set -gx OBSIDIAN_REST_API_KEY f5d4c30b08affc018b35b77440b57087aba42c76200ae08e3bff4608d5493311
+# set OBSIDIAN_REST_API_KEY in ~/.config/fish/local.fish (not version controlled)
 
 # Gas Town
 set -gx GT_TOWN_ROOT ~/gt
@@ -121,11 +123,11 @@ if status is-interactive
 end
 
 # Added by LM Studio CLI (lms)
-set -gx PATH $PATH /home/mattniedelman/.lmstudio/bin
+set -gx PATH $PATH {{ .chezmoi.homeDir }}/.lmstudio/bin
 # End of LM Studio CLI section
 
-# Added by git-ai installer on Thu Apr 16 10:50:29 AM CDT 2026
-fish_add_path -g "/home/mattniedelman/.git-ai/bin"
+# Added by git-ai installer
+fish_add_path -g "{{ .chezmoi.homeDir }}/.git-ai/bin"
 
 # strix
-fish_add_path /home/mattniedelman/.strix/bin
+fish_add_path {{ .chezmoi.homeDir }}/.strix/bin
