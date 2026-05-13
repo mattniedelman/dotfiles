@@ -1,9 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "mcp__plugin_context-mode_context-mode__ctx_doctor",
-      "WebFetch(domain:graph.microsoft.com)",
-      "WebFetch(domain:imprivata-my.sharepoint.com)"
-    ]
-  }
-}
