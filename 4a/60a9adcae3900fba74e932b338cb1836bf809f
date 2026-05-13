@@ -1,0 +1,20 @@
+dot_ssh/authorized_keys.tmpl
+  s_a4d740e7406199::t_a3fdbff2931ee5 2-4
+  s_a4d740e7406199::t_5e8b3d1cea7258 1,5
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.8",
+  "base_commit_sha": "4a60a9adcae3900fba74e932b338cb1836bf809f",
+  "prompts": {},
+  "sessions": {
+    "s_a4d740e7406199": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "6e59b0b2-0025-4dfa-b5e2-d8273c712ac2",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "Matt Niedelman <mattniedelman@gmail.com>"
+    }
+  }
+}
