@@ -2,7 +2,7 @@
 	defaultBranch = main
 [user]
 	name = "Matt Niedelman"
-	email = matt.niedelman@imprivata.com
+	email = {{ if .work }}matt.niedelman@imprivata.com{{ else }}mattniedelman@gmail.com{{ end }}
 	signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC5paKHoAWPxcczpD0Y4i62rK6aGuNlkJ+MSlfiMG7rS
 [commit]
 	gpgsign = true
@@ -10,7 +10,7 @@
 	format = ssh
 [gpg "ssh"]
 	program = /opt/1Password/op-ssh-sign
-	allowedSignersFile = /home/mattniedelman/.ssh/allowed_signers
+	allowedSignersFile = {{ .chezmoi.homeDir }}/.ssh/allowed_signers
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
@@ -30,9 +30,9 @@
 [core]
 	editor = nvim
 	autocrlf = input
-	excludesfile = /home/mattniedelman/.config/git/ignore
+	excludesfile = {{ .chezmoi.homeDir }}/.config/git/ignore
 	pager = delta
-	hooksPath = /home/mattniedelman/.config/git/hooks
+	hooksPath = {{ .chezmoi.homeDir }}/.config/git/hooks
 [interactive]
 	diffFilter = delta --color-only
 [diff]
@@ -55,15 +55,15 @@
 [diff "python"]
 	xfuncname = ^[ \t]*((class|(async[ \t]+)?def)[ \t].*)$
 [credential]
-	helper = !/home/mattniedelman/.local/share/mise/shims/gh auth git-credential
+	helper = !{{ .chezmoi.homeDir }}/.local/share/mise/shims/gh auth git-credential
 [beads]
 	role = contributor
 [credential "https://github.com"]
-	helper = !/home/mattniedelman/.local/share/mise/shims/gh auth git-credential
+	helper = !{{ .chezmoi.homeDir }}/.local/share/mise/shims/gh auth git-credential
 [credential "https://gist.github.com"]
-	helper = !/home/mattniedelman/.local/share/mise/shims/gh auth git-credential
+	helper = !{{ .chezmoi.homeDir }}/.local/share/mise/shims/gh auth git-credential
 [push]
 	useForceIfIncludes = true
 [trace2]
-	eventTarget = af_unix:stream:/home/mattniedelman/.git-ai/internal/daemon/trace2.sock
+	eventTarget = af_unix:stream:{{ .chezmoi.homeDir }}/.git-ai/internal/daemon/trace2.sock
 	eventNesting = 10
