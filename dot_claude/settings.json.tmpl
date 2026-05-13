@@ -1,11 +1,12 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  {{ if .work -}}
   "awsAuthRefresh": "aws sso login --sso-session imprivata",
+  {{ end -}}
   "env": {
     "AWS_PROFILE": "claude",
     "AWS_REGION": "us-east-1",
     "AWS_SDK_LOAD_CONFIG": "1",
-    "BASH_ENV": "/home/mattniedelman/.claude/hooks/bash_env.sh",
     "CLAUDE_AUTOCOMPACT_PCT_OVERRIDE": "99",
     "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
     "CLAUDE_CODE_USE_BEDROCK": "1",
@@ -13,7 +14,7 @@
     "GIT_CONFIG_KEY_0": "gpg.ssh.program",
     "GIT_CONFIG_KEY_1": "user.signingkey",
     "GIT_CONFIG_VALUE_0": "ssh-keygen",
-    "GIT_CONFIG_VALUE_1": "/home/mattniedelman/.ssh/git_signing_key",
+    "GIT_CONFIG_VALUE_1": "{{ .chezmoi.homeDir }}/.ssh/git_signing_key",
     "RTK_HOOK_AUDIT": "1"
   },
   "includeCoAuthoredBy": false,
@@ -102,7 +103,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/home/mattniedelman/.git-ai/bin/git-ai checkpoint claude --hook-input stdin"
+            "command": "{{ .chezmoi.homeDir }}/.git-ai/bin/git-ai checkpoint claude --hook-input stdin"
           }
         ]
       }
@@ -138,10 +139,6 @@
           {
             "type": "command",
             "command": "~/.claude/hooks/block_pip.py"
-          },
-          {
-            "type": "command",
-            "command": "bash ~/.claude/hooks/rtk-rewrite.sh"
           },
           {
             "type": "command",
@@ -185,7 +182,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/home/mattniedelman/.git-ai/bin/git-ai checkpoint claude --hook-input stdin"
+            "command": "{{ .chezmoi.homeDir }}/.git-ai/bin/git-ai checkpoint claude --hook-input stdin"
           }
         ]
       }
@@ -417,22 +414,22 @@
       ],
       "allowUnixSockets": [
         "~/.1password/agent.sock",
-        "/home/mattniedelman/.1password/agent.sock",
+        "{{ .chezmoi.homeDir }}/.1password/agent.sock",
         "/run/user/1001/bus"
       ]
     },
     "filesystem": {
       "allowWrite": [
         "/tmp",
-        "/home/mattniedelman/.aws/cli/cache",
-        "/home/mattniedelman/.aws/sso/cache",
-        "/home/mattniedelman/.claude/hooks/ways",
-        "/home/mattniedelman/.cache"
+        "{{ .chezmoi.homeDir }}/.aws/cli/cache",
+        "{{ .chezmoi.homeDir }}/.aws/sso/cache",
+        "{{ .chezmoi.homeDir }}/.claude/hooks/ways",
+        "{{ .chezmoi.homeDir }}/.cache"
       ],
       "allowRead": [
-        "/home/mattniedelman/.aws",
-        "/home/mattniedelman/.ssh",
-        "/home/mattniedelman/.config/gh"
+        "{{ .chezmoi.homeDir }}/.aws",
+        "{{ .chezmoi.homeDir }}/.ssh",
+        "{{ .chezmoi.homeDir }}/.config/gh"
       ]
     },
     "excludedCommands": [

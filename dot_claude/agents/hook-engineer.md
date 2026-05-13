@@ -35,7 +35,7 @@ development standards without breaking Claude Code's workflow.
 ## Standard Hook Structure
 
 ```python
-#!/usr/bin/env -S uv run --quiet --script --directory /home/mattniedelman/.claude/hooks
+#!/usr/bin/env -S uv run --quiet --script --directory ~/.claude/hooks
 """
 <HookType> hook: <one-line description>
 
