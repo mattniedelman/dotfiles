@@ -3,6 +3,7 @@
 [user]
 	name = "Matt Niedelman"
 	email = {{ if .work }}matt.niedelman@imprivata.com{{ else }}mattniedelman@gmail.com{{ end }}
+{{- if .work }}
 	signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC5paKHoAWPxcczpD0Y4i62rK6aGuNlkJ+MSlfiMG7rS
 [commit]
 	gpgsign = true
@@ -11,6 +12,7 @@
 [gpg "ssh"]
 	program = /opt/1Password/op-ssh-sign
 	allowedSignersFile = {{ .chezmoi.homeDir }}/.ssh/allowed_signers
+{{ end -}}
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
