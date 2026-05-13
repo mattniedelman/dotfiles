@@ -1,0 +1,29 @@
+dot_bashrc
+  s_a4d740e7406199::t_0ae937624cd5c0 1-61
+dot_profile
+  s_a4d740e7406199::t_0ae937624cd5c0 1-43
+private_dot_gitconfig
+  s_a4d740e7406199::t_0ae937624cd5c0 1-18,20-22,24-26,28-53,55-69
+dot_ripgreprc
+  s_a4d740e7406199::t_0ae937624cd5c0 1-3,6-7,9-11,14-16,18-19,21-24
+dot_zshrc
+  s_a4d740e7406199::t_0ae937624cd5c0 1-6,8-80
+private_dot_config/ohmyposh/claude.json
+  ai_agent 2-48,50-124,126-133,135-156,158-233,235,237-238
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.4",
+  "base_commit_sha": "6fed17ad0470cf8ab1e4fcea8bd7ebda555f5e21",
+  "prompts": {},
+  "sessions": {
+    "s_a4d740e7406199": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "6e59b0b2-0025-4dfa-b5e2-d8273c712ac2",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "Matt Niedelman <mattniedelman@gmail.com>"
+    }
+  }
+}
