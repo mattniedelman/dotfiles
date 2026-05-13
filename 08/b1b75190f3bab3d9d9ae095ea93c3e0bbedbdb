@@ -1,0 +1,19 @@
+.chezmoiignore
+  s_a4d740e7406199::t_f07f84c7415743 65-67
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.8",
+  "base_commit_sha": "08b1b75190f3bab3d9d9ae095ea93c3e0bbedbdb",
+  "prompts": {},
+  "sessions": {
+    "s_a4d740e7406199": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "6e59b0b2-0025-4dfa-b5e2-d8273c712ac2",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "Matt Niedelman <mattniedelman@gmail.com>"
+    }
+  }
+}
