@@ -17,6 +17,7 @@ from __future__ import annotations
 
 import json
 import re
+import subprocess
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -29,6 +30,25 @@ PROGRESS_LOG = "logs/progress.log"
 CB_FILE = "circuit-breaker.json"
 CB_NO_PROGRESS_THRESHOLD = 3
 CB_SAME_TASK_THRESHOLD = 3
+CB_MAX_ITERATIONS = 20
+
+
+def get_git_head(workspace: Path) -> str:
+    """Return current HEAD SHA, or empty string if not a git repo."""
+    try:
+        result = subprocess.run(
+            ["git", "rev-parse", "HEAD"],
+            cwd=workspace,
+            capture_output=True,
+            text=True,
+            timeout=5,
+            check=False,
+        )
+    except (OSError, subprocess.SubprocessError):
+        return ""
+    if result.returncode != 0:
+        return ""
+    return result.stdout.strip()
 
 
 def get_workspace(ctx: PostToolUseContext) -> Path | None:
@@ -95,21 +115,29 @@ def append_log(path: Path, message: str) -> None:
 
 
 def update_circuit_breaker(
-    cb_path: Path, files_changed: list[str], current_task: str
+    cb_path: Path, current_task: str, current_head: str, iteration: int
 ) -> dict:
-    """Update circuit breaker state, return current state."""
+    """Update circuit breaker state using git HEAD as progress signal."""
     cb = load_json(cb_path, {
         "no_progress_count": 0,
         "same_task_count": 0,
         "last_task": "",
+        "last_head": "",
         "tripped": False,
         "trip_reason": None,
     })
 
-    if not files_changed:
-        cb["no_progress_count"] = cb.get("no_progress_count", 0) + 1
-    else:
+    prior_head = cb.get("last_head", "")
+    head_advanced = bool(current_head) and bool(prior_head) and current_head != prior_head
+    no_git_signal = not current_head
+
+    if head_advanced:
         cb["no_progress_count"] = 0
+    elif no_git_signal:
+        cb["no_progress_count"] = cb.get("no_progress_count", 0)
+    else:
+        cb["no_progress_count"] = cb.get("no_progress_count", 0) + 1
+    cb["last_head"] = current_head or prior_head
 
     if current_task and current_task == cb.get("last_task", ""):
         cb["same_task_count"] = cb.get("same_task_count", 0) + 1
@@ -119,10 +147,15 @@ def update_circuit_breaker(
 
     if cb["no_progress_count"] >= CB_NO_PROGRESS_THRESHOLD:
         cb["tripped"] = True
-        cb["trip_reason"] = f"No progress for {cb['no_progress_count']} iterations"
+        cb["trip_reason"] = (
+            f"No new commits for {cb['no_progress_count']} iterations"
+        )
     elif cb["same_task_count"] >= CB_SAME_TASK_THRESHOLD:
         cb["tripped"] = True
         cb["trip_reason"] = f"Stuck on same task for {cb['same_task_count']} iterations"
+    elif iteration >= CB_MAX_ITERATIONS:
+        cb["tripped"] = True
+        cb["trip_reason"] = f"Hit max iterations safety net ({CB_MAX_ITERATIONS})"
 
     save_json(cb_path, cb)
     return cb
@@ -190,8 +223,9 @@ def main() -> None:
     state = update_state(ralph_dir / STATE_FILE, parsed, tool_name)
     cb = update_circuit_breaker(
         ralph_dir / CB_FILE,
-        parsed.get("files_changed", []),
         parsed.get("task", ""),
+        get_git_head(workspace),
+        state.get("loop_count", 0),
     )
 
     # Log for external monitoring
