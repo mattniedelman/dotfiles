@@ -63,7 +63,7 @@
       "Edit(~/.config/fish/conf.d/**)"
     ]
   },
-  "model": "us.anthropic.claude-opus-4-7",
+  "model": "us.anthropic.claude-sonnet-4-6",
   "hooks": {
     "PostToolUse": [
       {

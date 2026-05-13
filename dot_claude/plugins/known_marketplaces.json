@@ -5,7 +5,7 @@
       "repo": "trailofbits/skills"
     },
     "installLocation": "/home/mattniedelman/.claude/plugins/marketplaces/trailofbits",
-    "lastUpdated": "2026-05-13T15:48:00.665Z",
+    "lastUpdated": "2026-05-13T16:00:54.268Z",
     "autoUpdate": true
   },
   "agentsys": {
@@ -14,7 +14,7 @@
       "repo": "agent-sh/agentsys"
     },
     "installLocation": "/home/mattniedelman/.claude/plugins/marketplaces/agentsys",
-    "lastUpdated": "2026-05-13T15:48:01.479Z",
+    "lastUpdated": "2026-05-13T16:00:53.299Z",
     "autoUpdate": true
   },
   "pydantic-skills": {

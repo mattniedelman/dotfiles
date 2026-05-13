@@ -1,9 +1,0 @@
-[
-  {
-    "from": "team-lead",
-    "text": "Please continue. Check what's been done so far in the worktree at `/mnt/2b20906f-1847-4c8e-94e4-b841290bddc3/imprivata/ai/knowledge-bases/.worktrees/etl-foundation` and complete ALL the remaining tasks:\n\n1. Finish `src/kb/pipeline/_protocols.py` (Document models + Protocol classes)\n2. Create `src/kb/pipeline/__init__.py` with exports\n3. Create `src/kb/products.py` (Product model, PRODUCTS list, map_salesforce_product_to_code)\n4. Create `src/kb/pipeline/fakes.py` (FakeExtractor, FakeAnonymizer, FakeDocumentLoader, FakeS3Client)\n5. Create `src/kb/pipeline/_runner.py` (PipelineResult, run_pipeline)\n6. Create `tests/pipeline/__init__.py`, `tests/pipeline/test_document.py`, `tests/pipeline/test_fakes.py`, `tests/pipeline/test_runner.py`\n7. Create `tests/test_products.py`\n8. Run `uv run pytest tests/pipeline/ tests/test_products.py -v` from the worktree dir and fix all failures\n9. Commit: `feat: add ETL pipeline foundation - protocols, models, fakes, runner`\n10. Close beads issues: knowledge-bases-ae3, knowledge-bases-x6d, knowledge-bases-52h, knowledge-bases-cyp, knowledge-bases-tz0, knowledge-bases-4xk, knowledge-bases-bjk, knowledge-bases-p1x, knowledge-bases-8tj, knowledge-bases-a4z\n\nRun all commands from within the worktree directory. When done, report what files were created, test results, and commit hash.",
-    "summary": "Continue all remaining PR1 tasks",
-    "timestamp": "2026-04-09T19:01:34.216Z",
-    "read": false
-  }
-]
