@@ -1,0 +1,41 @@
+dot_profile.tmpl
+  s_a4d740e7406199::t_6603b939189adb 42
+private_dot_config/cbfmt.toml.tmpl
+  s_a4d740e7406199::t_47f9caa5f71bba 2-5
+dot_claude/agents/code-reviewer.md
+  ai_agent 7-8,10-15,17-19,23-24,38-51,112-113,134-135,137-140,179-182,184,186-187,216-217,263-264,268-275,295-300
+  s_a4d740e7406199::t_8ae47317a28ce6 4
+dot_bashrc.tmpl
+  s_a4d740e7406199::t_9bf21c58fb81a8 52,55,58
+dot_zshrc.tmpl
+  s_a4d740e7406199::t_c6b657e1a4ed03 3,45,48,51,54
+dot_claude/agents/hook-engineer.md
+  s_a4d740e7406199::t_8efd75e7fc737c 75
+private_dot_config/systemd/user/basic-memory-watch.service.tmpl
+  s_a4d740e7406199::t_e35ef4cc98ae47 6
+dot_claude/hooks/executable_check-config-updates.sh
+  ai_agent 1-216
+dot_claude/settings.json.tmpl
+  s_a4d740e7406199::t_75af01cdc9dce1 422
+  s_a4d740e7406199::t_77de2b2e0fa023 308-311
+private_dot_config/systemd/user/aws-sigv4-proxy.service.tmpl
+  s_a4d740e7406199::t_cf364e329ffe67 1,8,20
+dot_claude/hooks/executable_reflect_backfill.py.tmpl
+  s_a4d740e7406199::t_c3c97e0ea3dbe0 1
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.8",
+  "base_commit_sha": "24a6fbab5944fd81e6562eb633d0f58c77815c18",
+  "prompts": {},
+  "sessions": {
+    "s_a4d740e7406199": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "6e59b0b2-0025-4dfa-b5e2-d8273c712ac2",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "Matt Niedelman <mattniedelman@gmail.com>"
+    }
+  }
+}
