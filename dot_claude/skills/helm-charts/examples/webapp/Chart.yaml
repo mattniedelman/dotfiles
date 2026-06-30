@@ -1,0 +1,12 @@
+apiVersion: v2
+name: webapp
+description: Hardened reference chart for a stateless HTTP service. Every template here demonstrates a gotcha-avoidance from the helm-charts skill.
+type: application
+# Chart version: strict SemVer 2. Bump for CHART changes (templates, values shape).
+version: 0.1.0
+# App version: the version of the app shipped. Informational, quoted, moves independently.
+appVersion: "1.0.0"
+# Minimum Kubernetes version this chart's API versions require.
+kubeVersion: ">=1.23.0-0"
+maintainers:
+  - name: platform-team
