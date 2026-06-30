@@ -61,8 +61,8 @@ Always report:
 
 ## Integration
 
-Use Serena MCP (`mcp__serena__find_symbol`,
-`mcp__serena__find_referencing_symbols`) for code symbol searches.
+Use semble MCP (`mcp__semble__search`, `mcp__semble__find_related`) for
+semantic code search, then Grep for exact symbol references.
 Use Grep, Glob, and Read for text patterns and file exploration.
 Search before concluding something doesn't exist.
 </WORKTREE_PATH>

@@ -78,6 +78,19 @@ vim.api.nvim_create_autocmd("VimLeavePre", {
   end,
 })
 
+-- Markdown: hard-wrap your typing at 100, soft-wrap any existing long lines for readability
+local markdown_wrap_group = vim.api.nvim_create_augroup("MarkdownWrap", { clear = true })
+vim.api.nvim_create_autocmd("FileType", {
+  group = markdown_wrap_group,
+  pattern = { "markdown", "markdown.mdx" },
+  callback = function()
+    vim.opt_local.textwidth = 100
+    vim.opt_local.formatoptions:append("t")
+    vim.opt_local.wrap = true
+    vim.opt_local.linebreak = true
+  end,
+})
+
 -- Disable autoformat for files in /tmp
 local disable_autoformat_group = vim.api.nvim_create_augroup("DisableAutoformat", { clear = true })
 vim.api.nvim_create_autocmd("BufReadPost", {

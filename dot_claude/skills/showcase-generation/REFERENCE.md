@@ -97,6 +97,103 @@ For less critical items (utility skills, simple hooks, domain-specific agents).
 - **{Related}**: {Relationship}
 ```
 
+## Case Study Structure
+
+Each case study folder requires three components:
+
+```text
+case-studies/{case-name}/
+├── README.md           # Main narrative (100-200 lines)
+├── arc.md              # Arc metadata and session timeline
+└── sessions/           # Individual session summaries
+    ├── 01-{session-name}.md
+    ├── 02-{session-name}.md
+    └── ...
+```
+
+### README.md (Main Narrative)
+
+The primary document.
+Include:
+
+- **Overview table**:
+  Sessions, total exchanges, date range, pattern, artifacts
+- **The Problem**:
+  What I was trying to solve
+- **Session Timeline**:
+  Brief summary of each session with quotes
+- **What Made This Work**:
+  Patterns that contributed to success
+- **Key Takeaways**:
+  Bullets summarizing learnings
+
+### arc.md (Arc Metadata)
+
+Structured metadata pulled from Basic Memory arc notes:
+
+```markdown
+# Multi-Session Arc: {Name}
+
+{One-line description}
+
+## Arc Metadata
+
+- arc_type: {brainstorm|investigation|implementation|documentation}
+- sessions: {count}
+- total_exchanges: {total}
+- date_range: {YYYY-MM-DD to YYYY-MM-DD}
+- outcome: {brief outcome}
+
+## Session Timeline
+
+| # | Session | Exchanges | Date | Focus |
+|---|---------|-----------|------|-------|
+| 1 | {name} | {count} | {date} | {focus} |
+
+## Arc Pattern
+
+{Pattern description, e.g., "Brainstorm → Build → Document"}
+
+## Notable Characteristics
+
+- {characteristic 1}
+- {characteristic 2}
+
+## Key Artifacts
+
+- {artifact 1}
+- {artifact 2}
+```
+
+### Session Files (Individual Details)
+
+Each session file provides substantive detail beyond what's in the README.
+Include:
+
+- **Metadata**:
+  session_id, date, exchanges, category
+- **Initial Prompt**:
+  The actual prompt (or summary if long)
+- **What I Was Doing**:
+  Context for why this session happened
+- **What Happened**:
+  Detailed subsections describing the work
+- **Key Takeaways**:
+  Session-specific learnings
+
+**Session file substance matters.** Include:
+
+- Actual quotes from the conversation (with `> **Me:**` and `> **Agent:**`
+  format)
+- Structured "What Happened" subsections describing phases of work
+- Specific details that add value beyond the README summary
+
+### Single-Session Arcs
+
+Single-session arcs are valid case studies.
+Marathon sessions (300+ exchanges) often contain enough material for a complete
+case study with iterative refinement within one conversation.
+
 ## Execution Modes
 
 ### Interactive Mode (Preferred for Philosophy/Overview)

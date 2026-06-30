@@ -26,10 +26,12 @@ All code inspection must happen in the worktree:
 
 ## Review Process
 
-1. Read the implementation code
-2. Assess against quality criteria
-3. Categorize issues by severity
-4. Provide actionable feedback
+1. **Run the full test suite** -- if any tests fail, issue a FAIL verdict with Critical severity before reviewing anything else. Tests passing is a prerequisite for quality review.
+2. **Run linting/type checks** -- if the project has a linter or type checker, run it. Linter failures are Important-severity issues at minimum.
+3. Read the implementation code
+4. Assess against quality criteria
+5. Categorize issues by severity
+6. Provide actionable feedback
 
 ## Issue Severity
 
@@ -45,6 +47,9 @@ All code inspection must happen in the worktree:
 **Task:** [task name]
 
 **Verdict:** PASS or FAIL
+
+**Test suite:** PASS (N tests) or FAIL (list failing tests)
+**Linting:** PASS or FAIL (list errors) or N/A
 
 **Strengths:**
 - [what was done well]
@@ -64,5 +69,5 @@ Minor:
 [1-2 sentence summary]
 ```
 
-This format is parsed by the Ralph monitoring system.
+Keep this format consistent -- the Ralph orchestrator reads the PASS/FAIL verdict to decide whether to advance or route back.
 </WORKTREE_PATH>

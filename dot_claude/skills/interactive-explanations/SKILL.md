@@ -132,7 +132,7 @@ Step 2: [3] [1] | [5] | [8] [9]
 Save useful visualizations to Basic Memory:
 
 ```python
-write_note_basic - memory(
+mcp__basic - memory__write_note(
     title="Red-Black Tree Insertion Visualization",
     content="[HTML content or link]",
     directory="knowledge/visualizations",

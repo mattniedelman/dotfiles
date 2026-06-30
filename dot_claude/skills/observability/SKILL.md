@@ -27,8 +27,10 @@ Use this skill when:
 class UserNotFoundError(Exception):
     """Raised when user cannot be found."""
 
+
 class InvalidCredentialsError(Exception):
     """Raised when authentication fails."""
+
 
 def get_user(user_id: str) -> User:
     user = db.query(User).filter(User.id == user_id).first()
@@ -42,10 +44,7 @@ def get_user(user_id: str) -> User:
 ```python
 # ✅ Rich context
 raise ValidationError(
-    f"Invalid email format: {email}",
-    field="email",
-    value=email,
-    user_id=user_id
+    f"Invalid email format: {email}", field="email", value=email, user_id=user_id
 )
 
 # ❌ No context
@@ -54,16 +53,27 @@ raise ValidationError("Invalid email")
 
 ### Graceful Degradation
 
+Degradation must be visible. When you fall back to cached data, signal it on
+every channel: emit a metric, log with context, and mark the response itself so
+the caller can tell it is serving stale data -- never return a silent fallback.
+
 ```python
 def get_user_profile(user_id: str) -> UserProfile:
     try:
-        profile = external_api.fetch_profile(user_id)
+        return external_api.fetch_profile(user_id)
     except ExternalAPIError as e:
-        logger.warning(f"External API failed, using cached: {e}")
+        # Signal degradation: metric + log + marked response
+        metrics.increment(
+            "user_profile.degraded", tags={"reason": "external_api_error"}
+        )
+        logger.warning(f"External API failed, serving stale cache: {e}")
         profile = cache.get(f"profile:{user_id}")
         if not profile:
             raise UserProfileUnavailableError(f"Cannot fetch profile for {user_id}")
-    return profile
+        # Mark the response so callers know it is degraded/stale
+        profile.degraded = True
+        profile.degraded_reason = "external_api_unavailable"
+        return profile
 ```
 
 ## Structured Logging
@@ -93,17 +103,9 @@ logger.debug(f"API key: {api_key}")  # NEVER
 
 ### Correlation IDs
 
-```python
-from contextvars import ContextVar
-
-request_id_var: ContextVar[str] = ContextVar("request_id")
-
-@app.before_request
-def set_request_id():
-    request_id = request.headers.get("X-Request-ID", str(uuid.uuid4()))
-    request_id_var.set(request_id)
-    structlog.contextvars.bind_contextvars(request_id=request_id)
-```
+Bind a request-scoped correlation ID so every log line within a request carries
+it. For the structlog + contextvars implementation, see
+[python-otel.md](python-otel.md).
 
 ## Three Pillars of Observability
 
@@ -124,43 +126,14 @@ def set_request_id():
 
 ## OpenTelemetry Auto-Instrumentation
 
-### Log Level Configuration
+OTEL layers on top of Python logging - it does not replace it, and it does NOT
+control your app's log level (you still need Python logging config). It adds
+`trace_id` / `span_id` attributes to log records, automatic spans for frameworks
+(FastAPI, SQLAlchemy, boto, etc.), and export to collectors (OTLP, console).
 
-**OTEL does NOT control your app's log level.** You still need Python logging
-config:
-
-```python
-import logging
-import os
-
-logging.basicConfig(
-    level=os.getenv("LOG_LEVEL", "INFO"),
-    format="%(levelname)s - %(name)s - %(message)s",
-)
-```
-
-| Variable | Controls |
-|----------|----------|
-| `LOG_LEVEL` | Your application's log level |
-| `OTEL_LOG_LEVEL` | OTEL SDK internal debug logging |
-
-### Running with OTEL
-
-```bash
-# Both variables are independent
-LOG_LEVEL=DEBUG \
-OTEL_SERVICE_NAME=my-service \
-OTEL_TRACES_EXPORTER=console \
-opentelemetry-instrument uvicorn myapp:app
-```
-
-### What OTEL Adds
-
-- `trace_id` and `span_id` attributes on log records
-- Automatic spans for frameworks (FastAPI, SQLAlchemy, boto, etc.)
-- Export to collectors (OTLP, console, etc.)
-
-OTEL layers on top of Python logging - it does not replace it.
+For the Python logging config, the `LOG_LEVEL` vs `OTEL_LOG_LEVEL` distinction,
+and the `opentelemetry-instrument` run command, see
+[python-otel.md](python-otel.md).
 
 ## Alerting
 

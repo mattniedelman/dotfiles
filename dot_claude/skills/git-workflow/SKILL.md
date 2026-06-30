@@ -113,6 +113,10 @@ git merge --no-ff feature/user-auth
 - How it was tested
 - Related issues (Closes #123)
 
+See [pr-template.md](pr-template.md) for a paste-ready PR description body and
+a runnable hotfix sync command recipe (the "fix from main, also merge to
+develop" sequence).
+
 **Best practices:**
 
 - Keep PRs < 500 lines when possible

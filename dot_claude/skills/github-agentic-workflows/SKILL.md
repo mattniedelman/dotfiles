@@ -88,6 +88,9 @@ steps:
 Instructions for the AI agent go below the frontmatter...
 ```
 
+For a full, copy-paste-ready workflow that wires all of these patterns
+together, see [examples/auggie-workflow.md](examples/auggie-workflow.md).
+
 ## Custom Engine Configuration (CRITICAL)
 
 When using custom engines (Auggie instead of Copilot), these settings **must**
@@ -100,19 +103,8 @@ be paired:
 | `safe-outputs.threat-detection` | `false` | Requires sandbox |
 | `network.allowed` | Include `api.augmentcode.com` | Augment API access |
 
-**Required setup steps for Auggie:**
-
-```yaml
-steps:
-  - name: Setup Augment Auth
-    run: |
-      echo '${{ secrets.AUGMENT_SESSION_AUTH }}' > /tmp/augment-session-auth.json
-      echo "AUGMENT_SESSION_AUTH_FILE=/tmp/augment-session-auth.json" >> "$GITHUB_ENV"
-  - name: Install Augment CLI
-    run: |
-      npm install -g @augmentcode/auggie
-      which auggie
-```
+**Required setup steps for Auggie:** see the `steps:` block in the Basic
+Structure example above (Setup Augment Auth + Install Augment CLI).
 
 ## Safe Outputs
 

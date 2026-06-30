@@ -43,9 +43,10 @@ digraph when_to_use {
 
 **Don't use when:**
 
-- Failures are related (fix one might fix others)
-- Need to understand full system state
-- Agents would interfere with each other
+- Failures are related -- fixing one might fix others; investigate together first
+- You need to understand full system state to make sense of the problem
+- Exploratory debugging -- you don't know what's broken yet
+- Shared state -- agents would interfere (editing same files, using same resources)
 
 ## The Pattern
 
@@ -73,7 +74,8 @@ Each agent gets:
 
 ### 3. Dispatch in Parallel
 
-Use sub-agents with clear, focused instructions for each domain.
+Use sub-agents with clear, focused instructions for each domain. See
+[example-dispatch.md](example-dispatch.md) for copy-paste `Agent()` prompts.
 
 ### 4. Review and Integrate
 
@@ -106,19 +108,9 @@ change production code" or "Fix tests only"
 **❌ Vague output:** "Fix it" - you don't know what changed **✅ Specific:**
 "Return summary of root cause and changes"
 
-## When NOT to Use
-
-**Related failures:** Fixing one might fix others - investigate together first
-**Need full context:** Understanding requires seeing entire system **Exploratory
-debugging:** You don't know what's broken yet **Shared state:** Agents would
-interfere (editing same files, using same resources)
-
-## Key Benefits
-
-1. **Parallelization** - Multiple investigations happen simultaneously
-2. **Focus** - Each agent has narrow scope, less context to track
-3. **Independence** - Agents don't interfere with each other
-4. **Speed** - 3 problems solved in time of 1
+For copy-paste `Agent()` dispatch prompts (scope + goal + constraints +
+expected-output filled in) and a worked multi-failure parallel dispatch, see
+[example-dispatch.md](example-dispatch.md).
 
 ## Verification
 

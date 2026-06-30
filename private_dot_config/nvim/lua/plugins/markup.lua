@@ -60,4 +60,5 @@ return {
       -- Uses defaults which include wrap support for tables
     },
   },
+
 }

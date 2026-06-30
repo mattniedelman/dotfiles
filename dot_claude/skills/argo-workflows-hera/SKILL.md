@@ -80,13 +80,15 @@ with Workflow(
 # Inline (default) - function body dumped to YAML
 @script(image="python:3.12-slim")
 def simple_task(x: int) -> int:
- return x * 2
+    return x * 2
+
+
 # Runner - runs via hera.workflows.runner module
 @script(constructor="runner", image="my-image:v1")
 def complex_task(data: dict) -> dict:
- import pandas as pd # External imports work
+    import pandas as pd  # External imports work
 
- return processed_data
+    return processed_data
 ```
 
 ## Global Configuration
@@ -116,12 +118,12 @@ global_config.experimental_features["script_pydantic_io"] = True
 from hera.workflows import TTLStrategy
 
 workflow = Workflow(
- generate_name="ddi-pipeline-",
- ttl_strategy=TTLStrategy(
- seconds_after_completion=172800, # 2 days
- seconds_after_failure=172800,
- seconds_after_success=86400, # 1 day for success
- ),
+    generate_name="ddi-pipeline-",
+    ttl_strategy=TTLStrategy(
+        seconds_after_completion=172800,  # 2 days
+        seconds_after_failure=172800,
+        seconds_after_success=86400,  # 1 day for success
+    ),
 )
 ```
 
@@ -155,5 +157,8 @@ workflow = Workflow(
 
 ## See Also
 
+- [examples.md](examples.md) -- complete runnable CronWorkflow, a
+  runner-constructor Workflow with Pydantic I/O and an artifact wired end to
+  end, and S3/GCS artifact repository config
 - [Hera Documentation](https://hera.readthedocs.io/)
 - [Argo Workflows Documentation](https://argo-workflows.readthedocs.io/)

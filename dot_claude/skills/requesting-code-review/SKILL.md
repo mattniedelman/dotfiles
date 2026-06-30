@@ -5,7 +5,9 @@ description: Use when completing tasks, implementing major features, or before m
 
 # Requesting Code Review
 
-Dispatch a code-reviewer subagent to catch issues before they cascade.
+Dispatch a review subagent to catch issues before they cascade. For a single-pass
+review use `pr-auditor` (orchestrates the per-concern reviewers); for a focused lens
+use a specific reviewer (`quality-reviewer`, `security-reviewer`, `testing-reviewer`, etc.).
 
 **Core principle:** Review early, review often.
 
@@ -29,16 +31,13 @@ Dispatch a code-reviewer subagent to catch issues before they cascade.
 Get git SHAs:**
 
 ```bash
-BASE_SHA=$(git rev-parse HEAD~1)  # or origin/main
+BASE_SHA=$(git rev-parse HEAD~1) # or origin/main
 HEAD_SHA=$(git rev-parse HEAD)
 ```
 
 **2.
-Dispatch code-reviewer subagent:**
-
-Use a sub-agent with the code-reviewer template, providing:
-
-**Placeholders:**
+Dispatch a review subagent** (`pr-auditor` for full coverage, or a specific reviewer
+for a focused lens), providing:
 
 - `{WHAT_WAS_IMPLEMENTED}` - What you just built
 - `{PLAN_OR_REQUIREMENTS}` - What it should do
@@ -64,7 +63,7 @@ You: Let me request code review before proceeding.
 BASE_SHA=$(git log --oneline | grep "Task 1" | head -1 | awk '{print $1}')
 HEAD_SHA=$(git rev-parse HEAD)
 
-[Dispatch code-reviewer subagent]
+[Dispatch pr-auditor subagent]
   WHAT_WAS_IMPLEMENTED: Verification and repair functions for conversation index
   PLAN_OR_REQUIREMENTS: Task 2 from docs/plans/deployment-plan.md
   BASE_SHA: a7981ec
@@ -155,6 +154,3 @@ reviewers agreed, where they conflicted, and how conflicts were resolved.
 - Push back with technical reasoning
 - Show code/tests that prove it works
 - Request clarification
-
-See template at:
-requesting-code-review/code-reviewer.md

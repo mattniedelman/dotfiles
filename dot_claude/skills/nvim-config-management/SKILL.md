@@ -7,17 +7,9 @@ description: Use when reviewing, updating, or troubleshooting Neovim configurati
 
 Guide for managing the Neovim configuration workspace (`~/.config/nvim`).
 
-## When to Use
-
-Use this skill when:
-
-- User asks to review their Neovim configuration
-- User wants to add, update, or remove plugins
-- User needs to configure LSP servers or formatters
-- User wants to add or modify keymaps
-- User asks about plugin conflicts or interactions
-- User mentions LazyVim, Lazy.nvim, or specific plugins
-- User wants to troubleshoot Neovim behavior
+For the Basic Memory integration (note structure, queries, example notes), an
+annotated lazy.nvim plugin-spec example, and the `<leader>` keymap prefix table,
+see [reference.md](reference.md).
 
 ## Configuration Structure
 
@@ -187,92 +179,5 @@ Current config:
 **REQUIRED**:
 Track configuration decisions and changes in basic-memory to inform future
 choices.
-
-### When to Write Notes
-
-Write a note when:
-
-- Adding or removing a plugin (capture why, alternatives considered)
-- Changing keymaps (capture conflicts resolved, rationale)
-- Modifying LSP configuration (capture issues fixed, tradeoffs)
-- Resolving plugin conflicts (capture what conflicted, solution)
-- Making architectural decisions (e.g., "organize by concern not plugin")
-
-### Note Structure
-
-```python
-write_note(
-    title="nvim: <brief description>",
-    directory="nvim-config",
-    content="""
-# <Decision Title>
-
-## Context
-What prompted this change?
-
-## Decision
-What was decided and why?
-
-## Alternatives Considered
-What else was evaluated?
-
-## Consequences
-What are the implications?
-"""
-)
-```
-
-### Querying Past Decisions
-
-Before making changes, check for relevant history:
-
-```python
-# Search for related decisions
-search_notes(query="nvim <topic>")
-
-# Get recent nvim config activity
-recent_activity(timeframe="30d")
-
-# Build context from nvim-config folder
-build_context(url="memory://nvim-config/*")
-```
-
-### Example Notes
-
-**Plugin addition:**
-
-```markdown
-# nvim: Added sidekick.nvim for AI integration
-
-## Context
-Needed better AI assistant integration than basic augment.vim completion.
-
-## Decision
-Added folke/sidekick.nvim with auggie backend. Configured prompts for
-explain, fix, tests, commit, and lsp diagnostics.
-
-## Alternatives Considered
-- avante.nvim: Too heavy, different workflow
-- codecompanion.nvim: Less integrated with augment ecosystem
-
-## Consequences
-- New keymaps under <leader>a prefix
-- Disabled ctrl+p in sidekick to avoid auggie conflict
-```
-
-**Conflict resolution:**
-
-```markdown
-# nvim: Resolved tab key conflict between augment and sidekick
-
-## Context
-Both augment.vim and sidekick.nvim wanted to use <Tab> for accepting suggestions.
-
-## Decision
-- Disabled augment's tab mapping via vim.g.augment_disable_tab_mapping
-- Use sidekick's nes_jump_or_apply() for <Tab>
-- Added <C-f> as alternative accept key for augment
-
-## Consequences
-Tab now prioritizes sidekick edit suggestions, falls through to normal tab.
-```
+For note structure, query snippets, and example notes, see
+[reference.md](reference.md#basic-memory-integration).
