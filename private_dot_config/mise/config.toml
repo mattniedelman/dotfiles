@@ -2,12 +2,10 @@
 min_version = "2024.11.0"
 
 [tools]
-python = { version = '3.13'}
+python = { version = '3.13' }
 
 
-"aqua:BurntSushi/xsv" = "latest"  # CSV toolkit
-"aqua:dalance/procs" = "latest"  # Modern ps replacement
-"aqua:mikefarah/yq" = "4.47.2"
+"aqua:dalance/procs" = "latest"                                                                              # Modern ps replacement
 "cargo:agnix-cli" = "latest"
 "cargo:cbfmt" = "latest"
 "cargo:https://github.com/razziel89/mdslw" = "branch:main"
@@ -21,7 +19,7 @@ python = { version = '3.13'}
 "github:dolthub/dolt" = "latest"
 "github:joshmedeski/sesh" = "latest"
 "github:rtk-ai/rtk" = "latest"
-"go:github.com/mattn/efm-langserver" = "latest"  # General-purpose language server
+"go:github.com/mattn/efm-langserver" = "latest"                                                              # General-purpose language server
 "npm:@arizeai/phoenix-cli" = "latest"
 "npm:@augmentcode/auggie" = "latest"
 "npm:@contextlint/cli" = "latest"
@@ -34,26 +32,28 @@ python = { version = '3.13'}
 "npm:@openai/codex" = "latest"
 "npm:actions-up" = "latest"
 "npm:agentsys" = "latest"
-"npm:jscpd" = "latest"  # Copy-paste detection
 "npm:opencode-ai" = "latest"
 "npm:promptfoo" = "latest"
 "npm:rulesync" = "latest"
 "npm:think-strategies" = "latest"
 "pipx:aws-sso-util" = "latest"
-"pipx:basedpyright" = "latest"  # Enhanced fork of pyright with additional features
+"pipx:basedpyright" = "latest"                                                                               # Enhanced fork of pyright with additional features
 "pipx:basic-memory" = "latest"
 "pipx:crawl4ai" = "latest"
 "pipx:deply" = "latest"
 "pipx:desloppify" = "latest"
-"pipx:hindsight-embed" = "latest"
+# Co-install hindsight-api + langchain-text-splitters into the embed venv so the
+# daemon launches the local hindsight-api binary instead of an isolated runtime
+# `uvx hindsight-api@VER` env. This (1) survives uv cache GC that previously left
+# the daemon running from a deleted archive, and (2) provides langchain-text-splitters,
+# which hindsight-api imports lazily but never declares as a dependency.
+"pipx:hindsight-embed" = { version = "latest", uvx_args = "--with hindsight-api --with langchain-text-splitters" }
 "pipx:openshell" = "latest"
 "pipx:ruff" = "latest"
 "pipx:sshuttle" = "latest"
 "pipx:ty" = "latest"
-"pipx:yamllint" = "latest"      # YAML linter
-"pipx:zuban" = "latest"
-"ubi:ByteNess/aws-vault" = "latest"
-"ubi:zippoxer/recall" = "latest"
+"pipx:yamllint" = "latest"                                                                                         # YAML linter
+"github:zippoxer/recall" = "latest"
 1password = "latest"
 act = "latest"
 action-validator = "latest"
@@ -61,16 +61,15 @@ actionlint = "latest"
 amazon-ecr-credential-helper = "latest"
 ast-grep = "latest"
 atuin = "latest"
-aws-cli = "2"              # Pinned to major version for stability
+aws-cli = "2"                                                                                                      # Pinned to major version for stability
 aws-sigv4-proxy = "1.11.1"
 bat = "latest"
 bat-extras = "latest"
-bottom = "latest"          # Modern top/htop replacement
+bottom = "latest"                                                                                                  # Modern top/htop replacement
 bun = "latest"
-checkov = "latest"              # IaC security scanner
+checkov = "latest"                                                                                                 # IaC security scanner
 chezmoi = "latest"
 cue = "latest"
-dagger = "latest"
 delta = "latest"
 difftastic = "latest"
 direnv = "latest"
@@ -78,9 +77,9 @@ docker-compose = "latest"
 dotnet = "latest"
 dua = "latest"
 duckdb = "latest"
-duf = "latest"             # Modern df replacement (Go-based)
-dust = "latest"            # Modern du replacement
-eza = "latest"             # Modern ls replacement (fork of exa)
+duf = "latest"                                                                                                     # Modern df replacement (Go-based)
+dust = "latest"                                                                                                    # Modern du replacement
+eza = "latest"                                                                                                     # Modern ls replacement (fork of exa)
 fd = "latest"
 fzf = "latest"
 ghalint = "latest"
@@ -89,24 +88,19 @@ gitleaks = "latest"
 glow = "latest"
 go = 'latest'
 grype = "latest"
-hadolint = "latest"             # Dockerfile linter
-helm = "3"                 # Pinned to major version for stability
+hadolint = "latest"                                                                                                # Dockerfile linter
+helm = "3"                                                                                                         # Pinned to major version for stability
 hk = "latest"
 java = "17.0.2"
 jq = "latest"
 k3d = "latest"
-kube-capacity = "latest"
-kube-linter = "latest"
-kube-score = "latest"
-kubectl = "1.31"           # Pinned - should match cluster version
+kubectl = "1.31"                                                                                                   # Pinned - should match cluster version
 kubectx = "latest"
-kubesec = "latest"
 lua = "latest"
 make = "latest"
-markdownlint-cli2 = "latest"
 maven = "latest"
 neovim = "latest"
-node = "latest"
+node = "lts"
 pandoc = "latest"
 patat = "latest"
 pinact = "latest"
@@ -126,27 +120,41 @@ skaffold = "latest"
 sqlite = "latest"
 swift = "latest"
 syft = "latest"
-television = "latest"      # Modern fuzzy finder (tv)
-terraform = "latest"
-terrascan = "latest"            # Terraform security (deprecated upstream)
-tflint = "latest"               # Terraform linter
+television = "latest"                                                                                              # Modern fuzzy finder (tv)
+tflint = "latest"                                                                                                  # Terraform linter
 tmux = "latest"
 trivy = "latest"
 trufflehog = "latest"
 typos = "latest"
 usage = "latest"
 uv = "latest"
-vale = "latest"
 yamlfmt = "latest"
 zizmor = "latest"
 zoxide = "latest"
 "npm:gsd-pi" = "latest"
 "npm:confluence-cli" = "latest"
-"pipx:cocoindex-code" = {version = "latest", extras = "full", uvx_args = "--with boto3"}
 "github:agavra/tuicr" = "latest"
+"pipx:semble" = { version = "latest", extras = "mcp" }
+"npm:@colbymchenry/codegraph" = "latest"
+ghorg = "latest"
+"npm:@kaelio/ktx" = "latest"
+"npm:reveal.js" = "latest"
+"npm:playwright" = "latest"
+"pipx:agentsview" = "latest"
+"npm:hunkdiff" = "latest"
+"github:nolabs-ai/nono" = "v0.65.1"
+terraform = "latest"
+"npm:ccusage" = "latest"
+"go:github.com/grafana/mcp-grafana/cmd/mcp-grafana" = "v0.16.0"
+just = "latest"
+opa = "latest"
+"pipx:prowler" = "latest"
+oh-my-posh = "latest"
+opencode = "latest"
 
 [env]
 HK_MISE = "1"
+HK_PKL_BACKEND = "pkl"
 
 [settings]
 # plugins can read the versions files used by other version managers (if enabled by the plugin)
@@ -181,6 +189,18 @@ status = { missing_tools = "if_other_versions_installed", show_env = false, show
 
 # Enable reading native version files for these tools (.nvmrc, .python-version, etc.)
 idiomatic_version_file_enable_tools = ["python", "node", "go", "java"]
+lockfile = true
+locked_verify_provenance = true
+
+# Supply-chain cooldown: ignore versions newer than this window so the
+# community has time to flag compromised releases before mise installs them.
+# Applies to version-resolved backends (npm, pipx, cargo crates.io, github
+# releases, etc). Does NOT affect `branch:main` git installs (no release date).
+# NOTE: the per-tool exemption list (minimum_release_age_excludes) may or may
+# not be supported by the current mise version -- check `mise doctor` output.
+# If a security scanner's freshness matters more than the cooldown, pin it to
+# an explicit recent version.
+minimum_release_age = "7d"
 
 
 [tasks.upgrade]

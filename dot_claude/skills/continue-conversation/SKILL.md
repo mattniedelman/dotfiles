@@ -38,9 +38,9 @@ Known Topic - Use build_context**
 # Navigate knowledge graph from a known starting point
 build_context(
     url="memory://topic-or-note-name",
-    depth=2,           # How many relation hops to follow
-    timeframe="7d",    # Recent changes
-    project="main"     # or "specs" for specifications
+    depth=2,  # How many relation hops to follow
+    timeframe="7d",  # Recent changes
+    project="main",  # or "specs" for specifications
 )
 ```
 
@@ -56,9 +56,9 @@ Recent Activity - What's been happening?**
 ```python
 # See what's changed recently
 recent_activity(
-    timeframe="3d",    # "1d", "1 week", "2 weeks"
+    timeframe="3d",  # "1d", "1 week", "2 weeks"
     depth=1,
-    project="main"
+    project="main",
 )
 ```
 
@@ -67,11 +67,7 @@ Search for Context**
 
 ```python
 # Find relevant notes
-search_notes(
-    query="search terms",
-    page_size=10,
-    project="main"
-)
+search_notes(query="search terms", page_size=10, project="main")
 ```
 
 ### 3. Read Key Notes
@@ -79,10 +75,7 @@ search_notes(
 Once you identify relevant notes:
 
 ```python
-read_note(
-    identifier="note-title-or-permalink",
-    project="main"
-)
+read_note(identifier="note-title-or-permalink", project="main")
 ```
 
 ### 4. Present Context to User
@@ -100,17 +93,10 @@ Summarize what you found:
 
 ```python
 # 1. Read the spec
-read_note(
-    identifier="SPEC-24: Postgres Database Migration",
-    project="specs"
-)
+read_note(identifier="SPEC-24: Postgres Database Migration", project="specs")
 
 # 2. Check recent activity on related topics
-build_context(
-    url="memory://SPEC-24*",
-    timeframe="7d",
-    project="specs"
-)
+build_context(url="memory://SPEC-24*", timeframe="7d", project="specs")
 
 # 3. Look at what's been done in the codebase
 # (Use regular file tools for this)
@@ -120,33 +106,20 @@ build_context(
 
 ```python
 # 1. Check recent activity across projects
-recent_activity(
-    timeframe="3d",
-    project="main"
-)
+recent_activity(timeframe="3d", project="main")
 
 # 2. Read any notes from recent sessions
-read_note(
-    identifier="relevant-note",
-    project="main"
-)
+read_note(identifier="relevant-note", project="main")
 ```
 
 ### Following Up on a Topic
 
 ```python
 # 1. Search for the topic
-search_notes(
-    query="topic keywords",
-    project="main"
-)
+search_notes(query="topic keywords", project="main")
 
 # 2. Build context from best match
-build_context(
-    url="memory://found-note-permalink",
-    depth=2,
-    project="main"
-)
+build_context(url="memory://found-note-permalink", depth=2, project="main")
 ```
 
 ## Timeframe Reference
@@ -218,6 +191,6 @@ list_memory_projects()
 
 After building context, you might:
 
-- Use **knowledge-capture** to document new progress
-- Use **spec-driven-development** if continuing a spec implementation
+- Use **note** to capture new progress to Basic Memory
+- Use **implement** if continuing a tracked implementation
 - Create new notes linking to the context you gathered

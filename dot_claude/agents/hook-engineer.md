@@ -35,7 +35,7 @@ development standards without breaking Claude Code's workflow.
 ## Standard Hook Structure
 
 ```python
-#!/usr/bin/env -S uv run --quiet --script --directory ~/.claude/hooks
+#!/usr/bin/env -S uv run --quiet --script --directory /home/mattniedelman/.claude/hooks
 """
 <HookType> hook: <one-line description>
 
@@ -72,7 +72,7 @@ ctx.session_id  # session identifier
 # PreToolUseContext outputs
 ctx.output.allow()  # allow silently
 ctx.output.allow(reason="msg")  # allow + show message
-ctx.output.deny(reason="msg")  # block tool
+ctx.output.block(reason="msg")  # block tool
 
 # PostToolUseContext outputs
 ctx.output.exit_success()  # no-op

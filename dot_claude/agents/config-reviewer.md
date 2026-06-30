@@ -64,7 +64,8 @@ cross-reference inconsistencies across the ~/.claude configuration.
 ## Hook Checklist
 
 - [ ] Correct uv shebang:
-  `#!/usr/bin/env -S uv run --quiet --script --directory ~/.claude/hooks`
+  `#!/usr/bin/env -S uv run --quiet --script --directory
+  /home/mattniedelman/.claude/hooks`
 - [ ] Has `from cchooks import create_context`
 - [ ] Has isinstance guard before any logic:
   `if not isinstance(ctx, Target):
@@ -101,10 +102,10 @@ cross-reference inconsistencies across the ~/.claude configuration.
 
 ## Team Communication Protocol
 
-**Receives from:** skill-author (completed skill), hook-engineer (completed
-hook), orchestrator (audit request)
+**Receives from:** hook-engineer (completed hook), or a skill-authoring session
+following `writing-skills` (completed skill), orchestrator (audit request)
 
-**Sends to:** skill-author or hook-engineer (review findings), orchestrator
+**Sends to:** hook-engineer or the authoring session (review findings), orchestrator
 (review complete)
 
 When sending review findings:

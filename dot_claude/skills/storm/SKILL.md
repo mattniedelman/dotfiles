@@ -27,11 +27,11 @@ NEVER write files to the local filesystem.
 
 ## Related Skills
 
-**Use `deep-dive` first if:** You need to understand existing code or systems
-before researching external options.
-STORM assumes you know what you have; deep-dive builds that understanding.
+**Use `deep-research` first if:** You need to understand existing code or
+systems before researching external options.
+STORM assumes you know what you have; deep-research builds that understanding.
 
-**Use `deep-dive` after if:** STORM research concludes you need deeper
+**Use `deep-research` after if:** STORM research concludes you need deeper
 understanding of a specific component before deciding.
 
 ## STORM Process Overview
@@ -96,23 +96,12 @@ For topic: "[TOPIC]"
 | ... | ... | ... |
 ```
 
-**Example for "Kubernetes service mesh":**
-
-| Perspective           | Focus Areas                               | Key Questions                 |
-| --------------------- | ----------------------------------------- | ----------------------------- |
-| Security Engineer     | mTLS, network policies, zero-trust        | How is traffic encrypted?     |
-| Platform Engineer     | installation, upgrades, resource overhead | How do I operate this?        |
-| Application Developer | service discovery, retries, observability | How do I use this in my code? |
-| SRE                   | debugging, latency impact, failure modes  | How do I troubleshoot issues? |
-
-**Example for "Authentication strategy for API":**
-
-| Perspective        | Focus Areas                                | Key Questions                  |
-| ------------------ | ------------------------------------------ | ------------------------------ |
-| Security Architect | attack vectors, token security, compliance | What are the vulnerabilities?  |
-| Backend Developer  | library support, implementation complexity | How do I implement this?       |
-| Mobile Developer   | token storage, refresh flows, offline      | How does this work on mobile?  |
-| Product Manager    | user friction, onboarding, conversion      | What's the UX impact?          |
+**For pre-worked starting tables, see `perspective-library.md`** -- it has
+seed perspective/focus/key-question tables for common topic classes (security
+review, infra choice, API design, data modeling) plus worked examples for
+"Kubernetes service mesh" and "Authentication strategy for API". Use them to
+seed the set, then adjust to the specific topic. Perspectives still emerge from
+the source survey -- the library is a lookup, not a substitute for discovery.
 
 ## Phase 2: Multi-Perspective Research (Parallel)
 
@@ -251,7 +240,7 @@ next round of questions.
 After all perspective subagents complete, synthesize their findings into a
 unified outline organized by **theme** (not by perspective).
 
-**For outline generation, escalate to the `think-tree` skill** -- explore multiple thematic structures, evaluate, and pick the strongest. Frame the prompt around the research findings:
+**For outline generation, escalate to the `think` skill** -- explore multiple thematic structures, evaluate, and pick the strongest. Frame the prompt around the research findings:
 
 > I have research findings from 4 perspectives on [TOPIC]. Generate a hierarchical outline organized by THEME:
 > - Where do perspectives agree? (high confidence)
@@ -297,110 +286,9 @@ Use Basic Memory Only**
 Use `write_note` (Basic Memory MCP) to save the report.
 The `directory` parameter is a Basic Memory path, not a filesystem path.
 
-**Report Template:**
-
-```markdown
----
-title: "[Topic]"
-type: research
-tags:
- - research
- - storm
- - [topic-tags]
----
-
-# [Topic]
-
-## Summary
-
-[2-3 sentence executive summary synthesizing key findings across perspectives]
-
-## Research Question
-
-[What we set out to understand]
-
-## Perspectives Consulted
-
-| Perspective | Focus | Key Insight |
-|-------------|-------|-------------|
-| [Role 1] | [Focus area] | [One-line insight] |
-| [Role 2] | [Focus area] | [One-line insight] |
-
-## Key Findings
-
-### Finding 1: [Theme]
-
-**Consensus:** [What perspectives agree on]
-
-**Evidence:**
-- [Source 1]: [Quote or summary]
-- [Source 2]: [Quote or summary]
-
-**Trade-offs:** [Where perspectives differ, if applicable]
-
-### Finding 2: [Theme]
-[Same structure]
-
-## Common Pitfalls
-
-| Pitfall | Why It Happens | How to Avoid |
-|---------|----------------|--------------|
-| [Pattern 1] | [Root cause] | [Prevention strategy] |
-| [Pattern 2] | [Root cause] | [Prevention strategy] |
-| [Pattern 3] | [Root cause] | [Prevention strategy] |
-
-## Best Practices
-
-Synthesized from [N] sources with confidence scores:
-
-| Practice | Confidence | Sources | One-Line Description |
-|----------|------------|---------|---------------------|
-| [Practice 1] | HIGH | [N] | [Description] |
-| [Practice 2] | MEDIUM | [N] | [Description] |
-| [Practice 3] | LOW | [N] | [Description] |
-
-## Analysis
-
-[Synthesis across findings - patterns, implications, recommendations]
-
-## Open Questions
-
-- [Questions that emerged but weren't fully answered]
-- [Areas needing deeper investigation]
-
-## Sources (Quality-Ranked)
-
-| Source | Quality | Key Insight |
-|--------|---------|-------------|
-| [URL 1] | 0.9 | [Main takeaway] |
-| [URL 2] | 0.8 | [Main takeaway] |
-| [URL 3] | 0.7 | [Main takeaway] |
-| [[Related Note]] | - | [How it relates] |
-
-## Observations
-
-- [finding] Key insight from multi-perspective analysis #research #storm
-- [tradeoff] Trade-off identified between perspectives
-- [recommendation] Action suggested based on synthesis
-
-## Relations
-
-- researches [[Topic]]
-- informs [[Decision or Implementation]]
-- relates-to [[Related Concepts]]
-```
-
-**Save to Basic Memory:**
-
-```python
-# Basic Memory MCP
-write_note(
-    title="[Topic]",
-    content="[Full report]",
-    directory="knowledge/research",
-    tags=["research", "storm", "topic-tags"],
-)
-```
+**For the full report skeleton and the `write_note` call, see
+`report-template.md`** -- copy the template, populate it from the synthesized
+outline, and save to `directory="knowledge/research"`.
 
 ## Quick vs Deep Research
 
@@ -448,34 +336,9 @@ Adjust the STORM depth based on the request:
 
 ## Completion Format
 
-Always end with:
-
-```markdown
-## STORM Research Complete
-
-**Saved to Basic Memory:** `memory://artifacts/research/[topic]`
-
-**Perspectives Consulted:**
-- [Perspective 1]: [Key insight]
-- [Perspective 2]: [Key insight]
-- [Perspective 3]: [Key insight]
-
-**Key Findings:**
-1. [Most important cross-perspective finding]
-2. [Second finding]
-3. [Third finding]
-
-**Trade-offs Identified:**
-- [Trade-off 1]
-- [Trade-off 2]
-
-**Recommendation:** [If applicable]
-
-Would you like me to:
-- Dive deeper into any perspective?
-- Research a related topic?
-- Draft implementation based on findings?
-```
+Always end with the STORM completion summary. **See `report-template.md`** for
+the copy-paste completion block (saved-location, perspectives, key findings,
+trade-offs, recommendation, and follow-up offers).
 
 ## References
 

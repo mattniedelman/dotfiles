@@ -1,13 +1,14 @@
 # Project Instructions for AI Agents
 
-This file provides instructions and context for AI coding agents working on this
-project.
+## Skills
 
-## Project Context
+Before responding to ANY user message, check if a skill might apply.
+If there is even a 1% chance a skill applies, invoke it with the Skill tool
+BEFORE doing anything else -- including clarifying questions, exploring code, or
+gathering context.
 
-This repo primarily uses Python, YAML, Markdown, and Shell.
-When working with chezmoi-managed dotfiles, always check for template syntax and
-chezmoi-specific conventions before editing.
+Skill priority:
+process skills first (brainstorming, debugging), then implementation skills.
 
 ## Sandbox & Authentication
 
@@ -23,16 +24,6 @@ When the user says "my notes", "my note", or refers to notes without further
 qualification, they mean their Basic Memory notes stored in `~/basic-memory`.
 Use the Basic Memory MCP tools (`mcp__basic-memory__*`) to search, read, or
 write them -- do not create plain files under `~/basic-memory` directly.
-
-## Skills
-
-Before responding to ANY user message, check if a skill might apply.
-If there is even a 1% chance a skill applies, invoke it with the Skill tool
-BEFORE doing anything else -- including clarifying questions, exploring code, or
-gathering context.
-
-Skill priority:
-process skills first (brainstorming, debugging), then implementation skills.
 
 ## General Rules
 
@@ -63,6 +54,27 @@ Do not call lifecycle commands (start, stop, init, restart) on services that
 manage themselves automatically.
 Check whether the service auto-starts before issuing manual start/stop calls.
 
+## Posting Content Attributed to Me
+
+When an action posts content that will appear under my name -- anything a reader
+would take as authored by me -- show me a draft and get my explicit approval
+before posting.
+This is about authorship, not just the mechanics of the action:
+the permission prompt asks "may I run this command?"; this rule asks "do you
+approve these words going out under your name?"
+
+This applies to PR descriptions and review bodies, PR and issue comments,
+release notes, discussion posts, gists, emails, chat/Slack messages, and any
+similar externally visible, attributed content.
+Draft first, wait for my go-ahead, then post -- do not combine drafting and
+posting into one step.
+
+It does NOT apply to content that is clearly machine-attributed or
+non-authorial:
+commit messages and trailers, code and config, internal artifacts (change files,
+tracking notes), or anything where I have already reviewed the exact text in
+this session.
+
 ## Debugging
 
 After applying a config or service change, always verify the running process has
@@ -81,13 +93,18 @@ ordering was wrong.
 <!-- BEGIN BEADS INTEGRATION v:2 profile:br -->
 ## Beads Issue Tracker (br)
 
-This project uses **br (beads_rust)** for issue tracking.
+Projects may use **br (beads_rust)** for issue tracking.
 `bd` is aliased to `br` so existing muscle memory works; subcommands that
 existed only in the old Go `bd` (`dolt`, `prime`, `remember`, `memories`) were
 dropped in the migration and will error loudly.
 
-Storage is SQLite plus a git-tracked `.beads/issues.jsonl` export.
+Storage is SQLite plus a `.beads/issues.jsonl` export.
 No Dolt backend, no automatic commits, no background daemon.
+
+`.beads/` is NOT committed to git -- the whole directory (DB and JSONL alike)
+stays gitignored.
+beads is a local working store; the only task artifact that reaches git is the
+rendered `tasks.md` (see rule: beads-vmodel-tracking).
 
 ### Quick Reference
 
@@ -101,68 +118,40 @@ br stats              # Project stats (replaces bd prime at session start)
 
 ### Rules
 
-- Use `br` for ALL task tracking -- do NOT use TodoWrite, TaskCreate, or
-  markdown TODO lists
+- If `br` is initialized (check with `br status` or similar), use `br` for ALL
+  task tracking -- do NOT use TodoWrite, TaskCreate, or markdown TODO lists
 - Persistent cross-session knowledge goes to Basic Memory
   (`mcp__basic-memory__*`), not to MEMORY.md files and not to a `bd remember`
   equivalent (`br` has none)
-- JSONL auto-flushes on mutating commands; commit `.beads/issues.jsonl` like any
-  other source file when you want to share state
 
 ## Session Completion
 
-**When ending a work session**, you MUST complete ALL steps below.
-Work is NOT complete until `git push` succeeds.
+Work is NOT complete until `git push` succeeds -- YOU must push, never stop and wait.
 
-**MANDATORY WORKFLOW:**
-
-1. **File issues for remaining work** - Create issues for anything that needs
-   follow-up
-2. **Run quality gates** (if code changed) - Tests, linters, builds
-3. **Update issue status** - Close finished work, update in-progress items
-4. **PUSH TO REMOTE** - This is MANDATORY:
+1. File issues for remaining work
+2. Run quality gates (if code changed) -- tests, linters, builds
+3. Update issue status -- close finished work, update in-progress
+4. Push:
    ```bash
-   git pull --rebase
-   git push
-   git status  # MUST show "up to date with origin"
+   git pull && git push
+   git status  # must show "up to date with origin"
    ```
-   If `.beads/issues.jsonl` changed during the session, stage and commit it with
-   the rest of the work before pushing.
-5. **Clean up** - Clear stashes, prune remote branches
-6. **Verify** - All changes committed AND pushed
-7. **Hand off** - Provide context for next session
-
-**CRITICAL RULES:**
-- Work is NOT complete until `git push` succeeds
-- NEVER stop before pushing - that leaves work stranded locally
-- NEVER say "ready to push when you are" - YOU must push
-- If push fails, resolve and retry until it succeeds
+   Do NOT commit `.beads/`. If a change set uses beads, regenerate `changes/<name>/tasks.md`
+   before pushing (see rule: beads-vmodel-tracking).
+5. Clean up stashes, prune remote branches
+6. Hand off context for next session
 <!-- END BEADS INTEGRATION -->
 
-
-## Build & Test
-
-_Add your build and test commands here_
-
-```bash
-# Example:
-# npm install
-# npm test
-```
-
-## Architecture Overview
-
-_Add a brief overview of your project architecture_
 
 ## Text Output
 
 Use only ASCII punctuation in all file output:
 - Dashes:
-  `--` (not `—` or `–`)
+  `--` (not ` -- ` or `-`)
 - Quotes:
   `"..."` and `'...'` (not `"..."` or `'...'`)
 - Ellipsis:
-  `...` (not `…`)
+  `...` (not `...`)
 - Spaces:
   regular spaces only (not non-breaking or narrow variants)
 
@@ -171,17 +160,56 @@ correctly avoids the correction cycle.
 
 ## Conventions & Patterns
 
-### Python package management
+### Git Workflow
 
-- NEVER run `pip`, `pip3`, `python -m pip`, or `python3 -m pip`.
-  A PreToolUse hook blocks these.
-- Use `uv` for everything Python:
-  - `uv add <pkg>` to add a project dependency (preferred -- updates
-    `pyproject.toml` + `uv.lock`)
-  - `uv add --dev <pkg>` for dev dependencies
-  - `uv remove <pkg>` to drop a dependency
-  - `uv run <cmd>` to execute inside the project's environment
-  - `uv tool install <pkg>` for standalone CLI tools
-  - `uv pip install <pkg>` only as a last resort for ad-hoc virtualenvs --
-    prefer `uv add`
-- If a repo isn't uv-managed yet, run `uv init` before adding deps.
+Default workflow is simplified git flow -- not trunk-based, not squash-and-rebase.
+This overrides any skill that defaults to squash/rebase (e.g., `git-discipline`).
+
+- **Branching:** `main` and `develop` are long-lived; feature branches from `develop`, hotfix branches from `main`.
+- **Merging:** merge with `--no-ff` -- never rebase shared branches, never squash.
+- **Commits:** Conventional Commits format; only commit when explicitly asked.
+- **PRs:** create PRs to merge feature/fix branches; never merge directly to `main` or `develop` in conversation.
+- **Conflicts:** resolve conflict by conflict -- never abort and discard.
+- **Pulls:** `git pull` (no `--rebase`).
+
+
+<!-- SEMBLE_START -->
+## Semble Code Search
+
+A `semble` MCP server is available with two tools:
+- `mcp__semble__search` -- search the codebase with a natural-language or code
+  query.
+- `mcp__semble__find_related` -- find code similar to a specific file and line.
+
+Always call `mcp__semble__search` before using Grep, Glob, or Read to explore
+the codebase.
+Use Grep/Glob/Read only for exact path lookup, exhaustive literal matches, or
+when the returned chunk lacks enough context.
+
+Pass `--content docs` to search documentation and prose, `--content config` for
+config files, or `--content all` to search code, docs, and config together.
+
+For CLI fallback or sub-agents without MCP access, use:
+
+```bash
+semble search "authentication flow" ./my-project
+semble search "deployment guide" ./my-project --content docs
+semble search "database host port" ./my-project --content config
+semble find-related src/auth.py 42 ./my-project
+semble search "save model to disk" ./my-project --top-k 10
+```
+
+The index is built on first run and cached automatically.
+If `semble` is not on `$PATH`, use `uvx --from "semble[mcp]" semble`.
+
+### Workflow
+
+1. Start with `mcp__semble__search` to find relevant chunks.
+2. Use `--content docs` for documentation, `--content config` for config files,
+   or `--content all` for everything.
+3. Inspect full files only when the returned chunk does not give enough context.
+4. Optionally use `mcp__semble__find_related` with a promising result's
+   `file_path` and `line` to discover related implementations.
+5. Use Grep/Glob/Read only when you need exhaustive literal matches or quick
+   confirmation of an exact string.
+<!-- SEMBLE_END -->

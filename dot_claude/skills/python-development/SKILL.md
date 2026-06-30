@@ -1,11 +1,16 @@
 ---
 name: python-development
-description: Use when developing Python applications - patterns, testing with pytest, type hints, modern practices, and code organization
+description: Conventions for non-FastAPI Python modules, libraries, and scripts -- pytest test layout and fakes-over-mocks, type-hint and style conventions, Pydantic data structures, and code organization. Not for FastAPI services (use the fastapi skill).
 ---
 
 # Python Development Patterns
 
-Use this skill for Python development guidance beyond basic constraints.
+Use this skill for Python module, library, and script conventions beyond basic
+constraints. For FastAPI services, use the fastapi skill instead.
+
+Copy-paste artifacts -- a uv-managed `pyproject.toml` (ruff + pytest config), a
+`conftest.py` fakes fixture, and a worked fake-vs-mock test -- live in
+[templates.md](templates.md).
 
 ## Testing with pytest
 
@@ -17,12 +22,12 @@ strings:
 # pytest 9.0+ - native TOML (preferred)
 [tool.pytest]
 testpaths = ["tests"]
-addopts = ["--cov=src", "-v"]  # Array, not string
+addopts = ["--cov=src", "-v"] # Array, not string
 
 # pytest 6.0+ - INI-style
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-addopts = "--cov=src -v"  # String, not array
+addopts = "--cov=src -v" # String, not array
 ```
 
 **Organization:** Mirror source structure (`src/module.py` →
@@ -52,7 +57,8 @@ for i, item in enumerate(result):
 ```
 
 **Anti-mocking:** Use real implementations, in-memory databases, fakes - not
-mocks.
+mocks. See [templates.md](templates.md) for a `conftest.py` fakes fixture and a
+worked fake-vs-mock comparison.
 
 ## Type Hints
 
@@ -79,11 +85,12 @@ def process_data(items: list[str], threshold: int = 10) -> dict[str, int]:
 ```python
 from pydantic import BaseModel, Field
 
+
 class User(BaseModel):
     name: str
     email: str
     age: int = Field(ge=0, le=150)
-    
+
     model_config = {"frozen": True}  # Immutable if needed
 ```
 
@@ -100,6 +107,7 @@ message = "{} is {}".format(name, age)  # ❌
 
 ```python
 from pathlib import Path
+
 config = Path("config") / "settings.json"
 content = config.read_text() if config.exists() else ""
 ```

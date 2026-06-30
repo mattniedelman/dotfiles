@@ -29,58 +29,55 @@ service, check if documentation has already been crawled or is available.
 
 ## Workflow
 
+This is the single canonical workflow for accessing documentation, answering
+capability questions ("can X do Y?", "does X support Y?"), and reviewing a
+tool's docs. The fetch ladder is the same in every case:
+llms.txt -> WebFetch -> crwl -> WebSearch.
+
 ### 1. Check If Documentation Exists
 
-First, check if we already have documentation in Basic Memory:
+First, check whether we already have the docs in Basic Memory:
 
 ```python
 search_notes(query="library-name", tags=["docs"])  # Basic Memory MCP
 ```
 
-### 2. Decision: Fetch or Use Existing
+- **Exists and fresh:** proceed to step 4 (search/retrieve).
+- **Exists but stale (>30 days):** suggest a refresh if the library has likely
+  been updated; use existing if the user needs info quickly.
+- **Does not exist:** fetch it (step 2).
 
-**If docs don't exist:**
+### 2. Fetch via the Ladder
 
-- Try llms.txt first (see below)
-- Use `WebFetch` for specific documentation pages
-- Fall back to `crwl` if `WebFetch` fails (403, rate-limited, bot-blocked)
-- Fall back to `WebSearch` if crwl is unavailable
+Try each step in order; advance only when the current step fails or is
+unavailable.
 
-**If docs exist but are stale (>30 days):**
+1. **llms.txt first** -- fetch `https://docs.example.com/llms.txt` or
+   `https://example.com/llms.txt`. This file is a structured index optimized
+   for AI consumption: use it to see the full scope of available docs, identify
+   the most relevant pages, and navigate directly to authoritative sources.
+2. **WebFetch** -- fetch the specific pages (listed in llms.txt, or the known
+   URL):
+   ```python
+   WebFetch(url="https://docs.library.com/api/reference")
+   ```
+3. **crwl** (optional CLI) -- fall back here if WebFetch fails (403,
+   rate-limited, bot-blocked) and crwl is installed:
+   ```bash
+   crwl --version            # confirm it is available first
+   crwl https://docs.library.com/api/reference
+   ```
+4. **WebSearch** -- fall back here if no llms.txt exists, crwl is unavailable,
+   and direct fetching fails. Also use to supplement for very recent changes.
 
-- Suggest refresh if the library has likely been updated
-- Use existing if user needs info quickly
+### 3. Store (Optional)
 
-**If docs exist and fresh:**
-
-- Proceed to search/retrieve
-
-### 3. Fetch Documentation (When Needed)
-
-**Option A:
-WebFetch (always available)**
-
-```python
-WebFetch(url="https://docs.library.com/api/reference")
-```
-
-**Option B:
-crwl CLI (if installed)**
-
-```bash
-# Check if crwl is available first
-crwl --version
-
-# Crawl documentation pages
-crwl https://docs.library.com/
-crwl https://docs.library.com/api/reference
-```
-
-If crwl is not installed, fall back to `WebFetch` or `WebSearch`.
+When the docs are worth keeping, save them to Basic Memory so future lookups
+hit step 1 instead of re-fetching.
 
 ### 4. Search for Information
 
-After docs are stored, use Basic Memory to find specific info:
+Once docs are stored, use Basic Memory to find specific info:
 
 ```python
 # Search for specific topic
@@ -133,49 +130,16 @@ Use `WebFetch` and `WebSearch` as the primary fallback when crwl is unavailable.
 3. If not found, fetch httpx API reference
 4. Return exact signature and parameters
 
-## Capability Questions Workflow
+## Known llms.txt URLs
 
-When asked about software capabilities ("can X do Y?", "does X support Y?",
-"what features does X have?"):
+Skip the discovery step for these libraries -- fetch the index directly:
 
-1. **Try llms.txt first** - Fetch `https://docs.example.com/llms.txt` or
-   `https://example.com/llms.txt`
-2. **Use WebFetch for specific pages** - If llms.txt lists relevant pages
-3. **Fall back to crwl** - If WebFetch fails (403, rate-limited, bot-blocked)
-   and crwl is installed:
-   ```bash
-   crwl <url>
-   ```
-4. **Fall back to WebSearch** - If crwl unavailable or also blocked
-5. **Search stored docs** - If docs are already stored in Basic Memory
+| Library | llms.txt URL |
+| ------- | ------------ |
+| Pydantic | `https://docs.pydantic.dev/latest/llms.txt` (301-redirects to `https://pydantic.dev/docs/validation/latest/llms.txt`) |
 
-## llms.txt Discovery
-
-When asked to review documentation for any tool, library, framework, or service:
-
-1. **Search for llms.txt first** - Look for an `llms.txt` file at the
-   documentation root
-   - Common locations:
-     `https://docs.example.com/llms.txt`, `https://example.com/llms.txt`
-   - This file provides a structured index optimized for AI consumption
-
-2. **Use llms.txt as the primary index** - When found, use it to:
-   - Understand the full scope of available documentation
-   - Identify the most relevant pages for the current task
-   - Navigate directly to authoritative sources
-
-3. **Fetch relevant pages from the index** - Based on the user's request, fetch
-   specific documentation pages listed in llms.txt using `WebFetch`
-
-4. **Fall back to crwl if WebFetch fails** - Some sites block automated
-   fetching.
-   Use `crwl` as an alternative if installed:
-   ```bash
-   crwl <url>
-   ```
-
-5. **Fall back to WebSearch** - If no llms.txt exists, crwl unavailable, and
-   direct fetching fails
+For any other library, derive the candidate URL from its docs root
+(`<docs-root>/llms.txt`) per step 2 of the Workflow.
 
 ## Best Practices
 

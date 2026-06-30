@@ -19,7 +19,7 @@ updated.
 
 ### 2. Impact Analysis (MANDATORY)
 
-Before ANY refactoring, use Serena MCP tools to find:
+Before ANY refactoring, find:
 
 - All callers of functions being modified
 - All implementations of interfaces being changed
@@ -28,12 +28,11 @@ Before ANY refactoring, use Serena MCP tools to find:
 
 **Required tools:**
 
-- `mcp__serena__find_referencing_symbols` - Find all usages and implementations
-- `mcp__serena__find_symbol` - Locate definitions
-- `mcp__serena__get_symbols_overview` - Survey file structure
+- `mcp__semble__search` - locate definitions and related code by intent
+- `mcp__semble__find_related` - discover code similar to a definition site
+- **Grep** - enumerate exact references/usages by symbol name (authoritative for "find all callers")
 
-Do not use Grep for code symbol searches.
-Use Grep only for config files, string literals, and non-code content.
+Use semble first to map the area, then Grep the symbol name to enumerate every exact reference before changing anything.
 
 ### 3. Downstream Changes
 
@@ -123,7 +122,7 @@ else:
 ## Refactoring Workflow
 
 1. **Understand the request** - What exactly needs refactoring?
-2. **Analyze scope** - Use Serena MCP to find all affected code
+2. **Analyze scope** - Use semble + Grep to find all affected code
 3. **Present plan** - Show user what will be changed
 4. **Get approval** - Wait for explicit go-ahead
 5. **Make changes** - Apply refactoring with all downstream updates
@@ -162,10 +161,10 @@ Proceed with refactoring? (Waiting for approval)
 
 ## Integration
 
-- **Serena MCP**:
-  Primary tool for symbol analysis and impact assessment
+- **semble MCP** (`mcp__semble__search`, `mcp__semble__find_related`):
+  Primary tool for semantic discovery and impact mapping
 - **Grep/Glob/Read**:
-  Understand patterns across files and non-code content
+  Enumerate exact symbol references; understand patterns and non-code content
 - **Bash(git status)**:
   Check for uncommitted changes before starting
 

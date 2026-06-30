@@ -35,15 +35,6 @@
           "properties": {
             "branch_icon": " "
           }
-        },
-        {
-          "type": "text",
-          "style": "diamond",
-          "leading_diamond": " ",
-          "trailing_diamond": "",
-          "background": "#3a454a",
-          "foreground": "#83c092",
-          "template": "{{- if contains \"/.worktrees/\" .Env.PWD }} ⎇ {{- splitList \"/.worktrees/\" .Env.PWD | last | splitList \"/\" | first -}}{{- end }}"
         }
       ]
     },

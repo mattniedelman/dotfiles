@@ -199,155 +199,14 @@ Low-cost experimentation beats over-planning.
 
 ## Case Study Structure
 
-Each case study folder requires three components:
-
-```text
-case-studies/{case-name}/
-├── README.md           # Main narrative (100-200 lines)
-├── arc.md              # Arc metadata and session timeline
-└── sessions/           # Individual session summaries
-    ├── 01-{session-name}.md
-    ├── 02-{session-name}.md
-    └── ...
-```
-
-### README.md (Main Narrative)
-
-The primary document.
-Include:
-
-- **Overview table**:
-  Sessions, total exchanges, date range, pattern, artifacts
-- **The Problem**:
-  What I was trying to solve
-- **Session Timeline**:
-  Brief summary of each session with quotes
-- **What Made This Work**:
-  Patterns that contributed to success
-- **Key Takeaways**:
-  Bullets summarizing learnings
-
-### arc.md (Arc Metadata)
-
-Structured metadata pulled from Basic Memory arc notes:
-
-```markdown
-# Multi-Session Arc: {Name}
-
-{One-line description}
-
-## Arc Metadata
-
-- arc_type: {brainstorm|investigation|implementation|documentation}
-- sessions: {count}
-- total_exchanges: {total}
-- date_range: {YYYY-MM-DD to YYYY-MM-DD}
-- outcome: {brief outcome}
-
-## Session Timeline
-
-| # | Session | Exchanges | Date | Focus |
-|---|---------|-----------|------|-------|
-| 1 | {name} | {count} | {date} | {focus} |
-
-## Arc Pattern
-
-{Pattern description, e.g., "Brainstorm → Build → Document"}
-
-## Notable Characteristics
-
-- {characteristic 1}
-- {characteristic 2}
-
-## Key Artifacts
-
-- {artifact 1}
-- {artifact 2}
-```
-
-### Session Files (Individual Details)
-
-Each session file provides substantive detail beyond what's in the README.
-Include:
-
-- **Metadata**:
-  session_id, date, exchanges, category
-- **Initial Prompt**:
-  The actual prompt (or summary if long)
-- **What I Was Doing**:
-  Context for why this session happened
-- **What Happened**:
-  Detailed subsections describing the work
-- **Key Takeaways**:
-  Session-specific learnings
-
-**Session file substance matters.** Include:
-
-- Actual quotes from the conversation (with `> **Me:**` and `> **Agent:**`
-  format)
-- Structured "What Happened" subsections describing phases of work
-- Specific details that add value beyond the README summary
-
-### Single-Session Arcs
-
-Single-session arcs are valid case studies.
-Marathon sessions (300+ exchanges) often contain enough material for a complete
-case study with iterative refinement within one conversation.
+Case studies use a three-part folder (README.md narrative, arc.md metadata,
+sessions/ files). **See `REFERENCE.md` ("Case Study Structure") for the folder
+layout and the full README/arc.md/session sub-templates.**
 
 ## Markdownlint Patterns
 
-### Consecutive Blockquotes (MD028)
-
-**Wrong** - blank line between blockquotes:
-
-```markdown
-> **Me:** first quote
-
-> **Agent:** second quote
-```
-
-**Correct** - join with `>` continuation:
-
-```markdown
-> **Me:** first quote
->
-> **Agent:** second quote
-```
-
-### Headers in Blockquotes (MD025)
-
-**Wrong** - markdown header inside blockquote:
-
-```markdown
-> # Ralph Wiggum Development Flow
->
-> Execute the workflow...
-```
-
-**Correct** - describe instead of quoting the header:
-
-```markdown
-The Ralph Wiggum system prompt followed by the task:
-
-> Improve logging throughout this project with the following requirements...
-```
-
-### Lists in Blockquotes (MD032)
-
-**Wrong** - list directly in blockquote without spacing:
-
-```markdown
-> **Log Level Guidelines:**
-> - ERROR: Exceptions
-> - WARNING: Recoverable errors
-```
-
-**Correct** - restructure to prose or separate from quote:
-
-```markdown
-Log Level Guidelines: ERROR for exceptions, WARNING for recoverable errors,
-INFO for request/response summaries, DEBUG for detailed execution flow.
-```
+**See `REFERENCE.md` ("Markdownlint Quick Reference") for the MD028 / MD025 /
+MD032 / MD013 / MD041 patterns and their fixes.**
 
 ## Content Sourcing
 
@@ -365,28 +224,10 @@ generic summaries.
 
 ## File Types
 
-### Full Depth Annotations (100-200 lines)
-
-For core workflow items.
-Include:
-
-- Why I Created This
-- How It Works (detailed breakdown)
-- Key Design Decisions
-- Integration Points
-- Example in Action
-
-### Summary Annotations (30-50 lines)
-
-For less critical items.
-Include:
-
-- Purpose (1-2 sentences)
-- Key Points (3-5 bullets)
-- Notable Choices
-- Related Items
-
-See `REFERENCE.md` for complete templates and examples.
+Annotations come in two depths: full-depth (100-200 lines) for core workflow
+items and summary (30-50 lines) for less critical items. **See `REFERENCE.md`
+for the complete full-depth and summary annotation templates with the section
+breakdowns.**
 
 ## Reference Content
 
