@@ -87,9 +87,10 @@ WORKFLOW_NUDGE = (
 PR_CREATE_NUDGE = (
     "You just opened a PR. If the diff touches security-relevant code (auth, input "
     "validation, crypto, external/LLM calls, secrets, or access control), run the "
-    "`differential-review` skill on it -- it risk-classifies changed files, uses git "
-    "history to catch security regressions (removed validation, dropped access checks), "
-    "and can model exploit scenarios for high-risk changes. Skip for docs/config-only PRs."
+    "`differential-review` skill on it -- it risk-classifies changed files, uses "
+    "git history to catch security regressions (removed validation, dropped "
+    "access checks), and can model exploit scenarios for high-risk changes. Skip "
+    "for docs/config-only PRs."
 )
 
 
@@ -120,7 +121,10 @@ def main() -> None:
         if file_path and WORKFLOW_PATH_RE.search(file_path):
             path = Path(file_path)
             try:
-                content = path.read_text(encoding="utf-8") if path.is_file() else ""
+                if path.is_file():
+                    content = path.read_text(encoding="utf-8")
+                else:
+                    content = ""
             except OSError:
                 content = ""
             if content and AI_AGENT_WORKFLOW_RE.search(content):
