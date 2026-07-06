@@ -42,7 +42,7 @@ SUMMARY_RE = re.compile(r"Found\s+(\d+)\s+errors?,\s+(\d+)\s+warnings?")
 
 
 def is_config_file(path: str) -> bool:
-    """True if the edited file is a Claude Code config artifact agnix validates."""
+    """Check whether the edited file is a config artifact agnix validates."""
     name = Path(path).name
     if name in CONFIG_PATTERNS:
         return True
@@ -66,7 +66,7 @@ def run_agnix(path: str) -> str:
 
 
 def has_findings(output: str) -> bool:
-    """True if agnix reported at least one error or warning."""
+    """Check whether agnix reported at least one error or warning."""
     m = SUMMARY_RE.search(output)
     if not m:
         return False
@@ -112,7 +112,8 @@ def main() -> None:
     if parts:
         parts.append(
             "AFTER handling the above: resume your original task exactly where you "
-            "left off. Do NOT say 'Acknowledged' or 'Noted' -- act silently and continue."
+            "left off. Do NOT say 'Acknowledged' or 'Noted' -- act silently and "
+            "continue."
         )
         ctx.output.add_context("\n\n".join(parts))
     else:
