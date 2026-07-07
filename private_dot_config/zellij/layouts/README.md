@@ -1,41 +1,30 @@
-# Zellij Layouts for Multi-Auggie Sessions
-
-Layouts for running concurrent auggie sessions across different projects and
-task-focused tabs.
+# Zellij Layouts
 
 ## Layout Files
 
 | Layout | Purpose |
 | --- | --- |
-| `default.kdl` | General-purpose shell + auggie layout with swap layouts |
-| `auggie-project.kdl` | Single project with stacked utility panes |
-| `auggie-multi.kdl` | Multi-tab template for parallel features or tasks |
+| `project-sidebar.kdl` | Default session layout: tab-bar + zjstatus bar, swap layouts for pane arrangement |
 
-## Starting Layouts
+This is the `default_layout` set in `config.kdl`, so any new `zellij` session
+without an explicit `-l` flag uses it automatically.
 
-### Start a fresh session
+## Starting a Session
 
 ```bash
-zellij -l ~/.config/zellij/layouts/default.kdl
-zellij -l ~/.config/zellij/layouts/auggie-project.kdl
-zellij -l ~/.config/zellij/layouts/auggie-multi.kdl
+zellij                                              # uses project-sidebar.kdl by default
+zellij -l ~/.config/zellij/layouts/project-sidebar.kdl
 ```
-
-### Open a layout from an existing session
-
-Use the built-in layout manager from `config.kdl`:
-
-| Keys | Action |
-| --- | --- |
-| `Alt+l` | Open the built-in layout manager |
-| `Alt+[` / `Alt+]` | Cycle swap layouts in the current tab |
 
 ## Other Useful Keybindings
 
 | Keys | Action |
 | --- | --- |
+| `Alt+l` | Open the built-in layout manager |
+| `Alt+[` / `Alt+]` | Cycle swap layouts (`focus` / `equal` / `trio`) in the current tab |
 | `Alt+1-9` | Jump to tab N |
 | `Alt+t` / `Ctrl+Shift+t` | New tab |
 | `Ctrl+Shift+Left/Right` | Move between tabs |
 | `Alt+w` | Open the session manager |
 | `Ctrl+h/j/k/l` | Navigate panes in unlocked mode |
+| `f` (pane mode) / `Ctrl+Alt+z` | Toggle fullscreen for the focused pane -- this also hides the tab-bar/status bar for that tab since they're sibling panes; toggle again to bring them back |
