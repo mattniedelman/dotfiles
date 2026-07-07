@@ -13,13 +13,13 @@ input=$(cat)
 # Only act on Bash tool calls
 tool_name=$(echo "$input" | jq -r '.tool_name // empty')
 if [[ "$tool_name" != "Bash" ]]; then
-  exit 0
+	exit 0
 fi
 
 # If the command explicitly opts out of sandboxing, don't auto-allow
 unsafe=$(echo "$input" | jq -r '.tool_input.dangerouslyDisableSandbox // false')
 if [[ "$unsafe" == "true" ]]; then
-  exit 0
+	exit 0
 fi
 
 # Command will be sandboxed — allow it

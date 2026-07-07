@@ -5,4 +5,3 @@ function ps --wraps=procs --description 'Use procs in interactive mode, ps other
         command ps $argv
     end
 end
-

@@ -5,4 +5,3 @@ function df --wraps=duf --description 'Use duf in interactive mode, df otherwise
         command df -h $argv
     end
 end
-

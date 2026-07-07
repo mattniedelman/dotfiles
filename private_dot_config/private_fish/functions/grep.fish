@@ -5,4 +5,3 @@ function grep --wraps=rg --description 'Use ripgrep in interactive mode, grep ot
         command grep --color=auto $argv
     end
 end
-

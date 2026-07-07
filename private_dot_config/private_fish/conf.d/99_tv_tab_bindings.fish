@@ -9,4 +9,3 @@ if status is-interactive
     bind --erase --user tab
     bind --user tab __tv_fish_completions
 end
-

@@ -72,4 +72,3 @@ layout {
     }
     tab name="shell" focus=true { pane; }
 }
-

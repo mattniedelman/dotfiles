@@ -5,4 +5,3 @@ function ls --wraps=eza --description 'Use eza in interactive mode, ls otherwise
         command ls --color=auto $argv
     end
 end
-
