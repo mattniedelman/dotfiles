@@ -12,17 +12,16 @@ rule:
 note: |
   defaultdict can hide bugs by silently creating entries on access,
   making it harder to detect missing keys or typos.
-  
+
   Instead of:
     from collections import defaultdict
     counts = defaultdict(int)
     counts[key] += 1
-  
+
   Use:
     counts: dict[str, int] = {}
     counts[key] = counts.get(key, 0) + 1
-  
+
   Or for nested structures:
     data: dict[str, list[int]] = {}
     data.setdefault(key, []).append(value)
-

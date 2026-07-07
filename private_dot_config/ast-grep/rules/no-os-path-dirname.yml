@@ -12,10 +12,9 @@ fix: Path($PATH).parent
 note: |
   From python-development.md:
   "Use pathlib.Path not os.path"
-  
+
   Instead of:
     parent = os.path.dirname(file_path)
-  
+
   Use:
     parent = Path(file_path).parent
-

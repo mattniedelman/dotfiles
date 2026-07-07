@@ -11,12 +11,11 @@ rule:
 
 note: |
   pathlib provides a more object-oriented interface.
-  
+
   Instead of:
     import os.path
     abs_path = os.path.abspath(relative_path)
-  
+
   Use:
     from pathlib import Path
     abs_path = Path(relative_path).resolve()
-

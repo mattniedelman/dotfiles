@@ -12,13 +12,12 @@ rule:
 note: |
   From python-development.md:
   "Modern Python 3.9+ syntax (list[str] not List[str])"
-  
+
   Instead of:
     from typing import List
     def process(items: List[str]) -> List[int]:
         ...
-  
+
   Use:
     def process(items: list[str]) -> list[int]:
         ...
-

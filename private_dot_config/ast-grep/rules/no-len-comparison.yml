@@ -18,19 +18,18 @@ rule:
 note: |
   Python collections are truthy when non-empty and falsy when empty.
   Using len() for empty checks is verbose and less Pythonic.
-  
+
   Instead of:
     if len(items) == 0:
         ...
     if len(items) > 0:
         ...
-  
+
   Use:
     if not items:
         ...
     if items:
         ...
-  
+
   Note: len() comparison is appropriate when checking for a specific
   length other than 0, e.g., len(items) == 3.
-

@@ -12,17 +12,16 @@ fix: Path($PATH).exists()
 note: |
   From python-development.md:
   "Use pathlib.Path not os.path"
-  
+
   Instead of:
     if os.path.exists(config_path):
         ...
-  
+
   Use:
     if Path(config_path).exists():
         ...
-    
+
     # Or better, use the Path object throughout:
     config_path = Path("config/settings.json")
     if config_path.exists():
         ...
-

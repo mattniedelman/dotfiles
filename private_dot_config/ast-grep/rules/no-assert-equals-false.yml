@@ -14,12 +14,11 @@ rule:
 note: |
   From core-development-rules.md:
   "Never compare boolean expressions to boolean literals in assertions"
-  
+
   Instead of:
     assert is_valid == False
     assert (result.success == False)
-  
+
   Use:
     assert not is_valid
     assert not result.success
-

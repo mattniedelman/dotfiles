@@ -12,21 +12,20 @@ rule:
 
 note: |
   Pydantic provides validation, serialization, and better IDE support.
-  
+
   Instead of:
     from collections import namedtuple
     Point = namedtuple('Point', ['x', 'y'])
-  
+
   Or:
     from typing import NamedTuple
     class Point(NamedTuple):
         x: float
         y: float
-  
+
   Use:
     from pydantic import BaseModel
-    
+
     class Point(BaseModel):
         x: float
         y: float
-

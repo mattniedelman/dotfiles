@@ -12,4 +12,3 @@ fix: Path($PATH).is_dir()
 note: |
   From python-development.md:
   "Use pathlib.Path not os.path"
-

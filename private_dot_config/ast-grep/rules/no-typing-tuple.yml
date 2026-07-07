@@ -12,13 +12,12 @@ rule:
 note: |
   From python-development.md:
   "Modern Python 3.9+ syntax"
-  
+
   Instead of:
     from typing import Tuple
     def get_coords() -> Tuple[int, int]:
         ...
-  
+
   Use:
     def get_coords() -> tuple[int, int]:
         ...
-

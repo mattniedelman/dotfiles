@@ -11,12 +11,11 @@ rule:
 
 note: |
   pathlib provides a more consistent interface for path operations.
-  
+
   Instead of:
     import os
     current = os.getcwd()
-  
+
   Use:
     from pathlib import Path
     current = Path.cwd()
-
