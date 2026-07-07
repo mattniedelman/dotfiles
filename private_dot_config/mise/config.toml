@@ -2,10 +2,9 @@
 min_version = "2024.11.0"
 
 [tools]
-python = { version = '3.13' }
+python = { version = "3.13" }
 
-
-"aqua:dalance/procs" = "latest"                                                                              # Modern ps replacement
+"aqua:dalance/procs" = "latest"  # Modern ps replacement
 "cargo:agnix-cli" = "latest"
 "cargo:cbfmt" = "latest"
 "cargo:https://github.com/razziel89/mdslw" = "branch:main"
@@ -19,7 +18,7 @@ python = { version = '3.13' }
 "github:dolthub/dolt" = "latest"
 "github:joshmedeski/sesh" = "latest"
 "github:rtk-ai/rtk" = "latest"
-"go:github.com/mattn/efm-langserver" = "latest"                                                              # General-purpose language server
+"go:github.com/mattn/efm-langserver" = "latest"  # General-purpose language server
 "npm:@arizeai/phoenix-cli" = "latest"
 "npm:@augmentcode/auggie" = "latest"
 "npm:@contextlint/cli" = "latest"
@@ -37,7 +36,7 @@ python = { version = '3.13' }
 "npm:rulesync" = "latest"
 "npm:think-strategies" = "latest"
 "pipx:aws-sso-util" = "latest"
-"pipx:basedpyright" = "latest"                                                                               # Enhanced fork of pyright with additional features
+"pipx:basedpyright" = "latest"  # Enhanced fork of pyright with additional features
 "pipx:basic-memory" = "latest"
 "pipx:crawl4ai" = "latest"
 "pipx:deply" = "latest"
@@ -52,7 +51,7 @@ python = { version = '3.13' }
 "pipx:ruff" = "latest"
 "pipx:sshuttle" = "latest"
 "pipx:ty" = "latest"
-"pipx:yamllint" = "latest"                                                                                         # YAML linter
+"pipx:yamllint" = "latest"  # YAML linter
 "github:zippoxer/recall" = "latest"
 1password = "latest"
 act = "latest"
@@ -61,13 +60,13 @@ actionlint = "latest"
 amazon-ecr-credential-helper = "latest"
 ast-grep = "latest"
 atuin = "latest"
-aws-cli = "2"                                                                                                      # Pinned to major version for stability
+aws-cli = "2"  # Pinned to major version for stability
 aws-sigv4-proxy = "1.11.1"
 bat = "latest"
 bat-extras = "latest"
-bottom = "latest"                                                                                                  # Modern top/htop replacement
+bottom = "latest"  # Modern top/htop replacement
 bun = "latest"
-checkov = "latest"                                                                                                 # IaC security scanner
+checkov = "latest"  # IaC security scanner
 chezmoi = "latest"
 cue = "latest"
 delta = "latest"
@@ -77,24 +76,24 @@ docker-compose = "latest"
 dotnet = "latest"
 dua = "latest"
 duckdb = "latest"
-duf = "latest"                                                                                                     # Modern df replacement (Go-based)
-dust = "latest"                                                                                                    # Modern du replacement
-eza = "latest"                                                                                                     # Modern ls replacement (fork of exa)
+duf = "latest"  # Modern df replacement (Go-based)
+dust = "latest"  # Modern du replacement
+eza = "latest"  # Modern ls replacement (fork of exa)
 fd = "latest"
 fzf = "latest"
 ghalint = "latest"
 github-cli = "latest"
 gitleaks = "latest"
 glow = "latest"
-go = 'latest'
+go = "latest"
 grype = "latest"
-hadolint = "latest"                                                                                                # Dockerfile linter
-helm = "3"                                                                                                         # Pinned to major version for stability
+hadolint = "latest"  # Dockerfile linter
+helm = "3"  # Pinned to major version for stability
 hk = "latest"
 java = "17.0.2"
 jq = "latest"
 k3d = "latest"
-kubectl = "1.31"                                                                                                   # Pinned - should match cluster version
+kubectl = "1.31"  # Pinned - should match cluster version
 kubectx = "latest"
 lua = "latest"
 make = "latest"
@@ -120,8 +119,8 @@ skaffold = "latest"
 sqlite = "latest"
 swift = "latest"
 syft = "latest"
-television = "latest"                                                                                              # Modern fuzzy finder (tv)
-tflint = "latest"                                                                                                  # Terraform linter
+television = "latest"  # Modern fuzzy finder (tv)
+tflint = "latest"  # Terraform linter
 tmux = "latest"
 trivy = "latest"
 trufflehog = "latest"
@@ -161,28 +160,28 @@ HK_PKL_BACKEND = "pkl"
 # for example, .nvmrc in the case of node's nvm
 
 # configure `mise install` to always keep the downloaded archive
-always_keep_download = false # deleted after install by default
+always_keep_download = false  # deleted after install by default
 always_keep_install = false  # deleted on failure by default
 
 # configure how frequently (in minutes) to fetch updated plugin repository changes
 # this is updated whenever a new runtime is installed
-plugin_autoupdate_last_check_duration = '1 week' # set to 0 to disable updates
+plugin_autoupdate_last_check_duration = "1 week"  # set to 0 to disable updates
 
-verbose = false      # set to true to see full installation output, see `MISE_VERBOSE`
-http_timeout = "30s" # set the timeout for http requests as duration string, see `MISE_HTTP_TIMEOUT`
-jobs = 2             # number of plugins or runtimes to install in parallel
-raw = false          # set to true to directly pipe plugins to stdin/stdout/stderr
-yes = false          # set to true to automatically answer yes to all prompts
+verbose = false  # set to true to see full installation output, see `MISE_VERBOSE`
+http_timeout = "30s"  # set the timeout for http requests as duration string, see `MISE_HTTP_TIMEOUT`
+jobs = 2  # number of plugins or runtimes to install in parallel
+raw = false  # set to true to directly pipe plugins to stdin/stdout/stderr
+yes = false  # set to true to automatically answer yes to all prompts
 
-not_found_auto_install = true # automatically install missing tools when command not found
-task_output = "prefix"        # see Tasks Runner for more information
-paranoid = false              # see MISE_PARANOID
+not_found_auto_install = true  # automatically install missing tools when command not found
+task_output = "prefix"  # see Tasks Runner for more information
+paranoid = false  # see MISE_PARANOID
 
 # disable_default_shorthands = false # disable the default shorthands, see `MISE_DISABLE_DEFAULT_SHORTHANDS`
 
-env_file = '.env' # load env vars from a dotenv file, see `MISE_ENV_FILE`
+env_file = ".env"  # load env vars from a dotenv file, see `MISE_ENV_FILE`
 
-experimental = true # enable experimental features
+experimental = true  # enable experimental features
 
 # configure messages displayed when entering directories with config files
 status = { missing_tools = "if_other_versions_installed", show_env = false, show_tools = false }
@@ -201,7 +200,6 @@ locked_verify_provenance = true
 # If a security scanner's freshness matters more than the cooldown, pin it to
 # an explicit recent version.
 minimum_release_age = "7d"
-
 
 [tasks.upgrade]
 description = "Upgrade all tools to latest versions"

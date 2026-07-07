@@ -42,4 +42,3 @@ Available contexts can be listed with configuration_contexts_list.
 group = ""
 version = "v1"
 kind = "Secret"
-
