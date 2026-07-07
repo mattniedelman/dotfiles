@@ -30,14 +30,5 @@ if [ -d "$HOME/.local/bin" ]; then
   PATH="$HOME/.local/bin:$PATH"
 fi
 
-# ToolHive CLI
-if [ -d "$HOME/.toolhive/bin" ]; then
-  PATH="$HOME/.toolhive/bin:$PATH"
-fi
-
 # Cargo environment (adds ~/.cargo/bin to PATH)
 . "$HOME/.cargo/env"
-
-# Added by LM Studio CLI (lms)
-export PATH="$PATH:{{ .chezmoi.homeDir }}/.lmstudio/bin"
-# End of LM Studio CLI section

@@ -42,7 +42,7 @@ set -l valid_paths
 
 # Standard user paths
 # Note: ~/.cargo/bin is omitted here -- mise manages rust and adds it via RUSTUP_TOOLCHAIN
-for p in $HOME/bin $HOME/.krew/bin $HOME/.local/bin $HOME/.kubescape/bin $HOME/.toolhive/bin $HOME/.git-ai/bin
+for p in $HOME/bin $HOME/.krew/bin $HOME/.local/bin $HOME/.kubescape/bin $HOME/.toolhive/bin
     test -d $p; and set -a valid_paths $p
 end
 
@@ -115,19 +115,9 @@ if status is-interactive
     # Abbreviations (built-in Fish feature)
     test -f ~/.config/fish/abbreviations.fish; and source ~/.config/fish/abbreviations.fish
 
-    # Augment CLI slash commands (/note, /todo, /tasks, etc.)
-    test -f ~/.config/fish/augment.fish; and source ~/.config/fish/augment.fish
-
     # Machine-specific settings (not version controlled)
     test -f ~/.config/fish/local.fish; and source ~/.config/fish/local.fish
 end
-
-# Added by LM Studio CLI (lms)
-set -gx PATH $PATH {{ .chezmoi.homeDir }}/.lmstudio/bin
-# End of LM Studio CLI section
-
-# Added by git-ai installer
-fish_add_path -g "{{ .chezmoi.homeDir }}/.git-ai/bin"
 
 # strix
 fish_add_path {{ .chezmoi.homeDir }}/.strix/bin
