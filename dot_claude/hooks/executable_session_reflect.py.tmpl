@@ -179,6 +179,7 @@ def spawn_reflection(prompt: str, log_file: Path, transcript_path: str) -> None:
                 CHILD_MODEL,
                 "--allowedTools",
                 CHILD_TOOLS,
+                "--no-session-persistence",
             ],
             env=env,
             stdout=log_handle,

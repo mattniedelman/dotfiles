@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import hashlib
 import os
+import re
 import subprocess
 import sys
 from pathlib import Path
@@ -58,10 +59,16 @@ def run_command(
         return result.returncode, output
 
 
-def _is_in_git_repo(file_path: str) -> bool:
+def _git_repo_root(file_path: str) -> Path | None:
+    """Return the git repo root containing file_path, or None if not in a repo.
+
+    Resolves from the file's own directory (always inside the repo), then hands
+    the root back so callers can run repo-aware tools (hk) with the correct cwd
+    instead of inheriting the hook process's arbitrary cwd.
+    """
     try:
         result = subprocess.run(
-            ["git", "rev-parse", "--git-dir"],  # noqa: S607
+            ["git", "rev-parse", "--show-toplevel"],  # noqa: S607
             capture_output=True,
             text=True,
             check=False,
@@ -69,9 +76,22 @@ def _is_in_git_repo(file_path: str) -> bool:
             timeout=5,
         )
     except (subprocess.TimeoutExpired, FileNotFoundError):
-        return False
+        return None
     else:
-        return result.returncode == 0
+        if result.returncode != 0:
+            return None
+        root = result.stdout.strip()
+        return Path(root) if root else None
+
+
+# Upstream hk's bundled Builtins.pkl references properties the Pkl evaluator
+# has deprecated, emitting "[pklr] WARNING: property '...' is deprecated" lines
+# we do not control. Strip them so they do not masquerade as lint output.
+_PKL_DEPRECATION_RE = re.compile(r"^.*\[pklr\] WARNING: property .*is deprecated.*$\n?", re.MULTILINE)
+
+
+def _strip_pkl_deprecations(output: str) -> str:
+    return _PKL_DEPRECATION_RE.sub("", output)
 
 
 def _collect_modified_files(ctx: PostToolUseContext) -> list[str]:
@@ -85,18 +105,6 @@ def _collect_modified_files(ctx: PostToolUseContext) -> list[str]:
 
 
 # --- Special cases outside hk ---
-
-
-def fix_ascii_diagrams(files: list[str]) -> None:
-    """Run aadc in-place on markdown files to align ASCII diagram borders."""
-    md_files = [f for f in files if f.endswith((".md", ".mdx"))]
-    if not md_files:
-        return
-    code, out = run_command(["aadc", "-i", "--color", "never", *md_files], timeout=30)
-    if code in (-1, -2):
-        debug(f"aadc skipped (code={code}): {out}")
-    elif code != 0:
-        debug(f"aadc error (code={code}): {out}")
 
 
 def lint_wiki_links(files: list[str]) -> list[str]:
@@ -150,15 +158,20 @@ def main() -> None:
     context_parts: list[str] = []
     before_hashes = {f: _file_hash(f) for f in modified_files}
 
-    # --- aadc: align ASCII diagram borders in markdown (no git repo required) ---
-    fix_ascii_diagrams(modified_files)
-
     # --- hk: formatting + linting (requires git repo) ---
-    if _is_in_git_repo(modified_files[0]):
+    # hk resolves the git repo from its cwd, NOT from the file arguments. The
+    # hook process inherits whatever cwd Claude Code launched it in, which is
+    # frequently outside the repo -- so hk must be run with cwd set to the
+    # repo root, or it panics with "failed to find git repository".
+    repo_root = _git_repo_root(modified_files[0])
+    if repo_root is not None:
         # hk fix: fast formatters + linters (slow-profile steps skipped)
         code, out = run_command(
-            ["hk", "fix", "--no-progress", *modified_files], timeout=60
+            ["hk", "fix", "--no-progress", *modified_files],
+            cwd=repo_root,
+            timeout=60,
         )
+        out = _strip_pkl_deprecations(out)
         debug(f"hk fix exit={code}")
 
         if code in (-1, -2):
