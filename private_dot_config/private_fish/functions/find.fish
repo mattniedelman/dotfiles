@@ -5,4 +5,3 @@ function find --wraps=fd --description 'Use fd in interactive mode, find otherwi
         command find $argv
     end
 end
-

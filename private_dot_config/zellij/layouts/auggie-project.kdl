@@ -7,7 +7,7 @@
 
 layout {
     cwd "."  // Use current directory as project root
-    
+
     default_tab_template {
         children
         pane size=1 borderless=true {
@@ -60,7 +60,7 @@ layout {
                     // For watching logs
                 }
             }
-            
+
             // Right: Main auggie session
             pane name="auggie" command="auggie" {
                 args "chat"
@@ -80,4 +80,3 @@ layout {
         }
     }
 }
-

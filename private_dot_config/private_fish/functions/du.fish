@@ -5,4 +5,3 @@ function du --wraps=dust --description 'Use dust in interactive mode, du otherwi
         command du -h $argv
     end
 end
-

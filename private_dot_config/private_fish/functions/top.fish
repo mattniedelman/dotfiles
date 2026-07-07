@@ -5,4 +5,3 @@ function top --wraps=btm --description 'Use bottom in interactive mode, top othe
         command top $argv
     end
 end
-

@@ -127,7 +127,7 @@ font_size 12.0
 #: scrollback buffer (in MB). This separate buffer is not available
 #: for interactive scrolling but will be piped to the pager program
 #: when viewing scrollback buffer in a separate window. The current
-#: implementation stores one character in 4 bytes, so approximatively
+#: implementation stores one character in 4 bytes, so approximately
 #: 2500 lines per megabyte at 100 chars per line. A value of zero or
 #: less disables this feature. The maximum allowed size is 4GB.
 
@@ -594,7 +594,7 @@ strip_trailing_spaces smart
 #: you want to prevent programs running on a remote computer over ssh
 #: from controlling kitty.
 
-# env 
+# env
 
 #: Specify environment variables to set in all child processes. Note
 #: that environment variables are expanded recursively, so if you

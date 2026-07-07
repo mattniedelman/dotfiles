@@ -1,5 +1,5 @@
 // Single worktree tab layout - add to existing session
-// 
+//
 // Usage: Navigate to worktree, then:
 //   zellij action new-tab -l ~/.config/zellij/layouts/auggie-worktree-tab.kdl -n "feature-name"
 //
@@ -12,7 +12,7 @@ layout {
         pane name="shell" size="40%" {
             focus true
         }
-        
+
         // Right side: auggie (60%) - main working area
         pane name="auggie" command="auggie" {
             args "chat"
@@ -20,4 +20,3 @@ layout {
         }
     }
 }
-
