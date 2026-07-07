@@ -1,0 +1,7 @@
+[default.extend-words]
+# nvim plugin name (folke/noice.nvim), not a typo of "noise"
+noice = "noice"
+# real pipx/PyPI package name, not a typo of "deploy"
+deply = "deply"
+# hyphenated prefix (e.g. "mis-rendering"), not a typo of "miss"/"mist"
+mis = "mis"
