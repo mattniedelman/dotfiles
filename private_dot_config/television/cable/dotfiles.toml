@@ -6,6 +6,5 @@ requirements = ["fdfind", "bat"]
 [source]
 command = "fdfind -t f . $HOME/.config"
 
-
 [preview]
 command = "bat -n --color=always '{}'"
