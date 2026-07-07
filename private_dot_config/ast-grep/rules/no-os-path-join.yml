@@ -12,12 +12,11 @@ fix: Path($$$ARGS)
 note: |
   From python-development.md:
   "Use pathlib.Path not os.path"
-  
+
   Instead of:
     import os
     config_path = os.path.join("config", "settings.json")
-  
+
   Use:
     from pathlib import Path
     config_path = Path("config") / "settings.json"
-

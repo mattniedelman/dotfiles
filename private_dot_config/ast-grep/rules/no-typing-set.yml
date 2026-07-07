@@ -12,13 +12,12 @@ rule:
 note: |
   From python-development.md:
   "Modern Python 3.9+ syntax"
-  
+
   Instead of:
     from typing import Set
     def unique_items(items: Set[str]) -> Set[int]:
         ...
-  
+
   Use:
     def unique_items(items: set[str]) -> set[int]:
         ...
-

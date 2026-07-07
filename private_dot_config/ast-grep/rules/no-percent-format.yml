@@ -14,10 +14,9 @@ rule:
 note: |
   From python-development.md:
   "Use f-strings, not .format() or %"
-  
+
   Instead of:
     message = "%s is %d years old" % (name, age)
-  
+
   Use:
     message = f"{name} is {age} years old"
-

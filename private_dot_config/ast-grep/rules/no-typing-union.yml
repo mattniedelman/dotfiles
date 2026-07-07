@@ -11,13 +11,12 @@ rule:
 
 note: |
   Modern Python 3.10+ supports union syntax with |.
-  
+
   Instead of:
     from typing import Union
     def process(value: Union[str, int, float]) -> Union[str, None]:
         ...
-  
+
   Use:
     def process(value: str | int | float) -> str | None:
         ...
-

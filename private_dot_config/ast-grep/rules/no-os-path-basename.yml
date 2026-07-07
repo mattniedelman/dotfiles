@@ -12,10 +12,9 @@ fix: Path($PATH).name
 note: |
   From python-development.md:
   "Use pathlib.Path not os.path"
-  
+
   Instead of:
     filename = os.path.basename(file_path)
-  
+
   Use:
     filename = Path(file_path).name
-

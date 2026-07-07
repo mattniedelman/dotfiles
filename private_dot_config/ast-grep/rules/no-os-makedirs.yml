@@ -11,12 +11,11 @@ rule:
 
 note: |
   pathlib provides a cleaner interface for directory creation.
-  
+
   Instead of:
     import os
     os.makedirs(path, exist_ok=True)
-  
+
   Use:
     from pathlib import Path
     Path(path).mkdir(parents=True, exist_ok=True)
-

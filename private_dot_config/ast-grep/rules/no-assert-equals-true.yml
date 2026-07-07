@@ -14,12 +14,11 @@ rule:
 note: |
   From core-development-rules.md:
   "Never compare boolean expressions to boolean literals in assertions"
-  
+
   Instead of:
     assert is_valid == True
     assert (user.is_active == True)
-  
+
   Use:
     assert is_valid
     assert user.is_active
-

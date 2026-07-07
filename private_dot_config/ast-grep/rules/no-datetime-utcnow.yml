@@ -12,15 +12,14 @@ rule:
 note: |
   datetime.utcnow() is deprecated in Python 3.12 because it returns
   a naive datetime that can be confused with local time.
-  
+
   Instead of:
     from datetime import datetime
     now = datetime.utcnow()
-  
+
   Use:
     from datetime import datetime, timezone
     now = datetime.now(timezone.utc)
-  
+
   The timezone-aware version is explicit about being UTC and works
   correctly with timezone conversions.
-

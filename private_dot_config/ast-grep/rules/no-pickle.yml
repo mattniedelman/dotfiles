@@ -16,25 +16,24 @@ rule:
 note: |
   pickle can execute arbitrary code during deserialization, making it
   a security risk with untrusted data.
-  
+
   Instead of pickle, use:
-  
+
   For data interchange:
     import json
     data = json.loads(text)
     text = json.dumps(data)
-  
+
   For complex objects, use Pydantic:
     class MyModel(BaseModel):
         ...
-    
+
     obj = MyModel.model_validate_json(text)
     text = obj.model_dump_json()
-  
+
   For ML models, use format-specific serialization:
     # joblib for sklearn (still uses pickle internally, but more controlled)
     # torch.save/load for PyTorch
     # model.save() for Keras
-  
-  If you must use pickle, ensure data is from trusted sources only.
 
+  If you must use pickle, ensure data is from trusted sources only.

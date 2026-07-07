@@ -12,13 +12,12 @@ rule:
 note: |
   From python-development.md:
   "Modern Python 3.9+ syntax"
-  
+
   Instead of:
     from typing import Dict
     def process(data: Dict[str, int]) -> Dict[str, str]:
         ...
-  
+
   Use:
     def process(data: dict[str, int]) -> dict[str, str]:
         ...
-

@@ -38,4 +38,3 @@ note: |
 
     class User:
         id: Column[int]
-
