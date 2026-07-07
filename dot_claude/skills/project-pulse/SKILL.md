@@ -13,7 +13,7 @@ Compare this project against Claude Code upstream releases, or reconcile ADR sta
 
 ## Usage
 
-```
+```text
 /project-pulse                    # What's new upstream?
 /project-pulse --inward           # Are our ADRs current?
 /project-pulse --since 2026-03-01 # Wider window
@@ -33,6 +33,7 @@ The script outputs structured markdown. Your job is to interpret it.
 ## Upstream Mode (default)
 
 The script outputs:
+
 1. Claude Code releases in the window (with full changelogs)
 2. Our commits in the same window
 3. An epoch mapping table (our commits mapped to which upstream release was current)
@@ -43,6 +44,7 @@ The script outputs:
 Read the upstream changelogs and filter through what this project cares about:
 
 **Relevant to us** (suggest these):
+
 - Hooks: new hook types, hook behavior changes, hook lifecycle
 - Settings/config: new settings fields, managed settings, permissions model
 - Skills/slash commands: new frontmatter fields, skill discovery changes, effort levels
@@ -52,6 +54,7 @@ Read the upstream changelogs and filter through what this project cares about:
 - MCP: new capabilities, server management, tool patterns
 
 **Usually irrelevant** (skip these):
+
 - UI polish, terminal rendering, keybindings
 - Voice mode, dictation
 - IDE-specific integrations (VSCode, Cursor)
@@ -69,6 +72,7 @@ Pick the 2-5 most interesting upstream changes and explain in plain prose why th
 If nothing interesting happened in the window, say so. That's a valid outcome.
 
 Do NOT:
+
 - List every change
 - Score coverage
 - Show red/yellow/green
@@ -85,6 +89,7 @@ The script outputs a table of ADRs with their status, referencing commit count, 
 ### Your interpretation
 
 Focus on mismatches:
+
 - **"Accepted but no referencing commits"** — was this ADR adopted based on existing code, or is something missing?
 - **"Draft with N commits — promote?"** — the work exists, the ADR may need a status update
 - **"Dormant"** — no commits, no branches. Is this still planned?

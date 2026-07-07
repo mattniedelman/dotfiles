@@ -21,6 +21,7 @@ All code inspection must happen in the worktree:
 **Do not trust the implementer's report.** Verify everything by reading code.
 
 The implementer may have:
+
 - Claimed to implement something they didn't
 - Missed requirements
 - Added unrequested features

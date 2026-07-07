@@ -132,7 +132,6 @@ The skill itself tells you which.
 Instructions say WHAT, not HOW.
 "Add X" or "Fix Y" doesn't mean skip workflows.
 
-
 ## Phase Awareness
 
 Significant work flows through five phases -- EXPLORE, PLAN, EXECUTE, VERIFY,

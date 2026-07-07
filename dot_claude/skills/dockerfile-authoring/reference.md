@@ -161,7 +161,7 @@ RUN npm run build
 Build invocation:
 
 ```bash
-export NPM_TOKEN='...'                      # from your shell / secrets manager
+export NPM_TOKEN='...' # from your shell / secrets manager
 docker build --secret id=npm_token,env=NPM_TOKEN -t app .
 # or from a file:
 docker build --secret id=npm_token,src=./npm_token.txt -t app .

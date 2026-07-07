@@ -97,7 +97,7 @@ App installation token or a PAT secret.
 Never interpolate these into a `run:` block -- route through `env:` (SKILL.md
 rule 3). Verified list from GitHub Security Lab:
 
-```
+```text
 github.event.issue.title              github.event.issue.body
 github.event.pull_request.title       github.event.pull_request.body
 github.event.comment.body             github.event.review.body

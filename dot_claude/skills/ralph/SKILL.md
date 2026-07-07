@@ -79,6 +79,7 @@ For each task:
 Loop until spec-review PASS and quality-review PASS (or user approves proceeding on non-Critical issues), then advance to the next task.
 
 **Circuit breaker** (trips only on real stalls):
+
 - No new commits (`git rev-parse HEAD` unchanged) for 3 iterations
 - Same task reported 3 iterations in a row
 - Absolute safety net at 20 iterations
