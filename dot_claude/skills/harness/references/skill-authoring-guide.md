@@ -7,12 +7,12 @@ Supplements SKILL.md Phase 4.
 
 ## Table of Contents
 
-1. [Description Writing](#1-description-writing)
-2. [Body Writing Style](#2-body-writing-style)
-3. [Output Format Definition](#3-output-format-definition)
-4. [Progressive Disclosure](#4-progressive-disclosure)
-5. [Script Bundling](#5-script-bundling)
-6. [What Not to Include](#6-what-not-to-include)
+1. [Description Writing](#1-description-writing)
+2. [Body Writing Style](#2-body-writing-style)
+3. [Output Format Definition](#3-output-format-definition)
+4. [Progressive Disclosure](#4-progressive-disclosure)
+5. [Script Bundling](#5-script-bundling)
+6. [What Not to Include](#6-what-not-to-include)
 
 ---
 

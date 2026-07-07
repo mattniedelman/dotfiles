@@ -236,7 +236,7 @@ people:
 - **Removing a field from a template does not always remove it from the live
   object.** If something else (a controller, a `kubectl edit`) set it, the
   three-way merge can preserve it. Removing a whole resource from the chart
-  *does* delete it on upgrade.
+  _does_ delete it on upgrade.
 - **`helm rollback REL N`** rolls back to a stored revision (`helm history REL`).
   Failed upgrades are still revisions; rollback targets the last good one.
 - **`--atomic`** rolls back automatically if the upgrade fails; **`--wait`**

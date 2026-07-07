@@ -34,22 +34,26 @@ Never modify files in the main checkout.
 Before reporting, verify:
 
 **Tests (non-negotiable):**
+
 - [ ] New test(s) written and passing
 - [ ] Full test suite passes -- zero regressions
 - [ ] Tests verify behavior, not just mocks
 - [ ] Linter passes (if the project has one)
 
 **Completeness:**
+
 - [ ] Implemented everything in the task
 - [ ] No missed requirements
 - [ ] Edge cases handled
 
 **Quality:**
+
 - [ ] Names are clear and accurate
 - [ ] Code is clean and maintainable
 - [ ] Follows existing patterns
 
 **Discipline:**
+
 - [ ] No overbuilding (YAGNI)
 - [ ] Only built what was requested
 

@@ -50,7 +50,7 @@ real upstream repo, not a fork. Current major versions are in `REFERENCE.md`.
 
 A missing `permissions:` block inherits a token whose scope depends on
 repo/org settings -- often broad. A script injection or compromised action then
-wields a write-capable token. The moment you specify *any* permission, every
+wields a write-capable token. The moment you specify _any_ permission, every
 unspecified scope becomes `none` -- that narrowing is the goal.
 
 ```yaml
@@ -200,7 +200,7 @@ Also: any `if:` other than the implicit success default disables the implicit
 
 A required check gated by `on: pull_request: paths: ['src/**']` never reports on
 a docs-only PR -> branch protection waits forever -> PR stuck. Run the job
-unconditionally and filter *inside* it (e.g. `dorny/paths-filter`), or use a
+unconditionally and filter _inside_ it (e.g. `dorny/paths-filter`), or use a
 companion skip-workflow with the same job name. Pattern in `REFERENCE.md`.
 
 ## Definition of Done
@@ -239,7 +239,7 @@ If the repo has composite/local actions under `.github/actions/`, audit them
 too -- the same security rules (pinning, untrusted `${{ }}` in `run:`,
 credential persistence) apply to an `action.yml`. `zizmor` recurses into every
 directory you pass it, so the command above (which includes `.github/actions/`)
-already covers them. `actionlint` does **not**: it validates the *workflow*
+already covers them. `actionlint` does **not**: it validates the _workflow_
 schema, not the action-metadata schema (`runs:`, `using: composite`, `inputs:`),
 so pointing it at an `action.yml` only shellchecks the `run:` blocks. Rely on
 `zizmor` for the security audit of action definitions.

@@ -200,6 +200,7 @@ case study with iterative refinement within one conversation.
 
 In interactive mode, the showcase gets Matt's specific voice and insights.
 Content produced this way includes:
+
 - Specific quotes from past sessions
 - Named patterns and concepts
 - Counter-intuitive discoveries
@@ -221,10 +222,12 @@ case study structure, arc metadata, session summaries.
 2. Pull content from Basic Memory arc/session notes
 3. Include actual quotes from session logs
 4. Mark sections needing interactive enrichment:
-   ```
+
+   ```text
    <!-- TODO: Interactive enrichment needed -->
    <!-- Mechanism described but Matt's specific insight missing -->
    ```
+
 5. Flag gaps explicitly rather than filling with generic content
 
 ## Source Link Mapping

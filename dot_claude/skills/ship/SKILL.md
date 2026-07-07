@@ -80,10 +80,12 @@ For small/obvious changes, the test plan can be brief.
 ### 5. Review Gate (final step)
 
 **Team repos (3+ active contributors):**
+
 - State the change scope and suggest reviewers.
 - Exception: `/ship full-sail` is rejected for team repos -- tell the user why.
 
 **Solo/pair repos (≤2 active contributors):**
+
 - **Default**: Offer to spawn a `pr-auditor` subagent against the PR. This is the
   normal path -- don't wait for the user to ask. Frame it as: "I'll run a code review
   on this PR" and proceed unless the user declines.
@@ -92,7 +94,7 @@ For small/obvious changes, the test plan can be brief.
 
 **Running the review:**
 
-```
+```text
 Agent(subagent_type="pr-auditor", prompt="Review PR #<number> in this repo.
 Run gh pr diff <number> to see the changes. Post findings as a gh pr comment.")
 ```

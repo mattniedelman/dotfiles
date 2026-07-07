@@ -54,9 +54,10 @@ Specific routes MUST come before parameterized routes:
 def get_db():
     db = SessionLocal()
     try:
-        yield db          # Value injected to handler
+        yield db  # Value injected to handler
     finally:
-        db.close()        # Cleanup after response
+        db.close()  # Cleanup after response
+
 
 @app.get("/users/{user_id}")
 def read_user(user_id: int, db: Session = Depends(get_db)):
@@ -73,9 +74,11 @@ def get_db():
     finally:
         db.close()
 
+
 def get_current_user(db: Session = Depends(get_db)):
     # get_db resolved first, result passed here
     return db.query(User).first()
+
 
 @app.get("/me")
 def read_me(user: User = Depends(get_current_user)):
@@ -99,6 +102,7 @@ async def call_external():
     async with httpx.AsyncClient() as client:
         return await client.get("https://api.example.com")
 
+
 # CPU-bound - use sync (runs in threadpool)
 @app.get("/compute")
 def heavy_compute():
@@ -112,6 +116,7 @@ def heavy_compute():
 @app.get("/bad")
 async def bad_handler():
     time.sleep(10)  # Freezes entire server!
+
 
 # Correct - use async sleep or sync def
 @app.get("/good")
@@ -134,16 +139,18 @@ async def good_handler():
 ```python
 from pydantic import BaseModel, Field, ConfigDict
 
+
 class ItemCreate(BaseModel):
     name: str = Field(..., min_length=1, max_length=100)
     price: float = Field(..., gt=0)
     tags: list[str] = Field(default_factory=list)  # Not = []
 
+
 class ItemResponse(BaseModel):
     id: int
     name: str
     price: float
-    
+
     model_config = ConfigDict(from_attributes=True)  # For ORM
 ```
 
@@ -152,22 +159,20 @@ class ItemResponse(BaseModel):
 ```python
 from fastapi import HTTPException, status
 
+
 @app.get("/items/{id}")
 def read_item(id: int):
     if id not in items:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Item not found"
+            status_code=status.HTTP_404_NOT_FOUND, detail="Item not found"
         )
     return items[id]
+
 
 # Custom exception handler
 @app.exception_handler(CustomError)
 async def custom_handler(request, exc):
-    return JSONResponse(
-        status_code=400,
-        content={"error": str(exc)}
-    )
+    return JSONResponse(status_code=400, content={"error": str(exc)})
 ```
 
 ## Project Structure
@@ -195,12 +200,14 @@ from fastapi import APIRouter, Depends
 
 router = APIRouter(prefix="/users", tags=["users"])
 
+
 @router.get("/")
-def list_users():
-    ...
+def list_users(): ...
+
 
 # main.py
 from app.routers import users
+
 app.include_router(users.router)
 ```
 

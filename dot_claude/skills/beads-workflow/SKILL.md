@@ -7,7 +7,7 @@ description: Use when running any `br` (or legacy `bd`) command or working in a 
 
 Judgment calls for beads_rust issue tracking that agents get wrong without
 guidance.
-This skill covers *how to think about* beads, not exhaustive CLI reference --
+This skill covers _how to think about_ beads, not exhaustive CLI reference --
 run `br --help` or `br robot-docs guide` for that.
 
 ## bd vs br

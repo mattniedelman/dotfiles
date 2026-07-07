@@ -213,8 +213,8 @@ skills/
 it belongs in a resource file, not the body.
 
 **Stock the resource layer additively -- do not just spill into it.** The 80%
-heuristic decides what to *relocate* out of the body, but it does not tell you
-what the resource layer should *contain*. Resources are loaded only on demand,
+heuristic decides what to _relocate_ out of the body, but it does not tell you
+what the resource layer should _contain_. Resources are loaded only on demand,
 so the cold layer is effectively free shelf space -- and free space left empty
 is wasted, not virtuous. After draining the body, ask the additive question:
 **what would an expert keep open in another tab while doing this task?**
