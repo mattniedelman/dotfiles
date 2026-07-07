@@ -54,6 +54,12 @@ Do not call lifecycle commands (start, stop, init, restart) on services that
 manage themselves automatically.
 Check whether the service auto-starts before issuing manual start/stop calls.
 
+Before searching the filesystem for a config file or its schema, check
+official docs, `--help`, or man pages first.
+When a search is still needed, scope it to the directories that tool is known
+to use (XDG config dirs, project root, package install path) -- never scan the
+whole filesystem broadly.
+
 ## Posting Content Attributed to Me
 
 When an action posts content that will appear under my name -- anything a reader
@@ -90,39 +96,40 @@ complexity -- put the simplest working option first.
 If the user picks an option you listed last, treat that as a signal your
 ordering was wrong.
 
-<!-- BEGIN BEADS INTEGRATION v:2 profile:br -->
-## Beads Issue Tracker (br)
+<!-- BEGIN BEADS INTEGRATION v:2 profile:bd-manual -->
+## Beads Issue Tracker (bd)
 
-Projects may use **br (beads_rust)** for issue tracking.
-`bd` is aliased to `br` so existing muscle memory works; subcommands that
-existed only in the old Go `bd` (`dolt`, `prime`, `remember`, `memories`) were
-dropped in the migration and will error loudly.
+Projects may use **bd (beads, gastownhall/beads)** for issue tracking.
+Installed via mise (`github:gastownhall/beads`); `bd` resolves on `$PATH`.
+The full command surface is available -- including `dolt`, `prime`, `remember`,
+and `memories` (these were absent from the interim beads_rust build and are
+back).
 
-Storage is SQLite plus a `.beads/issues.jsonl` export.
-No Dolt backend, no automatic commits, no background daemon.
+Storage is an embedded Dolt database plus a `.beads/issues.jsonl` export.
+Embedded mode runs the Dolt engine in-process -- no external server, no port,
+no background daemon. Dolt auto-commit defaults to off.
 
-`.beads/` is NOT committed to git -- the whole directory (DB and JSONL alike)
-stays gitignored.
+`.beads/` is NOT committed to git -- the whole directory stays gitignored.
 beads is a local working store; the only task artifact that reaches git is the
 rendered `tasks.md` (see rule: beads-vmodel-tracking).
 
 ### Quick Reference
 
 ```bash
-br ready              # Find available work
-br show <id>          # View issue details
-br update <id> --status in_progress --assignee "$USER"  # Claim work
-br close <id>         # Complete work
-br stats              # Project stats (replaces bd prime at session start)
+bd ready              # Find available work
+bd show <id>          # View issue details
+bd update <id> --status in_progress --assignee "$USER"  # Claim work
+bd close <id>         # Complete work
+bd stats              # Project stats (also: bd status, bd prime at session start)
 ```
 
 ### Rules
 
-- If `br` is initialized (check with `br status` or similar), use `br` for ALL
+- If `bd` is initialized (check with `bd where` / `bd status`), use `bd` for ALL
   task tracking -- do NOT use TodoWrite, TaskCreate, or markdown TODO lists
 - Persistent cross-session knowledge goes to Basic Memory
-  (`mcp__basic-memory__*`), not to MEMORY.md files and not to a `bd remember`
-  equivalent (`br` has none)
+  (`mcp__basic-memory__*`), not to MEMORY.md files. bd has a `remember`/`memories`
+  store, but Basic Memory remains the system of record for durable knowledge.
 
 ## Session Completion
 
