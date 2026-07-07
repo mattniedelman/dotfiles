@@ -1,23 +1,238 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
-  {{ if .work -}}
-  "awsAuthRefresh": "aws sso login --sso-session imprivata",
-  {{ end -}}
+  "autoCompactEnabled": true,
+  "autoCompactWindow": 200000,
+  "autoMemoryEnabled": false,
+  "autoUpdates": false,
+  "autoUpdatesChannel": "latest",
+  "effortLevel": "high",
+  "enabledPlugins": {
+    "agentic-actions-auditor@trailofbits": false,
+    "agnix@agentsys": true,
+    "ai@pydantic-skills": true,
+    "ask-questions-if-underspecified@trailofbits": false,
+    "audit-context-building@trailofbits": false,
+    "audit-project@agentsys": false,
+    "can-i-help@agentsys": false,
+    "differential-review@trailofbits": false,
+    "drift-detect@agentsys": false,
+    "enhance@agentsys": true,
+    "git-cleanup@trailofbits": false,
+    "hindsight-memory@hindsight": true,
+    "insecure-defaults@trailofbits": true,
+    "learn@agentsys": false,
+    "nono@always-further": true,
+    "onboard@agentsys": true,
+    "perf@agentsys": false,
+    "repo-intel@agentsys": true,
+    "sharp-edges@trailofbits": true,
+    "skill-improver@trailofbits": true,
+    "skillers@agentsys": false,
+    "skypilot@skypilot": true,
+    "supply-chain-risk-auditor@trailofbits": true,
+    "sync-docs@agentsys": true,
+    "trailmark@trailofbits": true,
+    "variant-analysis@trailofbits": true,
+    "workflow-skill-design@trailofbits": true
+  },
   "env": {
     "AWS_PROFILE": "claude",
     "AWS_REGION": "us-east-1",
     "AWS_SDK_LOAD_CONFIG": "1",
-    "CLAUDE_AUTOCOMPACT_PCT_OVERRIDE": "99",
     "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
     "CLAUDE_CODE_USE_BEDROCK": "1",
-    "GIT_CONFIG_COUNT": "2",
-    "GIT_CONFIG_KEY_0": "gpg.ssh.program",
-    "GIT_CONFIG_KEY_1": "user.signingkey",
-    "GIT_CONFIG_VALUE_0": "ssh-keygen",
-    "GIT_CONFIG_VALUE_1": "{{ .chezmoi.homeDir }}/.ssh/git_signing_key",
     "RTK_HOOK_AUDIT": "1"
   },
+  "extraKnownMarketplaces": {
+    "agentsys": {
+      "autoUpdate": true,
+      "source": {
+        "repo": "agent-sh/agentsys",
+        "source": "github"
+      }
+    },
+    "hindsight": {
+      "source": {
+        "repo": "vectorize-io/hindsight",
+        "source": "github"
+      }
+    },
+    "knowledge-work-plugins": {
+      "source": {
+        "repo": "anthropics/knowledge-work-plugins",
+        "source": "github"
+      }
+    },
+    "pydantic-skills": {
+      "source": {
+        "repo": "pydantic/skills",
+        "source": "github"
+      }
+    },
+    "revealjs-skill": {
+      "source": {
+        "repo": "ryanbbrown/revealjs-skill",
+        "source": "github"
+      }
+    },
+    "skypilot": {
+      "source": {
+        "repo": "skypilot-org/skypilot",
+        "source": "github"
+      }
+    },
+    "trailofbits": {
+      "autoUpdate": true,
+      "source": {
+        "repo": "trailofbits/skills",
+        "source": "github"
+      }
+    }
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "hooks": [
+          {
+            "command": "~/.claude/hooks/auto_lint.py",
+            "timeout": 30,
+            "type": "command"
+          },
+          {
+            "command": "~/.claude/hooks/ascii_check.py",
+            "timeout": 10,
+            "type": "command"
+          },
+          {
+            "command": "~/.claude/hooks/agnix_validate.py",
+            "timeout": 15,
+            "type": "command"
+          },
+          {
+            "command": "~/.claude/hooks/security_audit_nudge.py",
+            "timeout": 10,
+            "type": "command"
+          }
+        ],
+        "matcher": "Edit|Write"
+      },
+      {
+        "hooks": [
+          {
+            "command": "~/.claude/hooks/security_audit_nudge.py",
+            "timeout": 10,
+            "type": "command"
+          }
+        ],
+        "matcher": "Bash"
+      },
+      {
+        "hooks": [],
+        "matcher": "*"
+      }
+    ],
+    "PreToolUse": [
+      {
+        "hooks": [
+          {
+            "command": "~/.claude/hooks/block_pip.py",
+            "timeout": 10,
+            "type": "command"
+          },
+          {
+            "command": "bash ~/.claude/hooks/rtk-rewrite.sh",
+            "timeout": 10,
+            "type": "command"
+          },
+          {
+            "command": "bash ~/.claude/hooks/worktree_placement_check.sh",
+            "timeout": 10,
+            "type": "command"
+          },
+          {
+            "command": "bash ~/.claude/hooks/allow_sandboxed_bash.sh",
+            "timeout": 10,
+            "type": "command"
+          },
+          {
+            "command": "~/.claude/hooks/steer_broad_search.py",
+            "timeout": 10,
+            "type": "command"
+          }
+        ],
+        "matcher": "Bash"
+      },
+      {
+        "hooks": [
+          {
+            "command": "~/.claude/hooks/basic_memory_directory_check.sh",
+            "timeout": 10,
+            "type": "command"
+          }
+        ],
+        "matcher": "mcp__basic-memory__write_note"
+      },
+      {
+        "hooks": [],
+        "matcher": "*"
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "command": "~/.claude/hooks/session_start.py",
+            "timeout": 30,
+            "type": "command"
+          }
+        ],
+        "matcher": "startup"
+      },
+      {
+        "hooks": [
+          {
+            "command": "~/.claude/hooks/session_start.py",
+            "timeout": 30,
+            "type": "command"
+          }
+        ],
+        "matcher": "resume"
+      },
+      {
+        "hooks": [
+          {
+            "command": "~/.claude/hooks/session_start.py",
+            "timeout": 30,
+            "type": "command"
+          }
+        ],
+        "matcher": "clear"
+      },
+      {
+        "hooks": [
+          {
+            "command": "~/.claude/hooks/session_start.py",
+            "timeout": 30,
+            "type": "command"
+          }
+        ],
+        "matcher": "compact"
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "command": "~/.claude/hooks/session_reflect.py",
+            "timeout": 30,
+            "type": "command"
+          }
+        ]
+      }
+    ]
+  },
   "includeCoAuthoredBy": false,
+  "model": "us.anthropic.claude-sonnet-5",
   "permissions": {
     "allow": [
       "Read",
@@ -29,7 +244,6 @@
       "Edit",
       "mcp__basic-memory__*",
       "mcp__beads__*",
-      "mcp__serena__*",
       "mcp__plugin_context7_context7__*",
       "mcp__plugin_cq_cq__*",
       "Bash(chezmoi:*)",
@@ -38,7 +252,21 @@
       "Bash(git:*)",
       "Bash(gh:*)",
       "Bash(curl:*)",
-      "Bash(systemctl:*)"
+      "Bash(systemctl:*)",
+      "Bash(aws:*)",
+      "Bash(nono why *)",
+      "Bash(nono profile guide)",
+      "mcp__grafana__*",
+      "mcp__semble__*",
+      "Skill(*)"
+    ],
+    "ask": [
+      "Edit(~/.bashrc)",
+      "Edit(~/.bash_profile)",
+      "Edit(~/.profile)",
+      "Edit(~/.zshrc)",
+      "Edit(~/.config/fish/config.fish)",
+      "Edit(~/.config/fish/conf.d/**)"
     ],
     "deny": [
       "Bash(rm -rf *)",
@@ -54,406 +282,21 @@
       "Bash(git push *--force*)",
       "Bash(git reset --hard*)",
       "Edit(~/.ssh/**)"
-    ],
-    "ask": [
-      "Edit(~/.bashrc)",
-      "Edit(~/.bash_profile)",
-      "Edit(~/.profile)",
-      "Edit(~/.zshrc)",
-      "Edit(~/.config/fish/config.fish)",
-      "Edit(~/.config/fish/conf.d/**)"
     ]
-  },
-  "model": "us.anthropic.claude-sonnet-4-6",
-  "hooks": {
-    "PostToolUse": [
-      {
-        "matcher": "Edit|Write|Bash|Task",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "${HOME}/.claude/hooks/ways/check-post.sh"
-          }
-        ]
-      },
-      {
-        "matcher": "Edit|Write",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.claude/hooks/auto_lint.py"
-          },
-          {
-            "type": "command",
-            "command": "~/.claude/hooks/ascii_check.py"
-          }
-        ]
-      },
-      {
-        "matcher": "Agent",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.claude/hooks/ralph_monitor.sh"
-          }
-        ]
-      },
-      {
-        "matcher": "*",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "{{ .chezmoi.homeDir }}/.git-ai/bin/git-ai checkpoint claude --hook-input stdin"
-          }
-        ]
-      }
-    ],
-    "PostToolUseFailure": [
-      {
-        "matcher": "Edit|Write|Bash|Task",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "${HOME}/.claude/hooks/ways/check-post.sh"
-          }
-        ]
-      }
-    ],
-    "PreToolUse": [
-      {
-        "matcher": "Edit|Write",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "${HOME}/.claude/hooks/ways/check-file-pre.sh"
-          }
-        ]
-      },
-      {
-        "matcher": "Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "${HOME}/.claude/hooks/ways/check-bash-pre.sh"
-          },
-          {
-            "type": "command",
-            "command": "~/.claude/hooks/block_pip.py"
-          },
-          {
-            "type": "command",
-            "command": "bash ~/.claude/hooks/worktree_placement_check.sh"
-          },
-          {
-            "type": "command",
-            "command": "bash ~/.claude/hooks/allow_sandboxed_bash.sh"
-          }
-        ]
-      },
-      {
-        "matcher": "TaskCreate",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "${HOME}/.claude/hooks/ways/mark-tasks-active.sh"
-          }
-        ]
-      },
-      {
-        "matcher": "Task",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "${HOME}/.claude/hooks/ways/check-task-pre.sh"
-          }
-        ]
-      },
-      {
-        "matcher": "mcp__basic-memory__write_note",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.claude/hooks/basic_memory_directory_check.sh"
-          }
-        ]
-      },
-      {
-        "matcher": "*",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "{{ .chezmoi.homeDir }}/.git-ai/bin/git-ai checkpoint claude --hook-input stdin"
-          }
-        ]
-      }
-    ],
-    "SessionStart": [
-      {
-        "matcher": "startup",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "${HOME}/.claude/hooks/ways/check-setup.sh"
-          },
-          {
-            "type": "command",
-            "command": "${HOME}/.claude/hooks/ways/clear-markers.sh"
-          },
-          {
-            "type": "command",
-            "command": "${HOME}/.claude/hooks/check-config-updates.sh"
-          },
-          {
-            "type": "command",
-            "command": "${HOME}/.claude/hooks/ways/check-state.sh"
-          },
-          {
-            "type": "command",
-            "command": "${HOME}/.claude/bin/ways init"
-          },
-          {
-            "type": "command",
-            "command": "${HOME}/.claude/bin/ways corpus --if-stale --quiet"
-          }
-        ]
-      },
-      {
-        "matcher": "compact",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "${HOME}/.claude/hooks/ways/clear-markers.sh"
-          },
-          {
-            "type": "command",
-            "command": "${HOME}/.claude/hooks/ways/check-state.sh"
-          }
-        ]
-      },
-      {
-        "matcher": "resume",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "${HOME}/.claude/hooks/ways/check-state.sh"
-          }
-        ]
-      },
-      {
-        "matcher": "clear",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "${HOME}/.claude/hooks/ways/clear-markers.sh"
-          },
-          {
-            "type": "command",
-            "command": "${HOME}/.claude/hooks/ways/check-state.sh"
-          },
-          {
-            "type": "command",
-            "command": "${HOME}/.claude/bin/ways init"
-          }
-        ]
-      },
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.claude/hooks/session_start.py"
-          }
-        ]
-      }
-    ],
-    "Stop": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "${HOME}/.claude/hooks/ways/check-response.sh"
-          }
-        ]
-      },
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.claude/hooks/session_reflect.py"
-          }
-        ]
-      }
-    ],
-    "SubagentStart": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "${HOME}/.claude/hooks/ways/inject-subagent.sh"
-          }
-        ]
-      }
-    ],
-    "UserPromptSubmit": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "${HOME}/.claude/hooks/ways/check-prompt.sh"
-          },
-          {
-            "type": "command",
-            "command": "${HOME}/.claude/hooks/ways/check-state.sh"
-          },
-          {
-            "type": "command",
-            "command": "~/.claude/hooks/prompt_context.py"
-          }
-        ]
-      }
-    ]
-  },
-  "statusLine": {
-    "type": "command",
-    "command": "~/.local/bin/starship-claude",
-    "padding": 0
-  },
-  "enabledPlugins": {
-    "agentic-actions-auditor@trailofbits": true,
-    "agnix@agentsys": true,
-    "ai@pydantic-skills": true,
-    "ask-questions-if-underspecified@trailofbits": true,
-    "audit-context-building@trailofbits": true,
-    "audit-project@agentsys": true,
-    "beads@beads-marketplace": false,
-    "can-i-help@agentsys": true,
-    "differential-review@trailofbits": true,
-    "drift-detect@agentsys": true,
-    "enhance@agentsys": true,
-    "git-cleanup@trailofbits": true,
-    "hindsight-memory@hindsight": true,
-    "insecure-defaults@trailofbits": true,
-    "learn@agentsys": false,
-    "onboard@agentsys": true,
-    "perf@agentsys": false,
-    "repo-intel@agentsys": true,
-    "sharp-edges@trailofbits": true,
-    "skill-improver@trailofbits": true,
-    "skillers@agentsys": false,
-    "skypilot@skypilot": true,
-    "supply-chain-risk-auditor@trailofbits": true,
-    "sync-docs@agentsys": true,
-    "trailmark@trailofbits": true,
-    "variant-analysis@trailofbits": true,
-    "workflow-skill-design@trailofbits": true
-  },
-  "extraKnownMarketplaces": {
-    "agentsys": {
-      "source": {
-        "source": "github",
-        "repo": "agent-sh/agentsys"
-      },
-      "autoUpdate": true
-    },
-    "beads-marketplace": {
-      "source": {
-        "source": "github",
-        "repo": "gastownhall/beads"
-      }
-    },
-    "hindsight": {
-      "source": {
-        "source": "github",
-        "repo": "vectorize-io/hindsight"
-      }
-    },
-    "knowledge-work-plugins": {
-      "source": {
-        "source": "github",
-        "repo": "anthropics/knowledge-work-plugins"
-      }
-    },
-    "pydantic-skills": {
-      "source": {
-        "source": "github",
-        "repo": "pydantic/skills"
-      }
-    },
-    "skypilot": {
-      "source": {
-        "source": "github",
-        "repo": "skypilot-org/skypilot"
-      }
-    },
-    "trailofbits": {
-      "source": {
-        "source": "github",
-        "repo": "trailofbits/skills"
-      },
-      "autoUpdate": true
-    }
   },
   "sandbox": {
-    "enabled": true,
-    "autoAllowBashIfSandboxed": true,
-    "allowUnsandboxedCommands": true,
-    "network": {
-      "allowedDomains": [
-        "localhost",
-        "127.0.0.1",
-        "github.com",
-        "api.github.com",
-        "*.githubusercontent.com",
-        "pypi.org",
-        "files.pythonhosted.org",
-        "registry.npmjs.org",
-        "*.npmjs.org",
-        "proxy.golang.org",
-        "sum.golang.org",
-        "storage.googleapis.com",
-        "crates.io",
-        "static.crates.io",
-        "*.amazonaws.com"
-      ],
-      "allowUnixSockets": [
-        "~/.1password/agent.sock",
-        "{{ .chezmoi.homeDir }}/.1password/agent.sock",
-        "/run/user/{{ .chezmoi.uid }}/bus"
-      ]
-    },
-    "filesystem": {
-      "allowWrite": [
-        "/tmp",
-        "{{ .chezmoi.homeDir }}/.aws/cli/cache",
-        "{{ .chezmoi.homeDir }}/.aws/sso/cache",
-        "{{ .chezmoi.homeDir }}/.claude/hooks/ways",
-        "{{ .chezmoi.homeDir }}/.cache"
-      ],
-      "allowRead": [
-        "{{ .chezmoi.homeDir }}/.aws",
-        "{{ .chezmoi.homeDir }}/.ssh",
-        "{{ .chezmoi.homeDir }}/.config/gh"
-      ]
-    },
-    "excludedCommands": [
-      "bd",
-      "br",
-      "chezmoi",
-      "curl",
-      "gh",
-      "git",
-      "ways",
-      "systemctl"
-    ]
+    "allowUnsandboxedCommands": false,
+    "enabled": false
   },
-  "effortLevel": "high",
-  "autoUpdatesChannel": "latest",
-  "tui": "fullscreen",
-  "autoDreamEnabled": true,
-  "skipDangerousModePermissionPrompt": true,
-  "verbose": false,
-  "teammateMode": "auto",
   "skipAutoPermissionPrompt": true,
-  "autoUpdates": false
+  "skipDangerousModePermissionPrompt": true,
+  "skipWorkflowUsageWarning": true,
+  "statusLine": {
+    "command": "~/.local/bin/starship-claude",
+    "padding": 0,
+    "type": "command"
+  },
+  "teammateMode": "auto",
+  "tui": "fullscreen",
+  "verbose": false
 }
