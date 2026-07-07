@@ -52,9 +52,10 @@ alias sg='sg --config $AST_GREP_CONFIG'
 alias tf='terraform'
 
 # ============================================================================
-# beads_rust (br): replaces legacy bd (steveyegge/beads)
+# beads (bd): gastownhall/beads, installed via mise
 # ============================================================================
-# `bd` is a symlink at ~/.local/bin/bd -> br (works from every shell including
-# non-interactive ones and Claude Code's bash). Legacy bd binary preserved at
-# ~/.local/bin/bd-legacy-v1.0.3. Commands that existed only in the old bd
-# (`dolt`, `prime`, `remember`, `memories`) error loudly -- intentional.
+# `bd` resolves via the mise shim (github:gastownhall/beads). No alias needed.
+# Embedded Dolt backend. The interim beads_rust (`br`) binary is still present
+# at ~/.local/bin/br, and the old Go bd at ~/.local/bin/bd-legacy-v1.0.3, but
+# `bd` on $PATH is the mise-managed gastownhall build with the full command set
+# (`dolt`, `prime`, `remember`, `memories` all work).
