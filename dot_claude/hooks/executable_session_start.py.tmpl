@@ -38,14 +38,14 @@ def get_beads_context() -> str:
     """Return formatted beads context (active + ready work), or empty string on failure."""
     try:
         in_progress = subprocess.run(
-            ["bd", "list", "--status=in_progress", "--flat", "-n", "10"],
+            ["br", "list", "--status=in_progress", "--limit", "10"],
             capture_output=True,
             text=True,
             check=False,
             timeout=8,
         )
         ready = subprocess.run(
-            ["bd", "ready", "-n", "5"],
+            ["br", "ready", "--limit", "5"],
             capture_output=True,
             text=True,
             check=False,
