@@ -220,3 +220,5 @@ If `semble` is not on `$PATH`, use `uvx --from "semble[mcp]" semble`.
 5. Use Grep/Glob/Read only when you need exhaustive literal matches or quick
    confirmation of an exact string.
 <!-- SEMBLE_END -->
+
+@RTK.md
