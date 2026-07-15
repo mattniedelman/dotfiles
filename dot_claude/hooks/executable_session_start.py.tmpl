@@ -130,7 +130,10 @@ def discover_agents() -> list[dict[str, str]]:
         if not agents_dir.exists():
             continue
         for agent_file in sorted(agents_dir.glob("*.md")):
-            content = agent_file.read_text()
+            try:
+                content = agent_file.read_text()
+            except OSError:
+                continue
             match = re.match(r"^---\s*\n(.+?)\n---", content, re.DOTALL)
             if not match:
                 continue
