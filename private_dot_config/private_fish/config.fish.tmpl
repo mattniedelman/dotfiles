@@ -58,10 +58,6 @@ test (count $valid_paths) -gt 0; and fish_add_path --path $valid_paths
 # Interactive Session Setup
 # ============================================================================
 if status is-interactive
-    if not set -q GH_TOKEN
-        set -gx GH_TOKEN (gh auth token 2>/dev/null)
-    end
-
     # Suppress greeting
     set -g fish_greeting ""
 
@@ -121,3 +117,13 @@ end
 
 # strix
 fish_add_path {{ .chezmoi.homeDir }}/.strix/bin
+
+# sparkrun tab-completion
+# Cache to an autoloaded completions file instead of regenerating on every
+# shell (the live probe cost ~385ms of Python cold-start per startup).
+# Fish autoloads completions/sparkrun.fish on demand; regenerate only when the
+# binary is newer than the cached file.
+set -l spark_comp ~/.config/fish/completions/sparkrun.fish
+if command -q sparkrun; and test (command -v sparkrun) -nt $spark_comp
+    _SPARKRUN_COMPLETE=fish_source sparkrun >$spark_comp 2>/dev/null
+end
