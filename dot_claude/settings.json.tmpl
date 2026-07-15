@@ -1,11 +1,227 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
-  "autoCompactEnabled": true,
-  "autoCompactWindow": 200000,
-  "autoMemoryEnabled": false,
-  "autoUpdates": false,
-  "autoUpdatesChannel": "latest",
-  "effortLevel": "high",
+  "env": {
+    "AWS_PROFILE": "claude",
+    "AWS_REGION": "us-east-1",
+    "AWS_SDK_LOAD_CONFIG": "1",
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
+    "CLAUDE_CODE_USE_BEDROCK": "1",
+    "RTK_HOOK_AUDIT": "1"
+  },
+  "includeCoAuthoredBy": false,
+  "permissions": {
+    "allow": [
+      "Read",
+      "Glob",
+      "Grep",
+      "WebFetch",
+      "WebSearch",
+      "Write",
+      "Edit",
+      "mcp__basic-memory__*",
+      "mcp__beads__*",
+      "mcp__plugin_context7_context7__*",
+      "mcp__plugin_cq_cq__*",
+      "Bash(rtk:*)",
+      "Bash(chezmoi:*)",
+      "Bash(bd:*)",
+      "Bash(br:*)",
+      "Bash(git:*)",
+      "Bash(gh:*)",
+      "Bash(curl:*)",
+      "Bash(systemctl:*)",
+      "Bash(aws:*)",
+      "Bash(nono why *)",
+      "Bash(nono profile guide)",
+      "Bash(nono profile show *)",
+      "Bash(nono profile groups *)",
+      "Bash(nono profile validate *)",
+      "Bash(nono profile schema)",
+      "Bash(nono audit list *)",
+      "Bash(nono audit show *)",
+      "Bash(hk config *)",
+      "Bash(hk check *)",
+      "Bash(hk validate *)",
+      "Bash(hk builtins *)",
+      "Bash(skillshare list *)",
+      "Bash(desloppify next *)",
+      "mcp__grafana__*",
+      "mcp__semble__*",
+      "Skill(*)"
+    ],
+    "deny": [
+      "Bash(rm -rf *)",
+      "Bash(rm -rf /)",
+      "Bash(rm -fr *)",
+      "Bash(rm -fr /)",
+      "Bash(sudo *)",
+      "Bash(mkfs *)",
+      "Bash(dd *)",
+      "Bash(wget *|bash*)",
+      "Bash(wget *| bash*)",
+      "Bash(git push --force*)",
+      "Bash(git push *--force*)",
+      "Bash(git reset --hard*)",
+      "Edit(~/.ssh/**)"
+    ],
+    "ask": [
+      "Edit(~/.bashrc)",
+      "Edit(~/.bash_profile)",
+      "Edit(~/.profile)",
+      "Edit(~/.zshrc)",
+      "Edit(~/.config/fish/config.fish)",
+      "Edit(~/.config/fish/conf.d/**)"
+    ]
+  },
+  "model": "us.anthropic.claude-sonnet-5",
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/auto_lint.py",
+            "timeout": 30
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/ascii_check.py",
+            "timeout": 10
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/agnix_validate.py",
+            "timeout": 15
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/security_audit_nudge.py",
+            "timeout": 10
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/security_audit_nudge.py",
+            "timeout": 10
+          }
+        ]
+      },
+      {
+        "matcher": "*",
+        "hooks": []
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "mcp__basic-memory__write_note",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/basic_memory_directory_check.sh",
+            "timeout": 10
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "rtk hook claude",
+            "timeout": 10
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/block_pip.py",
+            "timeout": 10
+          },
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/rtk-rewrite.sh",
+            "timeout": 10
+          },
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/worktree_placement_check.sh",
+            "timeout": 10
+          },
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/allow_sandboxed_bash.sh",
+            "timeout": 10
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/steer_broad_search.py",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "matcher": "startup",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/session_start.py",
+            "timeout": 30
+          }
+        ]
+      },
+      {
+        "matcher": "resume",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/session_start.py",
+            "timeout": 30
+          }
+        ]
+      },
+      {
+        "matcher": "clear",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/session_start.py",
+            "timeout": 30
+          }
+        ]
+      },
+      {
+        "matcher": "compact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/session_start.py",
+            "timeout": 30
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/session_reflect.py",
+            "timeout": 30
+          }
+        ]
+      }
+    ]
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "~/.local/bin/starship-claude",
+    "padding": 0
+  },
   "enabledPlugins": {
     "agentic-actions-auditor@trailofbits": false,
     "agnix@agentsys": true,
@@ -35,268 +251,72 @@
     "variant-analysis@trailofbits": true,
     "workflow-skill-design@trailofbits": true
   },
-  "env": {
-    "AWS_PROFILE": "claude",
-    "AWS_REGION": "us-east-1",
-    "AWS_SDK_LOAD_CONFIG": "1",
-    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
-    "CLAUDE_CODE_USE_BEDROCK": "1",
-    "RTK_HOOK_AUDIT": "1"
-  },
   "extraKnownMarketplaces": {
     "agentsys": {
-      "autoUpdate": true,
       "source": {
-        "repo": "agent-sh/agentsys",
-        "source": "github"
-      }
+        "source": "github",
+        "repo": "agent-sh/agentsys"
+      },
+      "autoUpdate": true
     },
     "hindsight": {
       "source": {
-        "repo": "vectorize-io/hindsight",
-        "source": "github"
+        "source": "github",
+        "repo": "vectorize-io/hindsight"
       }
     },
     "knowledge-work-plugins": {
       "source": {
-        "repo": "anthropics/knowledge-work-plugins",
-        "source": "github"
+        "source": "github",
+        "repo": "anthropics/knowledge-work-plugins"
       }
     },
     "pydantic-skills": {
       "source": {
-        "repo": "pydantic/skills",
-        "source": "github"
+        "source": "github",
+        "repo": "pydantic/skills"
       }
     },
     "revealjs-skill": {
       "source": {
-        "repo": "ryanbbrown/revealjs-skill",
-        "source": "github"
+        "source": "github",
+        "repo": "ryanbbrown/revealjs-skill"
       }
     },
     "skypilot": {
       "source": {
-        "repo": "skypilot-org/skypilot",
-        "source": "github"
+        "source": "github",
+        "repo": "skypilot-org/skypilot"
       }
     },
     "trailofbits": {
-      "autoUpdate": true,
       "source": {
-        "repo": "trailofbits/skills",
-        "source": "github"
+        "source": "github",
+        "repo": "trailofbits/skills"
+      },
+      "autoUpdate": true
+    },
+    "probo": {
+      "source": {
+        "source": "git",
+        "url": "https://github.com/getprobo/probo.git"
       }
     }
   },
-  "hooks": {
-    "PostToolUse": [
-      {
-        "hooks": [
-          {
-            "command": "~/.claude/hooks/auto_lint.py",
-            "timeout": 30,
-            "type": "command"
-          },
-          {
-            "command": "~/.claude/hooks/ascii_check.py",
-            "timeout": 10,
-            "type": "command"
-          },
-          {
-            "command": "~/.claude/hooks/agnix_validate.py",
-            "timeout": 15,
-            "type": "command"
-          },
-          {
-            "command": "~/.claude/hooks/security_audit_nudge.py",
-            "timeout": 10,
-            "type": "command"
-          }
-        ],
-        "matcher": "Edit|Write"
-      },
-      {
-        "hooks": [
-          {
-            "command": "~/.claude/hooks/security_audit_nudge.py",
-            "timeout": 10,
-            "type": "command"
-          }
-        ],
-        "matcher": "Bash"
-      },
-      {
-        "hooks": [],
-        "matcher": "*"
-      }
-    ],
-    "PreToolUse": [
-      {
-        "hooks": [
-          {
-            "command": "~/.claude/hooks/block_pip.py",
-            "timeout": 10,
-            "type": "command"
-          },
-          {
-            "command": "bash ~/.claude/hooks/rtk-rewrite.sh",
-            "timeout": 10,
-            "type": "command"
-          },
-          {
-            "command": "bash ~/.claude/hooks/worktree_placement_check.sh",
-            "timeout": 10,
-            "type": "command"
-          },
-          {
-            "command": "bash ~/.claude/hooks/allow_sandboxed_bash.sh",
-            "timeout": 10,
-            "type": "command"
-          },
-          {
-            "command": "~/.claude/hooks/steer_broad_search.py",
-            "timeout": 10,
-            "type": "command"
-          }
-        ],
-        "matcher": "Bash"
-      },
-      {
-        "hooks": [
-          {
-            "command": "~/.claude/hooks/basic_memory_directory_check.sh",
-            "timeout": 10,
-            "type": "command"
-          }
-        ],
-        "matcher": "mcp__basic-memory__write_note"
-      },
-      {
-        "hooks": [],
-        "matcher": "*"
-      }
-    ],
-    "SessionStart": [
-      {
-        "hooks": [
-          {
-            "command": "~/.claude/hooks/session_start.py",
-            "timeout": 30,
-            "type": "command"
-          }
-        ],
-        "matcher": "startup"
-      },
-      {
-        "hooks": [
-          {
-            "command": "~/.claude/hooks/session_start.py",
-            "timeout": 30,
-            "type": "command"
-          }
-        ],
-        "matcher": "resume"
-      },
-      {
-        "hooks": [
-          {
-            "command": "~/.claude/hooks/session_start.py",
-            "timeout": 30,
-            "type": "command"
-          }
-        ],
-        "matcher": "clear"
-      },
-      {
-        "hooks": [
-          {
-            "command": "~/.claude/hooks/session_start.py",
-            "timeout": 30,
-            "type": "command"
-          }
-        ],
-        "matcher": "compact"
-      }
-    ],
-    "Stop": [
-      {
-        "hooks": [
-          {
-            "command": "~/.claude/hooks/session_reflect.py",
-            "timeout": 30,
-            "type": "command"
-          }
-        ]
-      }
-    ]
-  },
-  "includeCoAuthoredBy": false,
-  "model": "us.anthropic.claude-sonnet-5",
-  "permissions": {
-    "allow": [
-      "Read",
-      "Glob",
-      "Grep",
-      "WebFetch",
-      "WebSearch",
-      "Write",
-      "Edit",
-      "mcp__basic-memory__*",
-      "mcp__beads__*",
-      "mcp__plugin_context7_context7__*",
-      "mcp__plugin_cq_cq__*",
-      "Bash(chezmoi:*)",
-      "Bash(bd:*)",
-      "Bash(br:*)",
-      "Bash(git:*)",
-      "Bash(gh:*)",
-      "Bash(curl:*)",
-      "Bash(systemctl:*)",
-      "Bash(aws:*)",
-      "Bash(nono why *)",
-      "Bash(nono profile guide)",
-      "mcp__grafana__*",
-      "mcp__semble__*",
-      "Skill(*)"
-    ],
-    "ask": [
-      "Edit(~/.bashrc)",
-      "Edit(~/.bash_profile)",
-      "Edit(~/.profile)",
-      "Edit(~/.zshrc)",
-      "Edit(~/.config/fish/config.fish)",
-      "Edit(~/.config/fish/conf.d/**)"
-    ],
-    "deny": [
-      "Bash(rm -rf *)",
-      "Bash(rm -rf /)",
-      "Bash(rm -fr *)",
-      "Bash(rm -fr /)",
-      "Bash(sudo *)",
-      "Bash(mkfs *)",
-      "Bash(dd *)",
-      "Bash(wget *|bash*)",
-      "Bash(wget *| bash*)",
-      "Bash(git push --force*)",
-      "Bash(git push *--force*)",
-      "Bash(git reset --hard*)",
-      "Edit(~/.ssh/**)"
-    ]
-  },
   "sandbox": {
-    "allowUnsandboxedCommands": false,
-    "enabled": false
+    "enabled": false,
+    "allowUnsandboxedCommands": false
   },
-  "skipAutoPermissionPrompt": true,
+  "effortLevel": "high",
+  "autoCompactWindow": 200000,
+  "autoUpdatesChannel": "latest",
+  "tui": "fullscreen",
+  "autoMemoryEnabled": false,
   "skipDangerousModePermissionPrompt": true,
   "skipWorkflowUsageWarning": true,
-  "statusLine": {
-    "command": "~/.local/bin/starship-claude",
-    "padding": 0,
-    "type": "command"
-  },
+  "verbose": false,
+  "autoCompactEnabled": true,
   "teammateMode": "auto",
-  "tui": "fullscreen",
-  "verbose": false
+  "skipAutoPermissionPrompt": true,
+  "autoUpdates": false
 }
