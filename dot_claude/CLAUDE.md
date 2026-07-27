@@ -1,5 +1,7 @@
 # Project Instructions for AI Agents
 
+It is never appropriate to run any form of `find /`
+
 ## Skills
 
 Before responding to ANY user message, check if a skill might apply.
@@ -54,10 +56,10 @@ Do not call lifecycle commands (start, stop, init, restart) on services that
 manage themselves automatically.
 Check whether the service auto-starts before issuing manual start/stop calls.
 
-Before searching the filesystem for a config file or its schema, check
-official docs, `--help`, or man pages first.
-When a search is still needed, scope it to the directories that tool is known
-to use (XDG config dirs, project root, package install path) -- never scan the
+Before searching the filesystem for a config file or its schema, check official
+docs, `--help`, or man pages first.
+When a search is still needed, scope it to the directories that tool is known to
+use (XDG config dirs, project root, package install path) -- never scan the
 whole filesystem broadly.
 
 ## Posting Content Attributed to Me
@@ -106,12 +108,14 @@ and `memories` (these were absent from the interim beads_rust build and are
 back).
 
 Storage is an embedded Dolt database plus a `.beads/issues.jsonl` export.
-Embedded mode runs the Dolt engine in-process -- no external server, no port,
-no background daemon. Dolt auto-commit defaults to off.
+Embedded mode runs the Dolt engine in-process -- no external server, no port, no
+background daemon.
+Dolt auto-commit defaults to off.
 
 `.beads/` is NOT committed to git -- the whole directory stays gitignored.
 beads is a local working store; the only task artifact that reaches git is the
-rendered `tasks.md` (see rule: beads-vmodel-tracking).
+rendered `tasks.md` (see rule:
+beads-vmodel-tracking).
 
 ### Quick Reference
 
@@ -128,12 +132,14 @@ bd stats              # Project stats (also: bd status, bd prime at session star
 - If `bd` is initialized (check with `bd where` / `bd status`), use `bd` for ALL
   task tracking -- do NOT use TodoWrite, TaskCreate, or markdown TODO lists
 - Persistent cross-session knowledge goes to Basic Memory
-  (`mcp__basic-memory__*`), not to MEMORY.md files. bd has a `remember`/`memories`
-  store, but Basic Memory remains the system of record for durable knowledge.
+  (`mcp__basic-memory__*`), not to MEMORY.md files.
+  bd has a `remember`/`memories` store, but Basic Memory remains the system of
+  record for durable knowledge.
 
 ## Session Completion
 
-Work is NOT complete until `git push` succeeds -- YOU must push, never stop and wait.
+Work is NOT complete until `git push` succeeds -- YOU must push, never stop and
+wait.
 
 1. File issues for remaining work
 2. Run quality gates (if code changed) -- tests, linters, builds
@@ -143,8 +149,10 @@ Work is NOT complete until `git push` succeeds -- YOU must push, never stop and 
    git pull && git push
    git status  # must show "up to date with origin"
    ```
-   Do NOT commit `.beads/`. If a change set uses beads, regenerate `changes/<name>/tasks.md`
-   before pushing (see rule: beads-vmodel-tracking).
+   Do NOT commit `.beads/`.
+   If a change set uses beads, regenerate `changes/<name>/tasks.md` before
+   pushing (see rule:
+   beads-vmodel-tracking).
 5. Clean up stashes, prune remote branches
 6. Hand off context for next session
 <!-- END BEADS INTEGRATION -->
@@ -169,13 +177,18 @@ correctly avoids the correction cycle.
 
 ### Git Workflow
 
-Default workflow is simplified git flow -- not trunk-based, not squash-and-rebase.
-This overrides any skill that defaults to squash/rebase (e.g., `git-discipline`).
+Default workflow is simplified git flow -- not trunk-based, not
+squash-and-rebase.
+This overrides any skill that defaults to squash/rebase (e.g.,
+`git-discipline`).
 
-- **Branching:** `main` and `develop` are long-lived; feature branches from `develop`, hotfix branches from `main`.
-- **Merging:** merge with `--no-ff` -- never rebase shared branches, never squash.
+- **Branching:** `main` and `dev` are long-lived; feature branches from `dev`,
+  hotfix branches from `main`.
+- **Merging:** merge with `--no-ff` -- never rebase shared branches, never
+  squash.
 - **Commits:** Conventional Commits format; only commit when explicitly asked.
-- **PRs:** create PRs to merge feature/fix branches; never merge directly to `main` or `develop` in conversation.
+- **PRs:** create PRs to merge feature/fix branches; never merge directly to
+  `main` or `develop` in conversation.
 - **Conflicts:** resolve conflict by conflict -- never abort and discard.
 - **Pulls:** `git pull` (no `--rebase`).
 

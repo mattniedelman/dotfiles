@@ -68,9 +68,9 @@ if status is-interactive
     # Mise (development environment manager)
     command -q mise; and mise activate fish | source
 
-    # Auto-start zellij in Ghostty only (after mise so the correct version is used)
-    if set -q GHOSTTY_RESOURCES_DIR; and not set -q ZELLIJ; and command -q zellij
-        exec zellij
+    # Auto-start herdr in Ghostty only (after mise so the correct version is used)
+    if set -q GHOSTTY_RESOURCES_DIR; and not set -q HERDR_ENV; and command -q herdr
+        exec herdr
     end
 
     # Oh My Posh prompt

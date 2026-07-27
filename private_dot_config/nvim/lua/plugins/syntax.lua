@@ -44,32 +44,44 @@ return {
       highlight = {
         enable = true,
         disable = { "dockerfile" }, -- Disable treesitter for Dockerfiles
-        additional_vim_regex_highlighting = { "python" },
       },
     },
   },
   {
     "nvim-treesitter/nvim-treesitter-textobjects",
+    -- main branch: select keymaps are created manually (the old
+    -- opts.textobjects.select.keymaps table is not read on this branch).
     opts = {
-      textobjects = {
-        select = {
-          enable = true,
-          lookahead = true,
-          keymaps = {
-            ["af"] = "@function.outer",
-            ["if"] = "@function.inner",
-            ["ac"] = "@class.outer",
-            ["ic"] = "@class.inner",
-            ["ab"] = "@block.outer",
-            ["ib"] = "@block.inner",
-            ["al"] = "@loop.outer",
-            ["il"] = "@loop.inner",
-            ["aa"] = "@parameter.outer",
-            ["ia"] = "@parameter.inner",
-          },
-        },
+      select = {
+        lookahead = true,
       },
     },
+    keys = function()
+      local maps = {
+        ["af"] = "@function.outer",
+        ["if"] = "@function.inner",
+        ["ac"] = "@class.outer",
+        ["ic"] = "@class.inner",
+        ["ab"] = "@block.outer",
+        ["ib"] = "@block.inner",
+        ["al"] = "@loop.outer",
+        ["il"] = "@loop.inner",
+        ["aa"] = "@parameter.outer",
+        ["ia"] = "@parameter.inner",
+      }
+      local keys = {}
+      for lhs, capture in pairs(maps) do
+        keys[#keys + 1] = {
+          lhs,
+          function()
+            require("nvim-treesitter-textobjects.select").select_textobject(capture, "textobjects")
+          end,
+          mode = { "x", "o" },
+          desc = "Select " .. capture,
+        }
+      end
+      return keys
+    end,
   },
   { "nvim-treesitter/nvim-treesitter-context", opts = {} },
 }

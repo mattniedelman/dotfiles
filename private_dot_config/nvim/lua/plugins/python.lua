@@ -32,15 +32,9 @@ return {
     },
   },
 
-  -- Install Python formatters/linters
-  {
-    "mason-org/mason.nvim",
-    opts = {
-      ensure_installed = {
-        "ruff", -- Python linter and formatter (CLI tool)
-      },
-    },
-  },
+  -- Note: ruff is installed via mason-lspconfig ensure_installed above; the
+  -- same package provides the CLI binary the conform formatters below invoke,
+  -- so no separate mason.nvim ensure_installed entry is needed.
 
   -- Configure Python formatters
   {

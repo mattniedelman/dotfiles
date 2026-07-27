@@ -3,16 +3,16 @@
 # dependencies = ["cchooks"]
 # ///
 """
-PostToolUse hook: Auto-run formatters and linters via hk on modified files.
+PostToolUse hook: Report formatting/linting issues via hk on modified files.
 
-Delegates formatting + linting to hk fix (slow-profile steps like secret
-scanners and type checkers are skipped here -- those run on pre-commit).
-Only special cases that hk can't handle are run directly.
+Delegates linting to hk check in report-only mode -- no fixes are applied
+(slow-profile steps like secret scanners and type checkers are skipped here;
+those run on pre-commit). Only special cases that hk can't handle are run
+directly, and those are read-only as well.
 """
 
 from __future__ import annotations
 
-import hashlib
 import os
 import re
 import subprocess
@@ -29,13 +29,6 @@ def debug(msg: str) -> None:
     """Emit debug message to stderr when AUTO_LINT_DEBUG=1."""
     if DEBUG:
         print(f"[auto_lint] {msg}", file=sys.stderr)  # noqa: T201
-
-
-def _file_hash(filepath: str) -> str:
-    try:
-        return hashlib.md5(Path(filepath).read_bytes()).hexdigest()  # noqa: S324
-    except OSError:
-        return ""
 
 
 def run_command(
@@ -156,49 +149,39 @@ def main() -> None:
 
     debug(f"Modified files: {modified_files}")
     context_parts: list[str] = []
-    before_hashes = {f: _file_hash(f) for f in modified_files}
 
-    # --- hk: formatting + linting (requires git repo) ---
+    # --- hk: linting in report-only mode (requires git repo) ---
     # hk resolves the git repo from its cwd, NOT from the file arguments. The
     # hook process inherits whatever cwd Claude Code launched it in, which is
     # frequently outside the repo -- so hk must be run with cwd set to the
     # repo root, or it panics with "failed to find git repository".
     repo_root = _git_repo_root(modified_files[0])
     if repo_root is not None:
-        # hk fix: fast formatters + linters (slow-profile steps skipped)
+        # hk check: report fast formatters + linters WITHOUT applying fixes
+        # (slow-profile steps skipped)
         code, out = run_command(
-            ["hk", "fix", "--no-progress", *modified_files],
+            ["hk", "check", "--no-progress", *modified_files],
             cwd=repo_root,
             timeout=60,
         )
         out = _strip_pkl_deprecations(out)
-        debug(f"hk fix exit={code}")
+        debug(f"hk check exit={code}")
 
         if code in (-1, -2):
             # Tool missing or timed out -- non-fatal, don't surface as lint error
-            debug(f"hk fix skipped (code={code}): {out}")
+            debug(f"hk check skipped (code={code}): {out}")
         elif code != 0 and out.strip():
             lint_notice = (
-                "LINT ERRORS detected in modified files. Fix ALL of these.\n\n"
-                "Pre-existing errors are NOT exempt -- do NOT skip errors because "
+                "LINT ISSUES detected in modified files. Fix ALL of these.\n\n"
+                "Pre-existing issues are NOT exempt -- do NOT skip issues because "
                 "they were 'already there' or 'out of scope'. "
-                "All errors must be fixed unless the user has explicitly said "
+                "All issues must be fixed unless the user has explicitly said "
                 "to ignore them.\n\n"
             )
             lint_notice += out
             context_parts.append(lint_notice)
     else:
         debug("Not in a git repo, skipping hk")
-
-    # Detect reformatted files via hash comparison (covers aadc + hk)
-    reformatted = [f for f in modified_files if _file_hash(f) != before_hashes.get(f)]
-    if reformatted:
-        notice = (
-            "FILES REFORMATTED by auto-formatter.\n"
-            "Re-read these files before making further edits:\n"
-        )
-        notice += "\n".join(f"  - {f}" for f in reformatted)
-        context_parts.insert(0, notice)
 
     # --- Special cases outside hk ---
     md_files = [f for f in modified_files if f.endswith((".md", ".mdx"))]
@@ -210,7 +193,7 @@ def main() -> None:
     if context_parts:
         context_parts.append(
             "AFTER handling the above: resume your original task exactly where "
-            "you left off. These lint/format issues are a side-effect, not the goal."
+            "you left off. These lint issues are a side-effect, not the goal."
             "\n\nDo NOT say 'Acknowledged', 'Noted', or any acknowledgment. "
             "Take the required action silently and continue."
         )
