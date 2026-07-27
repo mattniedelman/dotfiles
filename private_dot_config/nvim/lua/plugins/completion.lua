@@ -15,23 +15,17 @@ return {
         preset = "enter",
       },
       sources = {
+        -- Note: snippet items are filtered out globally by sources.transform_items
+        -- below, so "snippets" is intentionally omitted from this list.
         default = {
           "conventional_commits",
           "lsp",
           "path",
-          "snippets",
           "buffer",
           "git",
         },
 
         providers = {
-          lsp = {
-            transform_items = function(_, items)
-              return vim.tbl_filter(function(item)
-                return item.client_name ~= "Augment Server"
-              end, items)
-            end,
-          },
           conventional_commits = {
             name = "Conventional Commits",
             module = "blink-cmp-conventional-commits",

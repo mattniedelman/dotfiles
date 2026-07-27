@@ -4,7 +4,7 @@
 return {
   {
     "https://github.com/fresh2dev/zellij.vim",
-    lazy = false,
+    event = "VeryLazy",
   },
   {
     "jpalardy/vim-slime",

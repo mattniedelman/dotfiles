@@ -10,8 +10,11 @@
 -- Auto-reload files when they change externally
 local auto_reload_group = vim.api.nvim_create_augroup("AutoReload", { clear = true })
 
--- Check for file changes when entering a buffer or gaining focus
-vim.api.nvim_create_autocmd({ "BufEnter", "FocusGained", "CursorHold", "CursorHoldI" }, {
+-- Check for file changes when entering a buffer or gaining focus.
+-- BufEnter + FocusGained cover the real external-change cases (returning to
+-- the terminal, switching buffers); CursorHold* would poll the filesystem on
+-- every idle pause (up to 4x/sec at updatetime=250) with no added benefit.
+vim.api.nvim_create_autocmd({ "BufEnter", "FocusGained" }, {
   group = auto_reload_group,
   pattern = "*",
   callback = function()
@@ -30,7 +33,6 @@ vim.api.nvim_create_autocmd("FileChangedShellPost", {
   end,
 })
 
-
 -- LSP cleanup: Stop orphaned LSP servers when buffers are deleted
 local lsp_cleanup_group = vim.api.nvim_create_augroup("LspCleanup", { clear = true })
 
@@ -42,14 +44,18 @@ vim.api.nvim_create_autocmd({ "BufDelete", "BufWipeout" }, {
       local clients = vim.lsp.get_clients({ bufnr = bufnr }) or {}
 
       for _, client in ipairs(clients) do
-        local attached_buffers = vim.lsp.get_buffers_by_client_id(client.id) or {}
-        local other_buffers = vim.tbl_filter(function(buf)
-          return buf ~= bufnr and vim.api.nvim_buf_is_valid(buf)
-        end, attached_buffers)
+        local other_count = 0
+        for buf in pairs(client.attached_buffers or {}) do
+          if buf ~= bufnr and vim.api.nvim_buf_is_valid(buf) then
+            other_count = other_count + 1
+          end
+        end
 
-        if #other_buffers == 0 and client and client.id then
+        if other_count == 0 and client and client.id then
           vim.schedule(function()
-            pcall(vim.lsp.stop_client, client.id, true)
+            pcall(function()
+              client:stop(true)
+            end)
           end)
         end
       end
@@ -68,7 +74,9 @@ vim.api.nvim_create_autocmd("VimLeavePre", {
       local clients = vim.lsp.get_clients() or {}
       for _, client in ipairs(clients) do
         if client and client.id then
-          pcall(vim.lsp.stop_client, client.id, true)
+          pcall(function()
+            client:stop(true)
+          end)
         end
       end
     end)

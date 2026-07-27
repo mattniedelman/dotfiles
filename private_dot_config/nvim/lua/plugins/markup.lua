@@ -31,9 +31,7 @@ return {
       ensure_installed = {
         "jq", -- JSON processor/formatter
         "yamlfmt", -- YAML formatter (supports yamllint-compatible options)
-        "doctoc", -- Markdown TOC generator
-        "markdownlint-cli2", -- Markdown linter
-        "markdown-toc", -- Markdown TOC generator
+        -- Markdown tools (markdown-toc, markdownlint-cli2) live in formatting.lua
       },
     },
   },
@@ -54,11 +52,9 @@ return {
   -- Markdown previewer with wrap support for tables
   {
     "OXY2DEV/markview.nvim",
-    lazy = false,
-    ft = { "markdown", "norg", "rmd", "org", "vimwiki", "Avante" },
+    ft = { "markdown", "norg", "rmd", "org", "vimwiki" },
     opts = {
       -- Uses defaults which include wrap support for tables
     },
   },
-
 }

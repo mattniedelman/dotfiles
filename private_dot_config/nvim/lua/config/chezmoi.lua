@@ -1,111 +1,129 @@
 -- Chezmoi integration for Neovim
 -- Automatically prompts to edit source file when opening a chezmoi-managed file
+--
+-- Performance note: chezmoi is a slow external process (~30-75ms per spawn).
+-- Every synchronous shell-out on BufRead blocks the UI and makes files slow to
+-- open. To keep the hot path fast, all chezmoi calls here are async
+-- (vim.system) and gated behind cheap Lua checks so unrelated files never
+-- touch chezmoi at all.
 
--- Cache for managed files to avoid repeated chezmoi calls
+local HOME = vim.fn.expand("~")
+
+-- The chezmoi source directory root, resolved once, asynchronously, at
+-- startup. Nil until resolved; used only to skip files already in the source
+-- tree, so an unresolved value simply means "don't skip" (fail-open).
+local source_root = nil
+
+-- Cache for managed target files, keyed by absolute path. Refreshed
+-- asynchronously with a TTL. Managed lookups are pure Lua against this table.
 local managed_files_cache = {}
 local cache_timestamp = 0
+local cache_refreshing = false
 local CACHE_TTL = 300 -- 5 minutes in seconds
 
--- Get list of chezmoi-managed files
-local function get_managed_files()
-  local current_time = os.time()
-
-  -- Return cached result if still valid
-  if current_time - cache_timestamp < CACHE_TTL and next(managed_files_cache) ~= nil then
-    return managed_files_cache
-  end
-
-  -- Refresh cache
-  managed_files_cache = {}
-  local handle = io.popen("chezmoi managed --include=all 2>/dev/null")
-  if handle then
-    for line in handle:lines() do
-      managed_files_cache[line] = true
+-- Resolve the chezmoi source root once (async, non-blocking).
+vim.system({ "chezmoi", "source-path" }, { text = true }, function(out)
+  if out.code == 0 then
+    local root = vim.trim(out.stdout or "")
+    if root ~= "" then
+      source_root = root
     end
-    handle:close()
-    cache_timestamp = current_time
   end
+end)
 
-  return managed_files_cache
-end
-
--- Check if a file is managed by chezmoi
-local function is_managed(filepath)
-  local managed = get_managed_files()
-  return managed[filepath] == true
-end
-
--- Get the source path for a managed file
-local function get_source_path(filepath)
-  local handle = io.popen("chezmoi source-path " .. vim.fn.shellescape(filepath) .. " 2>/dev/null")
-  if not handle then
-    return nil
+-- Refresh the managed-files cache in the background. Never blocks; callers use
+-- whatever cache is currently populated and let this update it for next time.
+local function refresh_managed_cache()
+  if cache_refreshing then
+    return
   end
-
-  local source_path = handle:read("*l")
-  handle:close()
-
-  return source_path
+  cache_refreshing = true
+  vim.system({ "chezmoi", "managed", "--include=all" }, { text = true }, function(out)
+    cache_refreshing = false
+    if out.code ~= 0 then
+      return
+    end
+    local fresh = {}
+    for line in (out.stdout or ""):gmatch("[^\n]+") do
+      -- chezmoi managed prints paths relative to the destination (home) dir
+      fresh[HOME .. "/" .. line] = true
+    end
+    managed_files_cache = fresh
+    cache_timestamp = os.time()
+  end)
 end
 
--- Main autocmd to handle opening chezmoi-managed files
+-- Main autocmd to handle opening chezmoi-managed files.
 vim.api.nvim_create_autocmd("BufRead", {
   group = vim.api.nvim_create_augroup("ChezmoiAutoEdit", { clear = true }),
-  callback = function(args)
+  callback = function()
     local file = vim.fn.expand("%:p")
 
-    -- Skip if file is empty or doesn't exist
-    if file == "" or vim.fn.filereadable(file) == 0 then
+    -- Cheap Lua guards first -- no external process on the common path.
+
+    -- Skip anything outside the home dir (chezmoi only manages files there).
+    if file == "" or file:find(HOME, 1, true) ~= 1 then
       return
     end
 
-    -- Get chezmoi source path
-    local source_path_cmd = vim.fn.system("chezmoi source-path 2>/dev/null")
-    local source_path = vim.trim(source_path_cmd)
-
-    -- Skip if already in chezmoi source directory
-    if source_path ~= "" and file:find(source_path, 1, true) == 1 then
+    -- Skip files already in the chezmoi source tree.
+    if source_root and file:find(source_root, 1, true) == 1 then
       return
     end
 
-    -- Check if file is managed by chezmoi
-    if not is_managed(file) then
+    -- Skip if the file doesn't actually exist on disk.
+    if vim.fn.filereadable(file) == 0 then
       return
     end
 
-    -- Get the source file path
-    local source_file = get_source_path(file)
-    if not source_file or source_file == "" then
+    -- Keep the managed-files cache warm; this is async and never blocks.
+    if os.time() - cache_timestamp >= CACHE_TTL then
+      refresh_managed_cache()
+    end
+
+    -- Pure Lua lookup. If the cache isn't populated yet (first opens after
+    -- startup), fail-open: no prompt this time, cache warms for next time.
+    if managed_files_cache[file] ~= true then
       return
     end
 
-    -- Prompt user to edit source instead
-    vim.schedule(function()
-      local choice = vim.fn.confirm(
-        "This file is managed by chezmoi.\nEdit source instead?",
-        "&Yes\n&No\n&Always edit target",
-        1
-      )
-
-      if choice == 1 then
-        -- Edit source file
-        vim.cmd("edit " .. vim.fn.fnameescape(source_file))
-      elseif choice == 3 then
-        -- Disable auto-edit for this session
-        vim.api.nvim_del_augroup_by_name("ChezmoiAutoEdit")
-        vim.notify("Chezmoi auto-edit disabled for this session", vim.log.levels.INFO)
+    -- Confirmed managed. Resolve the source path async, then prompt.
+    vim.system({ "chezmoi", "source-path", file }, { text = true }, function(out)
+      if out.code ~= 0 then
+        return
       end
-      -- choice == 2 means continue editing target file (do nothing)
+      local source_file = vim.trim(out.stdout or "")
+      if source_file == "" then
+        return
+      end
+
+      vim.schedule(function()
+        local choice =
+          vim.fn.confirm("This file is managed by chezmoi.\nEdit source instead?", "&Yes\n&No\n&Always edit target", 1)
+
+        if choice == 1 then
+          -- Edit source file
+          vim.cmd("edit " .. vim.fn.fnameescape(source_file))
+        elseif choice == 3 then
+          -- Disable auto-edit for this session
+          vim.api.nvim_del_augroup_by_name("ChezmoiAutoEdit")
+          vim.notify("Chezmoi auto-edit disabled for this session", vim.log.levels.INFO)
+        end
+        -- choice == 2 means continue editing target file (do nothing)
+      end)
     end)
   end,
 })
 
 -- Custom commands for chezmoi operations
 vim.api.nvim_create_user_command("ChezmoiEdit", function()
+  -- Explicit, user-invoked command: a one-shot synchronous call is fine here
+  -- (unlike the per-BufRead hot path, this runs only on demand).
   local file = vim.fn.expand("%:p")
-  local source_file = get_source_path(file)
+  local out = vim.system({ "chezmoi", "source-path", file }, { text = true }):wait()
+  local source_file = out.code == 0 and vim.trim(out.stdout or "") or ""
 
-  if source_file and source_file ~= "" then
+  if source_file ~= "" then
     vim.cmd("edit " .. vim.fn.fnameescape(source_file))
   else
     vim.notify("File is not managed by chezmoi", vim.log.levels.WARN)

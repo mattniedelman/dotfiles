@@ -4,13 +4,12 @@
 	name = "Matt Niedelman"
 	email = {{ .email }}
 {{- if .work }}
-	signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC5paKHoAWPxcczpD0Y4i62rK6aGuNlkJ+MSlfiMG7rS
+	signingkey = {{ .chezmoi.homeDir }}/.ssh/git_signing_key
 [commit]
 	gpgsign = true
 [gpg]
 	format = ssh
 [gpg "ssh"]
-	program = /opt/1Password/op-ssh-sign
 	allowedSignersFile = {{ .chezmoi.homeDir }}/.ssh/allowed_signers
 {{ end -}}
 [filter "lfs"]
@@ -33,26 +32,25 @@
 	editor = nvim
 	autocrlf = input
 	excludesfile = {{ .chezmoi.homeDir }}/.config/git/ignore
-	pager = delta
+	pager = hunk pager
 	hooksPath = {{ .chezmoi.homeDir }}/.config/git/hooks
-[interactive]
-	diffFilter = delta --color-only
 [diff]
 	colorMoved = default
 	algorithm = histogram
-[delta]
-	navigate = true
-	side-by-side = true
-	line-numbers = true
-	syntax-theme = Dracula
+	tool = hunk
+[difftool]
+	prompt = false
+[difftool "hunk"]
+	cmd = hunk difftool "$LOCAL" "$REMOTE" "$MERGED"
 [alias]
 	dft = "!GIT_EXTERNAL_DIFF=difft git diff"
+	dt = difftool
 	co = checkout
 	br = branch
 	ci = commit
 	st = status
 [pull]
-	rebase = true
+	rebase = false
 
 [diff "python"]
 	xfuncname = ^[ \t]*((class|(async[ \t]+)?def)[ \t].*)$
@@ -60,10 +58,6 @@
 	helper = !{{ .chezmoi.homeDir }}/.local/share/mise/shims/gh auth git-credential
 [beads]
 	role = contributor
-[credential "https://github.com"]
-	helper = !{{ .chezmoi.homeDir }}/.local/share/mise/shims/gh auth git-credential
-[credential "https://gist.github.com"]
-	helper = !{{ .chezmoi.homeDir }}/.local/share/mise/shims/gh auth git-credential
 [push]
 	useForceIfIncludes = true
 [trace2]

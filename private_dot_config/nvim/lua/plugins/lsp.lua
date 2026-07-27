@@ -17,7 +17,7 @@ return {
       -- Template & Config
       "jinja_lsp",
       "spectral", -- OpenAPI
-      "systemd_ls",
+      "systemd_lsp",
       "vacuum", -- OpenAPI
 
       -- General Purpose
