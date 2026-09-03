@@ -21,14 +21,4 @@ return {
       },
     },
   },
-  {
-    "swaits/zellij-nav.nvim",
-    event = "VeryLazy",
-    keys = {
-      { "<C-h>", "<cmd>ZellijNavigateLeft<cr>", desc = "Navigate left" },
-      { "<C-j>", "<cmd>ZellijNavigateDown<cr>", desc = "Navigate down" },
-      { "<C-k>", "<cmd>ZellijNavigateUp<cr>", desc = "Navigate up" },
-      { "<C-l>", "<cmd>ZellijNavigateRight<cr>", desc = "Navigate right" },
-    },
-  },
 }

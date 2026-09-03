@@ -1,0 +1,47 @@
+onboarding = false
+
+[theme]
+name = "nord"
+auto_switch = false
+
+[ui.sound]
+enabled = false
+
+[ui.toast]
+delivery = "terminal"
+
+[ui.toast.clipboard]
+enabled = false
+
+[keys]
+prefix = "ctrl+g"
+focus_pane_left = ["prefix+h", "ctrl+h"]
+focus_pane_down = ["prefix+j", "ctrl+j"]
+focus_pane_up = ["prefix+k", "ctrl+k"]
+focus_pane_right = ["prefix+l", "ctrl+l"]
+previous_tab = ["prefix+p", "ctrl+alt+[", "ctrl+shift+left"]
+next_tab = ["prefix+n", "ctrl+alt+]", "ctrl+shift+right"]
+new_tab = ["prefix+c", "ctrl+alt+c", "ctrl+shift+t"]
+previous_workspace = ["ctrl+shift+up"]
+next_workspace = ["ctrl+shift+down"]
+new_workspace = ["prefix+shift+n", "ctrl+shift+n"]
+split_vertical = ["prefix+v", "ctrl+alt+d", "ctrl+\\"]
+split_horizontal = ["prefix+minus", "ctrl+alt+shift+d", "ctrl+minus"]
+zoom = ["prefix+z", "ctrl+alt+z"]
+close_pane = ["prefix+x", "ctrl+shift+w"]
+close_tab = ["prefix+shift+x", "ctrl+shift+x"]
+next_agent = "prefix+shift+j"
+previous_agent = "prefix+shift+k"
+toggle_sidebar = ["prefix+b", "alt+s"]
+
+[ui]
+agent_panel_sort = "spaces"
+prompt_new_tab_name = false
+hide_tab_bar_when_single_tab = true
+
+show_agent_labels_on_pane_borders = true
+[advanced]
+scrollback_limit_bytes = 100000000
+
+[experimental]
+pane_history = true
