@@ -3,10 +3,6 @@
 
 return {
   {
-    "https://github.com/fresh2dev/zellij.vim",
-    event = "VeryLazy",
-  },
-  {
     "jpalardy/vim-slime",
     cmd = { "SlimeSend", "SlimeSendCurrentLine" }, -- Load on first REPL command
     keys = {
