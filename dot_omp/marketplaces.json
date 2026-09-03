@@ -1,0 +1,45 @@
+{
+  "version": 1,
+  "marketplaces": [
+    {
+      "name": "ponytail",
+      "sourceType": "github",
+      "sourceUri": "DietrichGebert/ponytail",
+      "catalogPath": "/home/mattniedelman/.omp/plugins/cache/marketplaces/ponytail/marketplace.json",
+      "addedAt": "2026-08-11T20:35:16.383Z",
+      "updatedAt": "2026-09-02T14:38:17.435Z"
+    },
+    {
+      "name": "claude-plugins-official",
+      "sourceType": "github",
+      "sourceUri": "anthropics/claude-plugins-official",
+      "catalogPath": "/home/mattniedelman/.omp/plugins/cache/marketplaces/claude-plugins-official/marketplace.json",
+      "addedAt": "2026-08-20T13:23:41.234Z",
+      "updatedAt": "2026-09-02T14:38:18.413Z"
+    },
+    {
+      "name": "pydantic-skills",
+      "sourceType": "github",
+      "sourceUri": "pydantic/skills",
+      "catalogPath": "/home/mattniedelman/.omp/plugins/cache/marketplaces/pydantic-skills/marketplace.json",
+      "addedAt": "2026-08-20T13:55:48.526Z",
+      "updatedAt": "2026-09-02T14:38:19.120Z"
+    },
+    {
+      "name": "evo-hq-evo",
+      "sourceType": "github",
+      "sourceUri": "evo-hq/evo",
+      "catalogPath": "/home/mattniedelman/.omp/plugins/cache/marketplaces/evo-hq-evo/marketplace.json",
+      "addedAt": "2026-08-20T13:55:50.368Z",
+      "updatedAt": "2026-09-02T14:38:20.248Z"
+    },
+    {
+      "name": "sparkrun",
+      "sourceType": "github",
+      "sourceUri": "spark-arena/sparkrun",
+      "catalogPath": "/home/mattniedelman/.omp/plugins/cache/marketplaces/sparkrun/marketplace.json",
+      "addedAt": "2026-08-20T13:56:14.039Z",
+      "updatedAt": "2026-09-02T14:38:21.482Z"
+    }
+  ]
+}

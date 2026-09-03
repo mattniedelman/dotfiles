@@ -1,0 +1,151 @@
+providers: 
+  webSearchOrder: 
+    - public
+    - duckduckgo
+    - startpage
+  webSearchExclude: 
+    - google
+    - ecosia
+    - mojeek
+setupVersion: 1
+disabledProviders: 
+  - claude
+skills: 
+  enableAgentsUser: false
+  customDirectories: 
+    - /home/mattniedelman/.omp/agent/skills
+modelRoles: 
+  default: amazon-bedrock/us.anthropic.claude-sonnet-4-6
+  smol: amazon-bedrock/us.anthropic.claude-haiku-4-5
+  slow: amazon-bedrock/us.anthropic.claude-opus-4-8:high
+  plan: amazon-bedrock/us.anthropic.claude-opus-4-8:high
+memory: 
+  backend: hindsight
+hindsight: 
+  apiUrl: http://127.0.0.1:9077
+  bankId: claude_code
+  scoping: global
+tools: 
+  approvalMode: yolo
+  approval: 
+    bash: allow
+    hub: allow
+    task: allow
+    eval: allow
+    debug: allow
+    mcp__plugin_slack_slack_slack_send_message: prompt
+    mcp__plugin_slack_slack_slack_send_message_draft: prompt
+    mcp__plugin_slack_slack_slack_schedule_message: prompt
+    mcp__plugin_slack_slack_slack_add_reaction: prompt
+    mcp__plugin_slack_slack_slack_create_canvas: prompt
+    mcp__plugin_slack_slack_slack_update_canvas: prompt
+bash: 
+  patterns: 
+    - match: rm -rf ~/.context-engine/*
+      approval: allow
+    - match: rm -fr ~/.context-engine/*
+      approval: allow
+    - match: rm -rf /home/mattniedelman/.context-engine/*
+      approval: allow
+    - match: rm -fr /home/mattniedelman/.context-engine/*
+      approval: allow
+    - match: rm -rf *
+      approval: allow
+    - match: sudo *
+      approval: deny
+    - match: git push --force*
+      approval: deny
+    - match: git push *--force*
+      approval: deny
+    - match: git reset --hard*
+      approval: prompt
+    - match: git clean -f*
+      approval: prompt
+    - match: dd *
+      approval: deny
+    - match: mkfs *
+      approval: deny
+    - match: pip install*
+      approval: deny
+    - match: pip3 install*
+      approval: deny
+    - match: "* -m pip *"
+      approval: deny
+statusLine: 
+  preset: default
+  separator: pipe
+  sessionAccent: true
+  transparent: false
+  compactThinkingLevel: false
+  showHookStatus: true
+terminal: 
+  showProgress: true
+tui: 
+  tight: false
+display: 
+  cacheMissMarker: true
+  shimmer: disabled
+personality: pragmatic
+advisor: 
+  enabled: false
+doubleEscapeAction: tree
+features: 
+  unexpectedStopDetection: false
+compaction: 
+  idleEnabled: true
+ttsr: 
+  contextMode: discard
+read: 
+  renderMarkdown: true
+lsp: 
+  formatOnWrite: false
+bashInterceptor: 
+  enabled: false
+astGrep: 
+  enabled: true
+github: 
+  enabled: false
+security: 
+  enabled: false
+debug: 
+  enabled: true
+computer: 
+  enabled: false
+checkpoint: 
+  enabled: false
+browser: 
+  cmux: false
+dev: 
+  autoqa: false
+plan: 
+  defaultOnStartup: false
+goal: 
+  enabled: true
+collab: 
+  relayUrl: ""
+share: 
+  serverUrl: ""
+task: 
+  eager: preferred
+  batch: true
+  enableLsp: true
+  isolation: 
+    mode: auto
+    commits: ai
+  enableEffort: true
+theme: 
+  dark: dark-volcanic
+symbolPreset: nerd
+hideThinkingBlock: false
+eval: 
+  js: false
+defaultThinkingLevel: high
+autolearn: 
+  enabled: true
+  autoContinue: true
+proseOnlyThinking: false
+todo: 
+  reminders: true
+shellPath: /usr/bin/bash
+extensions: 
+  - ~/.omp/hooks/roborev.ts
