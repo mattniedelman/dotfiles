@@ -11,6 +11,7 @@ return {
     ensure_installed = {
       -- DevOps & Infrastructure
       "docker_language_server",
+      "golangci_lint_ls", -- live golangci-lint diagnostics; mirrors hk go ecosystem
       "gh_actions_ls",
       "helm_ls",
 

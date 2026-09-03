@@ -8,7 +8,8 @@
 # ============================================================================
 # Claude Code
 # ============================================================================
-abbr -a cc 'nono run --profile dev --allow . --allow-unix-socket "$SSH_AUTH_SOCK" -- claude'
+# abbr -a cc 'nono run --profile dev --allow . --allow-unix-socket "$SSH_AUTH_SOCK" -- claude --system-prompt="$(serena prompts print-cc-system-prompt-override)"'
+abbr -a cc 'claude --system-prompt="$(serena prompts print-cc-system-prompt-override)"'
 
 # ============================================================================
 # Chezmoi - Dotfile Management
