@@ -31,7 +31,23 @@ return {
       ensure_installed = {
         "jq", -- JSON processor/formatter
         "yamlfmt", -- YAML formatter (supports yamllint-compatible options)
-        -- Markdown tools (markdown-toc, markdownlint-cli2) live in formatting.lua
+        "rumdl", -- Markdown formatter/linter; mirrors hk rumdl_format + rumdl steps
+      },
+    },
+  },
+
+  -- rumdl LSP: inline lint diagnostics matching hk rumdl step.
+  -- Not in nvim-lspconfig's built-in registry; defined via vim.lsp.config.
+  -- Requires rumdl on PATH (mise use -g rumdl or cargo install rumdl).
+  {
+    "neovim/nvim-lspconfig",
+    opts = {
+      servers = {
+        rumdl = {
+          cmd = { "rumdl", "lsp" },
+          filetypes = { "markdown" },
+          root_markers = { ".git", "rumdl.toml", ".rumdl.toml" },
+        },
       },
     },
   },
@@ -43,6 +59,28 @@ return {
       opts.formatters_by_ft = opts.formatters_by_ft or {}
       opts.formatters_by_ft.json = { "jq" }
       opts.formatters_by_ft.yaml = { "yamlfmt" }
+      opts.formatters_by_ft.markdown = { "rumdl_format", "mdreflow" }
+      opts.formatters = opts.formatters or {}
+      -- rumdl fmt formats in place; mirrors hk rumdl_format builtin
+      opts.formatters.rumdl_format = {
+        command = "rumdl",
+        args = { "fmt", "$FILENAME" },
+        stdin = false,
+      }
+      -- mdreflow prose reflow (sentence-per-line); mirrors hk mdreflow step.
+      -- Formats in place; --config points at the global default.
+      opts.formatters.mdreflow = {
+        command = "mdreflow",
+        args = { "--config", vim.fn.expand("~/.config/mdreflow/mdreflow.yaml"), "$FILENAME" },
+        stdin = false,
+      }
+      -- Override conform's default `jq .` to use `jq -S` (sorted keys),
+      -- matching hk json.pkl which aligns both check and fix to jq -S.
+      opts.formatters.jq = {
+        command = "jq",
+        args = { "-S", "." },
+        stdin = true,
+      }
     end,
   },
 

@@ -9,10 +9,6 @@ return {
       ensure_installed = {
         "ruff", -- Python linter/formatter LSP
       },
-      -- Disable auto-enable for zuban (use ty instead)
-      automatic_enable = {
-        exclude = { "zuban" },
-      },
     },
     dependencies = {
       { "mason-org/mason.nvim", opts = {} },
@@ -20,14 +16,14 @@ return {
     },
   },
 
-  -- ty: Astral's Python type checker and LSP
-  -- Install via: mise use -g ty (or uv tool install ty)
-  -- Now has native nvim-lspconfig support - just needs to be in servers list
+  -- pyrefly: Meta's Python type checker and LSP
+  -- Install via: pipx install pyrefly (or mise use -g pyrefly)
+  -- Aligns with hk pyrefly step in ecosystems/python.pkl
   {
     "neovim/nvim-lspconfig",
     opts = {
       servers = {
-        ty = {},
+        pyrefly = {},
       },
     },
   },

@@ -23,9 +23,9 @@ if command -q bat
     alias catp='bat --style=plain --paging=never'
 end
 
-# bottom: also replace htop
-if command -q btm
-    alias htop='btm'
+# btop: also replace htop
+if command -q btop
+    alias htop='btop'
 end
 
 # ============================================================================

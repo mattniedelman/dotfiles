@@ -5,11 +5,10 @@ min_version = "2024.11.0"
 python = { version = "3.13" }
 
 "aqua:dalance/procs" = "latest"  # Modern ps replacement
-"cargo:agnix-cli" = "latest"
+"github:agent-sh/agnix" = "latest"
 "cargo:cbfmt" = "latest"
 "cargo:https://github.com/Dicklesworthstone/aadc" = "branch:main"
 "cargo:https://github.com/razziel89/mdslw" = "branch:main"
-zellij = "latest"
 lychee = "latest"
 "cargo:workmux" = "latest"
 "github:EmbarkStudios/cargo-deny" = "latest"
@@ -109,7 +108,10 @@ fd = "latest"
 fzf = "latest"
 ghalint = "latest"
 ghorg = "latest"
-github-cli = "latest"
+# gh-cred is a stable-path symlink used as the git credential helper. The helper
+# must NOT point at the mise shim: the shim re-enters mise, which then asks the
+# git credential helper for a GitHub token (github.use_git_credentials), looping.
+github-cli = { version = "latest", postinstall = "mkdir -p ~/.local/bin && ln -sfn \"$(mise which gh)\" ~/.local/bin/gh-cred" }
 gitleaks = "latest"
 glow = "latest"
 go = "latest"
@@ -174,8 +176,23 @@ golangci-lint = "latest"
 "go:golang.org/x/tools/cmd/goimports" = "latest"
 "go:golang.org/x/vuln/cmd/govulncheck" = "latest"
 "go:github.com/securego/gosec/v2/cmd/gosec" = "latest"
+"go:github.com/google/go-licenses" = "latest"
 "aqua:anordal/shellharden" = "latest"
 markdownlint-cli2 = "latest"
+worktrunk = "latest"
+"github:1broseidon/ketch" = "latest"
+marksman = "latest"
+"go:golang.org/x/tools/gopls" = "latest"
+"pipx:showboat" = "latest"
+"github:can1357/oh-my-pi" = "latest"
+"github:grafana/gcx" = "latest"
+"github:boyter/scc" = "latest"
+"go:github.com/jbeda/mdreflow/cmd/mdreflow" = "v0.2.0"
+ruby = "3.3"
+"github:kenn-io/roborev" = "latest"
+glab = "latest"
+goreleaser = "latest"
+"go:golang.org/x/tools/cmd/deadcode" = "latest"
 
 [env]
 HK_MISE = "1"
@@ -199,7 +216,6 @@ raw = false  # set to true to directly pipe plugins to stdin/stdout/stderr
 yes = false  # set to true to automatically answer yes to all prompts
 
 not_found_auto_install = true  # automatically install missing tools when command not found
-task_output = "prefix"  # see Tasks Runner for more information
 paranoid = false  # see MISE_PARANOID
 
 # disable_default_shorthands = false # disable the default shorthands, see `MISE_DISABLE_DEFAULT_SHORTHANDS`

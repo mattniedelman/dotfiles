@@ -1,5 +1,6 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "awsAuthRefresh": "aws sso login --profile claude",
   "cleanupPeriodDays": 365,
   "env": {
     "AWS_DEFAULT_REGION": "us-east-1",
@@ -10,7 +11,6 @@
     "CLAUDE_CODE_USE_BEDROCK": "1",
     "RTK_HOOK_AUDIT": "1"
   },
-  "awsAuthRefresh": "aws sso login --profile claude",
   "includeCoAuthoredBy": false,
   "permissions": {
     "allow": [
@@ -23,8 +23,10 @@
       "Edit",
       "mcp__basic-memory__*",
       "mcp__beads__*",
+      "mcp__plugin_ketch_ketch__*",
       "mcp__plugin_context7_context7__*",
       "mcp__plugin_cq_cq__*",
+      "mcp__serena__*",
       "Bash(rtk:*)",
       "Bash(chezmoi:*)",
       "Bash(bd:*)",
@@ -74,7 +76,7 @@
       "Edit(~/.config/fish/conf.d/**)"
     ]
   },
-  "model": "us.anthropic.claude-sonnet-5",
+  "model": "us.anthropic.claude-opus-4-8[1m]",
   "hooks": {
     "PostToolUse": [
       {
@@ -163,6 +165,26 @@
             "timeout": 10
           }
         ]
+      },
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "serena-hooks remind --client=claude-code",
+            "timeout": 10
+          }
+        ]
+      },
+      {
+        "matcher": "mcp__serena__*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "serena-hooks auto-approve --client=claude-code",
+            "timeout": 10
+          }
+        ]
       }
     ],
     "SessionStart": [
@@ -235,6 +257,16 @@
             "timeout": 10
           }
         ]
+      },
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "serena-hooks activate --client=claude-code",
+            "timeout": 10
+          }
+        ]
       }
     ],
     "Stop": [
@@ -252,6 +284,18 @@
           }
         ]
       }
+    ],
+    "SessionEnd": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "serena-hooks cleanup --client=claude-code",
+            "timeout": 10
+          }
+        ]
+      }
     ]
   },
   "statusLine": {
@@ -259,45 +303,8 @@
     "command": "~/.local/bin/starship-claude",
     "padding": 0
   },
-  "enabledPlugins": {
-    "agentic-actions-auditor@trailofbits": false,
-    "agnix@agentsys": true,
-    "ai@pydantic-skills": true,
-    "ask-questions-if-underspecified@trailofbits": false,
-    "audit-context-building@trailofbits": false,
-    "audit-project@agentsys": false,
-    "can-i-help@agentsys": false,
-    "differential-review@trailofbits": false,
-    "drift-detect@agentsys": false,
-    "enhance@agentsys": true,
-    "evo@evo-hq-evo": true,
-    "git-cleanup@trailofbits": false,
-    "hindsight-memory@hindsight": true,
-    "insecure-defaults@trailofbits": true,
-    "learn@agentsys": false,
-    "nono@always-further": true,
-    "onboard@agentsys": true,
-    "perf@agentsys": false,
-    "repo-intel@agentsys": true,
-    "sharp-edges@trailofbits": true,
-    "skill-improver@trailofbits": true,
-    "skillers@agentsys": false,
-    "skypilot@skypilot": true,
-    "sparkrun@sparkrun": true,
-    "supply-chain-risk-auditor@trailofbits": true,
-    "sync-docs@agentsys": true,
-    "trailmark@trailofbits": true,
-    "variant-analysis@trailofbits": true,
-    "workflow-skill-design@trailofbits": true
-  },
+  "enabledPlugins": {},
   "extraKnownMarketplaces": {
-    "agentsys": {
-      "source": {
-        "source": "github",
-        "repo": "agent-sh/agentsys"
-      },
-      "autoUpdate": true
-    },
     "evo-hq-evo": {
       "source": {
         "source": "github",
@@ -316,12 +323,6 @@
         "repo": "anthropics/knowledge-work-plugins"
       }
     },
-    "probo": {
-      "source": {
-        "source": "git",
-        "url": "https://github.com/getprobo/probo.git"
-      }
-    },
     "pydantic-skills": {
       "source": {
         "source": "github",
@@ -334,31 +335,18 @@
         "repo": "ryanbbrown/revealjs-skill"
       }
     },
-    "skypilot": {
-      "source": {
-        "source": "github",
-        "repo": "skypilot-org/skypilot"
-      }
-    },
     "sparkrun": {
       "source": {
         "source": "github",
         "repo": "spark-arena/sparkrun"
       }
-    },
-    "trailofbits": {
-      "source": {
-        "source": "github",
-        "repo": "trailofbits/skills"
-      },
-      "autoUpdate": true
     }
   },
   "sandbox": {
     "enabled": false,
     "allowUnsandboxedCommands": false
   },
-  "effortLevel": "high",
+  "effortLevel": "medium",
   "autoUpdatesChannel": "latest",
   "tui": "fullscreen",
   "autoMemoryEnabled": false,
@@ -367,6 +355,5 @@
   "verbose": false,
   "autoCompactEnabled": true,
   "teammateMode": "auto",
-  "skipAutoPermissionPrompt": true,
   "autoUpdates": false
 }

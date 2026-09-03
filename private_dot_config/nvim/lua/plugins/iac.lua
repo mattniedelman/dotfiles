@@ -10,7 +10,6 @@ return {
     opts = {
       ensure_installed = {
         "actionlint", -- GitHub Actions linter
-        "trivy", -- Container/IaC security scanner
         "kube-linter", -- Kubernetes linter
       },
     },
@@ -56,6 +55,16 @@ return {
         nls.builtins.diagnostics.actionlint,
         nls.builtins.diagnostics.kube_linter,
       })
+    end,
+  },
+
+  -- Terraform formatting on save; mirrors hk terraform builtin
+  {
+    "stevearc/conform.nvim",
+    opts = function(_, opts)
+      opts.formatters_by_ft = opts.formatters_by_ft or {}
+      opts.formatters_by_ft.terraform = { "terraform_fmt" }
+      opts.formatters_by_ft["terraform-vars"] = { "terraform_fmt" }
     end,
   },
 }

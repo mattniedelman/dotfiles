@@ -1,10 +1,10 @@
 [metadata]
 name = "files"
 description = "A channel to select files and directories"
-requirements = ["fdfind", "bat"]
+requirements = ["bat"]
 
 [source]
-command = ["fdfind -t f", "fdfind -t f -H"]
+command = "bash -c 'if git rev-parse --git-dir > /dev/null 2>&1; then git ls-files && git ls-files --others --exclude-standard | grep -Ev \"(^|/)[.]\"; else fdfind -t f -H; fi'"
 frecency = false
 # no_sort = true
 

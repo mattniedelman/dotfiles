@@ -5,15 +5,6 @@
 -- We use conform.nvim for formatting instead, so we only use none-ls for diagnostics/code actions
 
 return {
-  -- Install diagnostic tools
-  {
-    "mason-org/mason.nvim",
-    opts = {
-      ensure_installed = {
-        "commitlint", -- Commit message linter
-      },
-    },
-  },
 
   -- Configure none-ls diagnostics and code actions
   {
@@ -38,7 +29,6 @@ return {
         -- Git integration
         nls.builtins.code_actions.gitsigns,
         nls.builtins.code_actions.refactoring,
-        nls.builtins.diagnostics.commitlint,
       })
     end,
   },

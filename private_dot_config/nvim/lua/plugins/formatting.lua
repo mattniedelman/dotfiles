@@ -14,10 +14,6 @@ return {
         "sqlfmt", -- SQL formatter
         "typos", -- Source code spell checker
         -- Note: d2 formatter not available in Mason, install manually if needed
-
-        -- Markdown tools (also installed by LazyVim lang.markdown extra)
-        "markdown-toc",
-        "markdownlint-cli2",
       },
     },
   },
@@ -32,7 +28,6 @@ return {
         go = { "gofumpt", "goimports" },
         -- Markdown: Use mdslw for line wrapping
         -- Note: LazyVim lang.markdown extra also adds markdownlint-cli2 and markdown-toc
-        markdown = { "mdslw" },
         sql = { "sqlfmt" },
         dbt = { "sqlfmt" },
         -- d2 = { "d2fmt" }, -- d2 not available in Mason
