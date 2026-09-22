@@ -241,6 +241,7 @@ locked_verify_provenance = true
 # If a security scanner's freshness matters more than the cooldown, pin it to
 # an explicit recent version.
 minimum_release_age = "7d"
+dotfiles.root = "~/.local/share/chezmoi/dotfiles"
 
 [settings.github]
 use_git_credentials = true
@@ -263,8 +264,6 @@ run = "mise prune"
 
 # ── dotfiles ────────────────────────────────────────────────────────────────
 
-[settings]
-dotfiles.root = "~/.local/share/chezmoi/dotfiles"
 
 [dotfiles]
 # Plain symlinks — source inferred from dotfiles.root (mirrors ~/.*)
