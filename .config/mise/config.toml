@@ -1,5 +1,5 @@
 # Minimum mise version required for this config
-min_version = "2024.11.0"
+min_version = "2026.1.0"
 
 [tools]
 python = { version = "3.13" }
@@ -91,7 +91,6 @@ bottom = "latest"  # Modern top/htop replacement
 buf = "latest"
 bun = "latest"
 checkov = "latest"  # IaC security scanner
-chezmoi = "latest"
 cue = "latest"
 delta = "latest"
 difftastic = "latest"
@@ -385,7 +384,7 @@ phase = "pre-packages"
 "~/.bashrc" = { mode = "symlink" }
 
 # ~/.claude — symlink-each; exclude all runtime/generated state
-"~/.claude" = { source = "~/.local/share/chezmoi/.claude", mode = "symlink-each", exclude = [
+"~/.claude" = { mode = "symlink-each", exclude = [
   "hooks/*.tera",
   "sessions/**", "projects/**", "plugins/cache/**", "plugins/data/**", "plugins/marketplaces/**",
   "backups/**", "cache/**", "context-mode/**", "debug/**", "downloads/**", "file-history/**",
@@ -404,7 +403,7 @@ phase = "pre-packages"
 "~/.claude/hooks/reflect_backfill.py" = { source = "~/.local/share/chezmoi/.claude/hooks/reflect_backfill.py.tera", mode = "template" }
 "~/.claude/hooks/session_reflect.py" = { source = "~/.local/share/chezmoi/.claude/hooks/session_reflect.py.tera", mode = "template" }
 "~/.claude/hooks/session_start.py" = { source = "~/.local/share/chezmoi/.claude/hooks/session_start.py.tera", mode = "template" }
-"~/.config/ast-grep/rules" = { source = "~/.local/share/chezmoi/.config/ast-grep/rules", mode = "symlink" }
+"~/.config/ast-grep/rules" = { mode = "symlink" }
 "~/.config/ast-grep/sgconfig.yml" = { source = "~/.local/share/chezmoi/.config/ast-grep/sgconfig.yml.tera", mode = "template" }
 "~/.config/atuin" = { mode = "copy" }
 "~/.config/atuin/config.toml" = { mode = "track" }
@@ -414,20 +413,20 @@ phase = "pre-packages"
 
 # ~/.config/fish — symlink-each so fish can write fish_variables, completions/, etc.
 # config.fish is a template so excluded here and handled separately below.
-"~/.config/fish" = { source = "~/.local/share/chezmoi/.config/fish", mode = "symlink-each", exclude = ["config.fish.tera", "fish_variables", "fish_variables.*", "completions/**", "logs/**", "themes/**"] }
+"~/.config/fish" = { mode = "symlink-each", exclude = ["config.fish.tera", "fish_variables", "fish_variables.*", "completions/**", "logs/**", "themes/**"] }
 "~/.config/fish/config.fish" = { source = "~/.local/share/chezmoi/.config/fish/config.fish.tera", mode = "template" }
 
 # ~/.config — copy mode (edit in-place; tracked for local undo history)
 "~/.config/ghostty" = { mode = "copy" }
 "~/.config/ghostty/config" = { mode = "track" }
 "~/.config/git" = { mode = "symlink" }
-"~/.config/herdr/config.toml" = { source = "~/.local/share/chezmoi/.config/herdr/config.toml", mode = "copy" }
+"~/.config/herdr/config.toml" = { mode = "copy" }
 "~/.config/kitty" = { mode = "symlink" }
 "~/.config/kubernetes-mcp-server" = { mode = "symlink" }
 "~/.config/mdsf" = { mode = "symlink" }
-"~/.config/mise/.default-python-packages" = { source = "~/.local/share/chezmoi/.config/mise/.default-python-packages", mode = "symlink" }
+"~/.config/mise/.default-python-packages" = { mode = "symlink" }
 "~/.config/mise/config.toml" = { mode = "symlink" }
-"~/.config/mise/conf.d/dotfiles-tracking.toml" = { source = "~/.local/share/chezmoi/.config/mise/conf.d/dotfiles-tracking.toml", mode = "symlink" }
+"~/.config/mise/conf.d/dotfiles-tracking.toml" = { mode = "symlink" }
 
 # ~/.config — whole-directory symlinks (set-and-forget, edit via source)
 "~/.config/nvim" = { mode = "symlink-each", manifest = "git" }
@@ -439,9 +438,12 @@ phase = "pre-packages"
 "~/.gitconfig" = { source = "~/.local/share/chezmoi/.gitconfig.tera", mode = "template" }
 
 # ~/.omp — symlink-each; agent/ has private files (config.yml, mcp.json)
-"~/.omp" = { source = "~/.local/share/chezmoi/.omp", mode = "symlink-each" }
+"~/.omp" = { mode = "symlink-each" }
 "~/.profile" = { mode = "symlink" }
 "~/.ripgreprc" = { mode = "symlink" }
+# ~/.config/systemd/user — template services that can't be expressed in
+# [bootstrap.linux.systemd.units] (instantiated template, no WantedBy)
+"~/.config/systemd/user/notify-rclone-failure@.service" = { mode = "symlink" }
 
 # ── systemd user services (replaces chezmoi-placed unit files) ──────────────
 
@@ -451,6 +453,144 @@ exec_start = "~/.local/share/mise/shims/basic-memory mcp --transport streamable-
 after = ["network.target"]
 restart = "on-failure"
 restart_sec = "5s"
+
+
+# ── directories for services that need pre-existing paths ────────────────────
+
+[bootstrap.directories."~/onedrive"]
+mode = "0755"
+
+[bootstrap.directories."~/.cache/rclone/imprivata-onedrive"]
+mode = "0755"
+
+[bootstrap.directories."~/.beads/shared-server"]
+mode = "0755"
+
+# ── additional systemd user services ─────────────────────────────────────────
+
+[bootstrap.linux.systemd.units.aws-sigv4-proxy]
+description = "AWS SigV4 Signing Proxy for AMP"
+after = ["network.target"]
+exec_start = "~/.local/share/mise/shims/aws-sigv4-proxy --name aps --region us-east-2 --host aps-workspaces.us-east-2.amazonaws.com --port :9090"
+restart = "on-failure"
+restart_sec = "5s"
+environment = { AWS_SDK_LOAD_CONFIG = "true", AWS_PROFILE = "default" }
+
+[bootstrap.linux.systemd.units.agentsview]
+description = "AgentsView - local web viewer for AI agent sessions"
+after = ["network-online.target"]
+wants = ["network-online.target"]
+exec_start = "%h/.local/share/mise/shims/agentsview serve --no-browser --host 127.0.0.1 --port 8080"
+restart = "on-failure"
+restart_sec = "5s"
+timeout_start_sec = "120"
+
+[bootstrap.linux.systemd.units.hindsight-embed-daemon]
+description = "Hindsight embed daemon (claude-code profile)"
+after = ["network.target"]
+type = "oneshot"
+remain_after_exit = true
+exec_start = "~/.local/bin/hindsight-start claude-code"
+exec_stop = "~/.local/share/mise/shims/hindsight-embed -p claude-code daemon stop"
+
+[bootstrap.linux.systemd.units.hindsight-embed-ui]
+description = "Hindsight embed UI (claude-code profile)"
+after = ["network.target", "dev.mise.hindsight-embed-daemon.service"]
+requires = ["dev.mise.hindsight-embed-daemon.service"]
+type = "oneshot"
+remain_after_exit = true
+exec_start = "~/.local/share/mise/shims/hindsight-embed -p claude-code ui start"
+exec_stop = "~/.local/share/mise/shims/hindsight-embed -p claude-code ui stop"
+
+[bootstrap.linux.systemd.units.kenn-forge]
+description = "kenn-forge daemon"
+after = ["network-online.target"]
+wants = ["network-online.target"]
+exec_start = "~/.local/bin/kenn-forge serve"
+restart = "on-failure"
+restart_sec = "5s"
+
+[bootstrap.linux.systemd.units.beads-dolt]
+description = "Beads shared Dolt SQL server"
+after = ["network.target"]
+exec_start = "~/.local/share/mise/shims/dolt sql-server --host=127.0.0.1 --port=3308 --data-dir=%h/.beads/shared-server"
+environment = { HOME = "%h" }
+working_directory = "%h/.beads/shared-server"
+restart = "on-failure"
+restart_sec = "5s"
+
+[bootstrap.linux.systemd.units.sparkrun-proxy]
+description = "sparkrun LiteLLM inference proxy"
+after = ["network-online.target"]
+wants = ["network-online.target"]
+exec_start = "~/.local/share/mise/shims/sparkrun proxy start --foreground --host 127.0.0.1"
+restart = "on-failure"
+restart_sec = "5s"
+environment = { HOME = "%h", PATH = "%h/.local/share/mise/shims:%h/.local/bin:/usr/local/bin:/usr/bin:/bin" }
+
+[bootstrap.linux.systemd.units.toolhive-mcp]
+description = "Start ToolHive MCP server proxies"
+after = ["docker.service"]
+wants = ["docker.service"]
+type = "oneshot"
+remain_after_exit = true
+exec_start = "~/.toolhive/bin/thv start --all"
+restart = "on-failure"
+restart_sec = "5s"
+
+[bootstrap.linux.systemd.units.phoenix]
+description = "Arize Phoenix observability server"
+after = ["network.target"]
+exec_start = "~/.local/bin/phoenix serve"
+restart = "on-failure"
+restart_sec = "5s"
+environment = { PHOENIX_HOST = "127.0.0.1", PHOENIX_PORT = "6006", PHOENIX_WORKING_DIR = "%h/.local/share/phoenix", PHOENIX_TELEMETRY_ENABLED = "false", AWS_PROFILE = "bedrock-dev", AWS_SDK_LOAD_CONFIG = "true" }
+
+[bootstrap.linux.systemd.units.rclone-imprivata-onedrive]
+description = "Rclone mount for Imprivata OneDrive"
+after = ["network.target"]
+type = "notify"
+exec_start = "~/.local/share/mise/shims/rclone mount imprivata-onedrive: %h/onedrive --config %h/.config/rclone/rclone.conf --cache-dir %h/.cache/rclone/imprivata-onedrive --vfs-cache-mode full --vfs-refresh"
+exec_stop = "/usr/bin/fusermount3 -u %h/onedrive"
+restart = "on-failure"
+restart_sec = "5s"
+
+[bootstrap.linux.systemd.units.keylight-webcam]
+description = "Elgato Key Light follows Insta360 webcam use"
+after = ["network-online.target"]
+wants = ["network-online.target"]
+exec_start = "%h/.local/bin/keylight-webcam.sh"
+exec_stop = "%h/.local/bin/keylight-webcam.sh off"
+restart = "on-failure"
+restart_sec = "5s"
+
+# aws-sso-keepwarm: oneshot service driven by a timer
+# Note: OnStartupSec (fires on user manager start) is unsupported; using
+# on_unit_inactive_sec only — first run fires ~15min after login.
+[bootstrap.linux.systemd.units.aws-sso-keepwarm]
+description = "Keep AWS SSO imprivata access token warm for headless/sandboxed use"
+after = ["network-online.target"]
+wants = ["network-online.target"]
+type = "oneshot"
+exec_start = "%h/.local/bin/aws-sso-keepwarm.sh"
+environment = { XDG_RUNTIME_DIR = "/run/user/1001" }
+nice = 10
+wanted_by = []
+
+[bootstrap.linux.systemd.units.aws-sso-keepwarm-timer]
+description = "Periodically refresh the AWS SSO imprivata access token"
+on_unit_inactive_sec = "15min"
+persistent = true
+unit = "aws-sso-keepwarm"
+
+[bootstrap.linux.systemd.units.sshuttle-dev]
+description = "sshuttle tunnel to ai-nonprod-vpc"
+after = ["network-online.target"]
+wants = ["network-online.target"]
+exec_start = "%h/.local/bin/sshuttle-dev"
+restart = "on-failure"
+restart_sec = "15s"
+environment = { PATH = "%h/.local/share/mise/shims:%h/.local/bin:/usr/local/bin:/usr/bin:/bin" }
 
 # ── history watcher service ──────────────────────────────────────────────────
 
@@ -463,11 +603,6 @@ builtin = "history-watch"
 [history.reload]
 # Herdr multiplexer server picks up config without restart
 "~/.config/herdr/**" = "herdr server reload-config"
-
-# ── shell activation ─────────────────────────────────────────────────────────
-
-[bootstrap.mise_shell_activate]
-fish = "activate"
 
 # ── user settings ────────────────────────────────────────────────────────────
 

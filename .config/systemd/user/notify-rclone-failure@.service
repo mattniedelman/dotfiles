@@ -1,0 +1,7 @@
+[Unit]
+Description=Notify rclone failure for %i
+
+[Service]
+Type=oneshot
+Environment=DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/%U/bus
+ExecStart=notify-send -u critical "rclone: %i failed" "Token likely expired.\nRun: rclone config reconnect %i:"
