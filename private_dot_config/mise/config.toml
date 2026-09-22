@@ -456,6 +456,13 @@ restart_sec = "5s"
 [bootstrap.services.mise-history]
 builtin = "history-watch"
 
+# ── reload hooks ─────────────────────────────────────────────────────────────
+# Run after `mise dot apply` or `mise dot rollback` modifies matching files.
+
+[history.reload]
+# Herdr multiplexer server picks up config without restart
+"~/.config/herdr/**" = "herdr server reload-config"
+
 # ── shell activation ─────────────────────────────────────────────────────────
 
 [bootstrap.mise_shell_activate]
