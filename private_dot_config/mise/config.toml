@@ -293,6 +293,14 @@ group = "root"
 mode = "0644"
 phase = "pre-packages"
 
+# Ghostty terminal — community PPA (noble/24.04 only)
+[bootstrap.files."/etc/apt/sources.list.d/ghostty.sources"]
+source = "~/.local/share/chezmoi/dotfiles/files/apt/ghostty.sources"
+owner = "root"
+group = "root"
+mode = "0644"
+phase = "pre-packages"
+
 # ── system packages ───────────────────────────────────────────────────────────
 
 [bootstrap.packages]
@@ -335,6 +343,8 @@ phase = "pre-packages"
 # 1Password GUI + CLI
 "apt:1password" = "latest"
 "apt:1password-cli" = "latest"
+# Terminal emulator
+"apt:ghostty" = "latest"
 
 # ── dotfiles ────────────────────────────────────────────────────────────────
 
