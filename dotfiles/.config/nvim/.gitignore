@@ -1,1 +1,13 @@
-/home/mattniedelman/.local/share/chezmoi/dotfiles/.config/nvim/.gitignore
+tt.*
+.tests
+doc/tags
+debug
+.repro
+foo.*
+*.log
+data
+
+# KICS temporary files
+kics-results.json
+kics-results/
+.kics/

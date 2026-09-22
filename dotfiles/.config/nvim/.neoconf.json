@@ -1,1 +1,15 @@
-/home/mattniedelman/.local/share/chezmoi/dotfiles/.config/nvim/.neoconf.json
+{
+  "neodev": {
+    "library": {
+      "enabled": true,
+      "plugins": true
+    }
+  },
+  "neoconf": {
+    "plugins": {
+      "lua_ls": {
+        "enabled": true
+      }
+    }
+  }
+}
