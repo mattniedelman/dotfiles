@@ -426,7 +426,8 @@ phase = "pre-packages"
 "~/.config/kubernetes-mcp-server" = { mode = "symlink" }
 "~/.config/mdsf" = { mode = "symlink" }
 "~/.config/mise/.default-python-packages" = { source = "~/.local/share/chezmoi/dotfiles/.config/mise/.default-python-packages", mode = "symlink" }
-"~/.config/mise/config.toml" = { mode = "track" }
+"~/.config/mise/config.toml" = { mode = "symlink" }
+"~/.config/mise/conf.d/dotfiles-tracking.toml" = { source = "~/.local/share/chezmoi/dotfiles/.config/mise/conf.d/dotfiles-tracking.toml", mode = "symlink" }
 
 # ~/.config — whole-directory symlinks (set-and-forget, edit via source)
 "~/.config/nvim" = { mode = "symlink-each", manifest = "git" }
