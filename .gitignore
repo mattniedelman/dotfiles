@@ -1,3 +1,5 @@
 
 vim/.config/nvim/plugged/*
 vim/.config/nvim/viminfo
+__pycache__/
+*.pyc

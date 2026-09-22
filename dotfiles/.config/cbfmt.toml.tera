@@ -1,0 +1,5 @@
+[languages]
+bash = ["{{ env(name="HOME") }}/.local/share/mise/shims/shfmt -i 2 -"]
+sh = ["{{ env(name="HOME") }}/.local/share/mise/shims/shfmt -i 2 -"]
+json = ["{{ env(name="HOME") }}/.local/share/mise/shims/jq ."]
+python = ["{{ env(name="HOME") }}/.local/share/mise/shims/ruff format -"]

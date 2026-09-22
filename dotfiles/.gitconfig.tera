@@ -2,16 +2,7 @@
 	defaultBranch = main
 [user]
 	name = "Matt Niedelman"
-	email = {{ .email }}
-{{- if .work }}
-	signingkey = {{ .chezmoi.homeDir }}/.ssh/git_signing_key
-[commit]
-	gpgsign = true
-[gpg]
-	format = ssh
-[gpg "ssh"]
-	allowedSignersFile = {{ .chezmoi.homeDir }}/.ssh/allowed_signers
-{{ end -}}
+	email = {{ vars.email }}
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
@@ -31,9 +22,9 @@
 [core]
 	editor = nvim
 	autocrlf = input
-	excludesfile = {{ .chezmoi.homeDir }}/.config/git/ignore
+	excludesfile = {{ env(name="HOME") }}/.config/git/ignore
 	pager = hunk pager
-	hooksPath = {{ .chezmoi.homeDir }}/.config/git/hooks
+	hooksPath = {{ env(name="HOME") }}/.config/git/hooks
 [diff]
 	colorMoved = default
 	algorithm = histogram
@@ -55,11 +46,11 @@
 [diff "python"]
 	xfuncname = ^[ \t]*((class|(async[ \t]+)?def)[ \t].*)$
 [credential]
-	helper = !{{ .chezmoi.homeDir }}/.local/share/mise/shims/gh auth git-credential
+	helper = !{{ env(name="HOME") }}/.local/share/mise/shims/gh auth git-credential
 [beads]
 	role = contributor
 [push]
 	useForceIfIncludes = true
 [trace2]
-	eventTarget = af_unix:stream:{{ .chezmoi.homeDir }}/.git-ai/internal/daemon/trace2.sock
+	eventTarget = af_unix:stream:{{ env(name="HOME") }}/.git-ai/internal/daemon/trace2.sock
 	eventNesting = 10
