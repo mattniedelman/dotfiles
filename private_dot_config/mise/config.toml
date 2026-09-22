@@ -302,6 +302,26 @@ phase = "pre-packages"
 "apt:inotify-tools" = "latest"
 "apt:gh" = "latest"
 "apt:git-lfs" = "latest"
+"apt:wget" = "latest"
+"apt:gnupg" = "latest"
+"apt:zip" = "latest"
+"apt:xz-utils" = "latest"
+"apt:lsb-release" = "latest"
+"apt:pv" = "latest"
+"apt:tree" = "latest"
+"apt:parallel" = "latest"
+# Build deps for Python/Ruby/native extensions
+"apt:zlib1g-dev" = "latest"
+"apt:libffi-dev" = "latest"
+"apt:libreadline-dev" = "latest"
+"apt:libsqlite3-dev" = "latest"
+"apt:python3-dev" = "latest"
+# Dev tools
+"apt:clang" = "latest"
+"apt:protobuf-compiler" = "latest"
+"apt:postgresql-client" = "latest"
+# Container runtime
+"apt:podman" = "latest"
 
 # ── dotfiles ────────────────────────────────────────────────────────────────
 
