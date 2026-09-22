@@ -301,6 +301,14 @@ group = "root"
 mode = "0644"
 phase = "pre-packages"
 
+# Helium browser
+[bootstrap.files."/etc/apt/sources.list.d/helium.sources"]
+source = "~/.local/share/chezmoi/dotfiles/files/apt/helium.sources"
+owner = "root"
+group = "root"
+mode = "0644"
+phase = "pre-packages"
+
 # ── system packages ───────────────────────────────────────────────────────────
 
 [bootstrap.packages]
@@ -345,6 +353,29 @@ phase = "pre-packages"
 "apt:1password-cli" = "latest"
 # Terminal emulator
 "apt:ghostty" = "latest"
+# Browsers
+"apt:helium-bin" = "latest"
+# C/C++ build stack (neovim plugins, tree-sitter)
+"apt:cmake" = "latest"
+"apt:ninja-build" = "latest"
+"apt:meson" = "latest"
+# Media processing
+"apt:ffmpeg" = "latest"
+"apt:imagemagick" = "latest"
+# Networking
+"apt:nmap" = "latest"
+"apt:socat" = "latest"
+# Database
+"apt:sqlite3" = "latest"
+# Diagrams
+"apt:graphviz" = "latest"
+# Terminal / TUI tools
+"apt:btop" = "latest"
+"apt:asciinema" = "latest"
+"apt:chafa" = "latest"
+"apt:hexyl" = "latest"
+# Neovim
+"apt:luarocks" = "latest"
 
 # ── dotfiles ────────────────────────────────────────────────────────────────
 
