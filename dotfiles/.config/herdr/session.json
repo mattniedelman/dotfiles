@@ -1,0 +1,330 @@
+{
+  "version": 3,
+  "workspaces": [
+    {
+      "id": "w3H",
+      "custom_name": null,
+      "identity_cwd": "/home/mattniedelman/Documents/promo",
+      "public_pane_numbers": {
+        "135": 73,
+        "4": 20,
+        "114": 72
+      },
+      "next_public_pane_number": 75,
+      "public_tab_numbers": [
+        1,
+        10
+      ],
+      "next_public_tab_number": 11,
+      "tabs": [
+        {
+          "custom_name": null,
+          "layout": {
+            "Split": {
+              "direction": "Horizontal",
+              "ratio": 0.5,
+              "first": {
+                "Pane": 4
+              },
+              "second": {
+                "Pane": 114
+              }
+            }
+          },
+          "panes": {
+            "114": {
+              "cwd": "/home/mattniedelman/Documents/promo"
+            },
+            "4": {
+              "cwd": "/home/mattniedelman/Documents/promo",
+              "agent_session": {
+                "source": "herdr:omp",
+                "agent": "omp",
+                "kind": "path",
+                "value": "/home/mattniedelman/.omp/agent/sessions/-Documents-promo/2026-09-08T17-17-47-843Z_01a08206-a1c3-7000-808e-0658256f174d.jsonl"
+              }
+            }
+          },
+          "zoomed": false,
+          "focused": 4,
+          "root_pane": 4
+        },
+        {
+          "custom_name": null,
+          "layout": {
+            "Pane": 135
+          },
+          "panes": {
+            "135": {
+              "cwd": "/home/mattniedelman/Documents/promo"
+            }
+          },
+          "zoomed": false,
+          "focused": 135,
+          "root_pane": 135
+        }
+      ],
+      "active_tab": 0
+    },
+    {
+      "id": "w4S",
+      "custom_name": null,
+      "identity_cwd": "/home/mattniedelman/projects/imprivata-shared-tools/context-engine",
+      "public_pane_numbers": {
+        "60": 29,
+        "11": 1,
+        "34": 25
+      },
+      "next_public_pane_number": 30,
+      "public_tab_numbers": [
+        1,
+        4
+      ],
+      "next_public_tab_number": 5,
+      "tabs": [
+        {
+          "custom_name": null,
+          "layout": {
+            "Split": {
+              "direction": "Horizontal",
+              "ratio": 0.5,
+              "first": {
+                "Pane": 11
+              },
+              "second": {
+                "Pane": 60
+              }
+            }
+          },
+          "panes": {
+            "60": {
+              "cwd": "/home/mattniedelman/projects/imprivata-shared-tools/context-engine"
+            },
+            "11": {
+              "cwd": "/home/mattniedelman/projects/imprivata-shared-tools/context-engine",
+              "agent_session": {
+                "source": "herdr:omp",
+                "agent": "omp",
+                "kind": "path",
+                "value": "/home/mattniedelman/.omp/agent/sessions/-projects-imprivata-shared-tools-context-engine/2026-09-04T20-17-10-020Z_01a06e11-6984-7000-8070-ff4bd17ee788.jsonl"
+              }
+            }
+          },
+          "zoomed": false,
+          "focused": 60,
+          "root_pane": 11
+        },
+        {
+          "custom_name": null,
+          "layout": {
+            "Pane": 34
+          },
+          "panes": {
+            "34": {
+              "cwd": "/home/mattniedelman/projects/imprivata-shared-tools/context-engine"
+            }
+          },
+          "zoomed": false,
+          "focused": 34,
+          "root_pane": 34
+        }
+      ],
+      "active_tab": 0
+    },
+    {
+      "id": "w52",
+      "custom_name": null,
+      "identity_cwd": "/home/mattniedelman/basic-memory",
+      "public_pane_numbers": {
+        "80": 1
+      },
+      "next_public_pane_number": 2,
+      "public_tab_numbers": [
+        1
+      ],
+      "next_public_tab_number": 2,
+      "tabs": [
+        {
+          "custom_name": null,
+          "layout": {
+            "Pane": 80
+          },
+          "panes": {
+            "80": {
+              "cwd": "/home/mattniedelman/basic-memory"
+            }
+          },
+          "zoomed": false,
+          "focused": 80,
+          "root_pane": 80
+        }
+      ],
+      "active_tab": 0
+    },
+    {
+      "id": "w54",
+      "custom_name": null,
+      "identity_cwd": "/home/mattniedelman/projects/imprivata-architecture/ai-serving",
+      "public_pane_numbers": {
+        "141": 19,
+        "142": 20,
+        "125": 11,
+        "88": 1
+      },
+      "next_public_pane_number": 21,
+      "public_tab_numbers": [
+        1,
+        5,
+        6
+      ],
+      "next_public_tab_number": 7,
+      "tabs": [
+        {
+          "custom_name": null,
+          "layout": {
+            "Split": {
+              "direction": "Horizontal",
+              "ratio": 0.5,
+              "first": {
+                "Pane": 88
+              },
+              "second": {
+                "Pane": 125
+              }
+            }
+          },
+          "panes": {
+            "88": {
+              "cwd": "/home/mattniedelman/projects/imprivata-architecture/ai-serving",
+              "agent_session": {
+                "source": "herdr:omp",
+                "agent": "omp",
+                "kind": "path",
+                "value": "/home/mattniedelman/.omp/agent/sessions/-projects-imprivata-architecture-ai-serving/2026-09-14T22-11-39-906Z_01a0a1f9-d502-7000-a219-0532b6d8c8c0.jsonl"
+              }
+            },
+            "125": {
+              "cwd": "/home/mattniedelman/projects/imprivata-architecture/ai-serving"
+            }
+          },
+          "zoomed": false,
+          "focused": 125,
+          "root_pane": 88
+        },
+        {
+          "custom_name": null,
+          "layout": {
+            "Pane": 141
+          },
+          "panes": {
+            "141": {
+              "cwd": "/mnt/2b20906f-1847-4c8e-94e4-b841290bddc3"
+            }
+          },
+          "zoomed": false,
+          "focused": 141,
+          "root_pane": 141
+        },
+        {
+          "custom_name": null,
+          "layout": {
+            "Pane": 142
+          },
+          "panes": {
+            "142": {
+              "cwd": "/mnt/2b20906f-1847-4c8e-94e4-b841290bddc3"
+            }
+          },
+          "zoomed": false,
+          "focused": 142,
+          "root_pane": 142
+        }
+      ],
+      "active_tab": 0
+    },
+    {
+      "id": "w5J",
+      "custom_name": null,
+      "identity_cwd": "/home/mattniedelman/.local/share/chezmoi",
+      "public_pane_numbers": {
+        "144": 2,
+        "143": 1
+      },
+      "next_public_pane_number": 3,
+      "public_tab_numbers": [
+        1
+      ],
+      "next_public_tab_number": 2,
+      "tabs": [
+        {
+          "custom_name": null,
+          "layout": {
+            "Split": {
+              "direction": "Horizontal",
+              "ratio": 0.5,
+              "first": {
+                "Pane": 143
+              },
+              "second": {
+                "Pane": 144
+              }
+            }
+          },
+          "panes": {
+            "144": {
+              "cwd": "/home/mattniedelman/.local/share/chezmoi"
+            },
+            "143": {
+              "cwd": "/home/mattniedelman/.local/share/chezmoi",
+              "agent_session": {
+                "source": "herdr:omp",
+                "agent": "omp",
+                "kind": "path",
+                "value": "/home/mattniedelman/.omp/agent/sessions/-.local-share-chezmoi/2026-09-22T14-19-31-029Z_01a0c97c-7155-7000-83fa-13d37a8dec80.jsonl"
+              }
+            }
+          },
+          "zoomed": false,
+          "focused": 144,
+          "root_pane": 143
+        }
+      ],
+      "active_tab": 0
+    },
+    {
+      "id": "w5K",
+      "custom_name": null,
+      "identity_cwd": "/home/mattniedelman/.local/share/chezmoi/dotfiles/.config/nvim",
+      "public_pane_numbers": {
+        "146": 1
+      },
+      "next_public_pane_number": 2,
+      "public_tab_numbers": [
+        1
+      ],
+      "next_public_tab_number": 2,
+      "tabs": [
+        {
+          "custom_name": null,
+          "layout": {
+            "Pane": 146
+          },
+          "panes": {
+            "146": {
+              "cwd": "/home/mattniedelman/.local/share/chezmoi/dotfiles/.config/nvim"
+            }
+          },
+          "zoomed": false,
+          "focused": 146,
+          "root_pane": 146
+        }
+      ],
+      "active_tab": 0
+    }
+  ],
+  "active": 4,
+  "selected": 4,
+  "sidebar_width": 21,
+  "sidebar_section_split": 0.58,
+  "collapsed_space_keys": []
+}
