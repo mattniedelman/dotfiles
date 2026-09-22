@@ -269,16 +269,25 @@ group = "root"
 mode = "0644"
 phase = "pre-packages"
 
-# GitHub CLI apt repo
-[bootstrap.files."/usr/share/keyrings/githubcli-archive-keyring.gpg"]
-source = "~/.local/share/chezmoi/dotfiles/files/apt/githubcli-archive-keyring.gpg"
+# GitHub CLI apt repo (inline-key .sources format — avoids binary file UTF-8 issue)
+[bootstrap.files."/etc/apt/sources.list.d/github-cli.sources"]
+source = "~/.local/share/chezmoi/dotfiles/files/apt/github-cli.sources"
 owner = "root"
 group = "root"
 mode = "0644"
 phase = "pre-packages"
 
-[bootstrap.files."/etc/apt/sources.list.d/github-cli.list"]
-source = "~/.local/share/chezmoi/dotfiles/files/apt/github-cli.list"
+# Tailscale VPN
+[bootstrap.files."/etc/apt/sources.list.d/tailscale.sources"]
+source = "~/.local/share/chezmoi/dotfiles/files/apt/tailscale.sources"
+owner = "root"
+group = "root"
+mode = "0644"
+phase = "pre-packages"
+
+# 1Password
+[bootstrap.files."/etc/apt/sources.list.d/1password.sources"]
+source = "~/.local/share/chezmoi/dotfiles/files/apt/1password.sources"
 owner = "root"
 group = "root"
 mode = "0644"
@@ -322,6 +331,10 @@ phase = "pre-packages"
 "apt:postgresql-client" = "latest"
 # Container runtime
 "apt:podman" = "latest"
+"apt:tailscale" = "latest"
+# 1Password GUI + CLI
+"apt:1password" = "latest"
+"apt:1password-cli" = "latest"
 
 # ── dotfiles ────────────────────────────────────────────────────────────────
 
