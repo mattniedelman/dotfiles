@@ -268,37 +268,6 @@ run = "mise prune"
 [dotfiles]
 # Plain symlinks — source inferred from dotfiles.root (mirrors ~/.*)
 "~/.bashrc" = { mode = "symlink" }
-"~/.profile" = { mode = "symlink" }
-"~/.ripgreprc" = { mode = "symlink" }
-
-# Templates
-"~/.gitconfig" = { source = "~/.local/share/chezmoi/dotfiles/.gitconfig.tera", mode = "template" }
-
-# ~/.config — whole-directory symlinks
-"~/.config/nvim" = { mode = "symlink" }
-"~/.config/television" = { mode = "symlink" }
-"~/.config/ohmyposh" = { mode = "symlink" }
-"~/.config/kitty" = { mode = "symlink" }
-"~/.config/git" = { mode = "symlink" }
-"~/.config/kubernetes-mcp-server" = { mode = "symlink" }
-"~/.config/mdsf" = { mode = "symlink" }
-"~/.config/ghostty" = { mode = "symlink" }
-"~/.config/atuin" = { mode = "symlink" }
-"~/.config/herdr" = { mode = "symlink" }
-
-# ~/.config — file/dir-level entries (templates or non-standard source paths)
-"~/.config/cbfmt.toml" = { source = "~/.local/share/chezmoi/dotfiles/.config/cbfmt.toml.tera", mode = "template" }
-"~/.config/ast-grep/rules" = { source = "~/.local/share/chezmoi/dotfiles/.config/ast-grep/rules", mode = "symlink" }
-"~/.config/ast-grep/sgconfig.yml" = { source = "~/.local/share/chezmoi/dotfiles/.config/ast-grep/sgconfig.yml.tera", mode = "template" }
-"~/.config/mise/.default-python-packages" = { source = "~/.local/share/chezmoi/dotfiles/.config/mise/.default-python-packages", mode = "symlink" }
-
-# ~/.config/fish — symlink-each so fish can write fish_variables, completions/, etc.
-# config.fish is a template so excluded here and handled separately below.
-"~/.config/fish" = { source = "~/.local/share/chezmoi/dotfiles/.config/fish", mode = "symlink-each", exclude = ["config.fish.tera", "fish_variables", "fish_variables.*", "completions/**", "logs/**", "themes/**"] }
-"~/.config/fish/config.fish" = { source = "~/.local/share/chezmoi/dotfiles/.config/fish/config.fish.tera", mode = "template" }
-
-# ~/.omp — symlink-each; agent/ has private files (config.yml, mcp.json)
-"~/.omp" = { source = "~/.local/share/chezmoi/dotfiles/.omp", mode = "symlink-each" }
 
 # ~/.claude — symlink-each; exclude all runtime/generated state
 "~/.claude" = { source = "~/.local/share/chezmoi/dotfiles/.claude", mode = "symlink-each", exclude = [
@@ -320,6 +289,43 @@ run = "mise prune"
 "~/.claude/hooks/reflect_backfill.py" = { source = "~/.local/share/chezmoi/dotfiles/.claude/hooks/reflect_backfill.py.tera", mode = "template" }
 "~/.claude/hooks/session_reflect.py" = { source = "~/.local/share/chezmoi/dotfiles/.claude/hooks/session_reflect.py.tera", mode = "template" }
 "~/.claude/hooks/session_start.py" = { source = "~/.local/share/chezmoi/dotfiles/.claude/hooks/session_start.py.tera", mode = "template" }
+"~/.config/ast-grep/rules" = { source = "~/.local/share/chezmoi/dotfiles/.config/ast-grep/rules", mode = "symlink" }
+"~/.config/ast-grep/sgconfig.yml" = { source = "~/.local/share/chezmoi/dotfiles/.config/ast-grep/sgconfig.yml.tera", mode = "template" }
+"~/.config/atuin" = { mode = "copy" }
+"~/.config/atuin/config.toml" = { mode = "track" }
+
+# ~/.config — file/dir-level entries (templates or non-standard source paths)
+"~/.config/cbfmt.toml" = { source = "~/.local/share/chezmoi/dotfiles/.config/cbfmt.toml.tera", mode = "template" }
+
+# ~/.config/fish — symlink-each so fish can write fish_variables, completions/, etc.
+# config.fish is a template so excluded here and handled separately below.
+"~/.config/fish" = { source = "~/.local/share/chezmoi/dotfiles/.config/fish", mode = "symlink-each", exclude = ["config.fish.tera", "fish_variables", "fish_variables.*", "completions/**", "logs/**", "themes/**"] }
+"~/.config/fish/config.fish" = { source = "~/.local/share/chezmoi/dotfiles/.config/fish/config.fish.tera", mode = "template" }
+
+# ~/.config — copy mode (edit in-place; tracked for local undo history)
+"~/.config/ghostty" = { mode = "copy" }
+"~/.config/ghostty/config" = { mode = "track" }
+"~/.config/git" = { mode = "symlink" }
+"~/.config/herdr/config.toml" = { source = "~/.local/share/chezmoi/dotfiles/.config/herdr/config.toml", mode = "copy" }
+"~/.config/kitty" = { mode = "symlink" }
+"~/.config/kubernetes-mcp-server" = { mode = "symlink" }
+"~/.config/mdsf" = { mode = "symlink" }
+"~/.config/mise/.default-python-packages" = { source = "~/.local/share/chezmoi/dotfiles/.config/mise/.default-python-packages", mode = "symlink" }
+"~/.config/mise/config.toml" = { mode = "track" }
+
+# ~/.config — whole-directory symlinks (set-and-forget, edit via source)
+"~/.config/nvim" = { mode = "symlink-each", manifest = "git" }
+"~/.config/ohmyposh" = { mode = "copy" }
+"~/.config/ohmyposh/claude.json" = { mode = "track" }
+"~/.config/television" = { mode = "symlink" }
+
+# Templates
+"~/.gitconfig" = { source = "~/.local/share/chezmoi/dotfiles/.gitconfig.tera", mode = "template" }
+
+# ~/.omp — symlink-each; agent/ has private files (config.yml, mcp.json)
+"~/.omp" = { source = "~/.local/share/chezmoi/dotfiles/.omp", mode = "symlink-each" }
+"~/.profile" = { mode = "symlink" }
+"~/.ripgreprc" = { mode = "symlink" }
 
 # ── systemd user services (replaces chezmoi-placed unit files) ──────────────
 
@@ -343,7 +349,7 @@ fish = "activate"
 # ── user settings ────────────────────────────────────────────────────────────
 
 [bootstrap.user]
-login_shell = "fish"
+login_shell = "/usr/bin/fish"
 
 # ── SSH keys task (replaces authorized_keys template) ───────────────────────
 
