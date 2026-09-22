@@ -108,10 +108,6 @@ fd = "latest"
 fzf = "latest"
 ghalint = "latest"
 ghorg = "latest"
-# gh-cred is a stable-path symlink used as the git credential helper. The helper
-# must NOT point at the mise shim: the shim re-enters mise, which then asks the
-# git credential helper for a GitHub token (github.use_git_credentials), looping.
-github-cli = { version = "latest", postinstall = "mkdir -p ~/.local/bin && ln -sfn \"$(mise which gh)\" ~/.local/bin/gh-cred" }
 gitleaks = "latest"
 glow = "latest"
 go = "latest"
@@ -261,6 +257,51 @@ run = "mise outdated"
 [tasks.prune]
 description = "Remove unused tool versions"
 run = "mise prune"
+
+# ── apt repo setup (pre-packages phase) ─────────────────────────────────────
+
+# fish shell 4.x PPA — Ubuntu noble (24.04) only
+# If upgrading Ubuntu: update Suites and check for a new PPA release series
+[bootstrap.files."/etc/apt/sources.list.d/fish-shell.sources"]
+source = "~/.local/share/chezmoi/dotfiles/files/apt/fish-shell.sources"
+owner = "root"
+group = "root"
+mode = "0644"
+phase = "pre-packages"
+
+# GitHub CLI apt repo
+[bootstrap.files."/usr/share/keyrings/githubcli-archive-keyring.gpg"]
+source = "~/.local/share/chezmoi/dotfiles/files/apt/githubcli-archive-keyring.gpg"
+owner = "root"
+group = "root"
+mode = "0644"
+phase = "pre-packages"
+
+[bootstrap.files."/etc/apt/sources.list.d/github-cli.list"]
+source = "~/.local/share/chezmoi/dotfiles/files/apt/github-cli.list"
+owner = "root"
+group = "root"
+mode = "0644"
+phase = "pre-packages"
+
+# ── system packages ───────────────────────────────────────────────────────────
+
+[bootstrap.packages]
+# Shell and bootstrap prerequisites
+"apt:fish" = "latest"
+"apt:curl" = "latest"
+"apt:git" = "latest"
+"apt:ca-certificates" = "latest"
+"apt:unzip" = "latest"
+# Build deps required by cargo/go/node native builds
+"apt:build-essential" = "latest"
+"apt:libssl-dev" = "latest"
+"apt:pkg-config" = "latest"
+# System utilities
+"apt:wl-clipboard" = "latest"
+"apt:inotify-tools" = "latest"
+"apt:gh" = "latest"
+"apt:git-lfs" = "latest"
 
 # ── dotfiles ────────────────────────────────────────────────────────────────
 

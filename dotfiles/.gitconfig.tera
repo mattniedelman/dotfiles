@@ -46,7 +46,7 @@
 [diff "python"]
 	xfuncname = ^[ \t]*((class|(async[ \t]+)?def)[ \t].*)$
 [credential]
-	helper = !{{ env.HOME }}/.local/share/mise/shims/gh auth git-credential
+	helper = !/usr/bin/gh auth git-credential
 [beads]
 	role = contributor
 [push]
