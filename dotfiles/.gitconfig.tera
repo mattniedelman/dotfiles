@@ -22,9 +22,9 @@
 [core]
 	editor = nvim
 	autocrlf = input
-	excludesfile = {{ env(name="HOME") }}/.config/git/ignore
+	excludesfile = {{ env.HOME }}/.config/git/ignore
 	pager = hunk pager
-	hooksPath = {{ env(name="HOME") }}/.config/git/hooks
+	hooksPath = {{ env.HOME }}/.config/git/hooks
 [diff]
 	colorMoved = default
 	algorithm = histogram
@@ -46,11 +46,11 @@
 [diff "python"]
 	xfuncname = ^[ \t]*((class|(async[ \t]+)?def)[ \t].*)$
 [credential]
-	helper = !{{ env(name="HOME") }}/.local/share/mise/shims/gh auth git-credential
+	helper = !{{ env.HOME }}/.local/share/mise/shims/gh auth git-credential
 [beads]
 	role = contributor
 [push]
 	useForceIfIncludes = true
 [trace2]
-	eventTarget = af_unix:stream:{{ env(name="HOME") }}/.git-ai/internal/daemon/trace2.sock
+	eventTarget = af_unix:stream:{{ env.HOME }}/.git-ai/internal/daemon/trace2.sock
 	eventNesting = 10
