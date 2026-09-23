@@ -351,9 +351,8 @@ phase = "pre-packages"
 # Container runtime
 "apt:podman" = "latest"
 "apt:tailscale" = "latest"
-# 1Password GUI + CLI
+# 1Password GUI; CLI is installed by the `1password` mise tool above
 "apt:1password" = "latest"
-"apt:1password-cli" = "latest"
 # Terminal emulator
 "apt:ghostty" = "latest"
 # Browsers
