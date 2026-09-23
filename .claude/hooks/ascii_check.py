@@ -1,8 +1,4 @@
-<<<<<<<< HEAD:.claude/hooks/ascii_check.py.tera
-#!/usr/bin/env -S uv run --quiet --script --directory {{ env.HOME }}/.claude/hooks
-========
 #!/usr/bin/env -S uv run --quiet --script
->>>>>>>> feature/mise-bootstrap:.claude/hooks/ascii_check.py
 """
 PostToolUse hook: Auto-fix Unicode lookalike characters in file changes.
 
