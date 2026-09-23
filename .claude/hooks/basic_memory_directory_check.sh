@@ -1,4 +1,8 @@
+<<<<<<<< HEAD:.claude/hooks/basic_memory_directory_check.sh.tera
 #!/usr/bin/env -S uv run --quiet --script --directory {{ env.HOME }}/.claude/hooks
+========
+#!/usr/bin/env -S uv run --quiet --script
+>>>>>>>> feature/mise-bootstrap:.claude/hooks/basic_memory_directory_check.sh
 """
 PreToolUse hook: Block write_note_basic-memory calls without a proper directory.
 

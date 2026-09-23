@@ -1,0 +1,5 @@
+[languages]
+bash = ["$HOME/.local/share/mise/shims/shfmt -i 2 -"]
+sh = ["$HOME/.local/share/mise/shims/shfmt -i 2 -"]
+json = ["$HOME/.local/share/mise/shims/jq ."]
+python = ["$HOME/.local/share/mise/shims/ruff format -"]

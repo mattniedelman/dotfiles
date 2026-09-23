@@ -2,7 +2,8 @@
 	defaultBranch = main
 [user]
 	name = "Matt Niedelman"
-	email = {{ vars.email }}
+[include]
+	path = ~/.config/git/local
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
@@ -22,9 +23,9 @@
 [core]
 	editor = nvim
 	autocrlf = input
-	excludesfile = {{ env.HOME }}/.config/git/ignore
+	excludesfile = ~/.config/git/ignore
 	pager = hunk pager
-	hooksPath = {{ env.HOME }}/.config/git/hooks
+	hooksPath = ~/.config/git/hooks
 [diff]
 	colorMoved = default
 	algorithm = histogram
@@ -52,5 +53,5 @@
 [push]
 	useForceIfIncludes = true
 [trace2]
-	eventTarget = af_unix:stream:{{ env.HOME }}/.git-ai/internal/daemon/trace2.sock
+	eventTarget = af_unix:stream:~/.git-ai/internal/daemon/trace2.sock
 	eventNesting = 10

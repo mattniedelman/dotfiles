@@ -1,4 +1,8 @@
+<<<<<<<< HEAD:.claude/hooks/auto_lint.py.tera
 #!/usr/bin/env -S uv run --quiet --script --directory {{ env.HOME }}/.claude/hooks
+========
+#!/usr/bin/env -S uv run --quiet --script
+>>>>>>>> feature/mise-bootstrap:.claude/hooks/auto_lint.py
 # /// script
 # dependencies = ["cchooks"]
 # ///

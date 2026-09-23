@@ -3,3 +3,9 @@ vim/.config/nvim/plugged/*
 vim/.config/nvim/viminfo
 __pycache__/
 *.pyc
+# chezmoi-convention files (leftover from migration, not needed)
+.chezmoi*
+dot_*
+private_dot_*
+private_*
+*.tmpl

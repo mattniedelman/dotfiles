@@ -1,4 +1,8 @@
+<<<<<<<< HEAD:.claude/hooks/block_pip.py.tera
 #!/usr/bin/env -S uv run --quiet --script --directory {{ env.HOME }}/.claude/hooks
+========
+#!/usr/bin/env -S uv run --quiet --script
+>>>>>>>> feature/mise-bootstrap:.claude/hooks/block_pip.py
 """
 PreToolUse hook (Bash): Block raw `pip` invocations and steer to `uv add`.
 

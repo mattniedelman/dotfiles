@@ -236,7 +236,6 @@ locked_verify_provenance = true
 # If a security scanner's freshness matters more than the cooldown, pin it to
 # an explicit recent version.
 minimum_release_age = "7d"
-dotfiles.root = "~/.local/share/chezmoi"
 
 [settings.github]
 use_git_credentials = true
@@ -257,12 +256,17 @@ run = "mise outdated"
 description = "Remove unused tool versions"
 run = "mise prune"
 
+# ── dotfiles repo ────────────────────────────────────────────────────────────
+
+[bootstrap.repos."~/.dotfiles"]
+url = "git@github-personal:mattniedelman/dotfiles.git"
+
 # ── apt repo setup (pre-packages phase) ─────────────────────────────────────
 
 # fish shell 4.x PPA — Ubuntu noble (24.04) only
 # If upgrading Ubuntu: update Suites and check for a new PPA release series
 [bootstrap.files."/etc/apt/sources.list.d/fish-shell.sources"]
-source = "~/.local/share/chezmoi/files/apt/fish-shell.sources"
+source = "~/.dotfiles/files/apt/fish-shell.sources"
 owner = "root"
 group = "root"
 mode = "0644"
@@ -270,7 +274,7 @@ phase = "pre-packages"
 
 # GitHub CLI apt repo (inline-key .sources format — avoids binary file UTF-8 issue)
 [bootstrap.files."/etc/apt/sources.list.d/github-cli.sources"]
-source = "~/.local/share/chezmoi/files/apt/github-cli.sources"
+source = "~/.dotfiles/files/apt/github-cli.sources"
 owner = "root"
 group = "root"
 mode = "0644"
@@ -278,7 +282,7 @@ phase = "pre-packages"
 
 # Tailscale VPN
 [bootstrap.files."/etc/apt/sources.list.d/tailscale.sources"]
-source = "~/.local/share/chezmoi/files/apt/tailscale.sources"
+source = "~/.dotfiles/files/apt/tailscale.sources"
 owner = "root"
 group = "root"
 mode = "0644"
@@ -286,7 +290,7 @@ phase = "pre-packages"
 
 # 1Password
 [bootstrap.files."/etc/apt/sources.list.d/1password.sources"]
-source = "~/.local/share/chezmoi/files/apt/1password.sources"
+source = "~/.dotfiles/files/apt/1password.sources"
 owner = "root"
 group = "root"
 mode = "0644"
@@ -294,7 +298,7 @@ phase = "pre-packages"
 
 # Ghostty terminal — community PPA (noble/24.04 only)
 [bootstrap.files."/etc/apt/sources.list.d/ghostty.sources"]
-source = "~/.local/share/chezmoi/files/apt/ghostty.sources"
+source = "~/.dotfiles/files/apt/ghostty.sources"
 owner = "root"
 group = "root"
 mode = "0644"
@@ -302,7 +306,7 @@ phase = "pre-packages"
 
 # Helium browser
 [bootstrap.files."/etc/apt/sources.list.d/helium.sources"]
-source = "~/.local/share/chezmoi/files/apt/helium.sources"
+source = "~/.dotfiles/files/apt/helium.sources"
 owner = "root"
 group = "root"
 mode = "0644"
@@ -395,26 +399,16 @@ phase = "pre-packages"
   "stats-cache.json", "hook-approvals.log", "security_warnings_state_*",
   "__pycache__/**", "*.pyc", "install-counts-cache.json",
 ] }
-# Template hooks (rendered with +x from source permissions)
-"~/.claude/hooks/ascii_check.py" = { source = "~/.local/share/chezmoi/.claude/hooks/ascii_check.py.tera", mode = "template" }
-"~/.claude/hooks/auto_lint.py" = { source = "~/.local/share/chezmoi/.claude/hooks/auto_lint.py.tera", mode = "template" }
-"~/.claude/hooks/basic_memory_directory_check.sh" = { source = "~/.local/share/chezmoi/.claude/hooks/basic_memory_directory_check.sh.tera", mode = "template" }
-"~/.claude/hooks/block_pip.py" = { source = "~/.local/share/chezmoi/.claude/hooks/block_pip.py.tera", mode = "template" }
-"~/.claude/hooks/reflect_backfill.py" = { source = "~/.local/share/chezmoi/.claude/hooks/reflect_backfill.py.tera", mode = "template" }
-"~/.claude/hooks/session_reflect.py" = { source = "~/.local/share/chezmoi/.claude/hooks/session_reflect.py.tera", mode = "template" }
-"~/.claude/hooks/session_start.py" = { source = "~/.local/share/chezmoi/.claude/hooks/session_start.py.tera", mode = "template" }
 "~/.config/ast-grep/rules" = { mode = "symlink" }
-"~/.config/ast-grep/sgconfig.yml" = { source = "~/.local/share/chezmoi/.config/ast-grep/sgconfig.yml.tera", mode = "template" }
+"~/.config/ast-grep/sgconfig.yml" = { mode = "symlink" }
 "~/.config/atuin" = { mode = "copy" }
 "~/.config/atuin/config.toml" = { mode = "track" }
 
-# ~/.config — file/dir-level entries (templates or non-standard source paths)
-"~/.config/cbfmt.toml" = { source = "~/.local/share/chezmoi/.config/cbfmt.toml.tera", mode = "template" }
+# ~/.config — file/dir-level entries
+"~/.config/cbfmt.toml" = { mode = "symlink" }
 
 # ~/.config/fish — symlink-each so fish can write fish_variables, completions/, etc.
-# config.fish is a template so excluded here and handled separately below.
-"~/.config/fish" = { mode = "symlink-each", exclude = ["config.fish.tera", "fish_variables", "fish_variables.*", "completions/**", "logs/**", "themes/**"] }
-"~/.config/fish/config.fish" = { source = "~/.local/share/chezmoi/.config/fish/config.fish.tera", mode = "template" }
+"~/.config/fish" = { mode = "symlink-each", exclude = ["fish_variables", "fish_variables.*", "completions/**", "logs/**", "themes/**"] }
 
 # ~/.config — copy mode (edit in-place; tracked for local undo history)
 "~/.config/ghostty" = { mode = "copy" }
@@ -434,8 +428,8 @@ phase = "pre-packages"
 "~/.config/ohmyposh/claude.json" = { mode = "track" }
 "~/.config/television" = { mode = "symlink" }
 
-# Templates
-"~/.gitconfig" = { source = "~/.local/share/chezmoi/.gitconfig.tera", mode = "template" }
+# Home root
+"~/.gitconfig" = { mode = "symlink" }
 
 # ~/.omp — symlink-each; agent/ has private files (config.yml, mcp.json)
 "~/.omp" = { mode = "symlink-each" }

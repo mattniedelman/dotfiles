@@ -1,0 +1,9 @@
+# ast-grep global configuration
+# Usage: sg scan <path>
+
+ruleDirs:
+<<<<<<<< HEAD:.config/ast-grep/sgconfig.yml.tera
+  - {{ env.HOME }}/.config/ast-grep/rules
+========
+  - ~/.config/ast-grep/rules
+>>>>>>>> feature/mise-bootstrap:.config/ast-grep/sgconfig.yml
