@@ -1,0 +1,41 @@
+id: no-dict-keys-iteration
+language: python
+severity: warning
+message: |
+  Unnecessary .keys() call. Iterate over the dict directly.
+
+rule:
+  all:
+    - pattern: $DICT.keys()
+    - inside:
+        stopBy: end
+        kind: for_statement
+    - not:
+        inside:
+          kind: binary_operator
+
+note: |
+  Calling .keys() when iterating over a dictionary is redundant.
+  Iterating over a dict directly yields its keys.
+
+  Instead of:
+    for key in my_dict.keys():
+        print(key)
+
+    for k in data.keys():
+        process(k, data[k])
+
+  Use direct iteration:
+    for key in my_dict:
+        print(key)
+
+    for k in data:
+        process(k, data[k])
+
+  Or if you need both key and value:
+    for key, value in my_dict.items():
+        process(key, value)
+
+  Note: .keys() IS needed when you need a view object:
+    keys = my_dict.keys()  # Dynamic view
+    if "foo" in my_dict.keys() & other_dict.keys():  # Set operations

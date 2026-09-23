@@ -1,0 +1,59 @@
+id: no-except-pass
+language: python
+severity: warning
+message: |
+  Empty except block silently swallows exceptions. Log or handle the error.
+
+rule:
+  any:
+    - kind: except_clause
+      has:
+        kind: block
+        all:
+          - has:
+              kind: pass_statement
+          - not:
+              has:
+                kind: expression_statement
+    - kind: except_clause
+      has:
+        kind: block
+        all:
+          - has:
+              kind: expression_statement
+              has:
+                kind: ellipsis
+          - not:
+              has:
+                any:
+                  - kind: pass_statement
+                  - kind: call
+
+note: |
+  Silently swallowing exceptions hides bugs and makes debugging
+  extremely difficult.
+
+  Instead of:
+    try:
+        risky_operation()
+    except ValueError:
+        pass
+
+  At minimum, log the exception:
+    try:
+        risky_operation()
+    except ValueError:
+        logger.debug("ValueError occurred, continuing")
+
+  Or handle it explicitly:
+    try:
+        risky_operation()
+    except ValueError as e:
+        logger.warning("Operation failed: %s", e)
+        return default_value
+
+  If you truly want to ignore an exception, document why:
+    try:
+        optional_cleanup()
+    except OSError:
+        pass  # File may not exist, that's OK

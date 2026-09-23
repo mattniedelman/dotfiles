@@ -1,0 +1,26 @@
+{
+  "$schema": "https://raw.githubusercontent.com/can1357/oh-my-pi/main/packages/coding-agent/src/config/mcp-schema.json",
+  "mcpServers": {
+    "basic-memory": {
+      "type": "http",
+      "url": "http://127.0.0.1:8000/mcp"
+    },
+    "plugin:slack:slack": {
+      "type": "http",
+      "url": "https://mcp.slack.com/mcp",
+      "oauth": {
+        "clientId": "1601185624273.8899143856786",
+        "callbackPort": 3118
+      }
+    },
+    "semantica": {
+      "type": "stdio",
+      "command": "/home/mattniedelman/.local/bin/semantica-mcp",
+      "env": {
+        "SEMANTICA_KG_PATH": "/home/mattniedelman/.semantica/graph.json",
+        "SEMANTICA_LOG_LEVEL": "WARNING"
+      },
+      "enabled": false
+    }
+  }
+}

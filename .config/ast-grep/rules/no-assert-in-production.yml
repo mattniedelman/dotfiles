@@ -1,0 +1,40 @@
+id: no-assert-in-production
+language: python
+severity: warning
+message: |
+  Avoid assert statements for validation. Use explicit conditionals and raise exceptions.
+
+ignores:
+  - "**/test_*.py"
+  - "**/*_test.py"
+  - "**/tests/**"
+  - "**/test/**"
+  - "**/conftest.py"
+
+rule:
+  kind: assert_statement
+
+note: |
+  Assert statements are removed when Python runs with the -O (optimize)
+  flag, silently disabling your validation logic.
+
+  Instead of:
+    assert user.is_authenticated, "User must be authenticated"
+    assert len(items) > 0, "Items cannot be empty"
+
+  Use explicit validation:
+    if not user.is_authenticated:
+        raise AuthenticationError("User must be authenticated")
+
+    if not items:
+        raise ValueError("Items cannot be empty")
+
+  Assertions are appropriate for:
+  - Test code (pytest uses assert)
+  - Documenting invariants during development
+  - Checks that should never fail in production
+
+  But NOT for:
+  - Input validation
+  - Business logic validation
+  - Security checks

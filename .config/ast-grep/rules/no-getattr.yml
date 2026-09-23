@@ -1,0 +1,29 @@
+id: no-getattr
+language: python
+severity: warning
+message: |
+  Avoid getattr(). Use direct attribute access or reconsider the design.
+
+rule:
+  pattern: getattr($$$ARGS)
+
+note: |
+  getattr() bypasses static type checking and IDE support. If direct
+  attribute access is possible, you MUST use it instead.
+
+  Instead of:
+    value = getattr(obj, "name")
+    value = getattr(obj, "name", default)
+
+  Use direct access:
+    value = obj.name
+    value = getattr(obj, "name", None) or default  # Only if truly dynamic
+
+  Refactor to eliminate getattr():
+  1. Use proper typing so attributes are known at compile time
+  2. Use a dictionary for truly dynamic keys: obj.data.get("name")
+  3. Use TypedDict or dataclass for structured data
+
+  getattr() is ONLY acceptable when the attribute name is genuinely
+  unknown at write time (e.g., metaprogramming, plugin systems).
+  If you're passing a string literal to getattr(), you're doing it wrong.

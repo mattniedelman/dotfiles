@@ -1,0 +1,34 @@
+id: no-re-compile-in-function
+language: python
+severity: warning
+message: |
+  re.compile() inside a function recompiles on every call. Move to module level or use re.match/search directly.
+
+rule:
+  all:
+    - pattern: re.compile($$$ARGS)
+    - inside:
+        stopBy: end
+        kind: function_definition
+
+note: |
+  Regex compilation is expensive. Compiling inside a function means
+  the regex is recompiled on every function call.
+
+  Instead of:
+    def parse_email(text):
+        pattern = re.compile(r"[\w.-]+@[\w.-]+\.\w+")
+        return pattern.findall(text)
+
+  Option 1 - Module-level constant:
+    _EMAIL_PATTERN = re.compile(r"[\w.-]+@[\w.-]+\.\w+")
+
+    def parse_email(text):
+        return _EMAIL_PATTERN.findall(text)
+
+  Option 2 - Use re functions directly (they cache internally):
+    def parse_email(text):
+        return re.findall(r"[\w.-]+@[\w.-]+\.\w+", text)
+
+  Note: Python's re module caches the most recent patterns,
+  but explicit compilation is clearer and guarantees no recompilation.

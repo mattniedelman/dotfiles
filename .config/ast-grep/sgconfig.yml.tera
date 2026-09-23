@@ -1,0 +1,5 @@
+# ast-grep global configuration
+# Usage: sg scan <path>
+
+ruleDirs:
+  - {{ env.HOME }}/.config/ast-grep/rules

@@ -1,0 +1,31 @@
+id: no-relative-import
+language: python
+severity: warning
+message: |
+  Avoid relative imports. Use absolute imports instead.
+
+rule:
+  kind: import_from_statement
+  has:
+    kind: relative_import
+
+note: |
+  Relative imports (using dots) can be confusing and fragile.
+  They depend on the current module's location and can break
+  when code is moved or restructured.
+
+  Instead of:
+    from . import utils
+    from .models import User
+    from ..helpers import format_date
+
+  Use absolute imports:
+    from mypackage import utils
+    from mypackage.models import User
+    from mypackage.helpers import format_date
+
+  Benefits:
+  - Clear where imports come from
+  - Code is easier to move between packages
+  - Better IDE support
+  - More explicit dependencies

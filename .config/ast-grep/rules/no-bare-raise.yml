@@ -1,0 +1,41 @@
+id: no-bare-raise
+language: python
+severity: error
+message: |
+  Bare 'raise' outside of an except block will cause RuntimeError.
+
+rule:
+  all:
+    - kind: raise_statement
+    - not:
+        has:
+          kind: identifier
+    - not:
+        has:
+          kind: call
+    - not:
+        inside:
+          stopBy: end
+          kind: except_clause
+
+note: |
+  A bare 'raise' statement (without an exception) only works inside
+  an except block where it re-raises the current exception.
+
+  Outside an except block, it causes:
+    RuntimeError: No active exception to re-raise
+
+  Instead of:
+    if error_condition:
+        raise  # RuntimeError!
+
+  Use:
+    if error_condition:
+        raise ValueError("Description of the error")
+
+  Bare raise IS valid inside except:
+    try:
+        risky_operation()
+    except ValueError:
+        logger.error("Operation failed")
+        raise  # Re-raises the ValueError - this is fine

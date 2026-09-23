@@ -1,0 +1,56 @@
+[init]
+	defaultBranch = main
+[user]
+	name = "Matt Niedelman"
+	email = {{ vars.email }}
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+
+[merge]
+	tool = "nvim"
+	conflictStyle = zdiff3
+
+[mergetool]
+	keepBackup = false
+	prompt = false
+
+[mergetool "nvim"]
+	cmd = "nvim -d -c \"wincmd l\" -c \"norm ]c\" \"$LOCAL\" \"$MERGED\" \"$REMOTE\""
+[core]
+	editor = nvim
+	autocrlf = input
+	excludesfile = {{ env.HOME }}/.config/git/ignore
+	pager = hunk pager
+	hooksPath = {{ env.HOME }}/.config/git/hooks
+[diff]
+	colorMoved = default
+	algorithm = histogram
+	tool = hunk
+[difftool]
+	prompt = false
+[difftool "hunk"]
+	cmd = hunk difftool "$LOCAL" "$REMOTE" "$MERGED"
+[alias]
+	dft = "!GIT_EXTERNAL_DIFF=difft git diff"
+	dt = difftool
+	co = checkout
+	br = branch
+	ci = commit
+	st = status
+[pull]
+	rebase = false
+
+[diff "python"]
+	xfuncname = ^[ \t]*((class|(async[ \t]+)?def)[ \t].*)$
+[credential]
+	helper = !/usr/bin/gh auth git-credential
+[beads]
+	role = contributor
+[push]
+	useForceIfIncludes = true
+[trace2]
+	eventTarget = af_unix:stream:{{ env.HOME }}/.git-ai/internal/daemon/trace2.sock
+	eventNesting = 10
