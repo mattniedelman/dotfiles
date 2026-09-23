@@ -1,8 +1,4 @@
-<<<<<<<< HEAD:.claude/hooks/session_reflect.py.tera
-#!/usr/bin/env -S uv run --quiet --script --directory {{ env.HOME }}/.claude/hooks
-========
 #!/usr/bin/env -S uv run --quiet --script
->>>>>>>> feature/mise-bootstrap:.claude/hooks/session_reflect.py
 # /// script
 # dependencies = ["cchooks"]
 # ///
@@ -30,7 +26,7 @@ MAX_TEXT_LENGTH = 400
 MIN_HUMAN_TURNS = 8
 CHILD_MODEL = "haiku"
 CHILD_TOOLS = "mcp__basic-memory__write_note,mcp__basic-memory__search_notes"
-CLAUDE_BIN = "{{ env.HOME }}/.local/bin/claude"
+CLAUDE_BIN = Path.home() / ".local" / "bin" / "claude"
 REFLECTED_DIR = Path.home() / ".claude" / "hooks" / "logs" / "reflected"
 LOG_FILE = Path.home() / ".claude" / "hooks" / "logs" / "session_reflect.log"
 
