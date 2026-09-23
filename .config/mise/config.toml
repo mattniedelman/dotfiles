@@ -456,12 +456,12 @@ phase = "pre-packages"
 
 # ── systemd user services (replaces chezmoi-placed unit files) ──────────────
 
-[bootstrap.linux.systemd.units.basic-memory]
-description = "Basic Memory MCP Server (Streamable HTTP)"
-exec_start = "~/.local/share/mise/shims/basic-memory mcp --transport streamable-http --host 127.0.0.1"
-after = ["network.target"]
-restart = "on-failure"
-restart_sec = "5s"
+# [bootstrap.linux.systemd.units.basic-memory]
+# description = "Basic Memory MCP Server (Streamable HTTP)"
+# exec_start = "~/.local/share/mise/shims/basic-memory mcp --transport streamable-http --host 127.0.0.1"
+# after = ["network.target"]
+# restart = "on-failure"
+# restart_sec = "5s"
 
 
 # ── directories for services that need pre-existing paths ────────────────────
@@ -477,14 +477,14 @@ mode = "0755"
 
 # ── additional systemd user services ─────────────────────────────────────────
 
-[bootstrap.linux.systemd.units.agentsview]
-description = "AgentsView - local web viewer for AI agent sessions"
-after = ["network-online.target"]
-wants = ["network-online.target"]
-exec_start = "%h/.local/share/mise/shims/agentsview serve --no-browser --host 127.0.0.1 --port 8080"
-restart = "on-failure"
-restart_sec = "5s"
-timeout_start_sec = "120"
+# [bootstrap.linux.systemd.units.agentsview]
+# description = "AgentsView - local web viewer for AI agent sessions"
+# after = ["network-online.target"]
+# wants = ["network-online.target"]
+# exec_start = "%h/.local/share/mise/shims/agentsview serve --no-browser --host 127.0.0.1 --port 8080"
+# restart = "on-failure"
+# restart_sec = "5s"
+# timeout_start_sec = "120"
 
 # [bootstrap.linux.systemd.units.hindsight-embed-daemon]
 # description = "Hindsight embed daemon (claude-code profile)"
@@ -503,69 +503,69 @@ timeout_start_sec = "120"
 # exec_start = "~/.local/share/mise/shims/hindsight-embed -p claude-code ui start"
 # exec_stop = "~/.local/share/mise/shims/hindsight-embed -p claude-code ui stop"
 
-[bootstrap.linux.systemd.units.kenn-forge]
-description = "kenn-forge daemon"
-after = ["network-online.target"]
-wants = ["network-online.target"]
-exec_start = "~/.local/bin/kenn-forge serve"
-restart = "on-failure"
-restart_sec = "5s"
+# [bootstrap.linux.systemd.units.kenn-forge]
+# description = "kenn-forge daemon"
+# after = ["network-online.target"]
+# wants = ["network-online.target"]
+# exec_start = "~/.local/bin/kenn-forge serve"
+# restart = "on-failure"
+# restart_sec = "5s"
 
-[bootstrap.linux.systemd.units.sparkrun-proxy]
-description = "sparkrun LiteLLM inference proxy"
-after = ["network-online.target"]
-wants = ["network-online.target"]
-exec_start = "~/.local/share/mise/shims/sparkrun proxy start --foreground --host 127.0.0.1"
-restart = "on-failure"
-restart_sec = "5s"
-environment = { HOME = "%h", PATH = "%h/.local/share/mise/shims:%h/.local/bin:/usr/local/bin:/usr/bin:/bin" }
-
-
-[bootstrap.linux.systemd.units.rclone-imprivata-onedrive]
-description = "Rclone mount for Imprivata OneDrive"
-after = ["network.target"]
-type = "notify"
-exec_start = "~/.local/share/mise/shims/rclone mount imprivata-onedrive: %h/onedrive --config %h/.config/rclone/rclone.conf --cache-dir %h/.cache/rclone/imprivata-onedrive --vfs-cache-mode full --vfs-refresh"
-exec_stop = "/usr/bin/fusermount3 -u %h/onedrive"
-restart = "on-failure"
-restart_sec = "5s"
-
-[bootstrap.linux.systemd.units.keylight-webcam]
-description = "Elgato Key Light follows Insta360 webcam use"
-after = ["network-online.target"]
-wants = ["network-online.target"]
-exec_start = "%h/.local/bin/keylight-webcam.sh"
-exec_stop = "%h/.local/bin/keylight-webcam.sh off"
-restart = "on-failure"
-restart_sec = "5s"
+# [bootstrap.linux.systemd.units.sparkrun-proxy]
+# description = "sparkrun LiteLLM inference proxy"
+# after = ["network-online.target"]
+# wants = ["network-online.target"]
+# exec_start = "~/.local/share/mise/shims/sparkrun proxy start --foreground --host 127.0.0.1"
+# restart = "on-failure"
+# restart_sec = "5s"
+# environment = { HOME = "%h", PATH = "%h/.local/share/mise/shims:%h/.local/bin:/usr/local/bin:/usr/bin:/bin" }
+#
+#
+# [bootstrap.linux.systemd.units.rclone-imprivata-onedrive]
+# description = "Rclone mount for Imprivata OneDrive"
+# after = ["network.target"]
+# type = "notify"
+# exec_start = "~/.local/share/mise/shims/rclone mount imprivata-onedrive: %h/onedrive --config %h/.config/rclone/rclone.conf --cache-dir %h/.cache/rclone/imprivata-onedrive --vfs-cache-mode full --vfs-refresh"
+# exec_stop = "/usr/bin/fusermount3 -u %h/onedrive"
+# restart = "on-failure"
+# restart_sec = "5s"
+#
+# [bootstrap.linux.systemd.units.keylight-webcam]
+# description = "Elgato Key Light follows Insta360 webcam use"
+# after = ["network-online.target"]
+# wants = ["network-online.target"]
+# exec_start = "%h/.local/bin/keylight-webcam.sh"
+# exec_stop = "%h/.local/bin/keylight-webcam.sh off"
+# restart = "on-failure"
+# restart_sec = "5s"
 
 # aws-sso-keepwarm: oneshot service driven by a timer
 # Note: OnStartupSec (fires on user manager start) is unsupported; using
 # on_unit_inactive_sec only — first run fires ~15min after login.
-[bootstrap.linux.systemd.units.aws-sso-keepwarm]
-description = "Keep AWS SSO imprivata access token warm for headless/sandboxed use"
-after = ["network-online.target"]
-wants = ["network-online.target"]
-type = "oneshot"
-exec_start = "%h/.local/bin/aws-sso-keepwarm.sh"
-environment = { XDG_RUNTIME_DIR = "/run/user/1001" }
-nice = 10
-wanted_by = []
-
-[bootstrap.linux.systemd.units.aws-sso-keepwarm-timer]
-description = "Periodically refresh the AWS SSO imprivata access token"
-on_unit_inactive_sec = "15min"
-persistent = true
-unit = "aws-sso-keepwarm"
-
-[bootstrap.linux.systemd.units.sshuttle-dev]
-description = "sshuttle tunnel to ai-nonprod-vpc"
-after = ["network-online.target"]
-wants = ["network-online.target"]
-exec_start = "%h/.local/bin/sshuttle-dev"
-restart = "on-failure"
-restart_sec = "15s"
-environment = { PATH = "%h/.local/share/mise/shims:%h/.local/bin:/usr/local/bin:/usr/bin:/bin" }
+# [bootstrap.linux.systemd.units.aws-sso-keepwarm]
+# description = "Keep AWS SSO imprivata access token warm for headless/sandboxed use"
+# after = ["network-online.target"]
+# wants = ["network-online.target"]
+# type = "oneshot"
+# exec_start = "%h/.local/bin/aws-sso-keepwarm.sh"
+# environment = { XDG_RUNTIME_DIR = "/run/user/1001" }
+# nice = 10
+# wanted_by = []
+#
+# [bootstrap.linux.systemd.units.aws-sso-keepwarm-timer]
+# description = "Periodically refresh the AWS SSO imprivata access token"
+# on_unit_inactive_sec = "15min"
+# persistent = true
+# unit = "aws-sso-keepwarm"
+#
+# [bootstrap.linux.systemd.units.sshuttle-dev]
+# description = "sshuttle tunnel to ai-nonprod-vpc"
+# after = ["network-online.target"]
+# wants = ["network-online.target"]
+# exec_start = "%h/.local/bin/sshuttle-dev"
+# restart = "on-failure"
+# restart_sec = "15s"
+# environment = { PATH = "%h/.local/share/mise/shims:%h/.local/bin:/usr/local/bin:/usr/bin:/bin" }
 
 # ── history watcher service ──────────────────────────────────────────────────
 
