@@ -477,14 +477,6 @@ mode = "0755"
 
 # ── additional systemd user services ─────────────────────────────────────────
 
-[bootstrap.linux.systemd.units.aws-sigv4-proxy]
-description = "AWS SigV4 Signing Proxy for AMP"
-after = ["network.target"]
-exec_start = "~/.local/share/mise/shims/aws-sigv4-proxy --name aps --region us-east-2 --host aps-workspaces.us-east-2.amazonaws.com --port :9090"
-restart = "on-failure"
-restart_sec = "5s"
-environment = { AWS_SDK_LOAD_CONFIG = "true", AWS_PROFILE = "default" }
-
 [bootstrap.linux.systemd.units.agentsview]
 description = "AgentsView - local web viewer for AI agent sessions"
 after = ["network-online.target"]
@@ -494,37 +486,28 @@ restart = "on-failure"
 restart_sec = "5s"
 timeout_start_sec = "120"
 
-[bootstrap.linux.systemd.units.hindsight-embed-daemon]
-description = "Hindsight embed daemon (claude-code profile)"
-after = ["network.target"]
-type = "oneshot"
-remain_after_exit = true
-exec_start = "~/.local/bin/hindsight-start claude-code"
-exec_stop = "~/.local/share/mise/shims/hindsight-embed -p claude-code daemon stop"
-
-[bootstrap.linux.systemd.units.hindsight-embed-ui]
-description = "Hindsight embed UI (claude-code profile)"
-after = ["network.target", "dev.mise.hindsight-embed-daemon.service"]
-requires = ["dev.mise.hindsight-embed-daemon.service"]
-type = "oneshot"
-remain_after_exit = true
-exec_start = "~/.local/share/mise/shims/hindsight-embed -p claude-code ui start"
-exec_stop = "~/.local/share/mise/shims/hindsight-embed -p claude-code ui stop"
+# [bootstrap.linux.systemd.units.hindsight-embed-daemon]
+# description = "Hindsight embed daemon (claude-code profile)"
+# after = ["network.target"]
+# type = "oneshot"
+# remain_after_exit = true
+# exec_start = "~/.local/bin/hindsight-start claude-code"
+# exec_stop = "~/.local/share/mise/shims/hindsight-embed -p claude-code daemon stop"
+#
+# [bootstrap.linux.systemd.units.hindsight-embed-ui]
+# description = "Hindsight embed UI (claude-code profile)"
+# after = ["network.target", "dev.mise.hindsight-embed-daemon.service"]
+# requires = ["dev.mise.hindsight-embed-daemon.service"]
+# type = "oneshot"
+# remain_after_exit = true
+# exec_start = "~/.local/share/mise/shims/hindsight-embed -p claude-code ui start"
+# exec_stop = "~/.local/share/mise/shims/hindsight-embed -p claude-code ui stop"
 
 [bootstrap.linux.systemd.units.kenn-forge]
 description = "kenn-forge daemon"
 after = ["network-online.target"]
 wants = ["network-online.target"]
 exec_start = "~/.local/bin/kenn-forge serve"
-restart = "on-failure"
-restart_sec = "5s"
-
-[bootstrap.linux.systemd.units.beads-dolt]
-description = "Beads shared Dolt SQL server"
-after = ["network.target"]
-exec_start = "~/.local/share/mise/shims/dolt sql-server --host=127.0.0.1 --port=3308 --data-dir=%h/.beads/shared-server"
-environment = { HOME = "%h" }
-working_directory = "%h/.beads/shared-server"
 restart = "on-failure"
 restart_sec = "5s"
 
@@ -537,23 +520,6 @@ restart = "on-failure"
 restart_sec = "5s"
 environment = { HOME = "%h", PATH = "%h/.local/share/mise/shims:%h/.local/bin:/usr/local/bin:/usr/bin:/bin" }
 
-[bootstrap.linux.systemd.units.toolhive-mcp]
-description = "Start ToolHive MCP server proxies"
-after = ["docker.service"]
-wants = ["docker.service"]
-type = "oneshot"
-remain_after_exit = true
-exec_start = "~/.toolhive/bin/thv start --all"
-restart = "on-failure"
-restart_sec = "5s"
-
-[bootstrap.linux.systemd.units.phoenix]
-description = "Arize Phoenix observability server"
-after = ["network.target"]
-exec_start = "~/.local/bin/phoenix serve"
-restart = "on-failure"
-restart_sec = "5s"
-environment = { PHOENIX_HOST = "127.0.0.1", PHOENIX_PORT = "6006", PHOENIX_WORKING_DIR = "%h/.local/share/phoenix", PHOENIX_TELEMETRY_ENABLED = "false", AWS_PROFILE = "bedrock-dev", AWS_SDK_LOAD_CONFIG = "true" }
 
 [bootstrap.linux.systemd.units.rclone-imprivata-onedrive]
 description = "Rclone mount for Imprivata OneDrive"
