@@ -263,6 +263,22 @@ url = "git@github-personal:mattniedelman/dotfiles.git"
 
 # ── apt repo setup (pre-packages phase) ─────────────────────────────────────
 
+[bootstrap.directories."/etc/apt/keyrings"]
+owner = "root"
+group = "root"
+mode = "0755"
+phase = "pre-packages"
+
+[bootstrap.hooks.pre-packages]
+run = [
+  "sudo curl -fsSL 'https://keyserver.ubuntu.com/pks/lookup?fingerprint=on&op=get&search=0x88421E703EDC7AF54967DED473C9FCC9E2BB48DA' -o /etc/apt/keyrings/fish-shell.asc.tmp && sudo chmod 0644 /etc/apt/keyrings/fish-shell.asc.tmp && sudo mv /etc/apt/keyrings/fish-shell.asc.tmp /etc/apt/keyrings/fish-shell.asc",
+  "sudo curl -fsSL 'https://cli.github.com/packages/githubcli-archive-keyring.gpg' -o /etc/apt/keyrings/githubcli-archive-keyring.gpg.tmp && sudo chmod 0644 /etc/apt/keyrings/githubcli-archive-keyring.gpg.tmp && sudo mv /etc/apt/keyrings/githubcli-archive-keyring.gpg.tmp /etc/apt/keyrings/githubcli-archive-keyring.gpg",
+  "sudo curl -fsSL 'https://pkgs.tailscale.com/stable/ubuntu/noble.noarmor.gpg' -o /etc/apt/keyrings/tailscale-archive-keyring.gpg.tmp && sudo chmod 0644 /etc/apt/keyrings/tailscale-archive-keyring.gpg.tmp && sudo mv /etc/apt/keyrings/tailscale-archive-keyring.gpg.tmp /etc/apt/keyrings/tailscale-archive-keyring.gpg",
+  "sudo curl -fsSL 'https://downloads.1password.com/linux/keys/1password.asc' -o /etc/apt/keyrings/1password.asc.tmp && sudo chmod 0644 /etc/apt/keyrings/1password.asc.tmp && sudo mv /etc/apt/keyrings/1password.asc.tmp /etc/apt/keyrings/1password.asc",
+  "sudo curl -fsSL 'https://keyserver.ubuntu.com/pks/lookup?fingerprint=on&op=get&search=0x0721FDF5FECB88DC6920361657C8EF455CEAE491' -o /etc/apt/keyrings/ghostty.asc.tmp && sudo chmod 0644 /etc/apt/keyrings/ghostty.asc.tmp && sudo mv /etc/apt/keyrings/ghostty.asc.tmp /etc/apt/keyrings/ghostty.asc",
+  "sudo curl -fsSL 'https://raw.githubusercontent.com/imputnet/helium-linux/main/pubkey.asc' -o /etc/apt/keyrings/helium.asc.tmp && sudo chmod 0644 /etc/apt/keyrings/helium.asc.tmp && sudo mv /etc/apt/keyrings/helium.asc.tmp /etc/apt/keyrings/helium.asc",
+]
+
 # fish shell 4.x PPA — Ubuntu noble (24.04) only
 # If upgrading Ubuntu: update Suites and check for a new PPA release series
 [bootstrap.files."/etc/apt/sources.list.d/fish-shell.sources"]
@@ -272,7 +288,7 @@ group = "root"
 mode = "0644"
 phase = "pre-packages"
 
-# GitHub CLI apt repo (inline-key .sources format — avoids binary file UTF-8 issue)
+# GitHub CLI apt repo; keyring is refreshed by the pre-packages hook
 [bootstrap.files."/etc/apt/sources.list.d/github-cli.sources"]
 source = "./files/apt/github-cli.sources"
 owner = "root"
