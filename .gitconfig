@@ -2,6 +2,7 @@
 	defaultBranch = main
 [user]
 	name = "Matt Niedelman"
+	email = matt.niedelman@imprivata.com
 [include]
 	path = ~/.config/git/local
 [filter "lfs"]
