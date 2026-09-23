@@ -84,7 +84,6 @@ amazon-ecr-credential-helper = "latest"
 ast-grep = "latest"
 atuin = "latest"
 aws-cli = "2"  # Pinned to major version for stability
-aws-sigv4-proxy = "1.11.1"
 bat = "latest"
 bat-extras = "latest"
 bottom = "latest"  # Modern top/htop replacement
