@@ -1,4 +1,4 @@
-#!/usr/bin/env -S uv run --quiet --script --directory {{ env.HOME }}/.claude/hooks
+#!/usr/bin/env -S uv run --quiet --script
 """
 PreToolUse hook (Bash): Block raw `pip` invocations and steer to `uv add`.
 

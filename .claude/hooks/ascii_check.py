@@ -1,4 +1,4 @@
-#!/usr/bin/env -S uv run --quiet --script --directory {{ env.HOME }}/.claude/hooks
+#!/usr/bin/env -S uv run --quiet --script
 """
 PostToolUse hook: Auto-fix Unicode lookalike characters in file changes.
 

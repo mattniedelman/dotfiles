@@ -1,4 +1,4 @@
-#!/usr/bin/env -S uv run --quiet --script --directory {{ env.HOME }}/.claude/hooks
+#!/usr/bin/env -S uv run --quiet --script
 """
 PreToolUse hook: Block write_note_basic-memory calls without a proper directory.
 

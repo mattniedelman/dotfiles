@@ -395,26 +395,16 @@ phase = "pre-packages"
   "stats-cache.json", "hook-approvals.log", "security_warnings_state_*",
   "__pycache__/**", "*.pyc", "install-counts-cache.json",
 ] }
-# Template hooks (rendered with +x from source permissions)
-"~/.claude/hooks/ascii_check.py" = { source = "~/.local/share/chezmoi/.claude/hooks/ascii_check.py.tera", mode = "template" }
-"~/.claude/hooks/auto_lint.py" = { source = "~/.local/share/chezmoi/.claude/hooks/auto_lint.py.tera", mode = "template" }
-"~/.claude/hooks/basic_memory_directory_check.sh" = { source = "~/.local/share/chezmoi/.claude/hooks/basic_memory_directory_check.sh.tera", mode = "template" }
-"~/.claude/hooks/block_pip.py" = { source = "~/.local/share/chezmoi/.claude/hooks/block_pip.py.tera", mode = "template" }
-"~/.claude/hooks/reflect_backfill.py" = { source = "~/.local/share/chezmoi/.claude/hooks/reflect_backfill.py.tera", mode = "template" }
-"~/.claude/hooks/session_reflect.py" = { source = "~/.local/share/chezmoi/.claude/hooks/session_reflect.py.tera", mode = "template" }
-"~/.claude/hooks/session_start.py" = { source = "~/.local/share/chezmoi/.claude/hooks/session_start.py.tera", mode = "template" }
 "~/.config/ast-grep/rules" = { mode = "symlink" }
-"~/.config/ast-grep/sgconfig.yml" = { source = "~/.local/share/chezmoi/.config/ast-grep/sgconfig.yml.tera", mode = "template" }
+"~/.config/ast-grep/sgconfig.yml" = { mode = "symlink" }
 "~/.config/atuin" = { mode = "copy" }
 "~/.config/atuin/config.toml" = { mode = "track" }
 
-# ~/.config — file/dir-level entries (templates or non-standard source paths)
-"~/.config/cbfmt.toml" = { source = "~/.local/share/chezmoi/.config/cbfmt.toml.tera", mode = "template" }
+# ~/.config — file/dir-level entries
+"~/.config/cbfmt.toml" = { mode = "symlink" }
 
 # ~/.config/fish — symlink-each so fish can write fish_variables, completions/, etc.
-# config.fish is a template so excluded here and handled separately below.
-"~/.config/fish" = { mode = "symlink-each", exclude = ["config.fish.tera", "fish_variables", "fish_variables.*", "completions/**", "logs/**", "themes/**"] }
-"~/.config/fish/config.fish" = { source = "~/.local/share/chezmoi/.config/fish/config.fish.tera", mode = "template" }
+"~/.config/fish" = { mode = "symlink-each", exclude = ["fish_variables", "fish_variables.*", "completions/**", "logs/**", "themes/**"] }
 
 # ~/.config — copy mode (edit in-place; tracked for local undo history)
 "~/.config/ghostty" = { mode = "copy" }
@@ -434,8 +424,8 @@ phase = "pre-packages"
 "~/.config/ohmyposh/claude.json" = { mode = "track" }
 "~/.config/television" = { mode = "symlink" }
 
-# Templates
-"~/.gitconfig" = { source = "~/.local/share/chezmoi/.gitconfig.tera", mode = "template" }
+# Home root
+"~/.gitconfig" = { mode = "symlink" }
 
 # ~/.omp — symlink-each; agent/ has private files (config.yml, mcp.json)
 "~/.omp" = { mode = "symlink-each" }
