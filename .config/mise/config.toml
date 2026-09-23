@@ -236,7 +236,6 @@ locked_verify_provenance = true
 # If a security scanner's freshness matters more than the cooldown, pin it to
 # an explicit recent version.
 minimum_release_age = "7d"
-dotfiles.root = "~/.local/share/chezmoi"
 
 [settings.github]
 use_git_credentials = true
@@ -257,12 +256,17 @@ run = "mise outdated"
 description = "Remove unused tool versions"
 run = "mise prune"
 
+# ── dotfiles repo ────────────────────────────────────────────────────────────
+
+[bootstrap.repos."~/.dotfiles"]
+url = "git@github-personal:mattniedelman/dotfiles.git"
+
 # ── apt repo setup (pre-packages phase) ─────────────────────────────────────
 
 # fish shell 4.x PPA — Ubuntu noble (24.04) only
 # If upgrading Ubuntu: update Suites and check for a new PPA release series
 [bootstrap.files."/etc/apt/sources.list.d/fish-shell.sources"]
-source = "~/.local/share/chezmoi/files/apt/fish-shell.sources"
+source = "~/.dotfiles/files/apt/fish-shell.sources"
 owner = "root"
 group = "root"
 mode = "0644"
@@ -270,7 +274,7 @@ phase = "pre-packages"
 
 # GitHub CLI apt repo (inline-key .sources format — avoids binary file UTF-8 issue)
 [bootstrap.files."/etc/apt/sources.list.d/github-cli.sources"]
-source = "~/.local/share/chezmoi/files/apt/github-cli.sources"
+source = "~/.dotfiles/files/apt/github-cli.sources"
 owner = "root"
 group = "root"
 mode = "0644"
@@ -278,7 +282,7 @@ phase = "pre-packages"
 
 # Tailscale VPN
 [bootstrap.files."/etc/apt/sources.list.d/tailscale.sources"]
-source = "~/.local/share/chezmoi/files/apt/tailscale.sources"
+source = "~/.dotfiles/files/apt/tailscale.sources"
 owner = "root"
 group = "root"
 mode = "0644"
@@ -286,7 +290,7 @@ phase = "pre-packages"
 
 # 1Password
 [bootstrap.files."/etc/apt/sources.list.d/1password.sources"]
-source = "~/.local/share/chezmoi/files/apt/1password.sources"
+source = "~/.dotfiles/files/apt/1password.sources"
 owner = "root"
 group = "root"
 mode = "0644"
@@ -294,7 +298,7 @@ phase = "pre-packages"
 
 # Ghostty terminal — community PPA (noble/24.04 only)
 [bootstrap.files."/etc/apt/sources.list.d/ghostty.sources"]
-source = "~/.local/share/chezmoi/files/apt/ghostty.sources"
+source = "~/.dotfiles/files/apt/ghostty.sources"
 owner = "root"
 group = "root"
 mode = "0644"
@@ -302,7 +306,7 @@ phase = "pre-packages"
 
 # Helium browser
 [bootstrap.files."/etc/apt/sources.list.d/helium.sources"]
-source = "~/.local/share/chezmoi/files/apt/helium.sources"
+source = "~/.dotfiles/files/apt/helium.sources"
 owner = "root"
 group = "root"
 mode = "0644"
