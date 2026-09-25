@@ -162,6 +162,7 @@ ruby = "3.3"
 glab = "latest"
 goreleaser = "latest"
 "go:golang.org/x/tools/cmd/deadcode" = "latest"
+oh-my-pi = { version = "latest", rename_exe = "omp" }
 
 [env]
 HK_MISE = "1"
@@ -210,6 +211,7 @@ locked_verify_provenance = true
 # If a security scanner's freshness matters more than the cooldown, pin it to
 # an explicit recent version.
 minimum_release_age = "7d"
+auto_update = true
 
 [settings.github]
 use_git_credentials = true
@@ -461,22 +463,22 @@ mode = "0755"
 # restart_sec = "5s"
 # timeout_start_sec = "120"
 
-# [bootstrap.linux.systemd.units.hindsight-embed-daemon]
-# description = "Hindsight embed daemon (claude-code profile)"
-# after = ["network.target"]
-# type = "oneshot"
-# remain_after_exit = true
-# exec_start = "~/.local/bin/hindsight-start claude-code"
-# exec_stop = "~/.local/share/mise/shims/hindsight-embed -p claude-code daemon stop"
-#
-# [bootstrap.linux.systemd.units.hindsight-embed-ui]
-# description = "Hindsight embed UI (claude-code profile)"
-# after = ["network.target", "dev.mise.hindsight-embed-daemon.service"]
-# requires = ["dev.mise.hindsight-embed-daemon.service"]
-# type = "oneshot"
-# remain_after_exit = true
-# exec_start = "~/.local/share/mise/shims/hindsight-embed -p claude-code ui start"
-# exec_stop = "~/.local/share/mise/shims/hindsight-embed -p claude-code ui stop"
+[bootstrap.linux.systemd.units.hindsight-embed-daemon]
+description = "Hindsight embed daemon (claude-code profile)"
+after = ["network.target"]
+type = "oneshot"
+remain_after_exit = true
+exec_start = "~/.local/bin/hindsight-start claude-code"
+exec_stop = "~/.local/share/mise/shims/hindsight-embed -p claude-code daemon stop"
+
+[bootstrap.linux.systemd.units.hindsight-embed-ui]
+description = "Hindsight embed UI (claude-code profile)"
+after = ["network.target", "dev.mise.hindsight-embed-daemon.service"]
+requires = ["dev.mise.hindsight-embed-daemon.service"]
+type = "oneshot"
+remain_after_exit = true
+exec_start = "~/.local/share/mise/shims/hindsight-embed -p claude-code ui start"
+exec_stop = "~/.local/share/mise/shims/hindsight-embed -p claude-code ui stop"
 
 # [bootstrap.linux.systemd.units.kenn-forge]
 # description = "kenn-forge daemon"

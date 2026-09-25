@@ -1,33 +1,33 @@
-providers: 
-  webSearchOrder: 
+providers:
+  webSearchOrder:
     - public
     - duckduckgo
     - startpage
-  webSearchExclude: 
+  webSearchExclude:
     - google
     - ecosia
     - mojeek
-setupVersion: 1
-disabledProviders: 
+setupVersion: 2
+disabledProviders:
   - claude
-skills: 
+skills:
   enableAgentsUser: false
-  customDirectories: 
+  customDirectories:
     - /home/mattniedelman/.omp/agent/skills
-modelRoles: 
+modelRoles:
   default: amazon-bedrock/us.anthropic.claude-sonnet-4-6
   smol: amazon-bedrock/us.anthropic.claude-haiku-4-5
   slow: amazon-bedrock/us.anthropic.claude-opus-4-8:high
   plan: amazon-bedrock/us.anthropic.claude-opus-4-8:high
-memory: 
+memory:
   backend: hindsight
-hindsight: 
+hindsight:
   apiUrl: http://127.0.0.1:9077
   bankId: claude_code
   scoping: global
-tools: 
+tools:
   approvalMode: yolo
-  approval: 
+  approval:
     bash: allow
     hub: allow
     task: allow
@@ -39,8 +39,8 @@ tools:
     mcp__plugin_slack_slack_slack_add_reaction: prompt
     mcp__plugin_slack_slack_slack_create_canvas: prompt
     mcp__plugin_slack_slack_slack_update_canvas: prompt
-bash: 
-  patterns: 
+bash:
+  patterns:
     - match: rm -rf ~/.context-engine/*
       approval: allow
     - match: rm -fr ~/.context-engine/*
@@ -71,81 +71,83 @@ bash:
       approval: deny
     - match: "* -m pip *"
       approval: deny
-statusLine: 
+statusLine:
   preset: default
   separator: pipe
   sessionAccent: true
   transparent: false
   compactThinkingLevel: false
   showHookStatus: true
-terminal: 
+terminal:
   showProgress: true
-tui: 
+tui:
   tight: false
-display: 
+display:
   cacheMissMarker: true
   shimmer: disabled
 personality: pragmatic
-advisor: 
+advisor:
   enabled: false
 doubleEscapeAction: tree
-features: 
-  unexpectedStopDetection: false
-compaction: 
+features:
+  unexpectedStopDetection: none
+compaction:
   idleEnabled: true
-ttsr: 
+ttsr:
   contextMode: discard
-read: 
+read:
   renderMarkdown: true
-lsp: 
+lsp:
   formatOnWrite: false
-bashInterceptor: 
+bashInterceptor:
   enabled: false
-astGrep: 
+astGrep:
   enabled: true
-github: 
+github:
   enabled: false
-security: 
+security:
   enabled: false
-debug: 
+debug:
   enabled: true
-computer: 
+computer:
   enabled: false
-checkpoint: 
+checkpoint:
   enabled: false
-browser: 
+browser:
   cmux: false
-dev: 
+dev:
   autoqa: false
-plan: 
+plan:
   defaultOnStartup: false
-goal: 
+goal:
   enabled: true
-collab: 
+collab:
   relayUrl: ""
-share: 
+share:
   serverUrl: ""
-task: 
+task:
   eager: preferred
   batch: true
   enableLsp: true
-  isolation: 
-    mode: auto
+  isolation:
     commits: ai
+    enabled: true
   enableEffort: true
-theme: 
+theme:
   dark: dark-volcanic
 symbolPreset: nerd
 hideThinkingBlock: false
-eval: 
+eval:
   js: false
 defaultThinkingLevel: high
-autolearn: 
+autolearn:
   enabled: true
   autoContinue: true
 proseOnlyThinking: false
-todo: 
+todo:
   reminders: true
 shellPath: /usr/bin/bash
-extensions: 
+extensions:
   - ~/.omp/hooks/roborev.ts
+isolation:
+  backend: auto
