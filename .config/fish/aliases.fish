@@ -52,6 +52,13 @@ alias sg='sg --config $AST_GREP_CONFIG'
 alias tf='terraform'
 
 # ============================================================================
+# Docker -> Podman
+# ============================================================================
+if command -q podman; and not command -q docker
+    alias docker='podman'
+end
+
+# ============================================================================
 # beads (bd): gastownhall/beads, installed via mise
 # ============================================================================
 # `bd` resolves via the mise shim (github:gastownhall/beads). No alias needed.
