@@ -413,6 +413,7 @@ phase = "pre-packages"
 "~/.config/mise/config.toml" = { mode = "symlink" }
 "~/.config/mise/files" = { mode = "symlink" }
 "~/.config/mise/conf.d/dotfiles-tracking.toml" = { mode = "symlink" }
+"~/.config/mise/conf.d/pi-configuration.toml" = { mode = "symlink" }
 
 # ~/.config — whole-directory symlinks (set-and-forget, edit via source)
 "~/.config/nvim" = { mode = "symlink-each", manifest = "git" }
