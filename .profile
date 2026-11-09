@@ -32,3 +32,5 @@ fi
 
 # Cargo environment (adds ~/.cargo/bin to PATH)
 . "$HOME/.cargo/env"
+
+export PATH="$HOME/.elan/bin:$PATH"

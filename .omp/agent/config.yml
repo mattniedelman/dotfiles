@@ -15,7 +15,7 @@ skills:
   customDirectories:
     - /home/mattniedelman/.omp/agent/skills
 modelRoles:
-  default: amazon-bedrock/us.anthropic.claude-sonnet-4-6
+  default: amazon-bedrock/us.anthropic.claude-opus-5-5:high
   smol: amazon-bedrock/us.anthropic.claude-haiku-4-5
   slow: amazon-bedrock/us.anthropic.claude-opus-4-8:high
   plan: amazon-bedrock/us.anthropic.claude-opus-4-8:high

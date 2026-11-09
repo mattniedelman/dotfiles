@@ -2,170 +2,192 @@
 min_version = "2026.1.0"
 
 [tools]
-python = { version = "3.13" }
 
-"aqua:dalance/procs" = "latest"  # Modern ps replacement
-"cargo:cbfmt" = "latest"
-lychee = "latest"
-"github:EmbarkStudios/cargo-deny" = "latest"
-"github:Kampfkarren/selene" = "latest"
-"github:agavra/tuicr" = "latest"
-betterleaks = "latest"
-"github:dlvhdr/diffnav" = "latest"
-"github:dolthub/dolt" = "latest"
-"github:editorconfig-checker/editorconfig-checker" = "latest"
-"github:gastownhall/beads" = "latest"
-"github:jackchuka/mdschema" = "latest"
-"github:nolabs-ai/nono" = "v0.65.1"
-"github:owenlamont/ryl" = "latest"
-"github:stacklok/modelith" = "latest"
-"go:github.com/grafana/mcp-grafana/cmd/mcp-grafana" = "v0.16.0"
-"npm:@arizeai/phoenix-cli" = "latest"
-"npm:@contextlint/cli" = "latest"
-"npm:@devcontainers/cli" = "latest"
-"npm:@doist/todoist-cli" = "latest"
-codex = "latest"
-"npm:ccusage" = "latest"
-"npm:confluence-cli" = "latest"
-"npm:dclint" = "latest"
-"npm:hunkdiff" = "latest"
-"npm:playwright" = "latest"
-"npm:promptfoo" = "latest"
-"npm:reveal.js" = "latest"
-"npm:rulesync" = "latest"
-"pipx:agentsview" = "latest"
-"pipx:aws-sso-util" = "latest"
-"pipx:basedpyright" = "latest"  # Enhanced fork of pyright with additional features
-"pipx:basic-memory" = "latest"
-"pipx:crawl4ai" = "latest"
-"pipx:deply" = "latest"
-"pipx:desloppify" = "latest"
-"pipx:hindsight-embed" = { version = "latest", uvx_args = "--with hindsight-api --with langchain-text-splitters" }
-"pipx:prowler" = "latest"
-"pipx:pyrefly" = "latest"
-ruff = "latest"
-"pipx:sparkrun" = "latest"
-"pipx:sshuttle" = "latest"
-"pipx:ty" = "latest"
-yamllint = "latest"  # YAML linter
-# Co-install hindsight-api + langchain-text-splitters into the embed venv so the
-# `uvx hindsight-api@VER` env. This (1) survives uv cache GC that previously left
-# daemon launches the local hindsight-api binary instead of an isolated runtime
-# the daemon running from a deleted archive, and (2) provides langchain-text-splitters,
-# which hindsight-api imports lazily but never declares as a dependency.
-1password = "latest"
-act = "latest"
-action-validator = "latest"
-actionlint = "latest"
-amazon-ecr-credential-helper = "latest"
-ast-grep = "latest"
-atuin = "latest"
-aws-cli = "2"  # Pinned to major version for stability
-bat = "latest"
-bat-extras = "latest"
-bottom = "latest"  # Modern top/htop replacement
-buf = "latest"
-bun = "latest"
-checkov = "latest"  # IaC security scanner
-cue = "latest"
-delta = "latest"
-difftastic = "latest"
-direnv = "latest"
-docker-compose = "latest"
+# -- Languages, runtimes, package managers, and build tools --
+python = { version = "3.13" }
 dotnet = "latest"
-dua = "latest"
-duckdb = "latest"
-duf = "latest"  # Modern df replacement (Go-based)
-dust = "latest"  # Modern du replacement
-editorconfig-checker = "latest"
-eza = "latest"  # Modern ls replacement (fork of exa)
-fd = "latest"
-fzf = "latest"
-ghalint = "latest"
-ghorg = "latest"
-gitleaks = "latest"
-glow = "latest"
 go = "latest"
-grype = "latest"
-hadolint = "latest"  # Dockerfile linter
-helm = "3"  # Pinned to major version for stability
-herdr = "latest"
-hk = "latest"
 java = "17.0.2"
-jq = "latest"
-just = "latest"
-k3d = "latest"
-kubectl = "1.31"  # Pinned - should match cluster version
-kubectx = "latest"
 lua = "latest"
 make = "latest"
 maven = "latest"
-neovim = "latest"
 node = "latest"
-oh-my-posh = "latest"
-opa = "latest"
-opencode = "latest"
-pandoc = "latest"
-patat = "latest"
-pinact = "latest"
-pkl = "latest"
-podman = "latest"
-pre-commit = "latest"
-pulumi = "latest"
-rclone = "latest"
-ripgrep = "latest"
-ripgrep-all = "latest"
-rumdl = "latest"
+npm = "latest"
+bun = "latest"
 rust = { version = "latest", targets = "wasm32-wasip1" }
-semgrep = "latest"
-shellcheck = "latest"
-shfmt = "latest"
-skaffold = "latest"
-sqlite = "latest"
-stylua = "latest"
 swift = "latest"
-syft = "latest"
-television = "latest"  # Modern fuzzy finder (tv)
+uv = "latest"
+ruby = "3.3"
+
+# -- AI agents, LLM evaluation, memory, and agent support --
+codex = "latest"
+opencode = "latest"
+oh-my-pi = { version = "latest", rename_exe = "omp" }
+pi = "latest"
+"npm:@contextlint/cli" = "latest"
+"pipx:basic-memory" = { version = "1.0.0", uvx_args = "--python 3.14" }
+# Co-install hindsight-api + langchain-text-splitters into the embed venv so the
+# `uvx hindsight-api@VER` env survives uv cache GC and includes the package that
+# hindsight-api imports lazily but does not declare as a dependency.
+"pipx:hindsight-embed" = { version = "1.1.0", uvx_args = "--with hindsight-api --with langchain-text-splitters" }
+"pipx:sparkrun" = "latest"
+"pipx:evo-hq-cli" = "latest"
+llmfit = "latest"
+"github:kenn-io/roborev" = "latest"
+"github:stacklok/modelith" = "latest"
+
+# -- Cloud, containers, Kubernetes, infrastructure, and release --
+docker-compose = "latest"
+podman = "latest"
+aws-cli = "2"  # Pinned to major version for stability
+amazon-ecr-credential-helper = "latest"
+helm = "3"  # Pinned to major version for stability
+k3d = "latest"
+kubectl = "1.31"  # Pinned - should match cluster version
+kubectx = "latest"
+skaffold = "latest"
 terraform = "latest"
-tflint = "latest"  # Terraform linter
-tmux = "latest"
-tombi = "latest"
+pulumi = "latest"
+cue = "latest"
+pkl = "latest"
+opa = "latest"
+"github:grafana/gcx" = "latest"
+
+# -- Security, supply chain, and policy scanning --
+betterleaks = "latest"
+"github:EmbarkStudios/cargo-deny" = "latest"
+"pipx:prowler" = "latest"
+checkov = "latest"  # IaC security scanner
+gitleaks = "latest"
+grype = "latest"
+pinact = "latest"
+opengrep = "latest"
+syft = "latest"
 trivy = "latest"
 trufflehog = "latest"
-typos = "latest"
-usage = "latest"
-uv = "latest"
-yamlfmt = "latest"
 zizmor = "latest"
-zoxide = "latest"
-npm = "latest"
-mkcert = "latest"
-vacuum = "latest"
+"github:nolabs-ai/nono" = "v0.65.1"
+
+# -- Linters, formatters, static analysis, and language tooling --
+"cargo:cbfmt" = "latest"
+"github:Kampfkarren/selene" = "latest"
+"github:editorconfig-checker/editorconfig-checker" = "latest"
+"github:jackchuka/mdschema" = "latest"
+"npm:dclint" = "latest"
+"pipx:basedpyright" = "latest"  # Enhanced fork of pyright with additional features
+"pipx:pyrefly" = "latest"
+ruff = "latest"
+"pipx:ty" = "latest"
+yamllint = "latest"  # YAML linter
+action-validator = "latest"
+actionlint = "latest"
+ast-grep = "latest"
+editorconfig-checker = "latest"
+ghalint = "latest"
+hadolint = "latest"  # Dockerfile linter
+hk = "latest"
+pre-commit = "latest"
+rumdl = "latest"
+shellcheck = "latest"
+shfmt = "latest"
+stylua = "latest"
+tflint = "latest"  # Terraform linter
+tombi = "latest"
+typos = "latest"
+yamlfmt = "latest"
 gofumpt = "latest"
 golangci-lint = "latest"
 "go:golang.org/x/tools/cmd/goimports" = "latest"
-"go:golang.org/x/vuln/cmd/govulncheck" = "latest"
-"go:github.com/securego/gosec/v2/cmd/gosec" = "latest"
-"go:github.com/google/go-licenses" = "latest"
 "aqua:anordal/shellharden" = "latest"
 markdownlint-cli2 = "latest"
-worktrunk = "latest"
-"github:1broseidon/ketch" = "latest"
 marksman = "latest"
 "go:golang.org/x/tools/gopls" = "latest"
-"pipx:showboat" = "latest"
-"github:grafana/gcx" = "latest"
-"github:boyter/scc" = "latest"
 "go:github.com/jbeda/mdreflow/cmd/mdreflow" = "v0.2.0"
-ruby = "3.3"
-"github:kenn-io/roborev" = "latest"
-glab = "latest"
-goreleaser = "latest"
 "go:golang.org/x/tools/cmd/deadcode" = "latest"
-oh-my-pi = { version = "latest", rename_exe = "omp" }
+vacuum = "latest"
+"github:owenlamont/ryl" = "latest"
+
+# -- Git, GitHub/GitLab, diffs, reviews, and worktrees --
+"github:agavra/tuicr" = "latest"
+"github:dlvhdr/diffnav" = "latest"
+"npm:hunkdiff" = "latest"
+act = "latest"
+delta = "latest"
+difftastic = "latest"
+ghorg = "latest"
+worktrunk = "latest"
+glab = "latest"
+
+# -- Terminal, shell, navigation, search, and filesystem utilities --
+atuin = "latest"
+bat = "latest"
+bat-extras = "latest"
+direnv = "latest"
+dua = "latest"
+duf = "latest"  # Modern df replacement (Go-based)
+dust = "latest"  # Modern du replacement
+eza = "latest"  # Modern ls replacement (fork of exa)
+fd = "latest"
+fzf = "latest"
+herdr = "latest"
+jq = "latest"
+just = "latest"
+neovim = "latest"
+oh-my-posh = "latest"
+rclone = "latest"
+ripgrep = "latest"
+ripgrep-all = "latest"
+television = "latest"  # Modern fuzzy finder (tv)
+"github:1broseidon/ketch" = "latest"
+"github:boyter/scc" = "latest"
+yazi = "latest"
+
+# -- Documentation, Markdown, presentations, and media --
+lychee = "latest"
+"npm:reveal.js" = "latest"
+pandoc = "latest"
+patat = "latest"
+"pipx:showboat" = "latest"
+"github:jvanderberg/markless" = "latest"
+
+# -- Databases and data tools --
+"github:dolthub/dolt" = "latest"
+duckdb = "latest"
+sqlite = "latest"
+
+# -- Networking, authentication, and secrets --
+1password = "latest"
+"pipx:aws-sso-util" = "latest"
+"pipx:sshuttle" = "latest"
+mkcert = "latest"
+
+# -- Web testing and browser automation --
+"npm:playwright" = "latest"
+
+# -- Project, task, and personal workflow --
+"github:gastownhall/beads" = "latest"
+
+# -- Observability and Grafana --
+"github:vanderheijden86/b9s" = "latest"
+"github:iOfficeAI/OfficeCLI" = "latest"
+"pipx:git+https://github.com/NVIDIA/skillspector.git" = "latest"
+"github:quint-co/quint" = "latest"
+yt-dlp = { version = "latest", rename_exe = "yt-dlp" }
+"aqua:redhat-et/ripwire" = "latest"
+"aqua:whisper-sec/whisper-cli" = "latest"
+"pipx:openai-whisper" = "latest"
+apm = "latest"
+goss = "latest"
+"aqua:alibaba/open-code-review" = "latest"
+"pipx:agentsview" = "latest"
+"aqua:agentgateway/agentgateway/agentgateway" = "latest"
 
 [env]
 HK_MISE = "1"
+SKILLSPECTOR_PROVIDER = "openai_compatible"
+SKILLSPECTOR_COMPAT_BASE_URL = "http://localhost:4000/v1"
+SKILLSPECTOR_COMPAT_API_KEY = "local"
+SKILLSPECTOR_MODEL = "unsloth/Qwen3.6-35B-A3B-NVFP4-Fast"
 
 [settings]
 # plugins can read the versions files used by other version managers (if enabled by the plugin)
@@ -175,13 +197,10 @@ HK_MISE = "1"
 always_keep_download = false  # deleted after install by default
 always_keep_install = false  # deleted on failure by default
 
-# configure how frequently (in minutes) to fetch updated plugin repository changes
-# this is updated whenever a new runtime is installed
-plugin_autoupdate_last_check_duration = "1 week"  # set to 0 to disable updates
 
 verbose = false  # set to true to see full installation output, see `MISE_VERBOSE`
 http_timeout = "30s"  # set the timeout for http requests as duration string, see `MISE_HTTP_TIMEOUT`
-jobs = 2  # number of plugins or runtimes to install in parallel
+jobs = 10  # number of plugins or runtimes to install in parallel
 raw = false  # set to true to directly pipe plugins to stdin/stdout/stderr
 yes = false  # set to true to automatically answer yes to all prompts
 
@@ -198,7 +217,7 @@ experimental = true  # enable experimental features
 status = { missing_tools = "if_other_versions_installed", show_env = false, show_tools = false }
 
 # Enable reading native version files for these tools (.nvmrc, .python-version, etc.)
-idiomatic_version_file_enable_tools = ["python", "node", "go", "java"]
+idiomatic_version_file_enable_tools = ["python", "node", "java"]
 lockfile = true
 locked_verify_provenance = true
 
@@ -394,6 +413,7 @@ phase = "pre-packages"
 "~/.config/ast-grep/sgconfig.yml" = { mode = "symlink" }
 "~/.config/atuin" = { mode = "copy" }
 "~/.config/atuin/config.toml" = { mode = "track" }
+"~/.config/bd/config.yaml" = { mode = "track" }
 
 # ~/.config — file/dir-level entries
 "~/.config/cbfmt.toml" = { mode = "symlink" }
@@ -410,15 +430,18 @@ phase = "pre-packages"
 "~/.config/kubernetes-mcp-server" = { mode = "symlink" }
 "~/.config/mdsf" = { mode = "symlink" }
 "~/.config/mise/.default-python-packages" = { mode = "symlink" }
-"~/.config/mise/config.toml" = { mode = "symlink" }
-"~/.config/mise/files" = { mode = "symlink" }
 "~/.config/mise/conf.d/dotfiles-tracking.toml" = { mode = "symlink" }
 "~/.config/mise/conf.d/pi-configuration.toml" = { mode = "symlink" }
+"~/.config/mise/config.toml" = { mode = "symlink" }
+"~/.config/mise/files" = { mode = "symlink" }
 
 # ~/.config — whole-directory symlinks (set-and-forget, edit via source)
 "~/.config/nvim" = { mode = "symlink-each", manifest = "git" }
 "~/.config/ohmyposh" = { mode = "copy" }
 "~/.config/ohmyposh/claude.json" = { mode = "track" }
+# ~/.config/systemd/user — template services that can't be expressed in
+# [bootstrap.linux.systemd.units] (instantiated template, no WantedBy)
+"~/.config/systemd/user/notify-rclone-failure@.service" = { mode = "symlink" }
 "~/.config/television" = { mode = "symlink" }
 
 # Home root
@@ -428,9 +451,6 @@ phase = "pre-packages"
 "~/.omp" = { mode = "symlink-each" }
 "~/.profile" = { mode = "symlink" }
 "~/.ripgreprc" = { mode = "symlink" }
-# ~/.config/systemd/user — template services that can't be expressed in
-# [bootstrap.linux.systemd.units] (instantiated template, no WantedBy)
-"~/.config/systemd/user/notify-rclone-failure@.service" = { mode = "symlink" }
 
 # ── systemd user services (replaces chezmoi-placed unit files) ──────────────
 

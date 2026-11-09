@@ -2,20 +2,6 @@
 -- All Python-related tooling: LSP, formatting, linting, virtual environments
 
 return {
-  -- Python LSP servers via Mason
-  {
-    "mason-org/mason-lspconfig.nvim",
-    opts = {
-      ensure_installed = {
-        "ruff", -- Python linter/formatter LSP
-      },
-    },
-    dependencies = {
-      { "mason-org/mason.nvim", opts = {} },
-      "neovim/nvim-lspconfig",
-    },
-  },
-
   -- pyrefly: Meta's Python type checker and LSP
   -- Install via: pipx install pyrefly (or mise use -g pyrefly)
   -- Aligns with hk pyrefly step in ecosystems/python.pkl
@@ -28,9 +14,7 @@ return {
     },
   },
 
-  -- Note: ruff is installed via mason-lspconfig ensure_installed above; the
-  -- same package provides the CLI binary the conform formatters below invoke,
-  -- so no separate mason.nvim ensure_installed entry is needed.
+  -- ruff LSP is managed by miser.nvim from the active mise configuration.
 
   -- Configure Python formatters
   {

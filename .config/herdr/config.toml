@@ -34,6 +34,28 @@ next_agent = "prefix+shift+j"
 previous_agent = "prefix+shift+k"
 toggle_sidebar = ["prefix+b", "alt+s"]
 
+[[keys.command]]
+key = "prefix+shift+b"          # toggle the docked beads sidebar
+type = "plugin_action"
+command = "herdr-beads.open-dock"
+
+[[keys.command]]
+key = "prefix+shift+k"          # toggle the floating beads board
+type = "plugin_action"
+command = "herdr-beads.open-board"
+
+[[keys.command]]
+key = "prefix+e"
+type = "plugin_action"
+command = "chmarax.herdr-nvim.toggle"
+description = "nvim sidebar"
+
+[[keys.command]]
+key = "prefix+o"
+type = "plugin_action"
+command = "chmarax.herdr-nvim.pick-file"
+description = "open file from agent output"
+
 [ui]
 agent_panel_sort = "spaces"
 prompt_new_tab_name = false
