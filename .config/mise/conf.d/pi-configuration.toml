@@ -1,0 +1,8 @@
+# Pi's durable configuration is sourced from the pi-extensions repository.
+# Runtime state and credentials remain outside mise-managed dotfiles.
+
+[dotfiles]
+"~/.pi/agent/settings.json" = { mode = "symlink", source = "/home/matt-niedelman/.local/share/pi-extensions/pi-config-v1/config/settings.json" }
+"~/.pi/agent/mcp.json" = { mode = "symlink", source = "/home/matt-niedelman/.local/share/pi-extensions/pi-config-v1/config/mcp.json" }
+"~/.pi/agent/keybindings.json" = { mode = "symlink", source = "/home/matt-niedelman/.local/share/pi-extensions/pi-config-v1/keybindings.json" }
+"~/.pi/agent/agents" = { mode = "symlink-each", source = "/home/matt-niedelman/.local/share/pi-extensions/pi-config-v1/agents" }
