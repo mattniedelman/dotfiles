@@ -2,6 +2,7 @@
 # Runtime state and credentials remain outside mise-managed dotfiles.
 
 [dotfiles]
+"~/.pi/agent/AGENTS.md" = { mode = "symlink", source = "/home/matt-niedelman/.local/share/pi-extensions/pi-config-v1/config/AGENTS.md" }
 "~/.pi/agent/settings.json" = { mode = "symlink", source = "/home/matt-niedelman/.local/share/pi-extensions/pi-config-v1/config/settings.json" }
 "~/.pi/agent/mcp.json" = { mode = "symlink", source = "/home/matt-niedelman/.local/share/pi-extensions/pi-config-v1/config/mcp.json" }
 "~/.pi/agent/keybindings.json" = { mode = "symlink", source = "/home/matt-niedelman/.local/share/pi-extensions/pi-config-v1/keybindings.json" }
